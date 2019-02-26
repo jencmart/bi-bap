@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8c5f1ccf-065f-4604-87bf-a6d3a9772864" name="Default Changelist" comment="" />
+    <list default="true" id="8c5f1ccf-065f-4604-87bf-a6d3a9772864" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,11 +18,10 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="324">
-              <caret line="78" lean-forward="true" selection-start-line="78" selection-end-line="78" />
+            <state relative-caret-position="42">
+              <caret line="61" column="16" selection-start-line="61" selection-start-column="4" selection-end-line="61" selection-end-column="16" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
-                <element signature="e#240#2071#0" />
               </folding>
             </state>
           </provider>
@@ -62,10 +63,13 @@
       <find>C_STEP(</find>
       <find>_final = final_r</find>
       <find>elf.rss_ = final_re</find>
-      <find>make_c_steps</find>
       <find>use_sum</find>
       <find>preform_c_steps</find>
+      <find>make_c_steps</find>
     </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -80,6 +84,7 @@
     <option name="width" value="1856" />
     <option name="height" value="1000" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -192,11 +197,12 @@
       <workItem from="1551011913333" duration="108000" />
       <workItem from="1551012043540" duration="16206000" />
       <workItem from="1551179148095" duration="6041000" />
+      <workItem from="1551197469823" duration="631000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="25219000" />
+    <option name="totallyTimeSpent" value="25850000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -208,7 +214,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-2" y="-18" width="1924" height="1100" extended-state="0" />
+    <frame x="32" y="48" width="1856" height="1000" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.20245726" />
@@ -230,9 +236,9 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="SciView" order="3" sideWeight="0.49796334" visible="true" weight="0.083333336" />
+      <window_info active="true" anchor="right" id="SciView" order="3" sideWeight="0.4965909" visible="true" weight="0.08314856" />
       <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" x="0" y="0" width="177" height="800" id="Documentation" order="5" sideWeight="0.50203663" side_tool="true" visible="true" weight="0.083333336" />
+      <window_info anchor="right" x="0" y="0" width="177" height="800" id="Documentation" order="5" sideWeight="0.5034091" side_tool="true" visible="true" weight="0.08314856" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -241,11 +247,10 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="78" lean-forward="true" selection-start-line="78" selection-end-line="78" />
+        <state relative-caret-position="42">
+          <caret line="61" column="16" selection-start-line="61" selection-start-column="4" selection-end-line="61" selection-end-column="16" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <element signature="e#240#2071#0" />
           </folding>
         </state>
       </provider>
