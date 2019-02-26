@@ -69,4 +69,8 @@ docker start -i python-anaconda3
 python /path/to/my/scrpit
 ```
 
+# Teoretical part
+* Pouzit sablony latex
+* compiler - texlive
+* gui - gummi
 
