@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8c5f1ccf-065f-4604-87bf-a6d3a9772864" name="Default Changelist" comment="" />
+    <list default="true" id="8c5f1ccf-065f-4604-87bf-a6d3a9772864" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -9,6 +11,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/lts$main_remote_docker.coverage" NAME="main-remote-docker Coverage Results" MODIFIED="1551257106078" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/test$main_remote_docker.coverage" NAME="main-remote-docker Coverage Results" MODIFIED="1551183675838" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
   </component>
   <component name="FileEditorManager">
@@ -16,10 +19,14 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="42">
-              <caret line="61" column="16" selection-start-line="61" selection-start-column="4" selection-end-line="61" selection-end-column="16" />
+            <state relative-caret-position="401">
+              <caret line="361" column="14" selection-start-line="361" selection-start-column="14" selection-end-line="361" selection-end-column="14" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
+                <element signature="e#241#2072#0" />
+                <element signature="e#2534#3157#0" />
+                <element signature="e#3201#3370#0" />
+                <element signature="e#3410#3579#0" />
               </folding>
             </state>
           </provider>
@@ -64,6 +71,7 @@
       <find>use_sum</find>
       <find>preform_c_steps</find>
       <find>make_c_steps</find>
+      <find>print</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -79,7 +87,7 @@
   <component name="ProjectFrameBounds">
     <option name="x" value="32" />
     <option name="y" value="48" />
-    <option name="width" value="1856" />
+    <option name="width" value="911" />
     <option name="height" value="1000" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -196,11 +204,12 @@
       <workItem from="1551012043540" duration="16206000" />
       <workItem from="1551179148095" duration="6041000" />
       <workItem from="1551197469823" duration="1206000" />
+      <workItem from="1551254883280" duration="2234000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="26425000" />
+    <option name="totallyTimeSpent" value="28659000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -219,24 +228,24 @@
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3299389" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49946582" weight="0.29531568" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32959184" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49946582" visible="true" weight="0.3284091" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39918533" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4982538" weight="0.36659878" />
-      <window_info anchor="bottom" id="Docker" order="7" sideWeight="0.49946582" weight="0.296334" />
-      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4982538" weight="0.36632654" />
+      <window_info anchor="bottom" id="Docker" order="7" sideWeight="0.49946582" weight="0.29591838" />
+      <window_info anchor="bottom" id="Version Control" order="8" weight="0.32959184" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5005342" side_tool="true" weight="0.2657841" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5005342" side_tool="true" weight="0.29591838" />
       <window_info anchor="bottom" id="Terminal" order="11" weight="0.36734694" />
-      <window_info anchor="bottom" id="Python Console" order="12" weight="0.296334" />
+      <window_info anchor="bottom" id="Python Console" order="12" sideWeight="0.49946582" weight="0.29591838" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info active="true" anchor="right" id="SciView" order="3" sideWeight="0.4965909" visible="true" weight="0.08314856" />
+      <window_info anchor="right" id="SciView" order="3" sideWeight="0.49407783" visible="true" weight="0.08314856" />
       <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" x="0" y="0" width="177" height="800" id="Documentation" order="5" sideWeight="0.5034091" side_tool="true" visible="true" weight="0.08314856" />
+      <window_info anchor="right" x="0" y="0" width="177" height="800" id="Documentation" order="5" sideWeight="0.50592214" side_tool="true" visible="true" weight="0.08314856" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -245,10 +254,14 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="61" column="16" selection-start-line="61" selection-start-column="4" selection-end-line="61" selection-end-column="16" />
+        <state relative-caret-position="401">
+          <caret line="361" column="14" selection-start-line="361" selection-start-column="14" selection-end-line="361" selection-end-column="14" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#241#2072#0" />
+            <element signature="e#2534#3157#0" />
+            <element signature="e#3201#3370#0" />
+            <element signature="e#3410#3579#0" />
           </folding>
         </state>
       </provider>

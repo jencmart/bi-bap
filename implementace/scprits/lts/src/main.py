@@ -5,7 +5,7 @@ import time
 
 
 # currently support for np.ndarray and matrix
-def val_and_reshap(X, y, h_size, num_start_c_steps, num_starts_to_finish, max_c_steps, threshold, use_intercept):
+def validate(X, y, h_size, num_start_c_steps, num_starts_to_finish, max_c_steps, threshold, use_intercept):
     if X is None or not isinstance(X, (np.ndarray, np.matrix)):
         raise Exception('X must be  type array or np.ndarray or np.matrix')
     if y is None or not isinstance(y, (np.ndarray, np.matrix)):
@@ -59,23 +59,7 @@ def val_and_reshap(X, y, h_size, num_start_c_steps, num_starts_to_finish, max_c_
     return np.asmatrix(merged)
 
 
-def make_c_steps(h1, data, cnt_steps, h_size):  # vola se 500x
-    theta_old = OLS(data[h1, :])
-
-    for i in range(cnt_steps):  # vola se 2x
-        theta_new, h_new = c_step(theta_old, data, h_size)
-        theta_old = theta_new
-
-    # rss on Hnew
-    squared_residuals = RSS(data[h_new, :], theta_new)
-    return theta_new, h_new, squared_residuals
-
-
 def preform_c_steps(theta_old, data, use_sum, sum_old, h_size, max_steps, threshold):  # vola se 10x
-    # print(theta_old.shape)
-    # thetha has bad shape here, lets reshape it
-    # theta_old = theta_old.T
-    # theta_old = np.reshape(theta_old, (theta_old.shape[0], 1))
 
     for i in range(max_steps):  # vola se 50 x
         theta_new, h_new = c_step(theta_old, data, h_size)  # chyba tady
@@ -101,6 +85,7 @@ def c_step(theta_old, data, h_size):
     return theta_new, h_new
 
 
+# for storage only
 class SelectiveIterationResults:
     def __init__(self, arr_theta_hat, arr_h_index, arr_rss):
         self.arr_theta_hat = arr_theta_hat
@@ -131,8 +116,7 @@ class FastLtsRegression:
             threshold: 'stopping criterion for Qold Qnew sum residuals in c-steps' = 1e-6):
 
         # Init some properties
-        self._data = val_and_reshap(X, y, h_size, num_start_c_steps, num_starts_to_finish, max_c_steps, threshold,
-                                    use_intercept)
+        self._data = validate(X, y, h_size, num_start_c_steps, num_starts_to_finish, max_c_steps, threshold, use_intercept)
         self._p = self._data.shape[1] - 1
         self._N = self._data.shape[0]
 
@@ -149,17 +133,27 @@ class FastLtsRegression:
         final_results, self.n_iter_ = self.iterate_till_convergence(results, arr_best_idx, max_c_steps, threshold)
         arr_final_idx = K_SMALLEST_SET(final_results.arr_rss, 1)
 
-        # Store results
+        # final_results.arr_thetha_hat.shape (10,p,1) ndarray
+        # final_results.arr_rss.shape (10,1,1) ndarray
+        # final_results.arr_h_index.shape (10, 502) ndarray
+
+        # ... Store results
         theta_final = final_results.arr_theta_hat[arr_final_idx[0]]
+
         if use_intercept:
-            self.intercept_ = theta_final[-1]  # for last column, only first (and only row)
-            self.coef_ = theta_final[:-1]  # for all but last column,  only first (and only row)
+            self.intercept_ = theta_final[-1,0]  # last row last col
+            self.coef_ = theta_final[:-1,0]  # for all but last column,  only first col
         else:
             self.intercept_ = 0.0
-            self.coef_ = theta_final  # for all but last column,  only first (and only row)
+            self.coef_ = theta_final[:,0]  # all rows, only first col
 
-        self.h_subset_ = final_results.arr_h_index[arr_final_idx[0]].astype(int)
-        self.rss_ = final_results.arr_rss[arr_final_idx[0]]
+        self.h_subset_ = final_results.arr_h_index[arr_final_idx[0]].astype(int) # 0 0 protoze vybirame z (10,502)
+        self.rss_ = final_results.arr_rss[arr_final_idx[0]][0,0] # 0 0 protoze vybirame z (10,1,1)
+
+        # h_subset_ ndarray (502,)
+        # rss float32
+        # coef ndarray (p,)
+        # intercept float32
 
     # Select initial H1
     def select_initial_h1(self):
@@ -212,10 +206,6 @@ class FastLtsRegression:
     def selective_iteration(self, num_starts, num_start_c_steps):
         start_time = time.time()
 
-        # arr_theta_hat = np.empty((0, self._p))
-        # arr_h_subset = np.empty((0, self._h_size))
-        # arr_rss = np.empty((0, 1))  # only one number, but needed for sorting...
-
         arr_theta_hat = []
         arr_h_subset = []
         arr_rss = []
@@ -224,18 +214,14 @@ class FastLtsRegression:
         for i in range(num_starts):  # todo time O(num_starts * (n-p) * matrixSVD(pxp))
             # select initial h1
             init_h1 = self.select_initial_h1()  # todo time: (n-p) * matrixSVD(pxp) CANT GO BETTER ?? [BINARY -- ?]
-
             # make few c-steps
             # (p,1)  (h_size,) (1,1)
             thetha_old = OLS(self._data[init_h1, :])
+
             theta, h_subset, rss, _ = preform_c_steps(thetha_old, self._data, False, None, self._h_size, num_start_c_steps, 0)
             arr_theta_hat.append(theta)
             arr_h_subset.append(h_subset)
             arr_rss.append(rss.A1)
-
-            # arr_theta_hat = np.append(arr_theta_hat, theta.T, axis=0)
-            # arr_h_subset = np.append(arr_h_subset, np.reshape(h_subset, (1, self._h_size)), axis=0)
-            # arr_rss = np.append(arr_rss, rss, axis=0)
 
         arr_theta_hat = np.asarray(arr_theta_hat)
         arr_h_subset = np.asarray(arr_h_subset)
@@ -247,16 +233,12 @@ class FastLtsRegression:
 
     def iterate_till_convergence(self, results, arr_best_idx, max_c_steps, threshold):
         start_time = time.time()
-        # arr_theta_hat = np.empty((0, self._p))
-        # arr_h_subset = np.empty((0, self._h_size))
-        # arr_rss = np.empty((0, 1))  # only one number, but needed for sorting...
 
         arr_theta_hat = []
         arr_h_subset = []
         arr_rss = []
 
         n_iter = 0
-        print(results.arr_theta_hat[0].shape)
         for i in arr_best_idx:
             theta, h_subset, rss, n_iter = preform_c_steps(results.arr_theta_hat[i],
                                                            self._data,
@@ -264,10 +246,6 @@ class FastLtsRegression:
                                                            results.arr_rss[i],
                                                            self._h_size,
                                                            max_c_steps, threshold)
-
-            # arr_theta_hat = np.append(arr_theta_hat, theta.T, axis=0)
-            # arr_h_subset = np.append(arr_h_subset, np.reshape(h_subset, (1, self._h_size)), axis=0)
-            # arr_rss = np.append(arr_rss, rss, axis=0)
 
             arr_theta_hat.append(theta)
             arr_h_subset.append(h_subset)
@@ -343,8 +321,8 @@ def K_SMALLEST_SET(absolute_dist_in, k_smallest):
 if __name__ == '__main__':
     # LINEAR DATA
     # data generated same way as in Rousseeuw and Driessen 2000
-    X_original = np.random.normal(loc=0, scale=10, size=8000)  # var = 100
-    e = np.random.normal(loc=0, scale=1, size=8000)  # var = 1
+    X_original = np.random.normal(loc=0, scale=10, size=800)  # var = 100
+    e = np.random.normal(loc=0, scale=1, size=800)  # var = 1
     y_original = 1 + X_original + e
 
     # OUTLIERS
