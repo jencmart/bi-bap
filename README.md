@@ -69,6 +69,18 @@ docker start -i python-anaconda3
 python /path/to/my/scrpit
 ```
 
+# python -> pybind11 -> eigen
+```
+pip install pybind11
+pip install cppimport
+git clone https://github.com/eigenteam/eigen-git-mirror.git
+cd eigen-git-mirror
+mkdir example-program
+cd example-program
+touch funcs.hpp funcs.cpp wrap.cpp setup.py test_funcs.py
+
+```
+
 # Teoretical part
 * Pouzit sablony latex
 * compiler - texlive
