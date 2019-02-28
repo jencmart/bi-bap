@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8c5f1ccf-065f-4604-87bf-a6d3a9772864" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../../../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../../README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../notebooks/bakalarka_prototyp_fast_lts.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../../notebooks/bakalarka_prototyp_fast_lts.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -14,7 +11,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/lts$main_remote_docker.coverage" NAME="main-remote-docker Coverage Results" MODIFIED="1551368955316" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/lts$main_remote_docker.coverage" NAME="main-remote-docker Coverage Results" MODIFIED="1551373329892" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/test$main_remote_docker.coverage" NAME="main-remote-docker Coverage Results" MODIFIED="1551183675838" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
   </component>
   <component name="FileEditorManager">
@@ -22,12 +19,15 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="291">
-              <caret line="122" lean-forward="true" selection-start-line="122" selection-end-line="122" />
+            <state relative-caret-position="264">
+              <caret line="238" lean-forward="true" selection-start-line="238" selection-end-line="238" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
                 <element signature="e#235#2066#0" />
-                <element signature="e#2668#2837#0" />
+                <element signature="e#3850#5592#0" />
+                <element signature="e#7772#7939#0" />
+                <element signature="e#9556#9651#0" />
+                <element signature="e#9679#9836#0" />
               </folding>
             </state>
           </provider>
@@ -44,13 +44,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>elf.iterate_till_convergence(res</find>
-      <find>iterate_till_convergence</find>
-      <find>self.thres</find>
-      <find>self.use_i</find>
-      <find>lf.max_c_s</find>
-      <find>self.data</find>
-      <find>ravel</find>
       <find>p.appe</find>
       <find>OLS</find>
       <find>ABS</find>
@@ -67,13 +60,20 @@
       <find>K_SMALLEST_SET</find>
       <find>ABS_DIST</find>
       <find>SORT_K_SMALLEST_SET</find>
-      <find>generate_h1_subset</find>
-      <find>selective_iteration</find>
       <find>create_all_h1_subsets</find>
-      <find>preform_c_steps</find>
-      <find>iterate_c_steps</find>
       <find>indexes</find>
       <find>SORT_K_SMALLEST_SET_INPLACE</find>
+      <find>selective_iteration</find>
+      <find>iterate_till_convergence</find>
+      <find>coef_</find>
+      <find>generate_h1_subset</find>
+      <find>SelectiveIterationResults</find>
+      <find>preform_c_steps</find>
+      <find>c_step</find>
+      <find>c_step(</find>
+      <find>n_iter</find>
+      <find>iterate_c_steps</find>
+      <find>_data</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -89,7 +89,7 @@
   <component name="ProjectFrameBounds">
     <option name="x" value="32" />
     <option name="y" value="48" />
-    <option name="width" value="591" />
+    <option name="width" value="911" />
     <option name="height" value="1000" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -207,12 +207,12 @@
       <workItem from="1551179148095" duration="6041000" />
       <workItem from="1551197469823" duration="1206000" />
       <workItem from="1551254883280" duration="3723000" />
-      <workItem from="1551275560453" duration="9272000" />
+      <workItem from="1551275560453" duration="15159000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="39420000" />
+    <option name="totallyTimeSpent" value="45307000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -224,7 +224,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="32" y="48" width="591" height="1000" extended-state="0" />
+    <frame x="32" y="48" width="911" height="1000" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.20245726" />
@@ -257,12 +257,15 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="291">
-          <caret line="122" lean-forward="true" selection-start-line="122" selection-end-line="122" />
+        <state relative-caret-position="264">
+          <caret line="238" lean-forward="true" selection-start-line="238" selection-end-line="238" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
             <element signature="e#235#2066#0" />
-            <element signature="e#2668#2837#0" />
+            <element signature="e#3850#5592#0" />
+            <element signature="e#7772#7939#0" />
+            <element signature="e#9556#9651#0" />
+            <element signature="e#9679#9836#0" />
           </folding>
         </state>
       </provider>
