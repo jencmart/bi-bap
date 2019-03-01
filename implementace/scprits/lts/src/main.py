@@ -4,94 +4,69 @@ import math
 import time
 
 
-# currently support for np.ndarray and matrix
-def validate(X, y, h_size, num_start_c_steps, num_starts_to_finish, max_c_steps, threshold, use_intercept):
-    if X is None or not isinstance(X, (np.ndarray, np.matrix)):
-        raise Exception('X must be  type array or np.ndarray or np.matrix')
-    if y is None or not isinstance(y, (np.ndarray, np.matrix)):
-        raise Exception('y must be  type array or np.ndarray or np.matrix')
-
-    if X.ndim == 1:
-        X = np.reshape(X, [X.shape[0], 1])
-    if y.ndim == 1:
-        y = np.reshape(y, [y.shape[0], 1])
-
-    if type(X) is not np.matrix:
-        X = np.asmatrix(X)
-    if type(y) is not np.matrix:
-        y = np.asmatrix(y)
-
-    if y.ndim != 1:
-        if y.ndim != 2 or y.shape[1] != 1:
-            raise ValueError('y must be 1D array')
-    if y.shape[0] != X.shape[0]:
-        raise ValueError('X and y must have same number of samples')
-
-    if X.shape[0] < 1:  # expects N >= 1
-        raise ValueError('You must provide at least one sample')
-
-    if X.ndim < 1:  # expects p >=1
-        raise ValueError('X has zero dimensions')
-
-    if h_size != 'default':
-        if h_size > X.shape[0]:
-            raise ValueError('H_size must not be > number of samples')
-        if h_size < 1:
-            raise ValueError('H_size must be > 0 ; preferably (n + p + 1) / 2 <= h_size <= n ')
-
-    if max_c_steps < 1:  # expects max_steps => 1
-        raise ValueError('max_c_steps must be >= 1')
-
-    if num_start_c_steps < 1:  # expects num_start_steps => 1
-        raise ValueError('num_start_c_steps must be >= 1')
-
-    if num_starts_to_finish < 1:  # expects num_starts_to_finish >= 1
-        raise ValueError('num_starts_to_finish must be >= 1')
-
-    if threshold < 0:  # expects threshold >= 0
-        raise ValueError('threshold must be >= 0')
-
-    if use_intercept:
-        merged = np.concatenate([y, X, np.ones((X.shape[0], 1))], axis=1)
-    else:
-        merged = np.concatenate([y, X], axis=1)
-
-    return np.asmatrix(merged)
-
-
-def preform_c_steps(theta_old, data, use_sum, sum_old, h_size, max_steps, threshold):  # vola se 10x
-
-    for i in range(max_steps):
-        # c step
-        abs_residuals = abs_dist(data, theta_old)  # nested extension : DATA = TEN SUBSET ( 300 napriklad..) H_SIZE := subset_size * h/n ???? jo dava smysl ...lece pres 50% opet..
-        h_new = k_smallest(abs_residuals, h_size) #
-        theta_new = ols(data[h_new, :])
-        # ! c step
-
-        if use_sum:
-            sum_new = rss(data[h_new, :], theta_new)
-            if math.isclose(sum_old, sum_new, rel_tol=threshold):
-                break
-            sum_old = sum_new
-        theta_old = theta_new
-
-    if not use_sum:
-        sum_new = rss(data[h_new, :], theta_new)
-
-    return theta_new, h_new, sum_new[0,0], i
 
 class FastLtsRegression:
     def __init__(self):
-        self._data = None
-        self._p = None
-        self._N = None
-        self._h_size = None
         # public
         self.n_iter_ = None
         self.coef_ = None
         self.intercept_ = None
         self.h_subset_ = None
         self.rss_ = None
+
+    # currently support for np.ndarray and matrix
+    def _validate(self, X, y, h_size, num_start_c_steps, num_starts_to_finish, max_c_steps, threshold, use_intercept):
+        if X is None or not isinstance(X, (np.ndarray, np.matrix)):
+            raise Exception('X must be  type array or np.ndarray or np.matrix')
+        if y is None or not isinstance(y, (np.ndarray, np.matrix)):
+            raise Exception('y must be  type array or np.ndarray or np.matrix')
+
+        if X.ndim == 1:
+            X = np.reshape(X, [X.shape[0], 1])
+        if y.ndim == 1:
+            y = np.reshape(y, [y.shape[0], 1])
+
+        if type(X) is not np.matrix:
+            X = np.asmatrix(X)
+        if type(y) is not np.matrix:
+            y = np.asmatrix(y)
+
+        if y.ndim != 1:
+            if y.ndim != 2 or y.shape[1] != 1:
+                raise ValueError('y must be 1D array')
+        if y.shape[0] != X.shape[0]:
+            raise ValueError('X and y must have same number of samples')
+
+        if X.shape[0] < 1:  # expects N >= 1
+            raise ValueError('You must provide at least one sample')
+
+        if X.ndim < 1:  # expects p >=1
+            raise ValueError('X has zero dimensions')
+
+        if h_size != 'default':
+            if h_size > X.shape[0]:
+                raise ValueError('H_size must not be > number of samples')
+            if h_size < 1:
+                raise ValueError('H_size must be > 0 ; preferably (n + p + 1) / 2 <= h_size <= n ')
+
+        if max_c_steps < 1:  # expects max_steps => 1
+            raise ValueError('max_c_steps must be >= 1')
+
+        if num_start_c_steps < 1:  # expects num_start_steps => 1
+            raise ValueError('num_start_c_steps must be >= 1')
+
+        if num_starts_to_finish < 1:  # expects num_starts_to_finish >= 1
+            raise ValueError('num_starts_to_finish must be >= 1')
+
+        if threshold < 0:  # expects threshold >= 0
+            raise ValueError('threshold must be >= 0')
+
+        if use_intercept:
+            merged = np.concatenate([y, X, np.ones((X.shape[0], 1))], axis=1)
+        else:
+            merged = np.concatenate([y, X], axis=1)
+
+        return np.asmatrix(merged)
 
     def fit(self, X, y,
             num_starts: 'number of initial starts (H1)' = 500,
@@ -103,15 +78,9 @@ class FastLtsRegression:
             threshold: 'stopping criterion for Qold Qnew sum residuals in c-steps' = 1e-6):
 
         # Init some properties
-        self._data = validate(X, y, h_size, num_start_c_steps, num_starts_to_finish, max_c_steps, threshold, use_intercept)
-        self._p = self._data.shape[1] - 1
-        self._N = self._data.shape[0]
+        data = self._validate(X, y, h_size, num_start_c_steps, num_starts_to_finish, max_c_steps, threshold, use_intercept)
 
-        if h_size == 'default':
-            self._h_size = math.ceil((self._N + self._p + 1) / 2)  # todo with or without intercept?
-        else:
-            self._h_size = h_size
-
+        _h_size = math.ceil((data.shape[0] + data.shape[1] ) / 2) if h_size == 'default' else h_size # N + (p-1) + 1
 
         # IF N > 1500
         # 1. CREATE 5 SUBSETS OF THE DATA
@@ -131,17 +100,17 @@ class FastLtsRegression:
 
         # Selective iteration := h1 + few c-steps + find few with best rss
         start_time = time.time()
-        subset_results = self.create_all_h1_subsets(num_starts) # array of 500 Results (h1, thetha, inf)
+        subset_results = self.create_all_h1_subsets(num_starts, _h_size, data) # array of 500 Results (h1, thetha, inf)
         print('generate h1:', time.time() - start_time)
 
         start_time = time.time()
-        self.iterate_c_steps(subset_results, range(num_starts), False, num_start_c_steps, 0) # few c steps on all 500 results, all happens inplace
+        self.iterate_c_steps(data, _h_size, subset_results, num_starts, False, num_start_c_steps, 0) # few c steps on all 500 results, all happens inplace
         k_smallest_inplace(subset_results, num_starts_to_finish) # arr results && indexes are sorted (sort first 10 from 500...)
         print('c steps h1:', time.time() - start_time)
 
         # C-steps till convergence
         start_time = time.time()
-        self.iterate_c_steps(subset_results, range(num_starts_to_finish), True, max_c_steps, threshold)
+        self.iterate_c_steps(data, _h_size, subset_results, num_starts_to_finish, True, max_c_steps, threshold)
         print('convergence:', time.time() - start_time)
 
         # select the best one
@@ -163,30 +132,33 @@ class FastLtsRegression:
 
 
     # Select initial H1
-    # ONLY ONE H1 ( one array of indexes to _data)
-    def generate_h1_subset(self):
-        if self._p >= self._N:
-            J = self._data
+    # ONLY ONE H1 ( one array of indexes to data)
+    def generate_h1_subset(self, _h_size, data):
+        p = data.shape[1] - 1
+        N = data.shape[0]
+
+        if p >= N:
+            J = data
         else:
             # create random permutation
-            idx_all = np.random.permutation(self._N)
+            idx_all = np.random.permutation(N)
             # cut first p indexes and save the rest
-            idx_initial = idx_all[:self._p]
-            idx_rest = idx_all[self._p:]
+            idx_initial = idx_all[:p]
+            idx_rest = idx_all[p:]
 
             # create initial matrix of shape (p,p)
-            J = self._data[idx_initial, :]
+            J = data[idx_initial, :]
 
             # J[:,1:] == only X, without first y column
             rank = np.linalg.matrix_rank(J[:, 1:])
 
-            while rank < self._p and J.shape[0] < self._N:
+            while rank < p and J.shape[0] < N:
                 # get first index from rest of the indexes
                 current = idx_rest[[0],]
                 idx_rest = idx_rest[1:, ]
 
                 # add row on this index -fixed, ok
-                J = np.append(J, self._data[current, :], axis=0)
+                J = np.append(J, data[current, :], axis=0)
 
                 # and recalculate rank
                 rank = np.linalg.matrix_rank(J[:, 1:])
@@ -195,8 +167,8 @@ class FastLtsRegression:
         theta_zero_hat = ols(J)
 
         # abs dist on N, and return h smallest
-        abs_residuals = abs_dist(self._data, theta_zero_hat)
-        indexes = k_smallest(abs_residuals, self._h_size) # vraci pole indexu, mohlo by vracet o theta
+        abs_residuals = abs_dist(data, theta_zero_hat)
+        indexes = k_smallest(abs_residuals, _h_size) # vraci pole indexu, mohlo by vracet o theta
         return indexes
 
     class BetterResults:
@@ -206,21 +178,46 @@ class FastLtsRegression:
             self.rss = rss
             self.n_iter = n_iter
 
-    def create_all_h1_subsets(self, num_starts):
+
+    def create_all_h1_subsets(self, num_starts, _h_size, data):
         arr_results = []
         for i in range(num_starts):
-            init_h1 = self.generate_h1_subset() # one array of indexes to h1
-            arr_results.append(self.BetterResults(init_h1, ols(self._data[init_h1, :]), math.inf, 0))
+            init_h1 = self.generate_h1_subset(_h_size, data) # one array of indexes to h1
+            arr_results.append(self.BetterResults(init_h1, ols(data[init_h1, :]), math.inf, 0))
         return arr_results
 
-    def iterate_c_steps(self, results, indexes, stop_on_rss, cnt_steps, threshold):
+    def iterate_c_steps(self, data, _h_size, results, length, stop_on_rss, cnt_steps, threshold):
 
-        for i in indexes: # bude brat v potaz jenom prvnich X
-            theta, h_subset, rss, n_iter = preform_c_steps(results[i].theta, self._data, stop_on_rss, results[i].rss, self._h_size, cnt_steps, threshold)
+        for i in range(length): # bude brat v potaz jenom prvnich X
+            theta, h_subset, rss, n_iter = self._preform_c_steps(results[i].theta, data, stop_on_rss, results[i].rss, _h_size, cnt_steps, threshold)
             results[i].theta = theta
             results[i].h_subset = h_subset
             results[i].rss = rss
             results[i].n_iter += n_iter
+
+
+    def _preform_c_steps(self, theta_old, data, use_sum, sum_old, h_size, max_steps, threshold):  # vola se 10x
+
+        for i in range(max_steps):
+            # c step
+            abs_residuals = abs_dist(data,
+                                     theta_old)  # nested extension : DATA = TEN SUBSET ( 300 napriklad..) H_SIZE := subset_size * h/n ???? jo dava smysl ...lece pres 50% opet..
+            h_new = k_smallest(abs_residuals, h_size)  #
+            theta_new = ols(data[h_new, :])
+            # ! c step
+
+            if use_sum:
+                sum_new = rss(data[h_new, :], theta_new)
+                if math.isclose(sum_old, sum_new, rel_tol=threshold):
+                    break
+                sum_old = sum_new
+            theta_old = theta_new
+
+        if not use_sum:
+            sum_new = rss(data[h_new, :], theta_new)
+
+        return theta_new, h_new, sum_new[0, 0], i
+
 
 ##################
 # MAIN FUNCTIONS #
@@ -230,19 +227,18 @@ def rss(input_data, theta):
     x = input_data[:, 1:]
     return (y - x * theta).T * (y - x * theta)
 
-
 def ols(input_data):
     # [0] .. diky tomu bude mit spravny shape
     y = input_data[:, [0]]
     x = input_data[:, 1:]
     return (x.T * x).I * x.T * y  # including intercept (last)
 
-
 def abs_dist(data, theta):
     # Y (p+,1)
     # theta (p+ , 1)
     # xx (n, p)
     return np.absolute(data[:, [0]] - data[:, 1:] * theta)
+
 
 
 # what if I sort it...
@@ -310,8 +306,8 @@ def k_smallest(absolute_dist_in, kth_smallest):
 
 if __name__ == '__main__':
 
-    N_clear = 50000
-    N_dirty = 20000
+    N_clear = 1000
+    N_dirty = 200
     # LINEAR DATA
     # data generated same way as in Rousseeuw and Driessen 2000
     X_original = np.random.normal(loc=0, scale=10, size=N_clear)  # var = 100
@@ -331,7 +327,7 @@ if __name__ == '__main__':
 
     lts = FastLtsRegression()
     lts.fit(X, y, use_intercept=True)
-    print('\n\n')
+    print('\n')
     print('wights: ', lts.coef_)
     print('intercept: ', lts.intercept_)
     print('rss: ', lts.rss_)
