@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8c5f1ccf-065f-4604-87bf-a6d3a9772864" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/.rendered.somecode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/.rendered.somecode.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/.somecode.cpp.cppimporthash" beforeDir="false" afterPath="$PROJECT_DIR$/src/.somecode.cpp.cppimporthash" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/somecode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/somecode.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/somecode.cpython-35m-x86_64-linux-gnu.so" beforeDir="false" afterPath="$PROJECT_DIR$/src/somecode.cpython-35m-x86_64-linux-gnu.so" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/test.py" afterDir="false" />
-    </list>
+    <list default="true" id="8c5f1ccf-065f-4604-87bf-a6d3a9772864" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,7 +147,7 @@
   <component name="ProjectFrameBounds">
     <option name="x" value="32" />
     <option name="y" value="48" />
-    <option name="width" value="911" />
+    <option name="width" value="591" />
     <option name="height" value="1000" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -290,12 +284,12 @@
       <workItem from="1551197469823" duration="1206000" />
       <workItem from="1551254883280" duration="3723000" />
       <workItem from="1551275560453" duration="18854000" />
-      <workItem from="1551462999502" duration="12932000" />
+      <workItem from="1551462999502" duration="13008000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="61934000" />
+    <option name="totallyTimeSpent" value="62010000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -307,9 +301,9 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-2" y="-18" width="1924" height="1100" extended-state="0" />
+    <frame x="32" y="48" width="591" height="1000" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.12660256" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.43970317" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -323,14 +317,14 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32959184" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5005342" side_tool="true" weight="0.29591838" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.47142857" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.525" />
       <window_info anchor="bottom" id="Python Console" order="12" sideWeight="0.49946582" weight="0.29591838" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="SciView" order="3" sideWeight="0.49227798" visible="true" weight="0.050213676" />
+      <window_info anchor="right" id="SciView" order="3" sideWeight="0.49043062" visible="true" weight="0.17439704" />
       <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" x="0" y="0" width="177" height="800" id="Documentation" order="5" sideWeight="0.507722" side_tool="true" visible="true" weight="0.050213676" />
+      <window_info anchor="right" x="0" y="0" width="177" height="800" id="Documentation" order="5" sideWeight="0.5095694" side_tool="true" visible="true" weight="0.17439704" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
