@@ -104,11 +104,10 @@ class FastLtsRegression:
         # Selective iteration := h1 + few c-steps + find few with best rss
         # result = eigen_lts.fast_lts(data, num_starts, num_start_c_steps, num_starts_to_finish, max_c_steps, h_size, threshold)
         data_tmp = np.array(data, dtype='float64',copy=True)
-        print(type(data_tmp))
-        print(data_tmp.flags)
-        print('eigen before:', data_tmp)
-        eigen_lts.fast_lts(data_tmp)
-        print('eigen after:', data_tmp)
+        X = data[:, 1:]
+        y = data[:, :1]
+
+        eigen_lts.fast_lts(X, y, num_starts, _h_size)
 
         start_time = time.time()
         subset_results = self.create_all_h1_subsets(num_starts, _h_size, data) # array of 500 Results (h1, thetha, inf)
@@ -184,10 +183,10 @@ class FastLtsRegression:
 
     class BetterResults:
         def __init__(self, h_subset, theta, rss, n_iter):
-            self.theta = theta
-            self.h_subset = h_subset
-            self.rss = rss
-            self.n_iter = n_iter
+            self.theta = theta # matrix
+            self.h_subset = h_subset # array
+            self.rss = rss # double
+            self.n_iter = n_iter # integer
 
 
     def create_all_h1_subsets(self, num_starts, _h_size, data):

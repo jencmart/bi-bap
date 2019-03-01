@@ -10,10 +10,30 @@ setup_pybind11(cfg)
 #include <pybind11/eigen.h>
 #include <pybind11/numpy.h>
 #include <Eigen/LU>
+#include <Eigen/QR>
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 namespace py = pybind11;
+
+
+
+
+class Results {
+    public:
+        Eigen::MatrixXd theta;
+        std::vector<int> h_subset;
+        double rss;
+        int n_iter;
+
+        Results(){
+            rss = 0.0;
+            n_iter = 0;
+        }
+
+};
+
 
 
 /* E I G E N */
@@ -32,11 +52,59 @@ Eigen::MatrixXd inv(Eigen::MatrixXd xs) {
     return xs.inverse();
 }
 
+
+
+void generateSubsets(std::vector<Results*> & subset_results, const Eigen::MatrixXd & X, const Eigen::MatrixXd & y, int numStarts, int hSize ) {
+
+    unsigned p = X.cols();
+    unsigned N = X.rows();
+
+    for(int i = 0; i < numStarts; ++i){
+
+         // generate random permutation of [pi(0) ... pi(N)]
+         std::vector<int> permutation(N);
+         std::iota(permutation.begin(), permutation.end(), 0);
+         std::random_shuffle ( permutation.begin(), permutation.end());
+
+         // select first p elements of this permutation
+         std::vector<int>::const_iterator first = permutation.begin();
+         std::vector<int>::const_iterator last  = permutation.begin() + p;
+         std::vector<int> ind(first, last);
+
+         // select p samples (at those p random indexes) and calculate matrix decomp
+         // LU decompostion in this case
+         // todo QR decomposition .. in eigen JacobiRotation
+         // FullPivLU worked as expected. lets try QR
+         // ColPivHouseholderQR
+
+         Eigen::ColPivHouseholderQR<Eigen::MatrixXd> qr_decomp(X(ind, Eigen::all));
+         // and reveal rank from the decompositon
+         auto rank = qr_decomp.rank();
+
+         // add samples till rank is equal p
+         while(rank < p && ind.size() < N) {
+            ind.push_back(permutation[ind.size()]);
+             qr_decomp = qr_decomp.compute(X(ind, Eigen::all)); // todo i am sure this''ll segfault
+             rank = qr_decomp.rank();
+         }
+
+        //  2x1 :-)
+         Eigen::MatrixXd resultat = qr_decomp.solve(y(ind, Eigen::all));
+         std::cout << "i am king " << resultat.rows() << 'x' << resultat.cols() << std::endl;
+         std::cout << resultat << std::endl;
+         //subset_results.push_back(new Results(, ) )); TODO
+    }
+
+    return;
+}
+
 // return array of weights
-void fast_lts(Eigen::MatrixXd data) {
-    std::vector<int> ind{4,2,5,5,3};
-    std::cout << "\n\n"<< "Initial matrix A:\n" << data << "\n\n";
-    std::cout << "A(all,ind):\n" << data(ind, Eigen::all) << "\n\n";
+void fast_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int numStarts, int hSize) {
+
+    std::vector<Results*> subset_results;
+
+    generateSubsets(subset_results, X, y, numStarts, hSize);
+
     return;
 }
 
@@ -49,39 +117,6 @@ int square(double x) {
 }
 
 
-// soucet dvou np array
-py::array_t<double> add_arrays(py::array_t<double> input1, 
-							   py::array_t<double> input2) 
-{
-    auto buf1 = input1.request(), buf2 = input2.request();
-
-    if (buf1.ndim != 1 || buf2.ndim != 1)
-        throw std::runtime_error("Number of dimensions must be one");
-
-    if (buf1.shape[0] != buf2.shape[0])
-        throw std::runtime_error("Input shapes must match");
-
-    auto result = py::array(py::buffer_info(
-							nullptr,            /* Pointer to data (nullptr -> ask NumPy to allocate!) */
-							sizeof(double),     /* Size of one item */
-							py::format_descriptor<double>::value, /* Buffer format */
-							buf1.ndim,          /* How many dimensions? */
-							{ buf1.shape[0] },  /* Number of elements for each dimension */
-							{ sizeof(double) }  /* Strides for each dimension */
-						));
-
-    auto buf3 = result.request();
-
-    double *ptr1 = (double *) buf1.ptr,
-           *ptr2 = (double *) buf2.ptr,
-           *ptr3 = (double *) buf3.ptr;
-
-    for (size_t idx = 0; idx < buf1.shape[0]; idx++)
-        ptr3[idx] = ptr1[idx] + ptr2[idx];
-
-    return result;
-}
-
 
 
 // FOR THE PYBIND11
@@ -92,7 +127,6 @@ py::array_t<double> add_arrays(py::array_t<double> input1,
 // to znamena reference na funkci square o par radku vyse
 PYBIND11_MODULE(somecode, m) {
     m.def("square", &square);
-    m.def("add_arrays",  &add_arrays, "add two NumPy arrays");
     m.def("inv", &inv);
     m.def("det", &det);
     m.def("fast_lts", &fast_lts);
