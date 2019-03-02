@@ -106,8 +106,18 @@ class FastLtsRegression:
         X = data[:, 1:]
         y = data[:, :1]
 
-        print('******* jdeme pocitat *********')
+        print('start')
         eigen_result = eigen_lts.fast_lts(X, y, num_starts, num_start_c_steps, num_starts_to_finish, _h_size, max_c_steps, threshold)
+        self.eigen_weights = eigen_result.get_theta()
+        self.eigen_h_subset = eigen_result.get_h_subset()
+        self.eigen_rss = eigen_result.get_rss()
+        self.eigen_iters = eigen_result.get_n_inter()
+        self.eigen_time1 = eigen_result.get_time_1()
+        self.eigen_time2 = eigen_result.get_time_2()
+        self.eigen_time3 = eigen_result.get_time_3()
+
+        print('done')
+        return;
 
         time1 = time.process_time()
         subset_results = self.create_all_h1_subsets(num_starts, _h_size, data) # array of 500 Results (h1, thetha, inf)
@@ -140,13 +150,7 @@ class FastLtsRegression:
         self.rss_ = best_result.rss
         self.n_iter_ = best_result.n_iter
 
-        self.eigen_weights = eigen_result.get_theta()
-        self.eigen_h_subset = eigen_result.get_h_subset()
-        self.eigen_rss = eigen_result.get_rss()
-        self.eigen_iters = eigen_result.get_n_inter()
-        self.eigen_time1 = eigen_result.get_time_1()
-        self.eigen_time2 = eigen_result.get_time_2()
-        self.eigen_time3 = eigen_result.get_time_3()
+
 
     # Select initial H1
     # ONLY ONE H1 ( one array of indexes to data)
@@ -342,19 +346,19 @@ def generate_data(cnt, outlier_percentage=25):
 
 if __name__ == '__main__':
 
-    X, y = generate_data(50000, outlier_percentage=40)
+    X, y = generate_data(1000000, outlier_percentage=40)
     lts = FastLtsRegression()
     lts.fit(X, y, use_intercept=True)
     print('\n')
-    print('wights: ', lts.coef_)
-    print('intercept: ', lts.intercept_)
-    print('rss: ', lts.rss_)
-    print('iters:', lts.n_iter_)  # final inters only...
-    print('t1: ', lts.time1)
-    print('t2: ', lts.time2)
-    print('t3: ', lts.time3)
-    print('total: ', lts.time1 + lts.time2 + lts.time2 + lts.time3)
-    print('****************\n')
+    # print('wights: ', lts.coef_)
+    # print('intercept: ', lts.intercept_)
+    # print('rss: ', lts.rss_)
+    # print('iters:', lts.n_iter_)  # final inters only...
+    # print('t1: ', lts.time1)
+    # print('t2: ', lts.time2)
+    # print('t3: ', lts.time3)
+    # print('total cpu time: ', lts.time1 + lts.time2 + lts.time2 + lts.time3)
+    # print('****************\n')
 
     print('c code')
     print('weights: ', lts.eigen_weights)
@@ -363,7 +367,7 @@ if __name__ == '__main__':
     print('t1: ', lts.eigen_time1)
     print('t2: ', lts.eigen_time2)
     print('t3: ', lts.eigen_time3)
-    print('total: ', lts.eigen_time1 + lts.eigen_time2 + lts.eigen_time3)
+    print('total cpu time: ', lts.eigen_time1 + lts.eigen_time2 + lts.eigen_time3)
 
     # x = np.arange(12)
     # print(x)

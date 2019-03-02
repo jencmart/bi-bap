@@ -18,9 +18,9 @@ setup_pybind11(cfg)
 #include <algorithm>
 #include <cmath>
 //#include <chrono>
-#include <ctime>
+//#include <ctime>
 //#include <time.h>
-
+#include <time.h>
 /*
 system_clock - real time clock which is actually the clock used by system
 high_resolution_clock - clock with the smallest tick/interval available/supported by the system
@@ -281,15 +281,18 @@ void performCStepsInPlace(Result* result,  const Eigen::MatrixXd & X, const Eige
 // *********************************************************************************************************************
 Result* fast_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int numStarts, int numInitialCSteps, int numStartsToFinish, int hSize, int maxCSteps, double threshold) {
     std::vector<Result*> subsetResults;
-    clock_t start = clock();
+    clock_t t;
+
+     t = clock();
     //********************************************************
     // generate initial H1_subsets ( #H1_subsets == numStarts)
     generateSubsets(subsetResults, X, y, numStarts, hSize);
     //********************************************************
-    clock_t stop = clock();
-    double time1 = (double)(stop - start) * 1000.0 / CLOCKS_PER_SEC;
+    float time1 = ((float)(clock() - t))/CLOCKS_PER_SEC;
 
-    start = clock();
+
+
+    t = clock();
     //********************************************************
     // -- INITIAL - few c steps on all subsets
     // numStarts represent range thus we mean to iterate cSteps on all of initial H1 subsets for now
@@ -300,9 +303,12 @@ Result* fast_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int numStarts, int numIni
     // sort it
     kth_smallest_recursive_inplace_NoIndex(subsetResults, 0, subsetResults.size()-1, numStartsToFinish);
     //********************************************************
-    stop = clock();
-    double time2 = (double)(stop - start) * 1000.0 / CLOCKS_PER_SEC;
-    start = clock();
+    float time2 = ((float)(clock() - t))/CLOCKS_PER_SEC;
+
+
+
+
+    t = clock();
     //********************************************************
     // -- FINAL - iterate cSteps till convergence on best (say 10) final subset
     for (int i = 0; i < numStartsToFinish; ++i)
@@ -312,8 +318,7 @@ Result* fast_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int numStarts, int numIni
     for (int i = 0 ; i < numStartsToFinish; ++i)
         best = subsetResults[i]->rss < best->rss ? subsetResults[i] : best;
      //********************************************************
-    stop = clock();
-    double time3 = (double)(stop - start) * 1000.0 / CLOCKS_PER_SEC;
+    float time3 = ((float)(clock() - t))/CLOCKS_PER_SEC;
 
 
     best->time1 = time1;
