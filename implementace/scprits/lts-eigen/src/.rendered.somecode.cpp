@@ -198,7 +198,7 @@ void generateSubsets(std::vector<Result*> & subsetResults, const Eigen::MatrixXd
          std::vector<int> slicedVec(indexes.begin(), indexes.begin() + hSize);
 
          // calculate OLS on this smallest h1 subset
-         Eigen::ColPivHouseholderQR<Eigen::MatrixXd> finalDecomp(X(slicedVec, Eigen::all));
+         Eigen::HouseholderQR<Eigen::MatrixXd> finalDecomp(X(slicedVec, Eigen::all));
          Eigen::MatrixXd theta_final = qr_decomp.solve(y(slicedVec, Eigen::all));
          // ------------
 
@@ -229,7 +229,7 @@ void performCStepsInPlace(Result* result,  const Eigen::MatrixXd & X, const Eige
         std::vector<int> slicedVec(indexes.begin(), indexes.begin() + hSize);
 
         // calculate OLS on this smallest h1 subset
-        Eigen::ColPivHouseholderQR<Eigen::MatrixXd> finalDecomp(X(slicedVec, Eigen::all));
+        Eigen::HouseholderQR<Eigen::MatrixXd> finalDecomp(X(slicedVec, Eigen::all));
         Eigen::MatrixXd theta_new = finalDecomp.solve(y(slicedVec, Eigen::all));
         // -----------
 
@@ -246,7 +246,7 @@ void performCStepsInPlace(Result* result,  const Eigen::MatrixXd & X, const Eige
             if(std::fabs(result->rss - rss_new) < threshold) {
                 result->hSubset = slicedVec;
                 result->rss = rss_new;
-                result->n_iter +=  numSteps;
+                result->n_iter +=  i;
                 result->n_iter += 1; // this step
                 return;
             }
@@ -260,7 +260,7 @@ void performCStepsInPlace(Result* result,  const Eigen::MatrixXd & X, const Eige
 
             result->hSubset = slicedVec;
             result->rss =  ( (yy - XX * result->theta).transpose() * (yy - XX * result->theta) )(0,0);
-            result->n_iter +=  numSteps;
+            result->n_iter +=  i;
             result->n_iter += 1;
             return;
         }

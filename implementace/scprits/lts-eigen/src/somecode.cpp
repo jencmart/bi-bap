@@ -203,7 +203,7 @@ void generateSubsets(std::vector<Result*> & subsetResults, const Eigen::MatrixXd
          std::vector<int> slicedVec(indexes.begin(), indexes.begin() + hSize);
 
          // calculate OLS on this smallest h1 subset
-         Eigen::ColPivHouseholderQR<Eigen::MatrixXd> finalDecomp(X(slicedVec, Eigen::all));
+         Eigen::HouseholderQR<Eigen::MatrixXd> finalDecomp(X(slicedVec, Eigen::all));
          Eigen::MatrixXd theta_final = qr_decomp.solve(y(slicedVec, Eigen::all));
          // ------------
 
@@ -234,7 +234,7 @@ void performCStepsInPlace(Result* result,  const Eigen::MatrixXd & X, const Eige
         std::vector<int> slicedVec(indexes.begin(), indexes.begin() + hSize);
 
         // calculate OLS on this smallest h1 subset
-        Eigen::ColPivHouseholderQR<Eigen::MatrixXd> finalDecomp(X(slicedVec, Eigen::all));
+        Eigen::HouseholderQR<Eigen::MatrixXd> finalDecomp(X(slicedVec, Eigen::all));
         Eigen::MatrixXd theta_new = finalDecomp.solve(y(slicedVec, Eigen::all));
         // -----------
 
