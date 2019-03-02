@@ -1,4 +1,4 @@
 #!/bin/bash
 
-rm *.so
+#rm *.so
 python3 ./test.py

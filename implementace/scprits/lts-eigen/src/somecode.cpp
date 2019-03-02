@@ -17,6 +17,15 @@ setup_pybind11(cfg)
 #include <vector>
 #include <algorithm>
 #include <cmath>
+//#include <chrono>
+#include <ctime>
+//#include <time.h>
+
+/*
+system_clock - real time clock which is actually the clock used by system
+high_resolution_clock - clock with the smallest tick/interval available/supported by the system
+stable_clock - a clock with a steady tick rate (Recommended as tick rate is stable, while system_clock's tick period varies according to system load, see this
+*/
 
 namespace py = pybind11;
 
@@ -26,7 +35,9 @@ struct Result {
         Eigen::MatrixXd theta;
         double rss;
         int n_iter;
-
+        double time1;
+        double time2;
+        double time3;
         Result(const std::vector<int> & h_sub, const Eigen::MatrixXd & theta_hat, double RSS, int n_iterations): hSubset(h_sub){
             theta = theta_hat;
             rss = RSS;
@@ -36,12 +47,36 @@ struct Result {
         double getRSS(){
             return rss;
         }
+
+        double getTime1(){
+            return time1;
+        }
+        double getTime2(){
+            return time2;
+        }
+        double getTime3(){
+            return time3;
+        }
+
+        Eigen::MatrixXd getTheta(){
+            return theta;
+        }
+
+        std::vector<int> getHSubset(){
+        return hSubset;
+        }
+
+        int getNIter(){
+           return n_iter;
+        }
+
 };
 
 
 // *********************************************************************************************************************
 // ************************   Q U I C K  -  S E L E C T   **************************************************************
 // *********************************************************************************************************************
+// todo - this was tested i belive it works ok
 void kth_smallest_recursive_inplace(Eigen::MatrixXd & arr, std::vector<int> & indexes, int left, int right, int k) {
     double pivot = arr(right,0);
     int pos = left;
@@ -127,6 +162,7 @@ void kth_smallest_recursive_inplace_NoIndex(std::vector<Result*> & subsetResults
 // *********************************************************************************************************************
 // *****************  GENERATE ALL H1  *********************************************************************************
 // *********************************************************************************************************************
+// todo - this is most probbably ok
 void generateSubsets(std::vector<Result*> & subsetResults, const Eigen::MatrixXd & X, const Eigen::MatrixXd & y, int numStarts, int hSize ) {
     unsigned p = X.cols();
     unsigned N = X.rows();
@@ -182,7 +218,9 @@ void generateSubsets(std::vector<Result*> & subsetResults, const Eigen::MatrixXd
 // *********************************************************************************************************************
 // ****************   PERFORM C STEPS   ********************************************************************************
 // *********************************************************************************************************************
+// todo - here I suspect problem - SOLVED
 void performCStepsInPlace(Result* result,  const Eigen::MatrixXd & X, const Eigen::MatrixXd & y, int hSize, int numSteps,  double threshold) {
+
     for (int i = 0; i < numSteps; ++i){
         // -----------
         // calculate absolute residuals for each data sample from theta Hyperplane
@@ -205,11 +243,15 @@ void performCStepsInPlace(Result* result,  const Eigen::MatrixXd & X, const Eige
 
         // >>check stopping criterion<<
         if(threshold > 0) {
-            double rss_new =  ( (y - X * result->theta).transpose() * (y - X * result->theta) )(0,0);
+
+            Eigen::MatrixXd yy = y(slicedVec, Eigen::all);
+            Eigen::MatrixXd XX = X(slicedVec, Eigen::all);
+
+            double rss_new =  ( (yy - XX * result->theta).transpose() * (yy -XX * result->theta) )(0,0);
             if(std::fabs(result->rss - rss_new) < threshold) {
                 result->hSubset = slicedVec;
                 result->rss = rss_new;
-                result->n_iter +=  numSteps;
+                result->n_iter +=  i;
                 result->n_iter += 1; // this step
                 return;
             }
@@ -218,53 +260,67 @@ void performCStepsInPlace(Result* result,  const Eigen::MatrixXd & X, const Eige
 
         // save hSubset in last step
         if(i+1 == numSteps){
+            Eigen::MatrixXd yy = y(slicedVec, Eigen::all);
+            Eigen::MatrixXd XX = X(slicedVec, Eigen::all);
+
             result->hSubset = slicedVec;
+            result->rss =  ( (yy - XX * result->theta).transpose() * (yy - XX * result->theta) )(0,0);
+            result->n_iter +=  i;
+            result->n_iter += 1;
+            return;
         }
     }
 
     // calculate RSS and update num of iterations
-    result->rss =  ( (y - X * result->theta).transpose() * (y - X * result->theta) )(0,0);
-    result->n_iter +=  numSteps;
-}
 
+
+}
 
 // *********************************************************************************************************************
 // *********************   F A S T  -  L T S   *************************************************************************
 // *********************************************************************************************************************
 Result* fast_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int numStarts, int numInitialCSteps, int numStartsToFinish, int hSize, int maxCSteps, double threshold) {
-
     std::vector<Result*> subsetResults;
-
+    clock_t start = clock();
+    //********************************************************
     // generate initial H1_subsets ( #H1_subsets == numStarts)
     generateSubsets(subsetResults, X, y, numStarts, hSize);
+    //********************************************************
+    clock_t stop = clock();
+    double time1 = (double)(stop - start) * 1000.0 / CLOCKS_PER_SEC;
 
-    // -- INITIAL
+    start = clock();
+    //********************************************************
+    // -- INITIAL - few c steps on all subsets
     // numStarts represent range thus we mean to iterate cSteps on all of initial H1 subsets for now
-    for (int i = 0; i < numStarts; ++i)
-        performCStepsInPlace(subsetResults[i], X, y, hSize, numInitialCSteps, threshold);
-    // sort it
-    kth_smallest_recursive_inplace_NoIndex(subsetResults, 0, X.rows()-1, numStartsToFinish);
-
- // find best
-    Result* best = subsetResults[0];
-    for (int i = 0 ; i < numStartsToFinish; ++i){
-        std::cout << "rss je: " << subsetResults[i]->rss << std::endl;
-
-        if(subsetResults[i]->rss < best->rss)
-            best = subsetResults[i];
+    for (int i = 0; i < numStarts; ++i){
+            performCStepsInPlace(subsetResults[i], X, y, hSize, numInitialCSteps, threshold);
     }
-    // -- FINAL
+
+    // sort it
+    kth_smallest_recursive_inplace_NoIndex(subsetResults, 0, subsetResults.size()-1, numStartsToFinish);
+    //********************************************************
+    stop = clock();
+    double time2 = (double)(stop - start) * 1000.0 / CLOCKS_PER_SEC;
+    start = clock();
+    //********************************************************
+    // -- FINAL - iterate cSteps till convergence on best (say 10) final subset
     for (int i = 0; i < numStartsToFinish; ++i)
         performCStepsInPlace(subsetResults[i], X, y, hSize, maxCSteps, threshold);
+    // find the best one
+    Result* best = subsetResults[0];
+    for (int i = 0 ; i < numStartsToFinish; ++i)
+        best = subsetResults[i]->rss < best->rss ? subsetResults[i] : best;
+     //********************************************************
+    stop = clock();
+    double time3 = (double)(stop - start) * 1000.0 / CLOCKS_PER_SEC;
 
-    unsigned N = X.rows();
-    std::cout << std::endl;
-      for (int i = numStartsToFinish; i <  N; ++i){
-        std::cout << "rss je: " << subsetResults[i]->rss << std::endl;
-        if(subsetResults[i]->rss < best->rss)
-            best = subsetResults[i];
-    }
 
+    best->time1 = time1;
+    best->time2 = time2;
+    best->time3 = time3;
+
+    // find best
     return best;
 }
 
@@ -286,8 +342,11 @@ PYBIND11_MODULE(somecode, m) {
     py::class_<Result>(m, "Result")
     .def(py::init< const std::vector<int> & , const Eigen::MatrixXd & , double ,int  >())
     .def("get_rss", &Result::getRSS)
+    .def("get_theta", &Result::getTheta)
+    .def("get_h_subset", &Result::getHSubset)
+    .def("get_n_inter", &Result::getNIter)
+    .def("get_time_1", &Result::getTime1)
+    .def("get_time_2", &Result::getTime2)
+    .def("get_time_3", &Result::getTime3)
     ;
-   // .def("get_theta", &Result::getTheta)
-   // .def("get_h_subset",&Result::getHSubset)
-   // ..def("get_h_subset",&Result::getHSubset);
 }

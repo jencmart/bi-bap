@@ -106,28 +106,27 @@ class FastLtsRegression:
         X = data[:, 1:]
         y = data[:, :1]
 
+        print('******* jdeme pocitat *********')
         eigen_result = eigen_lts.fast_lts(X, y, num_starts, num_start_c_steps, num_starts_to_finish, _h_size, max_c_steps, threshold)
-        print(eigen_result.get_rss())
 
-        time_generate_h1 = time.time()
+        time1 = time.process_time()
         subset_results = self.create_all_h1_subsets(num_starts, _h_size, data) # array of 500 Results (h1, thetha, inf)
-        self.generate_time =  time.time() - time_generate_h1
+        self.time1 =  time.process_time() - time1
 
 
-        time_selective_iter = time.time()
+        time2 = time.process_time()
         self.iterate_c_steps(data, _h_size, subset_results, num_starts, False, num_start_c_steps, 0) # few c steps on all 500 results, all happens inplace
         k_smallest_inplace(subset_results, num_starts_to_finish) # arr results && indexes are sorted (sort first 10 from 500...)
-        self.time_selective_iter = time.time() - time_selective_iter
+        self.time2 = time.process_time() - time2
 
         # C-steps till convergence
-        time_final_convergence = time.time()
+        time3 = time.process_time()
         self.iterate_c_steps(data, _h_size, subset_results, num_starts_to_finish, True, max_c_steps, threshold)
-        self.time_final_convergence = time.time() - time_final_convergence
-
         # select the best one
         best_result = subset_results[0]
         for i in range(num_starts_to_finish):
             best_result = subset_results[i] if subset_results[i].rss < best_result.rss else best_result
+        self.time3 = time.process_time() - time3
 
         # ... Store best result
         if use_intercept:
@@ -141,6 +140,13 @@ class FastLtsRegression:
         self.rss_ = best_result.rss
         self.n_iter_ = best_result.n_iter
 
+        self.eigen_weights = eigen_result.get_theta()
+        self.eigen_h_subset = eigen_result.get_h_subset()
+        self.eigen_rss = eigen_result.get_rss()
+        self.eigen_iters = eigen_result.get_n_inter()
+        self.eigen_time1 = eigen_result.get_time_1()
+        self.eigen_time2 = eigen_result.get_time_2()
+        self.eigen_time3 = eigen_result.get_time_3()
 
     # Select initial H1
     # ONLY ONE H1 ( one array of indexes to data)
@@ -336,14 +342,28 @@ def generate_data(cnt, outlier_percentage=25):
 
 if __name__ == '__main__':
 
-    X, y = generate_data(100, outlier_percentage=20)
+    X, y = generate_data(50000, outlier_percentage=40)
     lts = FastLtsRegression()
     lts.fit(X, y, use_intercept=True)
     print('\n')
     print('wights: ', lts.coef_)
     print('intercept: ', lts.intercept_)
     print('rss: ', lts.rss_)
-    print('iters(-2):', lts.n_iter_)  # final inters only...
+    print('iters:', lts.n_iter_)  # final inters only...
+    print('t1: ', lts.time1)
+    print('t2: ', lts.time2)
+    print('t3: ', lts.time3)
+    print('total: ', lts.time1 + lts.time2 + lts.time2 + lts.time3)
+    print('****************\n')
+
+    print('c code')
+    print('weights: ', lts.eigen_weights)
+    print('rss: ', lts.eigen_rss)
+    print('iter: ', lts.eigen_iters)
+    print('t1: ', lts.eigen_time1)
+    print('t2: ', lts.eigen_time2)
+    print('t3: ', lts.eigen_time3)
+    print('total: ', lts.eigen_time1 + lts.eigen_time2 + lts.eigen_time3)
 
     # x = np.arange(12)
     # print(x)
