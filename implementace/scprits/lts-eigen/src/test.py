@@ -103,25 +103,26 @@ class FastLtsRegression:
 
         # Selective iteration := h1 + few c-steps + find few with best rss
         # result = eigen_lts.fast_lts(data, num_starts, num_start_c_steps, num_starts_to_finish, max_c_steps, h_size, threshold)
-        data_tmp = np.array(data, dtype='float64',copy=True)
         X = data[:, 1:]
         y = data[:, :1]
 
-        eigen_lts.fast_lts(X, y, num_starts, _h_size)
+        eigen_result = eigen_lts.fast_lts(X, y, num_starts, num_start_c_steps, num_starts_to_finish, _h_size, max_c_steps, threshold)
+        print(eigen_result.get_rss())
 
-        start_time = time.time()
+        time_generate_h1 = time.time()
         subset_results = self.create_all_h1_subsets(num_starts, _h_size, data) # array of 500 Results (h1, thetha, inf)
-        print('generate h1:', time.time() - start_time)
+        self.generate_time =  time.time() - time_generate_h1
 
-        start_time = time.time()
+
+        time_selective_iter = time.time()
         self.iterate_c_steps(data, _h_size, subset_results, num_starts, False, num_start_c_steps, 0) # few c steps on all 500 results, all happens inplace
         k_smallest_inplace(subset_results, num_starts_to_finish) # arr results && indexes are sorted (sort first 10 from 500...)
-        print('c steps h1:', time.time() - start_time)
+        self.time_selective_iter = time.time() - time_selective_iter
 
         # C-steps till convergence
-        start_time = time.time()
+        time_final_convergence = time.time()
         self.iterate_c_steps(data, _h_size, subset_results, num_starts_to_finish, True, max_c_steps, threshold)
-        print('convergence:', time.time() - start_time)
+        self.time_final_convergence = time.time() - time_final_convergence
 
         # select the best one
         best_result = subset_results[0]
@@ -183,8 +184,8 @@ class FastLtsRegression:
 
     class BetterResults:
         def __init__(self, h_subset, theta, rss, n_iter):
+            self.h_subset = h_subset  # array
             self.theta = theta # matrix
-            self.h_subset = h_subset # array
             self.rss = rss # double
             self.n_iter = n_iter # integer
 
@@ -210,8 +211,7 @@ class FastLtsRegression:
 
         for i in range(max_steps):
             # c step
-            abs_residuals = abs_dist(data,
-                                     theta_old)  # nested extension : DATA = TEN SUBSET ( 300 napriklad..) H_SIZE := subset_size * h/n ???? jo dava smysl ...lece pres 50% opet..
+            abs_residuals = abs_dist(data, theta_old)  # nested extension : DATA = TEN SUBSET ( 300 napriklad..) H_SIZE := subset_size * h/n ???? jo dava smysl ...lece pres 50% opet..
             h_new = k_smallest(abs_residuals, h_size)  #
             theta_new = ols(data[h_new, :])
             # ! c step
@@ -262,11 +262,9 @@ def k_smallest_inplace(results, kth):
         for j in range(left, right):
             if arr_results[j].rss <= pivot:
                 arr_results[pos], arr_results[j] = arr_results[j], arr_results[pos]  # swap whole results
-                #indexes[pos], indexes[j] = indexes[j], indexes[pos]  # swap indexes also
                 pos += 1
 
         arr_results[pos], arr_results[right] = arr_results[right], arr_results[pos]
-        #indexes[pos], indexes[right] = indexes[right], indexes[pos]
 
         # finish
         if pos - left == k - 1:
@@ -317,8 +315,8 @@ def k_smallest(absolute_dist_in, kth_smallest):
 def generate_data(cnt, outlier_percentage=25):
     # LINEAR DATA
     # data generated same way as in Rousseeuw and Driessen 2000
-    N_clear = cnt
-    N_dirty =int(math.ceil(cnt/100*outlier_percentage))
+    N_clear = cnt - int(math.floor(cnt/100*outlier_percentage))
+    N_dirty = int(math.ceil(cnt/100*outlier_percentage))
 
     X_original = np.random.normal(loc=0, scale=10, size=N_clear)  # var = 100
     e = np.random.normal(loc=0, scale=1, size=N_clear)  # var = 1
@@ -338,7 +336,7 @@ def generate_data(cnt, outlier_percentage=25):
 
 if __name__ == '__main__':
 
-    X, y = generate_data(10, outlier_percentage=20)
+    X, y = generate_data(100, outlier_percentage=20)
     lts = FastLtsRegression()
     lts.fit(X, y, use_intercept=True)
     print('\n')
@@ -357,3 +355,5 @@ if __name__ == '__main__':
     # print('INVERZE', code.inv(A))
     # print('DETERMINANT', code.det(A))
     # print('INVERZE', code.inv(A))
+
+

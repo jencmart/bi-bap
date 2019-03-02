@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8c5f1ccf-065f-4604-87bf-a6d3a9772864" name="Default Changelist" comment="" />
+    <list default="true" id="8c5f1ccf-065f-4604-87bf-a6d3a9772864" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/src/.rendered.somecode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/.rendered.somecode.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/.somecode.cpp.cppimporthash" beforeDir="false" afterPath="$PROJECT_DIR$/src/.somecode.cpp.cppimporthash" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/somecode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/somecode.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/somecode.cpython-35m-x86_64-linux-gnu.so" beforeDir="false" afterPath="$PROJECT_DIR$/src/somecode.cpython-35m-x86_64-linux-gnu.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/test.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,7 +20,7 @@
     <SUITE FILE_PATH="coverage/test$main_remote_docker.coverage" NAME="main-remote-docker Coverage Results" MODIFIED="1551183675838" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.4607398">
+    <splitter split-orientation="horizontal" split-proportion="0.31089744">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="false">
@@ -41,8 +47,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/somecode.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="378">
-                  <caret line="43" selection-start-line="43" selection-end-line="43" />
+                <state relative-caret-position="216">
+                  <caret line="38" column="2" selection-start-line="38" selection-start-column="2" selection-end-line="38" selection-end-column="2" />
                 </state>
               </provider>
             </entry>
@@ -50,12 +56,11 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/test.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="256">
-                  <caret line="188" column="11" selection-start-line="188" selection-start-column="11" selection-end-line="188" selection-end-column="11" />
+                <state relative-caret-position="225">
+                  <caret line="338" column="27" selection-start-line="338" selection-start-column="27" selection-end-line="338" selection-end-column="27" />
                   <folding>
                     <element signature="e#0#16#0" expanded="true" />
                     <element signature="e#534#2517#0" />
-                    <element signature="e#5782#6965#0" />
                   </folding>
                 </state>
               </provider>
@@ -80,8 +85,14 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/somecode.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="126">
-                  <caret line="94" column="60" selection-start-line="94" selection-start-column="60" selection-end-line="94" selection-end-column="60" />
+                <state relative-caret-position="464">
+                  <caret line="90" column="82" selection-start-line="90" selection-start-column="82" selection-end-line="90" selection-end-column="82" />
+                  <folding>
+                    <element signature="e#0#6238#0" />
+                    <element signature="e#0#6042#0" />
+                    <element signature="e#0#8823#0" />
+                    <element signature="e#0#3731#0" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -99,21 +110,9 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>SORT_K_SMALLEST_SET</find>
-      <find>indexes</find>
-      <find>SORT_K_SMALLEST_SET_INPLACE</find>
-      <find>selective_iteration</find>
-      <find>iterate_till_convergence</find>
-      <find>coef_</find>
-      <find>SelectiveIterationResults</find>
-      <find>c_step</find>
-      <find>c_step(</find>
-      <find>n_iter</find>
-      <find>_data</find>
       <find>self._p</find>
       <find>self._h_s</find>
       <find>create_all_h1_subsets</find>
-      <find>iterate_c_steps</find>
       <find>N</find>
       <find>preform_c_steps</find>
       <find>abs_dist</find>
@@ -121,14 +120,26 @@
       <find>somecode</find>
       <find>use_in</find>
       <find>det</find>
-      <find>generate_h1_subset</find>
       <find>itera</find>
       <find>data</find>
       <find>results</find>
       <find>class</find>
       <find>BetterResults</find>
-      <find>Results</find>
       <find>ind</find>
+      <find>hSize</find>
+      <find>indexes</find>
+      <find>generate_h1_subset</find>
+      <find>arr[</find>
+      <find>iterate_c_steps</find>
+      <find>Results</find>
+      <find>subset_results</find>
+      <find>ols_final</find>
+      <find>h_subset</find>
+      <find>maxCSteps</find>
+      <find>‘rss_new’</find>
+      <find>qr_decomp</find>
+      <find>performCStepsInPlace</find>
+      <find>generateSubsets</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -147,7 +158,7 @@
   <component name="ProjectFrameBounds">
     <option name="x" value="32" />
     <option name="y" value="48" />
-    <option name="width" value="591" />
+    <option name="width" value="824" />
     <option name="height" value="1000" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -284,12 +295,12 @@
       <workItem from="1551197469823" duration="1206000" />
       <workItem from="1551254883280" duration="3723000" />
       <workItem from="1551275560453" duration="18854000" />
-      <workItem from="1551462999502" duration="13008000" />
+      <workItem from="1551462999502" duration="33103000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="62010000" />
+    <option name="totallyTimeSpent" value="82105000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -301,9 +312,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="32" y="48" width="591" height="1000" extended-state="0" />
+    <frame x="-2" y="-18" width="1924" height="1100" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.43970317" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.016025642" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -316,15 +328,15 @@
       <window_info anchor="bottom" id="Docker" order="7" sideWeight="0.49946582" weight="0.29591838" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32959184" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5005342" side_tool="true" weight="0.29591838" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.525" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5005342" side_tool="true" weight="0.36734694" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" sideWeight="0.49946582" visible="true" weight="0.17653061" />
       <window_info anchor="bottom" id="Python Console" order="12" sideWeight="0.49946582" weight="0.29591838" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="SciView" order="3" sideWeight="0.49043062" visible="true" weight="0.17439704" />
+      <window_info anchor="right" id="SciView" order="3" sideWeight="0.49155146" weight="0.050213676" />
       <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" x="0" y="0" width="177" height="800" id="Documentation" order="5" sideWeight="0.5095694" side_tool="true" visible="true" weight="0.17439704" />
+      <window_info anchor="right" x="0" y="0" width="177" height="800" id="Documentation" order="5" sideWeight="0.50844854" side_tool="true" weight="0.050213676" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -361,29 +373,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test.py">
+    <entry file="file://$USER_HOME$/fit/bi-bap/implementace/scprits/lts-eigen/src/.rendered.somecode.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="188" column="11" selection-start-line="188" selection-start-column="11" selection-end-line="188" selection-end-column="11" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-            <element signature="e#534#2517#0" />
-            <element signature="e#5782#6965#0" />
-          </folding>
+        <state relative-caret-position="61">
+          <caret line="250" column="1" lean-forward="true" selection-start-line="250" selection-start-column="1" selection-end-line="250" selection-end-column="1" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/fit/bi-bap/implementace/scprits/lts-eigen/src/.rendered.somecode.cpp">
+    <entry file="file://$PROJECT_DIR$/src/test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="217">
-          <caret line="72" column="19" selection-start-line="72" selection-start-column="19" selection-end-line="72" selection-end-column="19" />
+        <state relative-caret-position="225">
+          <caret line="338" column="27" selection-start-line="338" selection-start-column="27" selection-end-line="338" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+            <element signature="e#534#2517#0" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/somecode.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="94" column="60" selection-start-line="94" selection-start-column="60" selection-end-line="94" selection-end-column="60" />
+        <state relative-caret-position="464">
+          <caret line="90" column="82" selection-start-line="90" selection-start-column="82" selection-end-line="90" selection-end-column="82" />
+          <folding>
+            <element signature="e#0#6238#0" />
+            <element signature="e#0#6042#0" />
+            <element signature="e#0#8823#0" />
+            <element signature="e#0#3731#0" />
+          </folding>
         </state>
       </provider>
     </entry>
