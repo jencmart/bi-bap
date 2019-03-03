@@ -1,0 +1,4 @@
+version=0.6.0
+typesetter=pdflatex
+steps=texpdf
+root=/home/jencmart/bi-bap/teoreticka/Bachelors-Thesis-2019/src/BP_Jenc_Martin_2019.tex
