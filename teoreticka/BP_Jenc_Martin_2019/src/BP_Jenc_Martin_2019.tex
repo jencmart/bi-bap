@@ -32,39 +32,117 @@
 % EDIT THIS
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
-\department{Department of \ldots (SPECIFY)}
-\title{Thesis title (SPECIFY)}
-\authorGN{Your Given Name(s) (SPECIFY)} %author's given name/names
-\authorFN{Your Family Name (surname, SPECIFY)} %author's surname
-\author{Your Name (SPECIFY)} %author's name without academic degrees
-\authorWithDegrees{Your Name \& degrees} %author's name with academic degrees
-\supervisor{Your Supervisor's Name (SPECIFY)}
-\acknowledgements{THANKS (remove entirely in case you do not with to thank anyone)}
-\abstractEN{Summarize the contents and contribution of your work in a few sentences in English language.}
+\department{Department of Applied Mathematics}
+\title{Probabilistic algorithms for computing the LTS estimate}
+\authorGN{Martin} %author's given name/names
+\authorFN{Jen{\v c}} %author's surname
+\author{Martin Jen{\v c}} %author's name without academic degrees
+\authorWithDegrees{Martin Jen{\v c}} %author's name with academic degrees
+\supervisor{Ing. Karel Klouda, Ph.D.}
+\acknowledgements{THANKS to everybody}
+\abstractEN{The least trimmed squares (LTS) method is a robust version of the classical method of least squares used to find an estimate of coefficients in the linear regression model. Computing the LTS estimate is known to be NP-hard, and hence suboptimal probabilistic algorithms are used in practice.}
 \abstractCS{V n{\v e}kolika v{\v e}t{\' a}ch shr{\v n}te obsah a p{\v r}{\' i}nos t{\' e}to pr{\' a}ce v {\v c}esk{\' e}m jazyce.}
 \placeForDeclarationOfAuthenticity{Prague}
-\keywordsCS{Replace with comma-separated list of keywords in Czech.}
-\keywordsEN{Replace with comma-separated list of keywords in English.}
+\keywordsCS{LTS odhad, lineární regrese, optimalizace, nejmenší usekané čtvrece, metoda nejmenších čtverců, outliers}
+\keywordsEN{LTS, linear regressin, robust estimator, least trimmed squares, ordinary least squares, outliers, outliers detection}
 \declarationOfAuthenticityOption{1} %select as appropriate, according to the desired license (integer 1-6)
 % \website{http://site.example/thesis} %optional thesis URL
 
+%---------------------------------- main document -------------------------------------------------
 
 \begin{document}
+
+% .......................... chapters .........................
+%\setsecnumdepth{part}
+%\include{00_intro}
+
+% \setsecnumdepth{all}
+% \include{01_opt}
+% \include{02_ke}
+% \include{03_alg}
+% \include{04_apps}
+
+%\setsecnumdepth{part}
+%\include{99_concl}
+
+% ***********************************************
 
 % \newacronym{CVUT}{{\v C}VUT}{{\v C}esk{\' e} vysok{\' e} u{\v c}en{\' i} technick{\' e} v Praze}
 % \newacronym{FIT}{FIT}{Fakulta informa{\v c}n{\' i}ch technologi{\' i}}
 
+
 \setsecnumdepth{part}
 \chapter{Introduction}
 
-
-
 \setsecnumdepth{all}
-\chapter{State-of-the-art}
+\chapter{The Least trimmed squares}
+\subsection{Objective function}
+\subsubsection{something}
 
-\chapter{Analysis and design}
+\section{Robust statistics}
+\section{Description}
+\section{Computation}
 
-\chapter{Realisation}
+\chapter{Algorithms}
+
+% **********************************************************************************
+% ************************* FAST - LTS *********************************************
+% **********************************************************************************
+\section{FAST-LTS}
+In this section we'll describe FAST-LTS algorithm and it's main properties. The main idea of this algorthm is based on the fact that from one approximation of the algorithm we can compute another which can have lower objective function.
+
+Thoerem 1:
+Let w0 ... wp be the LTS estimate.
+for each data sample we can compute |y-wx|
+
+
+
+Hlavni myslenka tohoto algoritmu spociva ve faktu, 
+
+
+Vyberte si šablonu podle druhu práce (bakalářská, diplomová), jazyka (čeština, angličtina) a kódování (ASCII, \mbox{UTF-8}, \mbox{ISO-8859-2} neboli latin2 a nebo \mbox{Windows-1250}). 
+
+V~české variantě naleznete šablony v~souborech pojmenovaných ve formátu práce\_kódování.tex. Typ práce může být:
+\begin{description}
+	\item[BP] bakalářská práce,
+	\item[DP] diplomová (magisterská) práce.
+\end{description}
+Kódování zdrojového souboru (\LaTeX{}), ve kterém chcete psát, může být:
+\begin{description}
+	\item[UTF-8] kódování Unicode,
+	\item[ISO-8859-2] latin2,
+	\item[Windows-1250] znaková sada 1250 Windows.
+\end{description}
+V~případě nejistoty ohledně kódování doporučujeme následující postup:
+\begin{enumerate}
+	\item Otevřete šablony pro kódování UTF-8 v~editoru prostého textu, který chcete pro psaní práce použít -- pokud můžete texty s~diakritikou normálně přečíst, použijte tuto šablonu.
+	\item V~opačném případě postupujte dále podle toho, jaký operační systém používáte:
+	\begin{itemize}
+		\item v~případě Windows použijte šablonu pro kódování \mbox{Windows-1250},
+		\item jinak zkuste použít šablonu pro kódování \mbox{ISO-8859-2}.
+	\end{itemize}
+\end{enumerate}
+
+
+V~anglické variantě jsou šablony pojmenované podle typu práce, možnosti jsou:
+\begin{description}
+	\item[bachelors] bakalářská práce,
+	\item[masters] diplomová (magisterská) práce.
+\end{description}
+
+% **********************************************************************************
+% ************************* EXACT POLYNOMIAL ALGORITHM *****************************
+% **********************************************************************************
+\section{Exact algorithm}
+\section{Feasible solution}
+\section{MMEA}
+\section{Branch and bound}
+\section{Adding row}
+
+\chapter{Experiments}
+\section{Data}
+\section{Performance}
+\section{Outlier detection}
 
 \setsecnumdepth{part}
 \chapter{Conclusion}
@@ -76,7 +154,7 @@
 \setsecnumdepth{all}
 \appendix
 
-\chapter{Acronyms}
+\chapter{Datasets}
 % \printglossaries
 \begin{description}
 	\item[GUI] Graphical user interface

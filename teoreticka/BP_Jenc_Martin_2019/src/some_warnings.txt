@@ -1,0 +1,4 @@
+LaTeX Font Warning: Font shape `OT1/lmr/bx/sc' undefined
+LaTeX Font Warning: Font shape `OT1/lmss/bx/sc' undefined
+pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored <to be read again> {State-of-the-art} [1]
+pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has been already used, duplicate ignored <to be read again> {State-of-the-art} [2
