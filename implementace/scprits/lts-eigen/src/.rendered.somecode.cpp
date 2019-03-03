@@ -33,10 +33,12 @@ struct Result {
         double time1;
         double time2;
         double time3;
+        bool converged;
         Result(const std::vector<int> & h_sub, const Eigen::MatrixXd & theta_hat, double RSS, int n_iterations): hSubset(h_sub){
             theta = theta_hat;
             rss = RSS;
             n_iter = n_iterations;
+            converged = false;
         }
 
         double getRSS(){
@@ -216,6 +218,10 @@ void generateSubsets(std::vector<Result*> & subsetResults, const Eigen::MatrixXd
 // todo - here I suspect problem - SOLVED
 void performCStepsInPlace(Result* result,  const Eigen::MatrixXd & X, const Eigen::MatrixXd & y, int hSize, int numSteps,  double threshold) {
 
+    // come results may already converged
+    if(result->converged)
+        return;
+
     for (int i = 0; i < numSteps; ++i){
         // -----------
         // calculate absolute residuals for each data sample from theta Hyperplane
@@ -234,20 +240,19 @@ void performCStepsInPlace(Result* result,  const Eigen::MatrixXd & X, const Eige
         // -----------
 
         // save theta
-        result->theta = theta_new;
+        result->theta = theta_new; // theta se zmenila
 
         // >>check stopping criterion<<
         if(threshold > 0) {
-
             Eigen::MatrixXd yy = y(slicedVec, Eigen::all);
             Eigen::MatrixXd XX = X(slicedVec, Eigen::all);
 
-            double rss_new =  ( (yy - XX * result->theta).transpose() * (yy -XX * result->theta) )(0,0);
-            if(std::fabs(result->rss - rss_new) < threshold) {
+            double rssOld = result->rss;
+            result->rss = ((yy - XX * result->theta).transpose() * (yy -XX * result->theta) )(0,0);
+            if(std::fabs(rssOld - result->rss) < threshold) {
                 result->hSubset = slicedVec;
-                result->rss = rss_new;
-                result->n_iter +=  i;
-                result->n_iter += 1; // this step
+                result->n_iter +=  i+1; // include this step
+                result->converged = true;
                 return;
             }
         }
@@ -260,8 +265,7 @@ void performCStepsInPlace(Result* result,  const Eigen::MatrixXd & X, const Eige
 
             result->hSubset = slicedVec;
             result->rss =  ( (yy - XX * result->theta).transpose() * (yy - XX * result->theta) )(0,0);
-            result->n_iter +=  i;
-            result->n_iter += 1;
+            result->n_iter +=  i + 1; // include this step
             return;
         }
     }
@@ -292,7 +296,7 @@ Result* fast_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int numStarts, int numIni
     // -- INITIAL - few c steps on all subsets
     // numStarts represent range thus we mean to iterate cSteps on all of initial H1 subsets for now
     for (int i = 0; i < numStarts; ++i){
-            performCStepsInPlace(subsetResults[i], X, y, hSize, numInitialCSteps, threshold);
+            performCStepsInPlace(subsetResults[i], X, y, hSize, numInitialCSteps, 0);
     }
 
     // sort it

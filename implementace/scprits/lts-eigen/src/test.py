@@ -3,9 +3,113 @@ import numpy as np
 import math
 import time
 
+from scipy import spatial
+
 eigen_lts = cppimport.imp("somecode")
 
 
+class FastLtsEigenRegressor:
+    def __init__(self):
+        # public
+        self.n_iter_ = None
+        self.coef_ = None
+        self.intercept_ = None
+        self.h_subset_ = None
+        self.rss_ = None
+        self.time1_ = None
+        self.time2_ = None
+        self.time3_ = None
+        self.time_total_ = None
+
+    # currently support for np.ndarray and matrix
+    def _validate(self, X, y, h_size, num_start_c_steps, num_starts_to_finish, max_c_steps, threshold,
+                  use_intercept):
+        if X is None or not isinstance(X, (np.ndarray, np.matrix)):
+            raise Exception('X must be  type array or np.ndarray or np.matrix')
+        if y is None or not isinstance(y, (np.ndarray, np.matrix)):
+            raise Exception('y must be  type array or np.ndarray or np.matrix')
+
+        if X.ndim == 1:
+            X = np.reshape(X, [X.shape[0], 1])
+        if y.ndim == 1:
+            y = np.reshape(y, [y.shape[0], 1])
+
+        if type(X) is not np.ndarray:
+            X = np.ndarray(X)
+        if type(y) is not np.ndarray:
+            y = np.ndarray(y)
+
+        if y.ndim != 1:
+            if y.ndim != 2 or y.shape[1] != 1:
+                raise ValueError('y must be 1D array')
+        if y.shape[0] != X.shape[0]:
+            raise ValueError('X and y must have same number of samples')
+
+        if X.shape[0] < 1:  # expects N >= 1
+            raise ValueError('You must provide at least one sample')
+
+        if X.ndim < 1:  # expects p >=1
+            raise ValueError('X has zero dimensions')
+
+        if h_size != 'default':
+            if h_size > X.shape[0]:
+                raise ValueError('H_size must not be > number of samples')
+            if h_size < 1:
+                raise ValueError('H_size must be > 0 ; preferably (n + p + 1) / 2 <= h_size <= n ')
+
+        if max_c_steps < 1:  # expects max_steps => 1
+            raise ValueError('max_c_steps must be >= 1')
+
+        if num_start_c_steps < 1:  # expects num_start_steps => 1
+            raise ValueError('num_start_c_steps must be >= 1')
+
+        if num_starts_to_finish < 1:  # expects num_starts_to_finish >= 1
+            raise ValueError('num_starts_to_finish must be >= 1')
+
+        if threshold < 0:  # expects threshold >= 0
+            raise ValueError('threshold must be >= 0')
+
+        if use_intercept:
+            X = np.concatenate([X, np.ones((X.shape[0], 1))], axis=1)
+
+        return X, y
+
+
+    def fit(self, X, y,
+            num_starts: 'number of initial starts (H1)' = 500,
+            num_start_c_steps: 'number of initial C steps' = 2,
+            num_starts_to_finish: 'number of H3 which`ll to finish' = 10,
+            max_c_steps: 'self explanatory' = 50,
+            h_size: 'default := (n + p + 1) / 2' = 'default',
+            use_intercept=True,
+            threshold: 'stopping criterion Qold Qnew' = 1e-6):
+
+
+        X, y = self._validate(X, y, h_size, num_start_c_steps, num_starts_to_finish, max_c_steps, threshold,
+                              use_intercept)
+
+        # todo - include intercept or not? now - p include intercept..
+        _h_size = math.ceil((X.shape[0] + X.shape[1] +1) / 2) if h_size == 'default' else h_size  # N + p + 1
+
+        eigen_result = eigen_lts.fast_lts(X, y, num_starts, num_start_c_steps, num_starts_to_finish, _h_size,
+                                          max_c_steps, threshold)
+
+        # ... Store best result
+        weights = eigen_result.get_theta()
+        if use_intercept:
+            self.intercept_ = weights[-1, 0]  # last row first col
+            self.coef_ = np.ravel(weights[:-1, 0])  # for all but last column,  only first col
+        else:
+            self.intercept_ = 0.0
+            self.coef_ = np.ravel(weights[:, 0])  # all rows, only first col
+
+        self.h_subset_ = eigen_result.get_h_subset()
+        self.rss_ = eigen_result.get_rss()
+        self.n_iter_ = eigen_result.get_n_inter()
+        self.time1_ = eigen_result.get_time_1()
+        self.time2_ = eigen_result.get_time_2()
+        self.time3_ = eigen_result.get_time_3()
+        self.time_total_ = self.time1_ + self.time2_ + self.time3_
 
 class FastLtsRegression:
     def __init__(self):
@@ -15,6 +119,11 @@ class FastLtsRegression:
         self.intercept_ = None
         self.h_subset_ = None
         self.rss_ = None
+        # process time - for benchmark only
+        self.time1_ = None
+        self.time2_ = None
+        self.time3_ = None
+        self.time_total_ = None
 
     # currently support for np.ndarray and matrix
     def _validate(self, X, y, h_size, num_start_c_steps, num_starts_to_finish, max_c_steps, threshold, use_intercept):
@@ -106,28 +215,15 @@ class FastLtsRegression:
         X = data[:, 1:]
         y = data[:, :1]
 
-        print('start')
-        eigen_result = eigen_lts.fast_lts(X, y, num_starts, num_start_c_steps, num_starts_to_finish, _h_size, max_c_steps, threshold)
-        self.eigen_weights = eigen_result.get_theta()
-        self.eigen_h_subset = eigen_result.get_h_subset()
-        self.eigen_rss = eigen_result.get_rss()
-        self.eigen_iters = eigen_result.get_n_inter()
-        self.eigen_time1 = eigen_result.get_time_1()
-        self.eigen_time2 = eigen_result.get_time_2()
-        self.eigen_time3 = eigen_result.get_time_3()
-
-        print('done')
-        return;
-
         time1 = time.process_time()
         subset_results = self.create_all_h1_subsets(num_starts, _h_size, data) # array of 500 Results (h1, thetha, inf)
-        self.time1 =  time.process_time() - time1
+        self.time1_ =  time.process_time() - time1
 
 
         time2 = time.process_time()
         self.iterate_c_steps(data, _h_size, subset_results, num_starts, False, num_start_c_steps, 0) # few c steps on all 500 results, all happens inplace
         k_smallest_inplace(subset_results, num_starts_to_finish) # arr results && indexes are sorted (sort first 10 from 500...)
-        self.time2 = time.process_time() - time2
+        self.time2_ = time.process_time() - time2
 
         # C-steps till convergence
         time3 = time.process_time()
@@ -136,7 +232,8 @@ class FastLtsRegression:
         best_result = subset_results[0]
         for i in range(num_starts_to_finish):
             best_result = subset_results[i] if subset_results[i].rss < best_result.rss else best_result
-        self.time3 = time.process_time() - time3
+        self.time3_ = time.process_time() - time3
+        self.time_total_ = self.time1_ + self.time2_ + self.time3_
 
         # ... Store best result
         if use_intercept:
@@ -192,7 +289,7 @@ class FastLtsRegression:
         indexes = k_smallest(abs_residuals, _h_size) # vraci pole indexu, mohlo by vracet o theta
         return indexes
 
-    class BetterResults:
+    class Result:
         def __init__(self, h_subset, theta, rss, n_iter):
             self.h_subset = h_subset  # array
             self.theta = theta # matrix
@@ -204,7 +301,7 @@ class FastLtsRegression:
         arr_results = []
         for i in range(num_starts):
             init_h1 = self.generate_h1_subset(_h_size, data) # one array of indexes to h1
-            arr_results.append(self.BetterResults(init_h1, ols(data[init_h1, :]), math.inf, 0))
+            arr_results.append(self.Result(init_h1, ols(data[init_h1, :]), math.inf, 0))
         return arr_results
 
     def iterate_c_steps(self, data, _h_size, results, length, stop_on_rss, cnt_steps, threshold):
@@ -216,9 +313,9 @@ class FastLtsRegression:
             results[i].rss = rss
             results[i].n_iter += n_iter
 
-
     def _preform_c_steps(self, theta_old, data, use_sum, sum_old, h_size, max_steps, threshold):  # vola se 10x
 
+        j = 0
         for i in range(max_steps):
             # c step
             abs_residuals = abs_dist(data, theta_old)  # nested extension : DATA = TEN SUBSET ( 300 napriklad..) H_SIZE := subset_size * h/n ???? jo dava smysl ...lece pres 50% opet..
@@ -229,6 +326,7 @@ class FastLtsRegression:
             if use_sum:
                 sum_new = rss(data[h_new, :], theta_new)
                 if math.isclose(sum_old, sum_new, rel_tol=threshold):
+                    j = i+1  # include last step
                     break
                 sum_old = sum_new
             theta_old = theta_new
@@ -236,7 +334,10 @@ class FastLtsRegression:
         if not use_sum:
             sum_new = rss(data[h_new, :], theta_new)
 
-        return theta_new, h_new, sum_new[0, 0], i
+        if j == 0:
+            j =  max_steps
+
+        return theta_new, h_new, sum_new[0, 0], j
 
 
 ##################
@@ -259,10 +360,6 @@ def abs_dist(data, theta):
     # xx (n, p)
     return np.absolute(data[:, [0]] - data[:, 1:] * theta)
 
-
-
-# what if I sort it...
-# trying to think out of the box
 def k_smallest_inplace(results, kth):
 
     def kth_smallest(arr_results, left, right, k):
@@ -288,7 +385,6 @@ def k_smallest_inplace(results, kth):
 
     kth_smallest(results, 0, len(results) - 1, kth)
     return
-
 
 def k_smallest(absolute_dist_in, kth_smallest):
     absolute_dist_copy = np.copy(absolute_dist_in)
@@ -322,14 +418,16 @@ def k_smallest(absolute_dist_in, kth_smallest):
     result_values, result_indexes = kth_smallest2(absolute_dist, indexes, 0, absolute_dist.shape[0] - 1, kth_smallest)
     return result_indexes
 
-def generate_data(cnt, outlier_percentage=25):
+
+# Data generator
+def generate_data_2D_multi_variate(cnt, outlier_percentage=20):
     # LINEAR DATA
     # data generated same way as in Rousseeuw and Driessen 2000
-    N_clear = cnt - int(math.floor(cnt/100*outlier_percentage))
+    N_clean = cnt - int(math.floor(cnt/100*outlier_percentage))
     N_dirty = int(math.ceil(cnt/100*outlier_percentage))
 
-    X_original = np.random.normal(loc=0, scale=10, size=N_clear)  # var = 100
-    e = np.random.normal(loc=0, scale=1, size=N_clear)  # var = 1
+    X_original = np.random.normal(loc=0, scale=10, size=N_clean)  # var = 100
+    e = np.random.normal(loc=0, scale=1, size=N_clean)  # var = 1
     y_original = 1 + X_original + e
     # OUTLIERS
     # multivariate N(mean = location, covariance)
@@ -338,46 +436,85 @@ def generate_data(cnt, outlier_percentage=25):
                                              cov=[[25, 0], [0, 25]],
                                              size=N_dirty)
 
+    # outliers
     # FINAL DATA
     X = np.concatenate((X_original, outliers.T[0]), axis=0)
     y = np.concatenate((y_original, outliers.T[1]), axis=0)
 
     return X,y
 
+def generate_data_ND(cnt, dim, outlier_percentage=20, n_xij= (0,10), ei = (0,1), n_xi1_outlier = (100,10) ):
+    N_clean = cnt - int(math.floor(cnt / 100 * outlier_percentage))
+    N_dirty = int(math.ceil(cnt / 100 * outlier_percentage))
+
+    # Xij
+    mu, sigma = n_xij
+    X_clean = np.random.normal(mu,sigma, (N_clean, dim))
+    mu, sigma = n_xi1_outlier
+    X_outliers = np.random.normal(mu,sigma, (N_dirty, dim))
+
+    #ei
+    mu, sigma = ei
+    e = np.random.normal(mu, sigma, (N_clean, 1))
+    e_2 = np.random.normal(mu, sigma, (N_dirty, 1))
+
+    #Y
+    y_clean = np.concatenate((X_clean, e), axis=1)
+    y_clean = np.sum(y_clean, axis=1)
+
+    y_outliers = np.concatenate((X_outliers, e_2), axis=1)
+    y_outliers = np.sum(y_outliers, axis=1)
+
+    X = np.concatenate((X_clean, X_outliers), axis=0)
+    y = np.concatenate((y_clean, y_outliers), axis=0)
+
+
+    y = np.reshape(y, [y.shape[0], 1])
+    y_clean = np.reshape(y_clean, [y_clean.shape[0], 1])
+
+    return X, y, X_clean, y_clean
+
+
+
+def getRegressor(type):
+    if type == 'ltsPython':
+        return FastLtsRegression()
+    if type == 'ltsCpp':
+        return \
+            FastLtsEigenRegressor()
+
 if __name__ == '__main__':
 
-    X, y = generate_data(1000000, outlier_percentage=40)
-    lts = FastLtsRegression()
-    lts.fit(X, y, use_intercept=True)
-    print('\n')
-    # print('wights: ', lts.coef_)
-    # print('intercept: ', lts.intercept_)
-    # print('rss: ', lts.rss_)
-    # print('iters:', lts.n_iter_)  # final inters only...
-    # print('t1: ', lts.time1)
-    # print('t2: ', lts.time2)
-    # print('t3: ', lts.time3)
-    # print('total cpu time: ', lts.time1 + lts.time2 + lts.time2 + lts.time3)
-    # print('****************\n')
+    types = ['ltsPython', 'ltsCpp' ]
 
-    print('c code')
-    print('weights: ', lts.eigen_weights)
-    print('rss: ', lts.eigen_rss)
-    print('iter: ', lts.eigen_iters)
-    print('t1: ', lts.eigen_time1)
-    print('t2: ', lts.eigen_time2)
-    print('t3: ', lts.eigen_time3)
-    print('total cpu time: ', lts.eigen_time1 + lts.eigen_time2 + lts.eigen_time3)
+    # same as in FAST-LTS paper -- it is a benchamrk
+    experiments = [(100,2), (100,3), (100,5), (500,2), (500,3), (500,5), (1000,2),
+                   (1000,5), (1000,10), (10000,2), (10000,5), (10000,10), (50000,2), (50000,5)]
 
-    # x = np.arange(12)
-    # print(x)
-    # print(code.add_arrays(x, x))
-    # A = np.array([[1, 2, 1],
-    #               [2, 1, 0],
-    #               [-1, 1, 2]])
-    # print('NP ARRAY', A)
-    # print('INVERZE', code.inv(A))
-    # print('DETERMINANT', code.det(A))
-    # print('INVERZE', code.inv(A))
+    # experiments = [(100,2), (100,3)]
 
+    for experiment in experiments:
+        n, p = experiment
+        X, y, X_clean, y_clean = generate_data_ND(n, p)
+        for kind in types:
+            lts = getRegressor(kind)
+
+
+            # lts
+            lts.fit(X, y, use_intercept=True)
+            weights_correct = lts.coef_
+
+            # print data
+            print('{} ({},{})'.format(kind, n, p))
+            print('rss: ', lts.rss_)
+            print('itr: ', lts.n_iter_)
+            print('tim: ', lts.time_total_)
+
+            #ols
+            lts.fit(X_clean, y_clean, use_intercept=True, h_size=X_clean.shape[0])
+            weights_expected = lts.coef_
+            # print('rsO: ', lts.rss_)
+            # cos similarity
+            result = 1 - spatial.distance.cosine(weights_correct, weights_expected)
+            print('cos: ', result)
 
