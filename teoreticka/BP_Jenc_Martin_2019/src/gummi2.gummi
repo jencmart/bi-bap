@@ -1,6 +1,0 @@
-version=0.6.0
-typesetter=pdflatex
-steps=texpdf
-root=/home/jencmart/teoreticka/BP_Jenc_Martin_2019.tex
-
-file=/home/jencmart/teoreticka/navod/DP_Priklad.tex

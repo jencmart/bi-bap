@@ -4,9 +4,9 @@
 %%
 %% The original source files were:
 %%
-%% merlin.mbs  (with options: `head,exlang,lang,vonx,nm-rev,jnrlst,aunm-semi,nmlm,x3,m3,atit-u,vnum-nr,volp-sp,jwdpg,pp-last,jwdvol,num-xser,ser-vol,ser-ed,pg-bk,add-pub,isbn,issn,doi,edpar,edby,blk-tit,au-col,\v ce\v stina,pp,and-xcom,xand,eprint,biburl,url-nl,nfss,,{}')
-%% czech.mbs  (with options: `exlang,lang,vonx,nm-rev,jnrlst,aunm-semi,nmlm,x3,m3,atit-u,vnum-nr,volp-sp,jwdpg,pp-last,jwdvol,num-xser,ser-vol,ser-ed,pg-bk,add-pub,isbn,issn,doi,edpar,edby,blk-tit,au-col,\v ce\v stina,pp,and-xcom,xand,eprint,biburl,url-nl,nfss,,{}')
-%% merlin.mbs  (with options: `tail,exlang,lang,vonx,nm-rev,jnrlst,aunm-semi,nmlm,x3,m3,atit-u,vnum-nr,volp-sp,jwdpg,pp-last,jwdvol,num-xser,ser-vol,ser-ed,pg-bk,add-pub,isbn,issn,doi,edpar,edby,blk-tit,au-col,\v ce\v stina,pp,and-xcom,xand,eprint,biburl,url-nl,nfss,,{}')
+%% merlin.mbs  (with options: `head,exlang,lang,vonx,nm-rev,jnrlst,aunm-semi,nmlm,x3,m3,atit-u,vnum-nr,volp-sp,jwdpg,pp-last,jwdvol,num-xser,ser-vol,ser-ed,pg-bk,add-pub,isbn,issn,doi,edpar,edby,blk-tit,au-col,èe¹tina,pp,and-xcom,xand,eprint,biburl,url-nl,nfss,,{}')
+%% czech.mbs  (with options: `exlang,lang,vonx,nm-rev,jnrlst,aunm-semi,nmlm,x3,m3,atit-u,vnum-nr,volp-sp,jwdpg,pp-last,jwdvol,num-xser,ser-vol,ser-ed,pg-bk,add-pub,isbn,issn,doi,edpar,edby,blk-tit,au-col,èe¹tina,pp,and-xcom,xand,eprint,biburl,url-nl,nfss,,{}')
+%% merlin.mbs  (with options: `tail,exlang,lang,vonx,nm-rev,jnrlst,aunm-semi,nmlm,x3,m3,atit-u,vnum-nr,volp-sp,jwdpg,pp-last,jwdvol,num-xser,ser-vol,ser-ed,pg-bk,add-pub,isbn,issn,doi,edpar,edby,blk-tit,au-col,èe¹tina,pp,and-xcom,xand,eprint,biburl,url-nl,nfss,,{}')
 %% ----------------------------------------
 %% *** Czech style CSN ISO 690 ***
 %% 
@@ -225,111 +225,108 @@ FUNCTION {space.word}
  % Begin module:
  % \ProvidesFile{czech.mbs}[2011/07/09 1.0 (DM)]
 
- % The language selected here is CZECH
+ % The language selected here is ENGLISH
 FUNCTION {bbl.and}
-{ "a"}
+{ "and"}
 
 FUNCTION {bbl.etal}
-{ "aj." }
+{ "et al." }
 
 FUNCTION {bbl.editors}
-{ "edito\v ri" }
+{ "editors" }
 
 FUNCTION {bbl.editor}
 { "editor" }
 
 FUNCTION {bbl.edby}
-{ "editace" }
+{ "edited by" }
 
 FUNCTION {bbl.edition}
-{ "vyd\'an\'\i{}" }
+{ "edition" }
 
 FUNCTION {bbl.volume}
-{ "ro\v cn\'\i{}k" }
+{ "volume" }
 
 FUNCTION {bbl.of}
-{ "" }
+{ "of" }
 
 FUNCTION {bbl.number}
-{ "\v c\'\i{}slo" }
+{ "number" }
 
 FUNCTION {bbl.nr}
-{ "\v c." }
+{ "no." }
 
 FUNCTION {bbl.in}
 { "in" }
 
 FUNCTION {bbl.pages}
-{ "s." }
+{ "pp." }
 
 FUNCTION {bbl.page}
-{ "str." }
+{ "p." }
 
 FUNCTION {bbl.chapter}
-{ "kapitola" }
+{ "chapter" }
 
 FUNCTION {bbl.techrep}
-{ "Technick\'a Zpr\'ava" }
-
-FUNCTION {bbl.bthesis}
-{ "Bakal\'a\v rsk\'a pr\'ace" }
+{ "Technical report" }
 
 FUNCTION {bbl.mthesis}
-{ "Diplomov\'a pr\'ace" }
+{ "Master's thesis" }
 
 FUNCTION {bbl.phdthesis}
-{ "Dizerta\v cn\'\i{} pr\'ace" }
+{ "Dissertation thesis" }
 
 FUNCTION {bbl.first}
-{ "Prvn\'\i{}" }
+{ "First" }
 
 FUNCTION {bbl.second}
-{ "Druh\'e" }
+{ "Second" }
 
 FUNCTION {bbl.third}
-{ "T\v ret\'\i{}" }
+{ "Third" }
 
 FUNCTION {bbl.fourth}
-{ "\v Ctvrt\'e" }
+{ "Fourth" }
 
 FUNCTION {bbl.fifth}
-{ "P\'at\'e" }
+{ "Fifth" }
 
 FUNCTION {bbl.st}
-{ "" }
+{ "st" }
 
 FUNCTION {bbl.nd}
-{ "" }
+{ "nd" }
 
 FUNCTION {bbl.rd}
-{ "" }
+{ "rd" }
 
 FUNCTION {bbl.th}
-{ "" }
+{ "th" }
 
-MACRO {jan} {"Leden"}
+MACRO {jan} {"Jan."}
 
-MACRO {feb} {"\'Unor"}
+MACRO {feb} {"Feb."}
 
-MACRO {mar} {"B\v rezen"}
+MACRO {mar} {"Mar."}
 
-MACRO {apr} {"Duben"}
+MACRO {apr} {"Apr."}
 
-MACRO {may} {"Kv\v eten"}
+MACRO {may} {"May"}
 
-MACRO {jun} {"\v Cerven"}
+MACRO {jun} {"June"}
 
-MACRO {jul} {"\v Cervenec"}
+MACRO {jul} {"July"}
 
-MACRO {aug} {"Srpen"}
+MACRO {aug} {"Aug."}
 
-MACRO {sep} {"Z\'a\v r\'\i{}"}
+MACRO {sep} {"Sept."}
 
-MACRO {oct} {"\v R\'\i{}jen"}
+MACRO {oct} {"Oct."}
 
-MACRO {nov} {"Listopad"}
+MACRO {nov} {"Nov."}
 
-MACRO {dec} {"Prosinec"}
+MACRO {dec} {"Dec."}
 
  % End module: czech.mbs
 %% Copyright 1994-2004 Patrick W Daly
@@ -447,9 +444,9 @@ FUNCTION {format.names}
       't :=
       nameptr #1 >
         {
-          nameptr #3
+          nameptr #2
           #1 + =
-          numnames #3
+          numnames #2
           > and
             { "others" 't :=
               #1 'namesleft := }
@@ -606,7 +603,7 @@ FUNCTION {format.title}
   "title" bibinfo.check
   duplicate$ empty$ 'skip$
     {
-      select.language
+%       select.language
     }
   if$
 }
@@ -675,7 +672,7 @@ FUNCTION {format.btitle}
   duplicate$ empty$ 'skip$
     {
       emphasize
-      select.language
+%       select.language
     }
   if$
 }
@@ -1067,7 +1064,7 @@ FUNCTION {format.organization.address}
 FUNCTION {article}
 { output.bibitem
   format.authors "author" output.check
-  add.colon
+  new.sentence
   format.title "title" output.check
   new.sentence
   crossref missing$
@@ -1097,10 +1094,10 @@ FUNCTION {book}
 { output.bibitem
   author empty$
     { format.editors "author and editor" output.check
-      add.colon
+      new.sentence
     }
     { format.authors output.nonnull
-      add.colon
+      new.sentence
       crossref missing$
         { "author and editor" editor either.or.check }
         'skip$
@@ -1132,7 +1129,7 @@ FUNCTION {book}
 FUNCTION {booklet}
 { output.bibitem
   format.authors output
-  add.colon
+  new.sentence
   format.title "title" output.check
   new.sentence
   howpublished "howpublished" bibinfo.check output
@@ -1151,10 +1148,10 @@ FUNCTION {inbook}
 { output.bibitem
   author empty$
     { format.editors "author and editor" output.check
-      add.colon
+      new.sentence
     }
     { format.authors output.nonnull
-      add.colon
+      new.sentence
       crossref missing$
         { "author and editor" editor either.or.check }
         'skip$
@@ -1193,7 +1190,7 @@ FUNCTION {inbook}
 FUNCTION {incollection}
 { output.bibitem
   format.authors "author" output.check
-  add.colon
+  new.sentence
   format.title "title" output.check
   new.sentence
   crossref missing$
@@ -1219,7 +1216,7 @@ FUNCTION {incollection}
 FUNCTION {inproceedings}
 { output.bibitem
   format.authors "author" output.check
-  add.colon
+  new.sentence
   format.title "title" output.check
   new.sentence
   crossref missing$
@@ -1258,7 +1255,7 @@ FUNCTION {manual}
     }
     { format.authors output.nonnull }
   if$
-  add.colon
+  new.sentence
   format.btitle "title" output.check
   new.sentence
   author empty$
@@ -1283,28 +1280,10 @@ FUNCTION {manual}
   write.url
 }
 
-FUNCTION {bachelorsthesis}
-{ output.bibitem
-  format.authors "author" output.check
-  add.colon
-  format.btitle
-  "title" output.check
-  new.sentence
-  bbl.bthesis format.thesis.type output.nonnull
-  school "school" bibinfo.warn output
-  address "address" bibinfo.check output
-  format.date "year" output.check
-  format.doi output
-  format.note output
-  format.eprint output
-  fin.entry
-  write.url
-}
-
 FUNCTION {mastersthesis}
 { output.bibitem
   format.authors "author" output.check
-  add.colon
+  new.sentence
   format.btitle
   "title" output.check
   new.sentence
@@ -1322,7 +1301,7 @@ FUNCTION {mastersthesis}
 FUNCTION {misc}
 { output.bibitem
   format.authors output
-  add.colon
+  new.sentence
   format.title output
   new.sentence
   howpublished "howpublished" bibinfo.check output
@@ -1337,7 +1316,7 @@ FUNCTION {misc}
 FUNCTION {phdthesis}
 { output.bibitem
   format.authors "author" output.check
-  add.colon
+  new.sentence
   format.btitle
   "title" output.check
   new.sentence
@@ -1359,7 +1338,7 @@ FUNCTION {proceedings}
     }
     { format.editors output.nonnull }
   if$
-  add.colon
+  new.sentence
   format.btitle "title" output.check
   format.bvolume output
   format.number.series output
@@ -1394,7 +1373,7 @@ FUNCTION {proceedings}
 FUNCTION {techreport}
 { output.bibitem
   format.authors "author" output.check
-  add.colon
+  new.sentence
   format.title
   "title" output.check
   new.sentence
@@ -1412,7 +1391,7 @@ FUNCTION {techreport}
 FUNCTION {unpublished}
 { output.bibitem
   format.authors "author" output.check
-  add.colon
+  new.sentence
   format.title "title" output.check
   format.date output
   format.doi output
@@ -1599,7 +1578,7 @@ FUNCTION {begin.bib}
   "\providecommand{\biburl}[1]{\url{#1}}"
 %   "\providecommand{\biburl}[1]{#1}"
   write$ newline$
-  "\providecommand{\urlprefix}{Dostupn{\' e} z: }"
+  "\providecommand{\urlprefix}{Available from: }"
   write$ newline$
   "\expandafter\ifx\csname urlstyle\endcsname\relax"
   write$ newline$
@@ -1607,8 +1586,8 @@ FUNCTION {begin.bib}
   write$ newline$
   "  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup \urlstyle{rm}\Url}\fi"
   write$ newline$
-  "\providecommand{\selectlanguage}[1]{\relax}"
-  write$ newline$
+%   "\providecommand{\selectlanguage}[1]{\relax}"
+%   write$ newline$
   "\providecommand{\eprint}[2][]{\biburl{#2}}"
   write$ newline$
 }

@@ -49,8 +49,15 @@
 % \website{http://site.example/thesis} %optional thesis URL
 
 %---------------------------------- main document -------------------------------------------------
-
+% Kile, TeX Maker
+%online - Pepeeria, >>Overleaf
 \begin{document}
+
+
+
+% \newacronym{CVUT}{{\v C}VUT}{{\v C}esk{\' e} vysok{\' e} u{\v c}en{\' i} technick{\' e} v Praze}
+% \newacronym{FIT}{FIT}{Fakulta informa{\v c}n{\' i}ch technologi{\' i}}
+
 
 % .......................... chapters .........................
 %\setsecnumdepth{part}
@@ -67,10 +74,6 @@
 
 % ***********************************************
 
-% \newacronym{CVUT}{{\v C}VUT}{{\v C}esk{\' e} vysok{\' e} u{\v c}en{\' i} technick{\' e} v Praze}
-% \newacronym{FIT}{FIT}{Fakulta informa{\v c}n{\' i}ch technologi{\' i}}
-
-
 \setsecnumdepth{part}
 \chapter{Introduction}
 
@@ -83,61 +86,7 @@
 \section{Description}
 \section{Computation}
 
-\chapter{Algorithms}
-
-% **********************************************************************************
-% ************************* FAST - LTS *********************************************
-% **********************************************************************************
-\section{FAST-LTS}
-In this section we'll describe FAST-LTS algorithm and it's main properties. The main idea of this algorthm is based on the fact that from one approximation of the algorithm we can compute another which can have lower objective function.
-
-Thoerem 1:
-Let w0 ... wp be the LTS estimate.
-for each data sample we can compute |y-wx|
-
-
-
-Hlavni myslenka tohoto algoritmu spociva ve faktu, 
-
-
-Vyberte si šablonu podle druhu práce (bakalářská, diplomová), jazyka (čeština, angličtina) a kódování (ASCII, \mbox{UTF-8}, \mbox{ISO-8859-2} neboli latin2 a nebo \mbox{Windows-1250}). 
-
-V~české variantě naleznete šablony v~souborech pojmenovaných ve formátu práce\_kódování.tex. Typ práce může být:
-\begin{description}
-	\item[BP] bakalářská práce,
-	\item[DP] diplomová (magisterská) práce.
-\end{description}
-Kódování zdrojového souboru (\LaTeX{}), ve kterém chcete psát, může být:
-\begin{description}
-	\item[UTF-8] kódování Unicode,
-	\item[ISO-8859-2] latin2,
-	\item[Windows-1250] znaková sada 1250 Windows.
-\end{description}
-V~případě nejistoty ohledně kódování doporučujeme následující postup:
-\begin{enumerate}
-	\item Otevřete šablony pro kódování UTF-8 v~editoru prostého textu, který chcete pro psaní práce použít -- pokud můžete texty s~diakritikou normálně přečíst, použijte tuto šablonu.
-	\item V~opačném případě postupujte dále podle toho, jaký operační systém používáte:
-	\begin{itemize}
-		\item v~případě Windows použijte šablonu pro kódování \mbox{Windows-1250},
-		\item jinak zkuste použít šablonu pro kódování \mbox{ISO-8859-2}.
-	\end{itemize}
-\end{enumerate}
-
-
-V~anglické variantě jsou šablony pojmenované podle typu práce, možnosti jsou:
-\begin{description}
-	\item[bachelors] bakalářská práce,
-	\item[masters] diplomová (magisterská) práce.
-\end{description}
-
-% **********************************************************************************
-% ************************* EXACT POLYNOMIAL ALGORITHM *****************************
-% **********************************************************************************
-\section{Exact algorithm}
-\section{Feasible solution}
-\section{MMEA}
-\section{Branch and bound}
-\section{Adding row}
+\include{02_algorithms}
 
 \chapter{Experiments}
 \section{Data}
@@ -147,7 +96,7 @@ V~anglické variantě jsou šablony pojmenované podle typu práce, možnosti js
 \setsecnumdepth{part}
 \chapter{Conclusion}
 
-
+% citace - TODO
 \bibliographystyle{iso690}
 \bibliography{mybibliographyfile}
 
