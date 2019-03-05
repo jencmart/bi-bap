@@ -2,15 +2,19 @@
 % arara: xelatex
 % arara: xelatex
 
-
 % options:
 % thesis=B bachelor's thesis
 % thesis=M master's thesis
 % czech thesis in Czech language
 % english thesis in English language
 % hidelinks remove colour boxes around hyperlinks
-
 \documentclass[thesis=B,english]{FITthesis}[2012/10/20]
+
+
+
+% ******************************************************************
+% *************************   PACKAGES   ***************************
+% ******************************************************************
 
 % \usepackage[utf8]{inputenc} % LaTeX source encoded as UTF-8
 % \usepackage[latin2]{inputenc} % LaTeX source encoded as ISO-8859-2
@@ -23,14 +27,35 @@
 
 \usepackage{dirtree} %directory tree visualisation
 
+% ostatní
+\usepackage{enumerate}
+
+% matematické balíčky - ty cou pouziva Ing. Kalvoda, Ph.D.
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+
+% **** PSEUDOCODE ****
+\usepackage{amsfonts}
+%\usepackage{algorithm,algpseudocode} tento balicek se bije s tim co je o radek dal
+\usepackage[linesnumbered]{algorithm2e}
+
+% ***& MY MACROS ****
+% mymacros.sty
+% soubor s mymy makry
+\usepackage{mymacros}
+
 % % list of acronyms
 % \usepackage[acronym,nonumberlist,toc,numberedsection=autolabel]{glossaries}
 % \iflanguage{czech}{\renewcommand*{\acronymname}{Seznam pou{\v z}it{\' y}ch zkratek}}{}
 % \makeglossaries
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
-% EDIT THIS
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+
+% ******************************************************************
+% **************************   HEADER   ****************************
+% ******************************************************************
 
 \department{Department of Applied Mathematics}
 \title{Probabilistic algorithms for computing the LTS estimate}
@@ -45,61 +70,65 @@
 \placeForDeclarationOfAuthenticity{Prague}
 \keywordsCS{LTS odhad, lineární regrese, optimalizace, nejmenší usekané čtvrece, metoda nejmenších čtverců, outliers}
 \keywordsEN{LTS, linear regressin, robust estimator, least trimmed squares, ordinary least squares, outliers, outliers detection}
-\declarationOfAuthenticityOption{1} %select as appropriate, according to the desired license (integer 1-6)
+\declarationOfAuthenticityOption{1} %select according to the desired license (integer 1-6)
 % \website{http://site.example/thesis} %optional thesis URL
 
-%---------------------------------- main document -------------------------------------------------
-% Kile, TeX Maker
-%online - Pepeeria, >>Overleaf
+
+
+% ******************************************************************
+% ***********************   MAIN DOCUMENT   ************************
+% ******************************************************************
+
 \begin{document}
-
-
-
 % \newacronym{CVUT}{{\v C}VUT}{{\v C}esk{\' e} vysok{\' e} u{\v c}en{\' i} technick{\' e} v Praze}
 % \newacronym{FIT}{FIT}{Fakulta informa{\v c}n{\' i}ch technologi{\' i}}
 
 
-% .......................... chapters .........................
-%\setsecnumdepth{part}
-%\include{00_intro}
 
-% \setsecnumdepth{all}
-% \include{01_opt}
-% \include{02_ke}
-% \include{03_alg}
-% \include{04_apps}
-
-%\setsecnumdepth{part}
-%\include{99_concl}
-
-% ***********************************************
+% ******************************************************************
+% **************************  CHAPTERS  ****************************
+% ******************************************************************
 
 \setsecnumdepth{part}
+\include{chapters/00_introduction}
 \chapter{Introduction}
 
 \setsecnumdepth{all}
-\chapter{The Least trimmed squares}
-\subsection{Objective function}
-\subsubsection{something}
-
-\section{Robust statistics}
-\section{Description}
-\section{Computation}
-
-\include{02_algorithms}
-
-\chapter{Experiments}
-\section{Data}
-\section{Performance}
-\section{Outlier detection}
+\include{chapters/01_linear_regression}
+\include{chapters/02_lts}
+\include{chapters/03_algorithms}
+\include{chapters/04_experiments}
 
 \setsecnumdepth{part}
+\include{chapters/99_conclusion}
 \chapter{Conclusion}
 
-% citace - TODO
-\bibliographystyle{iso690}
-\bibliography{mybibliographyfile}
 
+
+% ******************************************************************
+% ***********************  BILIOGRAPHY  ****************************
+% ******************************************************************
+% “book – A single-volume book with one or more authors where the authors share credit for the work as a whole.”
+
+% “inbook – A part of a book which forms a self-contained unit with its own title. Note that the profile of this entry type is different from standard BibTeX, see § 2.3.1.”
+
+% “collection – A single-volume collection with multiple, self-contained contributions by distinct authors which have their own title. The work as a whole has no overall author but it will usually have an editor.”
+
+% “incollection – A contribution to a collection which forms a self-contained unit with a distinct author and title. The author refers to the title, the editor to the booktitle, i. e., the title of the collection.”
+
+% INPROCEEDINGS - ???
+
+% In practice, incollection items vastly outnumber inbook
+
+
+\bibliographystyle{bib/iso690}
+\bibliography{bib/mybibliographyfile}
+
+
+
+% ******************************************************************
+% ************************  APPENDIX  ******************************
+% ******************************************************************
 \setsecnumdepth{all}
 \appendix
 
@@ -112,9 +141,7 @@
 
 
 \chapter{Contents of enclosed CD}
-
 %change appropriately
-
 \begin{figure}
 	\dirtree{%
 		.1 readme.txt\DTcomment{the file with CD contents description}.

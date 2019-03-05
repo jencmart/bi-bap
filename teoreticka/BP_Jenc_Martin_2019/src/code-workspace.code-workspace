@@ -1,3 +1,21 @@
 {
-	"folders": []
+	"folders": [
+		{
+			"path": "bib"
+		},
+		{
+			"path": "img"
+		},
+		{
+			"path": "chapters"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"cSpell.words": [
+			"dataset"
+		]
+	}
 }

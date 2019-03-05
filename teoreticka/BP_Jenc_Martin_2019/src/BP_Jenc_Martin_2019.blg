@@ -1,0 +1,55 @@
+This is BibTeX, Version 0.99d (TeX Live 2016/Debian)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: BP_Jenc_Martin_2019.aux
+A level-1 auxiliary file: chapters/00_introduction.aux
+A level-1 auxiliary file: chapters/01_linear_regression.aux
+A level-1 auxiliary file: chapters/02_lts.aux
+A level-1 auxiliary file: chapters/03_algorithms.aux
+A level-1 auxiliary file: chapters/04_experiments.aux
+A level-1 auxiliary file: chapters/99_conclusion.aux
+The style file: bib/iso690.bst
+Database file #1: bib/mybibliographyfile.bib
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Warning--empty year in rybicka
+You've used 2 entries,
+            3146 wiz_defined-function locations,
+            667 strings with 5781 characters,
+and the built_in function-call counts, 1093 in all, are:
+= -- 79
+> -- 25
+< -- 2
++ -- 12
+- -- 7
+* -- 60
+:= -- 129
+add.period$ -- 6
+call.type$ -- 2
+change.case$ -- 11
+chr.to.int$ -- 3
+cite$ -- 3
+duplicate$ -- 103
+empty$ -- 107
+format.name$ -- 8
+if$ -- 237
+int.to.chr$ -- 0
+int.to.str$ -- 2
+missing$ -- 25
+newline$ -- 15
+num.names$ -- 5
+pop$ -- 58
+preamble$ -- 1
+purify$ -- 7
+quote$ -- 0
+skip$ -- 38
+stack$ -- 0
+substring$ -- 45
+swap$ -- 56
+text.length$ -- 1
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 6
+warning$ -- 1
+while$ -- 9
+width$ -- 3
+write$ -- 27
+(There was 1 warning)

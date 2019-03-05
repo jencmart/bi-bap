@@ -1,0 +1,171 @@
+FAST-LTS
+V teto kapitole si predstavime algoritmus FAST-LTS (Rousseeuw and Van Driessen, 2000). Jedna se, stejne jako v jinych pripadech, o iterativni algorimus jehoz hlavni myslenka spociva v kroku ktery tvurci oznacuji jako C-STEP. C-STEP, jak si ukazeme dokaze z existujiciho LTS odhadu vyvorit novy LTS odhah, jehoz objektova funkce je mensi nebo rovna puvodnimu odhadu. Na zaklade teto vlastnosti C-STEP budeme schopni sestrojit posloupnost C-STEPU ktere budou vest k lepsim odhadum. Nasledne popiseme moznosti v jakem LTS odhadu zacit  a nekolik dalsich poznatku, diky kterym budeme moci sestrojit cely algoritmus.
+
+In this chapter we’ll introduce FAST-LTS algorithm first presented in  
+Veta 1
+Necht mame dataset  x1, y1 … xn, yn. Kde xi e Rp. uvazujme variantu s itnerceptem, tedy xi1 = 1 pro vsechny xi a necht mame existujici OLS odhad w e Rp  w10 .. wp.  Na mnozine H1 podmnoz {1...N} a |H1| = h. Oznacme nyni objektovou funkci tohoto LTS odhadu  
+RSSh1(w) = SUM i..h (yi -w1xiT1)^2 kde kde  respektive w10*xi0 + w11 + xi1
+ Oznacme nyni  r.pi(1) … r.pi(n) tak, ze r.pi(i)  <= r.pi(j) pro i < j 
+A polozme monzinu H2 = { r.pi(1) , r.pi(2) … r.pi(h) } 
+Nyni spocitejme OLS na podmoznine h pozorovani x.pi(1) y.pi(1) … x.pi 
+A oznacme jeho objektovou funkci RSSh2(w) jako sum i e H2 r2(i)^2 
+Potom RSSh2(w) <= RSSh1(w)
+
+DK
+Protoze jsme vzali h pozorovnani, pro nez je r nejmensi, respektive pro nez je vysvetlovana L1 mira vysvetlovane promene y od nadrovniy Xw nejmensi, potom urcite
+Sum i e h2 r1^2  <= Sum i e h1 r1^2 = RSSh1(w1).
+A protoze OLS minimalizuje objektovou funkci h2, potom
+RSSh2 = Sum i h2 r2^2 <= sum i e h2 r1^2 
+Dostavame tedy RSSh2 =  <= <= = RSSh1 
+
+Tedy pro dane h1 muzeme setrojit h2 tak ze RSSh1 <= RSSh2
+Vzheledem k tomu, ze  w1 je OLS na h1, muzme sestrojit nasledujici algoritmicky krok, ktery se oznacuje jako C-STEP
+
+C-STEP(w_old)
+Spocitejme vzdalenosti r_old(i) pro i = 1 … n
+Seradme vzdalenosti tak ze |r_old.pi(1) <= …. r_old.pi(n)|
+Vyberme h nejmensich
+Polozme h_new {pi(1) … pi(h) }
+Spocitemne w_new := OLS na h_new
+
+
+
+
+
+
+Casova slozitost
+V jednom kroku C-step musime spocitat n vzdalenosti O(n) nasledne vybrat mnozinu h nejmensich, coz zle udelat v case O(n) pomoci algoritmu QuckSelect a nakonec spocitat OLS
+Casove slozitosti OLS asymptoticky dominuje casova slozitost spocitani inverze, coz zavisi na konkternim algoritmu
+For a least squares regression with 𝑁N training examples and 𝐶C features, it takes:
+𝑂(𝐶2𝑁)O(C2N) to multiply 𝑋𝑇XT by 𝑋X
+𝑂(𝐶𝑁)O(CN) to multiply 𝑋𝑇XT by 𝑌Y
+𝑂(𝐶3)O(C3) to compute the LU (or Cholesky) factorization of 𝑋𝑇𝑋XTX and use that to compute the product (𝑋𝑇𝑋)−1(𝑋𝑇𝑌)(XTX)−1(XTY)
+Asymptotically, 𝑂(𝐶2𝑁)O(C2N) dominates 𝑂(𝐶𝑁)O(CN) so we can forget the 𝑂(𝐶𝑁)O(CN) part
+Since you're using the normal equation I will assume that 𝑁>𝐶N>C - otherwise the matrix 𝑋𝑇𝑋XTX would be singular (and hence non-invertible), which means that 𝑂(𝐶2𝑁)O(C2N) asymptotically dominates 
+Posloupnost C-STEP vede na iteraci w_1 w_2 …  w_i  a k nim snadno spocitame korespondujici RSShi jako sum (yi-w_i*xi.T)^2
+Na otazku, zda-li nekdy takovato posloupnost zkocni, odpovida nasledujici veta.
+
+Veta 2
+Posloupnost  kroku algoritmus C-STEP je konecna, a zkonci nejpozdeji po m=( n nad h)
+
+DK
+Na zakladne vystupu C-STEP dostavame w_1 w_2 a knim korespondujici nezapornou  nerostouci posloupnost RSSh1 RSSh2 tedy RSSh1 >= RSSh2 … tedy posloupnost ktera nutne kunverguje. Vzhledem k tomu ze mnozina N pozorovani ma jen konecne mnozstvi podmnozin, algoritmus je konecny a zastavi nejpozdeji po (n nad h) krocich
+
+Cely algoritmus muzeme zapsat tatko
+C-STEPS(w_old)
+while(true)
+RSS_old = sum (yi-w_old*xi.T)^2
+w_new = C-STEP(w_old)
+RSS_new = sum (yi-w_new*xi.T)^2
+if(RSS_new == RSS_old)
+End
+
+Pocet kroku vedoucich ke konvergenci je v praxi velmi maly, na zaklade naseho mereni se algoritmus zastavi nejcasteji po m < 20 krocich. Nejedna se o postacujici podminku k nalezeni globalniho minima objektove funkce, ale jedna se o podminku nutnou.
+
+Na zaklade toho bychom cely algoritmus mohli zkonstruovat zhruba takto:
+
+Vyberme dostatecne velke mnozstvi H1 mnozin a kazdou z nich pouzijme jako vstup do algoritmu C-Steps. Z vyslednych zkonvergovanych mnozim Hi vyberme tu, ktera ma nejmensi hodnotu RSShi
+
+Abychom ale algoritmus mohli zkonstruovat, je potreba vyresit dve zakladni veci, ktere jsme zatim nediskutovali. V prni rade musime najit zpusob, jak vybrat mnozinu h1. A nasledne je potreba urcit kolik takovych mnozin musime vybrat. Pojdme se nejdrive zamerit na to, jakymi zpusoby lze vybrat vstupni mnozina h1.
+
+Jak vybrat mnozinu h1
+	Metoda 1 (nahodne)
+Trivialni zpusob muze byt vybrat nahodne h data samples, spocitat na nich OLS a to pouzit jako vstup algoritmu.
+
+Observation
+S rostoucim poctem data samples je pravdepodobnost ze ze z m nahodnych podmnozin velikosti h se pravdepodobnost toho, ze alespon jedna z techto podmnozin bude vybrana tak, ze prislusna data nebudou obsahovat outliers se blizi k 0.
+Dukaz: 
+Mejme dataset ktery obsahuje e  procent outlers. h = (n+p + 1)/2. m je pocet nahodne vybranych mnozin. 
+(1-e) je potom pravdepodobnost ze  vybereme prave jedno pozorovani, ktere nebude outlier
+(1-e)^h vybereme h data samples bez outliers
+1- (1-e)^h  vybereme h data samples s alespon jednim outlierem
+(1 - (1-e)^h)^m vybereme m x h data samples kde ve vsech h exisuje alespon jeden outlier
+1- (1 - (1-e)^h)^m vybereme m x h data samples kde e alespon jedennom h jsou vsechny data samples bez outliers
+n->inf potom h->inf potom (1-e)^h -> 0 pototom 1- (1-e)^h  -> 1 potom (1 - (1-e)^h)^m -> 1 
+Potom 1- (1 - (1-e)^h)^m -> 0
+O
+
+Pokud zacneme ze spatne vstupni H1 potom c-stepls  nezkonverguje k dobremu reseni. Proto je vhodne  zabyvat se jinym zpusobem vybrani vstupniho subset H1
+
+
+
+V \ref{Rousseauw} proto navrhuji pozuti jine metody pro zvoleni vstupni mnoziny h1, ktera byla prvne uveda v \ref(Rousseeauw Leroy 1987}
+
+Metoda 2
+Vyberme nahodne podmnozinu J |J| = p. Spocitejme dimenzi matice XJ: pokud tato matice nema dimenzi p, pridavejme postupne do XJ nahodne vybrane pozorovani z X (bez opakovani) dokud dimenze nebude p. Necht tedy XJ ma dimezni p. Nasledne spocitejme w^ = OLSJ
+a pote rezidua r0 = yi -w^.T * xi . a nasledne je seradme podle velikosti r.pi(1) … r.pi(n)
+Jako H1 polozme {r.pi(1) … r.pi(h)}
+
+Pozorovani 2
+Pravdepodobnost ze z m x nahodne vybranych p-subsets jsme vybrali alespon jeden subset pi ktery v sobe nema outliers pro velke n jde k 
+	1- (1 - (1-e)^p)^m > 0
+Dukaz
+Obdobne jak v predchozim pripade.
+
+Poznamenejme ze bychom mohli zvolit i jine zpusby jak zvolit mozninu H1 a tim tento algoritmus modifikovat. Tomu se budeme jeste venovat v kapitole XX
+
+Posledni co nam k dokonceni algoritmu chybi je mnozstvni m subsetu h1, ktere je predpokladem pro konvergenci alespon jednoho k dobremu vysledku. Pro to je ale nutne jeste zminit nekolik empiricky overenych pozorovani z \ref{rousseeauw}
+
+3. Zrychleni algoritmu
+3.1 Selektivni iterace
+Vypocetne nejnarocenjsi jadro algoritmu je C-STEP ktery musi v kazdem kroku spositat OLS na h subsetu, nasledne spocitat residua pro vsech n datasamples a vybrat z nich mnozinu h nejmensich. Ke konvergenci, jak bylo zmineno zpravidla dochazi behem 20ti kroku. 
+Pro rychly chod algoritmu by proto bylo vhodne abychom C-STEP opakovali co nejmene krat a zaroven abychom tim neovlivnili performance algoritmu.
+Vzhledem k tomu ze jednotlive C-STEPS postupuji ke sve konvergenci pomerne ‘agresivne’, ukazuje se na zaklade empirickeho pozorovani, ze uz po dvou az trech C-STEPS muzeme na zaklade velikosti RSSh3 respektive RSSh4. Ackoli tedy tvurci neuvadeji presnou velikost m, zminuji, ze pokud po nekolika uvodnich krocich staci zvolit nekolik (rekneme 10) subsetu h3 resp. H4 ktere maji nejmensi RSS a na nich nasledne budeme iterovat C-STEPS az do konvergence.
+
+Poznamka
+Velikost m muzeme urcit na zaklade pozorovani 2, kde podotkneme, ze v idealnim pripade by se  pravdepodonost existence alespon jednoho h1 bez outliers mela blizit k 1. Coz ale vzhledem k tomu, ze v takovem pripade je m exponecialne zavisle na p a navic v praxi vetsinou nevim procento outliers v nasem datesetu. Konkretni hodnoty m vhledem k datum a jejich vysledky budou viditelne v sekci XX.
+
+Todo vygenerovat si obrazek s daty !
+
+
+3.2  Nested extension
+Vypoctu c-step je pro mala n velmi rychly. Problem nastava pro velka n, protoze c step pocita ols na hsubsetu ktere jez je zavisle n. A nasledne pocita residua pro vsech n data samples.  Aby se predeslo pocitani na celem datasetu, navrhuje \ref{rousseeauw} postup ktery oznacuje jako nested extension, ktery byl prvne uveden v \ref{rousseeauw 1999}.
+
+Postup je nasledujici:
+Pokud je je n vetsi nez nas nastaveny limit L. rozdelime dataset na s casti tak, ze v kazde casti bude l/s data samples. 
+Pro kazdou z techto casti si nastavime velikost mi = m/l nasledne v kazde casti nezavisle na sobe nasamplujeme mi x h1 a provedeme 2 az 3 kroky c-steps a nasledne z techto mi vybereme 10 h3 resp. H4 s nejmensim RSSh3 resp RSSh4.
+Nasledne vsech techto 10*s nejlepsich vysledku spojime dohromady a opet na nich provedeme 2 -3 kroky c-steps. 
+Nakonec z nich vybereme 10 nejlepsich, na ktreych uz iterujeme c-steps az do konvergence.
+
+Tento postup zrychli vypocet pro velka n, protoze se c-steps zpocatku nepocitaji na celem datasetu.
+
+3.3 Cely algoritmus 
+Popsali jsme vsechny casti a hlavni myslenky algoritmu FAS-LTS. Kdyz je vsechny spojime dohromady, vytvorime algorimus, jehoz pseudokod je nalsedujici. Poznamenejme, ze nektera cisla jsou zvolena exaktne a potencialne muzou byt zmenena jako dalsi parametry algoritmu.
+Co take jeste nebylo zmineno, je vhodne zavest parametry max_iterations a treshold, ktere vedou k predcasnemu zastaveni aloritmu v pripade, ze by c-steps meli piris dlouhou posloupnost ke konvergenci. Max_steps oznacuje maximalni pocet kroku, ktere muze algoritmus udelat pro kazde h1 v ramci finalni konverecne a treshold oznacuje kriterium zastaveni jakozo |RSS_old - RSS_new| < treshold namisto RSS_old == RSS_new
+
+
+
+
+
+
+
+
+
+Vstup: x, y, m, L, s, max_iterations, treshold, num_initial_iter
+If x_too_big
+Merged best = {}
+Pro i = 0, i < s
+Pro i = 0, i < L/s
+Selective iteration
+Best = Choose 10 best
+Merged best += best 
+Final_best = {}
+For subset in Merged:
+Selective iteration
+Best = choose 10 best
+Final_best += best
+Select 10 best from final best
+For subset in final best:
+C-step  till convergence (max_terations, treshold)
+best _one = Chose best
+Return best_one
+Else
+Final_best = {}
+Selective iteration
+Best = Choose 10 best
+For subset in final best:
+C-step  till convergence (max_terations, treshold)
+best _one = Chose best
+Return best_one
+
+

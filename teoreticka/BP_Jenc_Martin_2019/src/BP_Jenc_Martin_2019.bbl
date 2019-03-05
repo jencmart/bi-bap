@@ -1,0 +1,20 @@
+\begin{thebibliography}{1}
+\providecommand{\biburl}[1]{\url{#1}}
+\providecommand{\urlprefix}{Available from: }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+\providecommand{\eprint}[2][]{\biburl{#2}}
+
+\bibitem{rouss:2000}
+Rousseeuw, P.~J.; Driessen, K.~V. An Algorithm for Positive-Breakdown
+  Regression Based on Concentration Steps. In \emph{Data Analysis: Scientific
+  Modeling and Practical Application}, edited by M.~S. W.~Gaul, O.~Opitz,
+  Springer-Verlag Berlin Heidelberg, 2000, pp. 335--346.
+
+\bibitem{rybicka}
+Rybicka, J. \emph{LaTeX pro za\v c\'ate\v cn\'\i{}ky}. Brno: Konvoj, third
+  edition, ISBN 80-7302-049-1.
+
+\end{thebibliography}

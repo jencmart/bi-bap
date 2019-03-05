@@ -1,0 +1,128 @@
+
+\chapter{Algorithms}
+
+% **********************************************************************************
+% ************************* FAST - LTS *********************************************
+% **********************************************************************************
+% \cite{rouss:2000}
+\section{FAST-LTS}
+In this section we'll introduce FAST-LTS algorithm\cite{rouss:2000}. 
+It's, as well as in other cases, iterative algorithm. We'll discuss all main components
+of the algorithm starting with its core idea called concentration step which 
+authors simply calls C-step.
+\newcommand{\paramhat}[1]{\boldsymbol{\hat{\textbf{#1}}}}
+\newcommand{\param}[1]{\textbf{\text{#1}}}
+
+\subsection{C-step}
+We'll show that from existing LTS estimate $\boldsymbol{\hat{w}_{old}}$ we 
+can construct new LTS estimate $\boldsymbol{\hat{w}_{new}}$ which objective 
+function is less or equal to old one. Based on this property we'll be able 
+to create sequence of LTS estimates which will lead to better results.
+
+
+\begin{veta}
+Let's have dataset consisting of $x_1, x_2 ... x_n$ explanatory variables and its
+corresponding $y_1, y_2 ... y_n$ response variables where $x_i $
+\end{veta}
+
+
+
+
+\begin{veta}\label{vet:Fourier_exp}
+Buď $f$ funkce, ktera ma\cite{rouss:2000} po částech spojitou derivaci na intervalu $\langle-T,T\rangle$. Potom Fourierova řada funkce $f$ na intervalu $(-T,T)$ konverguje na celé množině $\mathbb{R}$. Označme $F$
+její součtovou funkci, tzn.
+\[
+	F(x):=\frac{a_0}{2} + \sum_{k=1}^\infty a_k \cos\frac{k\pi x}{T} + b_k \sin\frac{k\pi x}{T}\,, \quad \forall x\in\mathbb{R}\,,
+\]
+kde posloupnosti $(a_n)_{n=0}^{\infty}$ a $(b_n)_{n=1}^{\infty}$ jsou určeny vztahy . Potom platí:
+\begin{enumerate}[(i)]
+	\item $F$ je periodická funkce s periodou $2T$.
+	\item $\displaystyle F(x)=\frac{f(x+)+f(x-)}{2}$ pro každé $x\in(-T,T)$.
+	\item $\displaystyle F(T)=F(-T)=\frac{f(-T+)+f(T-)}{2}$.
+\end{enumerate}
+
+\end{veta}
+
+\begin{proof}
+	Neuvádíme.
+\end{proof}
+   
+
+
+
+
+
+\begin{algorithm}[H]
+	\KwData{this text}
+	\KwResult{how to write algorithm with \LaTeX2e }
+	initialization\;
+	\While{not at end of this document}{
+	read current\;
+	\eIf{understand}{
+	go to next section\;\label{alg:goto}
+	current section becomes this one\;
+	}{
+	go back to the beginning of current section\;
+	}
+	}
+\end{algorithm}
+
+
+% \begin{algorithm}
+%   \caption{MyAlgo}
+%   \begin{algorithmic}[1]
+%     \Statex \textbullet~\textbf{Parameters:} $n, t \in \mathbb{N}$, where $t < n$.
+%     \State First step
+%     \State Second step
+%     \State \ldots
+%   \end{algorithmic}
+% \end{algorithm}
+
+	
+   
+In this section we'll describe FAST-LTS algorithm and it's main properties. The main idea of this algorthm is based on the fact that from one approximation of the algorithm we can compute another which can have lower objective function.
+ TA DAAAAAAAAAAAAAAAAA
+Thoerem 1: \cite{rybicka}
+Let w0 ... wp be the LTS estimate.
+for each data sample we can compute |y-wx|
+
+
+
+Hlavni myslenka tohoto algoritmu spociva ve faktu, 
+
+
+
+V~české variantě naleznete šablony v~souborech pojmenovaných ve formátu práce\_kódování.tex. Typ práce může být:
+\begin{description}
+	\item[BP] bakalářská práce,
+	\item[DP] diplomová (magisterská) práce.
+\end{description}
+\begin{description}
+	\item[UTF-8] kódování Unicode,
+	\item[ISO-8859-2] latin2,
+	\item[Windows-1250] znaková sada 1250 Windows.
+\end{description}
+V~případě nejistoty ohledně kódování doporučujeme následující postup:
+\begin{enumerate}
+	\item V~opačném případě postupujte dále podle toho, jaký operační systém používáte:
+	\begin{itemize}
+		\item v~případě Windows použijte šablonu pro kódování \mbox{Windows-1250},
+		\item jinak zkuste použít šablonu pro kódování \mbox{ISO-8859-2}.
+	\end{itemize}
+\end{enumerate}
+
+
+V~anglické variantě jsou šablony pojmenované podle typu práce, možnosti jsou:
+\begin{description}
+	\item[bachelors] bakalářská práce,
+	\item[masters] diplomová (magisterská) práce.
+\end{description}
+
+% **********************************************************************************
+% ************************* EXACT POLYNOMIAL ALGORITHM *****************************
+% **********************************************************************************
+\section{Exact algorithm}
+\section{Feasible solution}
+\section{MMEA}
+\section{Branch and bound}
+\section{Adding row}

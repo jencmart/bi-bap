@@ -1,0 +1,23 @@
+% AMS Theorems
+\newtheoremstyle{newthm}%
+  {4pt}         % space above
+  {4pt}         % space below
+  {\normalfont} % body font
+  {}            % indent amount
+  {\bfseries}   % theorem head font
+  {:}           % punctuation after theorem head
+  {.5em}        % space after theorem head
+  {}            % head spec (?)
+
+% theorems
+\theoremstyle{newthm}
+\newtheorem{defi}{Definice}
+
+\newtheorem{veta}[defi]{Theorem}
+
+\newtheorem{lemma}[defi]{Lemma}
+\newtheorem{dusl}[defi]{Důsledek}
+\newtheorem{pozn}[defi]{Poznámka}
+\newtheorem{prik}[defi]{Příklad}
+\newtheorem{cvi}{Cvičení}[section]
+\newtheorem{cvi*}{Cvičení}[cvi]
