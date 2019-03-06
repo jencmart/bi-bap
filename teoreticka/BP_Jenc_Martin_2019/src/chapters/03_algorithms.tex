@@ -1,17 +1,37 @@
-
 \chapter{Algorithms}
 
+\newcommand{\paramhat}[1]{\boldsymbol{\hat{\textbf{#1}}}}
+\newcommand{\param}[1]{\textbf{\text{#1}}}
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+% vector x = x1,x2,...,xn
+\newcommand{\showVec}[3]{\vec{#1} = (\lowercase{#2}_1, \lowercase{#2}_2,\ldots,\lowercase{#2}_#3)}
+% matrix notation
+\newcommand{\m}[1]{\boldsymbol{\uppercase{#1}}}
+% \cite{rouss:2000}
+
+% \usepackage{amssymb}
+\let\vec\boldsymbol
+
+
+% \textbf{X} - tucna rovna
+% \pmb{X} - hodne tucna
+% \boldmath{X} - skoro netucna
+%  $\textbf{X}^T$ - TRANSPOSED MATRIX
+
+% change arrowed vector to the bold vector
+% mathbf give bold 
+% boldsymbol gives bold cursive
 % **********************************************************************************
 % ************************* FAST - LTS *********************************************
 % **********************************************************************************
-% \cite{rouss:2000}
 \section{FAST-LTS}
 In this section we'll introduce FAST-LTS algorithm\cite{rouss:2000}. 
 It's, as well as in other cases, iterative algorithm. We'll discuss all main components
 of the algorithm starting with its core idea called concentration step which 
 authors simply calls C-step.
-\newcommand{\paramhat}[1]{\boldsymbol{\hat{\textbf{#1}}}}
-\newcommand{\param}[1]{\textbf{\text{#1}}}
+
+% $\showVec{\hat{w}}{w}{n}$
+% $\boldsymbol{Y}$ - tucna trochu nakrivo
 
 \subsection{C-step}
 We'll show that from existing LTS estimate $\boldsymbol{\hat{w}_{old}}$ we 
@@ -19,37 +39,53 @@ can construct new LTS estimate $\boldsymbol{\hat{w}_{new}}$ which objective
 function is less or equal to old one. Based on this property we'll be able 
 to create sequence of LTS estimates which will lead to better results.
 
+% \usepackage{etoolbox}
 
+\newcommand{\what}[1]{
+	\vec{\hat{w}_#1}
+}
+\newcommand{\whatn}{
+	\vec{\hat{w}}
+}
+
+% (y_i - \vec{w}^T_0\vec{x_i}) = 
 \begin{veta}
-Let's have dataset consisting of $x_1, x_2 ... x_n$ explanatory variables and its
-corresponding $y_1, y_2 ... y_n$ response variables where $x_i $
-\end{veta}
-
-
-
-
-\begin{veta}\label{vet:Fourier_exp}
-Buď $f$ funkce, ktera ma\cite{rouss:2000} po částech spojitou derivaci na intervalu $\langle-T,T\rangle$. Potom Fourierova řada funkce $f$ na intervalu $(-T,T)$ konverguje na celé množině $\mathbb{R}$. Označme $F$
-její součtovou funkci, tzn.
-\[
-	F(x):=\frac{a_0}{2} + \sum_{k=1}^\infty a_k \cos\frac{k\pi x}{T} + b_k \sin\frac{k\pi x}{T}\,, \quad \forall x\in\mathbb{R}\,,
+Consider dataset consisting of
+$\vec{x_1}, \vec{x_2} \ldots,\vec{x_n}$ explanatory variables where where 
+$\vec{x_i}\in\mathbb{R}^p\,, \forall \vec{x_i} = (x^i_1, x^i_2,\ldots,x^i_p)$ where $x^i_1 = 1$
+and its corresponding $y_1, y_2,\ldots,y_n$ response variables. 
+Let's also have $\vec{\hat{w}_0}\in\mathbb{R}^p$ any p-dimensional vector and 
+$H_0 = \{{h_i ; h_i \in\mathbb{Z}\,, 1 \leq h_i \leq n\}}\,, |H_0| = h$. 
+Let's now mark $RSS(\what{0}) = \sum_{i\in H_0} (r_0(i))^2$ where 
+$r_0(i) = y_i - (w_1^0x^i_1 + w_2^0x^i_2 +\ldots+ w_p^0x^i_p$).
+%Let's now mark  $H_1 = \{{h_i ;  1 \leq h_i \leq n\   \}}$ 
+%uch that 
+Let's take $\hat{n} = \{{1,2,\ldots,n\}}$ and mark
+$\pi: \hat{n} \rightarrow \hat{n}$ permutation of $\hat{n}$ such that $|r_0({\pi(1)})| \leq |r_0({\pi(2)})| \leq \ldots \leq |r_0({\pi(n)})|$
+and mark $H_1 = \{{\pi(1)\,, \pi(2)\,,... \pi(h)\}}$ set of $h$ indexes corresponding to $h$ smallest absolute residuals $r_0(i)$.
+Finally take $\vec{\hat{w}^{OLS(H_1)}_1 }$ ordinary least squares fit on $H_1$ subset of observations
+and its corresponding $RSS(\what{1}) = \sum_{i\in H_1} (r_i^1)^2$ sum of least squares. Then
+\[ 
+	RSS(\what{1}) \leq RSS(\what{0}) \numberthis
 \]
-kde posloupnosti $(a_n)_{n=0}^{\infty}$ a $(b_n)_{n=1}^{\infty}$ jsou určeny vztahy . Potom platí:
-\begin{enumerate}[(i)]
-	\item $F$ je periodická funkce s periodou $2T$.
-	\item $\displaystyle F(x)=\frac{f(x+)+f(x-)}{2}$ pro každé $x\in(-T,T)$.
-	\item $\displaystyle F(T)=F(-T)=\frac{f(-T+)+f(T-)}{2}$.
-\end{enumerate}
-
 \end{veta}
 
 \begin{proof}
-	Neuvádíme.
+	Because we took $h$ observations with smallest absolute residuals $r_0$, then for sure $\sum_{i\in H_1} (r_0(i))^2 \leq \sum_{i\in H_0} (r_0(i))^2 =  RSS(\what{0})$.
+	When we we take into account that Ordinary least squares fit $OLS_{H_1}$ minimize objective function of 
+	$H_1$ subset of observations, then for sure  $RSS(\what{1}) =  \sum_{i\in H_1} (r_i^1)^2 \leq \sum_{i\in H_1} (r_i^0)^2$.
+	Together we get $RSS(\what{1}) =  \sum_{i\in H_1} (r_i^1)^2 \leq  \sum_{i\in H_1} (r_0(i))^2 \leq \sum_{i\in H_0} (r_0(i))^2 =  RSS(\what{0})$
 \end{proof}
-   
+
+$   F(x):=\frac{a_0}{2} + \sum_{k=1}^\infty a_k \cos\frac{k\pi x}{T} + b_k \sin\frac{k\pi x}{T}\,, \quad \forall x\in\mathbb{R}\,,
+$
 
 
+% \begin{veta}\label{vet:Fourier_exp}
 
+% \begin{enumerate}[(i)]
+% 	\item 
+% \end{enumerate}
 
 
 \begin{algorithm}[H]
