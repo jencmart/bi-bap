@@ -48,8 +48,10 @@ to create sequence of LTS estimates which will lead to better results.
 	\vec{\hat{w}}
 }
 
-% (y_i - \vec{w}^T_0\vec{x_i}) = 
-\begin{veta}
+
+%******************************** C-STEP theorem  ***************************************************%
+
+\begin{theorem}
 Consider dataset consisting of
 $\vec{x_1}, \vec{x_2} \ldots,\vec{x_n}$ explanatory variables where 
 $\vec{x_i}\in\mathbb{R}^p\,, \forall \vec{x_i} = (x^i_1, x^i_2,\ldots,x^i_p)$ where $x^i_1 = 1$
@@ -68,7 +70,7 @@ and its corresponding $RSS(\what{1}) = \sum_{i\in H_1} (r_1(i))^2$ sum of least 
 \[ 
 	RSS(\what{1}) \leq RSS(\what{0}) \numberthis
 \]
-\end{veta}
+\end{theorem}
 
 \begin{proof}
 	Because we take $h$ observations with smallest absolute residuals $r_0$, then for sure $\sum_{i\in H_1} (r_0(i))^2 \leq \sum_{i\in H_0} (r_0(i))^2 =  RSS(\what{0})$.
@@ -77,16 +79,18 @@ and its corresponding $RSS(\what{1}) = \sum_{i\in H_1} (r_1(i))^2$ sum of least 
 	Together we get $$RSS(\what{1})=\sum_{i\in H_1}(r_1(i))^2\leq\sum_{i\in H_1}(r_0(i))^2\leq\sum_{i\in H_0}(r_0(i))^2=RSS(\what{0})$$
 \end{proof}
 
+%******************************** C-STEP algorithm **********************************************%
+
 \begin{corollary} 
 	Based on previous theorem, using some $\vec{\hat{w}^{OLS(H_{old})}}$  on $H_{old}$ subset of observations we can
 	construct $H_new$ subset with corresponding $\vec{\hat{w}^{OLS(H_{new})}}$ such that $RSS(\vec{\hat{w}^{OLS(H_{new})}}) \leq RSS(\vec{\hat{w}^{OLS(H_{old})}})$. 
 	With this we can apply above theorem again on $\vec{\hat{w}^{OLS(H_{new})}}$ with $H_{new}$. This will lead to the iterative sequence of
-	 $RSS(\what{{old}}) \leq RSS(\what{{new}}) \leq \ldots$. One step of this process is described by following pseudocode. Note that for C-step we actually need only $\vec{\hat{w}}$ 
+	$RSS(\what{{old}}) \leq RSS(\what{{new}}) \leq \ldots$. One step of this process is described by following pseudocode. Note that for C-step we actually need only $\vec{\hat{w}}$ 
 	 without need of passing  $H$.
 \end{corollary}
 
 \begin{algorithm}[H]
-	\label{algo:Cstep}
+	\label{alg:Cstep}
     % \SetKwInOut{Input}{input}
     % \SetKwInOut{Output}{output}
     \KwIn{dataset consiting of $\boldsymbol{X} \in \mathbb{R}^{n \times p}$ and $\boldsymbol{y} \in \mathbb{R}^{n \times 1}$,  $\what{{old}} \in \mathbb{R}^{p \times 1}$}
@@ -99,13 +103,34 @@ and its corresponding $RSS(\what{1}) = \sum_{i\in H_1} (r_1(i))^2$ sum of least 
 	}
 	$H_{new} \gets $ select set of $h$ smallest absolute residuals from $R$\;
 	$\what{{new}} \gets OLS(H_{new})$\;
-	\Return{ $\what{{new}}$, $H_{new}$ }\;
+	\Return{ $\what{{new}}$\,, $H_{new}$ }\;
 \end{algorithm}
 
+%******************************** C-STEP alg. time complexity ******************************************%
 \begin{observation} 
-	Time complexity of algorithm C-step \ref{algo:Cstep} is same as time complexity as OLS. Thus $O(p^2n)$
+	Time complexity of algorithm C-step \ref{alg:Cstep} is same as time complexity as OLS. Thus $O(p^2n)$
 	$\boldsymbol{{TODO}}$
 \end{observation} 
+
+\begin{lemma}
+	Time complexity of OLS  on $\m{X}^{n \times p}$ and $\m{Y}^{n \times 1}$ is $O(p^2n)$.
+\end{lemma}
+
+\begin{proof}
+	Normal equation of OLS is $\vec{\hat{w}} = (\m{X^T}\m{X})^{-1}\m{X^T}\m{Y}$.
+	Time complexity  of matrix multiplication $\m{A}^{m \times n}$ and  $\m{B}^{n \times p}$ is $\sim \mathcal{O}(mnp)$.
+	Time complexity of matrix $\m{C}^{m \times m}$ is $\sim \mathcal{O}(m^3)$
+	So we need to compute 
+	$\m{A} = \m{X^T}\m{X} \sim \mathcal{O}(p^2n)$ and
+	$\m{B} = \m{X^T}\m{Y} \sim \mathcal{O}(pn)$ and
+	$\m{C} = \m{A}^{-1} \sim \mathcal{O}(p^3)$ and finally 
+	$\m{C}\m{B} \sim \mathcal{O}(p^2)$. 
+	That give us $\mathcal{O}(p^2n + pn + p^3 + p^2)$. Because  $\mathcal{O}(p^2n)$ and 
+	$\mathcal{O}(p^3)$ asymptotically dominates over $\mathcal{O}(p^2)$ and $\mathcal{O}(pn)$ we can
+	write $\mathcal{O}(p^2n + p^3)$.
+
+	$\boldsymbol{{TODO}}$ CO zo toho je vic? Neni casove narocnejsi vynasobeni $\m{X^T}\m{X}$ nez inverze, kdyz bereme v uvahu $n >> p$ ???
+\end{proof}
 
 \begin{proof}
 	In C-step we must compute $n$ absolute residuals. Computation of one absolute residual consist of
@@ -114,17 +139,82 @@ and its corresponding $RSS(\what{1}) = \sum_{i\in H_1} (r_1(i))^2$ sum of least 
 	Next we must select set of $h$ smallest residuals which can be done in $\mathcal{O}(n)$ using modification 
 	of algorithm QuickSelect. reference: $\boldsymbol{{TODO}}$
 	Finally we must compute $\hat{w}$ OLS estimate on $h$ subset of data.
-	Because $h$ is linearly dependent on $n$, time complexity can be stated as follows.
-	$\m{A} = \m{X^T}\m{X} \sim \mathcal{O}(p^2n)$ and
-	$\m{B} = \m{X^T}\m{Y} \sim \mathcal{O}(pn)$ and
-	$\m{A}^{-1}\m{B} \sim \mathcal{O}(p^3 + p^2)$.
-	That give us $\mathcal{O}{p^2n + pn + p^3 + p^2n}$ which asymptotically dominates previous steps
-	which time complexity is $\mathcal{O}(np+n)$.\\
-	$\boldsymbol{{TODO}}$ neni tedy casove narocnejsi vynasobeni $\m{X^T}\m{X}$ nez inverze, kdyz bereme v uvahu $n >> p$ ???
+	Because $h$ is linearly dependent on $n$, we can say that it is $\mathcal{O}(p^2n + p^3)$ which 
+	is asymptotically dominant against previous steps which are $\mathcal{O}(np + n)$.
 \end{proof}
 
-\begin{observation} 
-\end{observation} 
+As ve stated above, repeating algorithm C-step will lead to sequence of $\what{1}, \what{2} \ldots$ 
+on subsets $H_1, H_2 \ldots$ with corresponding residual sum of squares
+$RSS(\what{{1}}) \geq RSS(\what{{2}}) \geq \ldots$. One could ask if this sequence will converge, so that
+$RSS(\what{{i}}) == RSS(\what{{i+1}})$. 
+Answer to this question will be answered by the following theorem.
+
+
+%******************************** C-STEP alg. will converge ********************************************%
+\begin{theorem}
+	Sequence of C-step will converge to $\what{{m}}$ after maximum of $m = {n \choose h}$
+	so that $RSS(\what{{m}}) == RSS(\what{{n}})\,, \forall n\geq m$ where $n$ is number of data samples 
+	and $h$ is size of subset $H_i$.
+\end{theorem}
+
+\begin{proof}
+	Since  the $RSS(\what{{i}})$ is non-negative and $RSS(\what{{i}}) \leq RSS(\what{{i+i}})$ the 
+	sequence will converge. $\what{{i}}$  is computed out of subset 
+	$H_i \subset {1,2,\ldots,n}$. When there are finite number of subsets of size $h$ out of $n$ samples, namely ${n \choose h}$, the sequence will converge at the latest after this number of steps.
+\end{proof}
+
+%******************************** ITERATE-C-STEP algorithm **********************************************%
+Above theorem gives us clue to create algorithm described by following pseudocode.
+
+
+
+\begin{algorithm}[H]
+	\label{alg:RepeatCstep}
+	\KwIn{dataset consiting of $\boldsymbol{X} \in \mathbb{R}^{n \times p}$ 
+	and $\boldsymbol{y} \in \mathbb{R}^{n \times 1}$,  $\what{{old}} \in \mathbb{R}^{p \times 1}\,, H_0 $}
+    \KwOut{ $\what{{final}}$, $H_{final}$ }
+	\caption{Repeat-C-step}
+	\SetKw{Break}{break}
+	$\what{{new}} \gets \emptyset$\;
+	$H_{new} \gets \emptyset$\;
+	$RSS_{new} \gets \infty $\;
+
+	\While{$True$}{
+		$RSS_{old} \gets RSS(\what{{old}})$\;
+		$\what{{new}}$\,, $H_{new} \gets \boldsymbol{X}\,, \boldsymbol{y}\,, \what{{old}}$\;
+		$RSS_{new} \gets RSS(\what{{new}})$\;
+		\If{$RSS_{old} == RSS_{new}$}{
+			\Break
+		  }
+		$\what{{old}} \gets \what{{new}}$
+	}
+
+	\Return{ $\what{{new}}$, $H_{new}$ }\;
+\end{algorithm}
+
+It is important to note, that although maximum number of steps of this algorithm is ${n \choose h}$ in practice it is very low, most often under $20$ steps. $\boldsymbol{TODO}$ nejaky hezky grafik ktery to ukazuje....
+That is not enough for algorithm $Repeat-C-step$ to converge to global minimum, but it is necessary condition. That gives us, as stated in \cite{rouss:2000}
+
+\[ 
+	Choose lot of initial subsets H_1 and on each of them apply algorithm Repeat-C-step. From all converged subsets with corresponding \hat{w} estimates choose that which has lowest RSS(\hat{w}). \numberthis
+\]
+
+Before we can construct final algorithm we must decide how to choose initial subset $H_1$ and how many of them means ``\emph{lot of}''. Let's focus first on how to choose initial subset $H_1$.
+
+\subsection{Choosing initial $H_1$subset}
+
+We have couple of different options.
+
+\begin{description}
+	\item[Random] 
+	\item[Not random] 
+\end{description}
+
+
+
+%********************************************************************************************************%
+%******************************************** END *******************************************************%
+%********************************************************************************************************%
 
 \begin{algorithm}
 	\DontPrintSemicolon % Some LaTeX compilers require you to use \dontprintsemicolon instead

@@ -12,16 +12,17 @@
 \contentsline {chapter}{\chapternumberline {3}Algorithms}{7}{chapter.3}
 \contentsline {section}{\numberline {3.1}FAST-LTS}{7}{section.3.1}
 \contentsline {subsection}{\numberline {3.1.1}C-step}{7}{subsection.3.1.1}
-\contentsline {section}{\numberline {3.2}Exact algorithm}{10}{section.3.2}
-\contentsline {section}{\numberline {3.3}Feasible solution}{10}{section.3.3}
-\contentsline {section}{\numberline {3.4}MMEA}{10}{section.3.4}
-\contentsline {section}{\numberline {3.5}Branch and bound}{10}{section.3.5}
-\contentsline {section}{\numberline {3.6}Adding row}{10}{section.3.6}
-\contentsline {chapter}{\chapternumberline {4}Experiments}{11}{chapter.4}
-\contentsline {section}{\numberline {4.1}Data}{11}{section.4.1}
-\contentsline {section}{\numberline {4.2}Results}{11}{section.4.2}
-\contentsline {section}{\numberline {4.3}Outlier detection}{11}{section.4.3}
-\contentsline {chapter}{Conclusion}{13}{chapter*.6}
-\contentsline {chapter}{Bibliography}{15}{section*.8}
-\contentsline {appendix}{\chapternumberline {A}Datasets}{17}{appendix.A}
-\contentsline {appendix}{\chapternumberline {B}Contents of enclosed CD}{19}{appendix.B}
+\contentsline {subsection}{\numberline {3.1.2}Choosing initial $H_1$subset}{10}{subsection.3.1.2}
+\contentsline {section}{\numberline {3.2}Exact algorithm}{12}{section.3.2}
+\contentsline {section}{\numberline {3.3}Feasible solution}{12}{section.3.3}
+\contentsline {section}{\numberline {3.4}MMEA}{12}{section.3.4}
+\contentsline {section}{\numberline {3.5}Branch and bound}{12}{section.3.5}
+\contentsline {section}{\numberline {3.6}Adding row}{12}{section.3.6}
+\contentsline {chapter}{\chapternumberline {4}Experiments}{13}{chapter.4}
+\contentsline {section}{\numberline {4.1}Data}{13}{section.4.1}
+\contentsline {section}{\numberline {4.2}Results}{13}{section.4.2}
+\contentsline {section}{\numberline {4.3}Outlier detection}{13}{section.4.3}
+\contentsline {chapter}{Conclusion}{15}{chapter*.6}
+\contentsline {chapter}{Bibliography}{17}{section*.8}
+\contentsline {appendix}{\chapternumberline {A}Datasets}{19}{appendix.A}
+\contentsline {appendix}{\chapternumberline {B}Contents of enclosed CD}{21}{appendix.B}
