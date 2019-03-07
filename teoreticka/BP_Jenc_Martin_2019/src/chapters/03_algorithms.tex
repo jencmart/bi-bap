@@ -108,7 +108,7 @@ and its corresponding $RSS(\what{1}) = \sum_{i\in H_1} (r_1(i))^2$ sum of least 
 
 %******************************** C-STEP alg. time complexity ******************************************%
 \begin{observation} 
-	Time complexity of algorithm C-step \ref{alg:Cstep} is same as time complexity as OLS. Thus $O(p^2n)$
+	Time complexity of algorithm C-step \ref{alg:Cstep} is the same as time complexity as OLS. Thus $O(p^2n)$
 	$\boldsymbol{{TODO}}$
 \end{observation} 
 
@@ -125,7 +125,7 @@ and its corresponding $RSS(\what{1}) = \sum_{i\in H_1} (r_1(i))^2$ sum of least 
 	$\m{B} = \m{X^T}\m{Y} \sim \mathcal{O}(pn)$ and
 	$\m{C} = \m{A}^{-1} \sim \mathcal{O}(p^3)$ and finally 
 	$\m{C}\m{B} \sim \mathcal{O}(p^2)$. 
-	That give us $\mathcal{O}(p^2n + pn + p^3 + p^2)$. Because  $\mathcal{O}(p^2n)$ and 
+	That gives us $\mathcal{O}(p^2n + pn + p^3 + p^2)$. Because  $\mathcal{O}(p^2n)$ and 
 	$\mathcal{O}(p^3)$ asymptotically dominates over $\mathcal{O}(p^2)$ and $\mathcal{O}(pn)$ we can
 	write $\mathcal{O}(p^2n + p^3)$.
 
@@ -133,8 +133,8 @@ and its corresponding $RSS(\what{1}) = \sum_{i\in H_1} (r_1(i))^2$ sum of least 
 \end{proof}
 
 \begin{proof}
-	In C-step we must compute $n$ absolute residuals. Computation of one absolute residual consist of
-	matrix multiplication of shapes $ \times p$ and $p t\times 1$ that give us $\mathcal{O}(p)$. Rest is in constant time.
+	In C-step we must compute $n$ absolute residuals. Computation of one absolute residual consists of
+	matrix multiplication of shapes $1 \times p$ and $p \times 1$ that gives us $\mathcal{O}(p)$. Rest is in constant time.
 	So time of computation $n$ residuals is $\mathcal{O}(np)$.
 	Next we must select set of $h$ smallest residuals which can be done in $\mathcal{O}(n)$ using modification 
 	of algorithm QuickSelect. reference: $\boldsymbol{{TODO}}$
@@ -143,11 +143,11 @@ and its corresponding $RSS(\what{1}) = \sum_{i\in H_1} (r_1(i))^2$ sum of least 
 	is asymptotically dominant against previous steps which are $\mathcal{O}(np + n)$.
 \end{proof}
 
-As ve stated above, repeating algorithm C-step will lead to sequence of $\what{1}, \what{2} \ldots$ 
+As we stated above, repeating algorithm C-step will lead to sequence of $\what{1}, \what{2} \ldots$ 
 on subsets $H_1, H_2 \ldots$ with corresponding residual sum of squares
 $RSS(\what{{1}}) \geq RSS(\what{{2}}) \geq \ldots$. One could ask if this sequence will converge, so that
 $RSS(\what{{i}}) == RSS(\what{{i+1}})$. 
-Answer to this question will be answered by the following theorem.
+Answer to this question will be presented by the following theorem.
 
 
 %******************************** C-STEP alg. will converge ********************************************%
@@ -158,9 +158,9 @@ Answer to this question will be answered by the following theorem.
 \end{theorem}
 
 \begin{proof}
-	Since  the $RSS(\what{{i}})$ is non-negative and $RSS(\what{{i}}) \leq RSS(\what{{i+i}})$ the 
+	Since  $RSS(\what{{i}})$ is non-negative and $RSS(\what{{i}}) \leq RSS(\what{{i+i}})$ the 
 	sequence will converge. $\what{{i}}$  is computed out of subset 
-	$H_i \subset {1,2,\ldots,n}$. When there are finite number of subsets of size $h$ out of $n$ samples, namely ${n \choose h}$, the sequence will converge at the latest after this number of steps.
+	$H_i \subset \{{1,2,\ldots,n\}}$. When there is finite number of subsets of size $h$ out of $n$ samples, namely ${n \choose h}$, the sequence will converge at the latest after this number of steps.
 \end{proof}
 
 %******************************** ITERATE-C-STEP algorithm **********************************************%
@@ -193,13 +193,15 @@ Above theorem gives us clue to create algorithm described by following pseudocod
 \end{algorithm}
 
 It is important to note, that although maximum number of steps of this algorithm is ${n \choose h}$ in practice it is very low, most often under $20$ steps. $\boldsymbol{TODO}$ nejaky hezky grafik ktery to ukazuje....
-That is not enough for algorithm $Repeat-C-step$ to converge to global minimum, but it is necessary condition. That gives us, as stated in \cite{rouss:2000}
+That is not enough for the algorithm $Repeat-C-step$ to converge to global minimum, but it is necessary condition. That gives us an idea how to create the final algorithm. \cite{rouss:2000}
 
-\[ 
-	Choose lot of initial subsets H_1 and on each of them apply algorithm Repeat-C-step. From all converged subsets with corresponding \hat{w} estimates choose that which has lowest RSS(\hat{w}). \numberthis
-\]
+Choose a lot of initial subsets $H_1$ and on each of them apply algorithm Repeat-C-step. From all converged subsets with corresponding $\hat{w}$ estimates choose that which has lowest $RSS(\hat{w})$. 
 
-Before we can construct final algorithm we must decide how to choose initial subset $H_1$ and how many of them means ``\emph{lot of}''. Let's focus first on how to choose initial subset $H_1$.
+
+Before we can construct final algorithm we must decide how to choose initial subset $H_1$ and how many of them mean ``\emph{a lot of}''. First let's focus on how to choose initial subset $H_1$.
+
+\renewcommand{\O}[1]{$\mathcal{O}(#1)$}
+
 
 \subsection{Choosing initial $H_1$subset}
 
