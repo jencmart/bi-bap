@@ -5,7 +5,7 @@
   {\normalfont} % body font
   {}            % indent amount
   {\bfseries}   % theorem head font
-  {:}           % punctuation after theorem head
+  {.}           % punctuation after theorem head
   {.5em}        % space after theorem head
   {}            % head spec (?)
 
@@ -14,10 +14,12 @@
 \newtheorem{defi}{Definice}
 
 \newtheorem{veta}[defi]{Theorem}
-
+\newtheorem{corollary}[defi]{Corollary}
 \newtheorem{lemma}[defi]{Lemma}
-\newtheorem{dusl}[defi]{Důsledek}
-\newtheorem{pozn}[defi]{Poznámka}
+\newtheorem{note}[defi]{Note}
+\newtheorem{observation}[defi]{Observation}
+
+
 \newtheorem{prik}[defi]{Příklad}
 \newtheorem{cvi}{Cvičení}[section]
 \newtheorem{cvi*}{Cvičení}[cvi]

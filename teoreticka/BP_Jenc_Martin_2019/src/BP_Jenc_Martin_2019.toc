@@ -12,11 +12,11 @@
 \contentsline {chapter}{\chapternumberline {3}Algorithms}{7}{chapter.3}
 \contentsline {section}{\numberline {3.1}FAST-LTS}{7}{section.3.1}
 \contentsline {subsection}{\numberline {3.1.1}C-step}{7}{subsection.3.1.1}
-\contentsline {section}{\numberline {3.2}Exact algorithm}{9}{section.3.2}
-\contentsline {section}{\numberline {3.3}Feasible solution}{9}{section.3.3}
-\contentsline {section}{\numberline {3.4}MMEA}{9}{section.3.4}
-\contentsline {section}{\numberline {3.5}Branch and bound}{9}{section.3.5}
-\contentsline {section}{\numberline {3.6}Adding row}{9}{section.3.6}
+\contentsline {section}{\numberline {3.2}Exact algorithm}{10}{section.3.2}
+\contentsline {section}{\numberline {3.3}Feasible solution}{10}{section.3.3}
+\contentsline {section}{\numberline {3.4}MMEA}{10}{section.3.4}
+\contentsline {section}{\numberline {3.5}Branch and bound}{10}{section.3.5}
+\contentsline {section}{\numberline {3.6}Adding row}{10}{section.3.6}
 \contentsline {chapter}{\chapternumberline {4}Experiments}{11}{chapter.4}
 \contentsline {section}{\numberline {4.1}Data}{11}{section.4.1}
 \contentsline {section}{\numberline {4.2}Results}{11}{section.4.2}

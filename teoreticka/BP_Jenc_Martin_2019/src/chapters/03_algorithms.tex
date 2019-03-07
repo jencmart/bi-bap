@@ -13,30 +13,30 @@
 \let\vec\boldsymbol
 
 
-% \textbf{X} - tucna rovna
-% \pmb{X} - hodne tucna
-% \boldmath{X} - skoro netucna
+% \textbf{X} - bold
+% \pmb{X} - strong bold
+% \boldmath{X} - quite normal
 %  $\textbf{X}^T$ - TRANSPOSED MATRIX
 
 % change arrowed vector to the bold vector
 % mathbf give bold 
-% boldsymbol gives bold cursive
+% bold-symbol gives bold cursive
 % **********************************************************************************
 % ************************* FAST - LTS *********************************************
 % **********************************************************************************
 \section{FAST-LTS}
-In this section we'll introduce FAST-LTS algorithm\cite{rouss:2000}. 
-It's, as well as in other cases, iterative algorithm. We'll discuss all main components
+In this section we will introduce FAST-LTS algorithm\cite{rouss:2000}. 
+It is, as well as in other cases, iterative algorithm. We will discuss all main components
 of the algorithm starting with its core idea called concentration step which 
-authors simply calls C-step.
+authors simply call C-step.
 
 % $\showVec{\hat{w}}{w}{n}$
-% $\boldsymbol{Y}$ - tucna trochu nakrivo
+% $\boldsymbol{Y}$ - bold cursive
 
 \subsection{C-step}
-We'll show that from existing LTS estimate $\boldsymbol{\hat{w}_{old}}$ we 
+We will show that from existing LTS estimate $\boldsymbol{\hat{w}_{old}}$ we 
 can construct new LTS estimate $\boldsymbol{\hat{w}_{new}}$ which objective 
-function is less or equal to old one. Based on this property we'll be able 
+function is less or equal to the old one. Based on this property we will be able 
 to create sequence of LTS estimates which will lead to better results.
 
 % \usepackage{etoolbox}
@@ -51,7 +51,7 @@ to create sequence of LTS estimates which will lead to better results.
 % (y_i - \vec{w}^T_0\vec{x_i}) = 
 \begin{veta}
 Consider dataset consisting of
-$\vec{x_1}, \vec{x_2} \ldots,\vec{x_n}$ explanatory variables where where 
+$\vec{x_1}, \vec{x_2} \ldots,\vec{x_n}$ explanatory variables where 
 $\vec{x_i}\in\mathbb{R}^p\,, \forall \vec{x_i} = (x^i_1, x^i_2,\ldots,x^i_p)$ where $x^i_1 = 1$
 and its corresponding $y_1, y_2,\ldots,y_n$ response variables. 
 Let's also have $\vec{\hat{w}_0}\in\mathbb{R}^p$ any p-dimensional vector and 
@@ -64,23 +64,156 @@ Let's take $\hat{n} = \{{1,2,\ldots,n\}}$ and mark
 $\pi: \hat{n} \rightarrow \hat{n}$ permutation of $\hat{n}$ such that $|r_0({\pi(1)})| \leq |r_0({\pi(2)})| \leq \ldots \leq |r_0({\pi(n)})|$
 and mark $H_1 = \{{\pi(1)\,, \pi(2)\,,... \pi(h)\}}$ set of $h$ indexes corresponding to $h$ smallest absolute residuals $r_0(i)$.
 Finally take $\vec{\hat{w}^{OLS(H_1)}_1 }$ ordinary least squares fit on $H_1$ subset of observations
-and its corresponding $RSS(\what{1}) = \sum_{i\in H_1} (r_i^1)^2$ sum of least squares. Then
+and its corresponding $RSS(\what{1}) = \sum_{i\in H_1} (r_1(i))^2$ sum of least squares. Then
 \[ 
 	RSS(\what{1}) \leq RSS(\what{0}) \numberthis
 \]
 \end{veta}
 
 \begin{proof}
-	Because we took $h$ observations with smallest absolute residuals $r_0$, then for sure $\sum_{i\in H_1} (r_0(i))^2 \leq \sum_{i\in H_0} (r_0(i))^2 =  RSS(\what{0})$.
-	When we we take into account that Ordinary least squares fit $OLS_{H_1}$ minimize objective function of 
-	$H_1$ subset of observations, then for sure  $RSS(\what{1}) =  \sum_{i\in H_1} (r_i^1)^2 \leq \sum_{i\in H_1} (r_i^0)^2$.
-	Together we get $RSS(\what{1}) =  \sum_{i\in H_1} (r_i^1)^2 \leq  \sum_{i\in H_1} (r_0(i))^2 \leq \sum_{i\in H_0} (r_0(i))^2 =  RSS(\what{0})$
+	Because we take $h$ observations with smallest absolute residuals $r_0$, then for sure $\sum_{i\in H_1} (r_0(i))^2 \leq \sum_{i\in H_0} (r_0(i))^2 =  RSS(\what{0})$.
+	When we take into account that Ordinary least squares fit $OLS_{H_1}$ minimize objective function of 
+	$H_1$ subset of observations, then for sure  $RSS(\what{1}) =  \sum_{i\in H_1} (r_1(i))^2 \leq \sum_{i\in H_1} (r_0(i))^2$.
+	Together we get $$RSS(\what{1})=\sum_{i\in H_1}(r_1(i))^2\leq\sum_{i\in H_1}(r_0(i))^2\leq\sum_{i\in H_0}(r_0(i))^2=RSS(\what{0})$$
 \end{proof}
 
-$   F(x):=\frac{a_0}{2} + \sum_{k=1}^\infty a_k \cos\frac{k\pi x}{T} + b_k \sin\frac{k\pi x}{T}\,, \quad \forall x\in\mathbb{R}\,,
-$
+\begin{corollary} 
+	Based on previous theorem, using some $\vec{\hat{w}^{OLS(H_{old})}}$  on $H_{old}$ subset of observations we can
+	construct $H_new$ subset with corresponding $\vec{\hat{w}^{OLS(H_{new})}}$ such that $RSS(\vec{\hat{w}^{OLS(H_{new})}}) \leq RSS(\vec{\hat{w}^{OLS(H_{old})}})$. 
+	With this we can apply above theorem again on $\vec{\hat{w}^{OLS(H_{new})}}$ with $H_{new}$. This will lead to the iterative sequence of
+	 $RSS(\what{{old}}) \leq RSS(\what{{new}}) \leq \ldots$. One step of this process is described by following pseudocode. Note that for C-step we actually need only $\vec{\hat{w}}$ 
+	 without need of passing  $H$.
+\end{corollary}
 
+\begin{algorithm}[H]
+	\label{algo:Cstep}
+    % \SetKwInOut{Input}{input}
+    % \SetKwInOut{Output}{output}
+    \KwIn{dataset consiting of $\boldsymbol{X} \in \mathbb{R}^{n \times p}$ and $\boldsymbol{y} \in \mathbb{R}^{n \times 1}$,  $\what{{old}} \in \mathbb{R}^{p \times 1}$}
+    \KwOut{ $\what{{new}}$, $H_{new}$ }
+	\caption{C-step}
+	
+	$R \gets \emptyset$\;
+	\For{$i \gets 1$ \textbf{to} $n$}{  
+		$R \gets R \cup \{ |y_i - \what{{old}} \vec{x_i}^T |\}$\;
+	}
+	$H_{new} \gets $ select set of $h$ smallest absolute residuals from $R$\;
+	$\what{{new}} \gets OLS(H_{new})$\;
+	\Return{ $\what{{new}}$, $H_{new}$ }\;
+\end{algorithm}
 
+\begin{observation} 
+	Time complexity of algorithm C-step \ref{algo:Cstep} is same as time complexity as OLS. Thus $O(p^2n)$
+	$\boldsymbol{{TODO}}$
+\end{observation} 
+
+\begin{proof}
+	In C-step we must compute $n$ absolute residuals. Computation of one absolute residual consist of
+	matrix multiplication of shapes $ \times p$ and $p t\times 1$ that give us $\mathcal{O}(p)$. Rest is in constant time.
+	So time of computation $n$ residuals is $\mathcal{O}(np)$.
+	Next we must select set of $h$ smallest residuals which can be done in $\mathcal{O}(n)$ using modification 
+	of algorithm QuickSelect. reference: $\boldsymbol{{TODO}}$
+	Finally we must compute $\hat{w}$ OLS estimate on $h$ subset of data.
+	Because $h$ is linearly dependent on $n$, time complexity can be stated as follows.
+	$\m{A} = \m{X^T}\m{X} \sim \mathcal{O}(p^2n)$ and
+	$\m{B} = \m{X^T}\m{Y} \sim \mathcal{O}(pn)$ and
+	$\m{A}^{-1}\m{B} \sim \mathcal{O}(p^3 + p^2)$.
+	That give us $\mathcal{O}{p^2n + pn + p^3 + p^2n}$ which asymptotically dominates previous steps
+	which time complexity is $\mathcal{O}(np+n)$.\\
+	$\boldsymbol{{TODO}}$ neni tedy casove narocnejsi vynasobeni $\m{X^T}\m{X}$ nez inverze, kdyz bereme v uvahu $n >> p$ ???
+\end{proof}
+
+\begin{observation} 
+\end{observation} 
+
+\begin{algorithm}
+	\DontPrintSemicolon % Some LaTeX compilers require you to use \dontprintsemicolon instead
+	\KwIn{A finite set $A=\{a_1, a_2, \ldots, a_n\}$ of integers}
+	\KwOut{The largest element in the set}
+	$max \gets a_1$\;
+	\For{$i \gets 2$ \textbf{to} $n$} {
+	  \If{$a_i > max$} {
+		$max \gets a_i$\;
+	  }
+	}
+	\Return{$max$}\;
+	\label{algo:max}
+	\end{algorithm}
+	
+	Algorithm~\ref{algo:change} is a greedy change-making algorithm (Slide 19 in Class Slides).
+	
+	\begin{algorithm}
+	\DontPrintSemicolon % Some LaTeX compilers require you to use \dontprintsemicolon instead 
+	\KwIn{A set $C = \{c_1, c_2, \ldots, c_r\}$ of denominations of coins, where $c_i > c_2 > \ldots > c_r$ and a positive number $n$}
+	\KwOut{A list of coins $d_1,d_2,\ldots,d_k$, such that $\sum_{i=1}^k d_i = n$ and $k$ is minimized}
+	$C \gets \emptyset$\;
+	\For{$i \gets 1$ \textbf{to} $r$}{
+	  \While{$n \geq c_i$} {
+		$C \gets C \cup \{c_i\}$\;
+		$n \gets n - c_i$\;
+	  }
+	}
+	\Return{$C$}\;
+	\label{algo:change}
+	\end{algorithm}
+	
+	Algorithm~\ref{algo:duplicate} and Algorithm~\ref{algo:duplicate2} will
+	find the first duplicate element in a sequence of integers.
+	
+	\begin{algorithm}
+	\DontPrintSemicolon % Some LaTeX compilers require you to use \dontprintsemicolon instead
+	\KwIn{A sequence of integers $\langle a_1, a_2, \ldots, a_n \rangle$}
+	\KwOut{The index of first location witht he same value as in a previous location in the sequence}
+	$location \gets 0$\;
+	$i \gets 2$\;
+	\While{$i \leq n$ \textbf{and} $location = 0$}{
+	  $j \gets 1$\;
+	  \While{$j < i$ \textbf{and} $location = 0$}{
+		% The "u" before the "If" makes it so there is no "end" after the statement, so the else will then follow
+		\uIf{$a_i = a_j$}{
+		  $location \gets i$\;
+		}
+		\Else{
+		  $j \gets j + 1$\;
+		}
+	  }
+	  $i \gets i + 1$\;
+	}
+	\Return{location}\;
+	\label{algo:duplicate}
+	\end{algorithm}
+	
+	\begin{algorithm}
+	\DontPrintSemicolon
+	\KwIn{A sequence of integers $\langle a_1, a_2, \ldots, a_n \rangle$}
+	\KwOut{The index of first location witht he same value as in a previous location in the sequence}
+	$location \gets 0$\;
+	$i \gets 2$\;
+	\While{$i \leq n \land location = 0$}{
+	  $j \gets 1$\;
+	  \While{$j < i \land location = 0$}{
+		% The "l" before the If makes it so it does not expand to a second line
+		\lIf{$a_i = a_j$}{
+		  $location \gets i$\;
+		}
+		\lElse{
+		  $j \gets j + 1$\;
+		}
+	  }
+	  $i \gets i + 1$\;
+	}
+	\Return{location}\;
+	\label{algo:duplicate2}
+	\end{algorithm}
+% algorithm - float wrapper == similar to table or figure (stay on one page)
+% type settings environments
+% algorithmic, algorithmic-x, algorithm2e
+% alg-pseudocode - layout for algorithmic-x
+% algorithmic-x + alg-pseudocode  >> algorithmic
+% algorithmic-x + alg-pseudocode similar to algorithm2e
+% but algorithm2e  clearer syntax ! and suitable for latex2e
+
+%$   F(x):=\frac{a_0}{2} + \sum_{k=1}^\infty a_k \cos\frac{k\pi x}{T} + b_k \sin\frac{k\pi x}{T}\,, \quad \forall x\in\mathbb{R}\,,$
 % \begin{veta}\label{vet:Fourier_exp}
 
 % \begin{enumerate}[(i)]
@@ -88,71 +221,20 @@ $
 % \end{enumerate}
 
 
-\begin{algorithm}[H]
-	\KwData{this text}
-	\KwResult{how to write algorithm with \LaTeX2e }
-	initialization\;
-	\While{not at end of this document}{
-	read current\;
-	\eIf{understand}{
-	go to next section\;\label{alg:goto}
-	current section becomes this one\;
-	}{
-	go back to the beginning of current section\;
-	}
-	}
-\end{algorithm}
-
-
-% \begin{algorithm}
-%   \caption{MyAlgo}
-%   \begin{algorithmic}[1]
-%     \Statex \textbullet~\textbf{Parameters:} $n, t \in \mathbb{N}$, where $t < n$.
-%     \State First step
-%     \State Second step
-%     \State \ldots
-%   \end{algorithmic}
-% \end{algorithm}
-
 	
    
-In this section we'll describe FAST-LTS algorithm and it's main properties. The main idea of this algorthm is based on the fact that from one approximation of the algorithm we can compute another which can have lower objective function.
+In this section we will describe FAST-LTS algorithm and its main properties. The main idea of this algorithm is based on the fact that from one approximation of the algorithm we can compute another which can have lower objective function.
  TA DAAAAAAAAAAAAAAAAA
-Thoerem 1: \cite{rybicka}
+Theorem 1: \cite{rybicka}
 Let w0 ... wp be the LTS estimate.
 for each data sample we can compute |y-wx|
 
 
+% \begin{description}
+% 	\item[BP] 
+% 	\item[DP] 
+% \end{description}
 
-Hlavni myslenka tohoto algoritmu spociva ve faktu, 
-
-
-
-V~české variantě naleznete šablony v~souborech pojmenovaných ve formátu práce\_kódování.tex. Typ práce může být:
-\begin{description}
-	\item[BP] bakalářská práce,
-	\item[DP] diplomová (magisterská) práce.
-\end{description}
-\begin{description}
-	\item[UTF-8] kódování Unicode,
-	\item[ISO-8859-2] latin2,
-	\item[Windows-1250] znaková sada 1250 Windows.
-\end{description}
-V~případě nejistoty ohledně kódování doporučujeme následující postup:
-\begin{enumerate}
-	\item V~opačném případě postupujte dále podle toho, jaký operační systém používáte:
-	\begin{itemize}
-		\item v~případě Windows použijte šablonu pro kódování \mbox{Windows-1250},
-		\item jinak zkuste použít šablonu pro kódování \mbox{ISO-8859-2}.
-	\end{itemize}
-\end{enumerate}
-
-
-V~anglické variantě jsou šablony pojmenované podle typu práce, možnosti jsou:
-\begin{description}
-	\item[bachelors] bakalářská práce,
-	\item[masters] diplomová (magisterská) práce.
-\end{description}
 
 % **********************************************************************************
 % ************************* EXACT POLYNOMIAL ALGORITHM *****************************

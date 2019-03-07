@@ -15,8 +15,10 @@
 	],
 	"settings": {
 		"cSpell.words": [
+			"MMEA",
 			"dataset",
-			"hyperplane"
+			"hyperplane",
+			"pseudocode"
 		]
 	}
 }
