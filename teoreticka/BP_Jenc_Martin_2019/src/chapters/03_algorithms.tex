@@ -166,8 +166,6 @@ Answer to this question will be presented by the following theorem.
 %******************************** ITERATE-C-STEP algorithm **********************************************%
 Above theorem gives us clue to create algorithm described by following pseudocode.
 
-
-
 \begin{algorithm}[H]
 	\label{alg:RepeatCstep}
 	\KwIn{dataset consiting of $\boldsymbol{X} \in \mathbb{R}^{n \times p}$ 
@@ -243,6 +241,7 @@ Let's choose subset $J \subset \{{1,2,\ldots,n\}}\,, |J| = p$. Next compute rank
 $\pi: \hat{n} \rightarrow \hat{n}$ be permutation of $\hat{n}$ such that $|r({\pi(1)})| \leq |r({\pi(2)})| \leq \ldots \leq |r({\pi(n)})|$. Finally put $H_1 = \{{\pi(1)\,, \pi(2)\,,... \pi(h)\}}$ set of $h$ indexes corresponding to $h$ smallest absolute residuals $r_0(i)$.
 
 \begin{observation}
+	\label{cStepM}
 	With increasing number of data samples, thus with increasing $n$, the probability of choosing among $m$ random selections of $J_{1_1}, \ldots ,J_{1_m}$ the probability of selecting
 	at least one $J_{1_i}$ such that its corresponding data samples does not contains outliers, goes toho
 	$$ 1-(1-(1-\epsilon)^h)^m  > 0$$
@@ -252,8 +251,10 @@ $\pi: \hat{n} \rightarrow \hat{n}$ be permutation of $\hat{n}$ such that $|r({\p
 	Similarly as in previous observation.
 \end{proof}
 
+\begin{itshape}
 Note that there are other possibilities of choosing $H_1$ subset other than these presented in \cite{rouss:2000}.
-We'll properly discuss them in chapter $\boldsymbol{TODO}$.
+We'll properly discuss them in chapter $\boldsymbol{TODO}$.\\
+\end{itshape}
 
 Last missing piece of the algorithm is determining number of $m$ initial $H_1$ subsets, which will maximize probability to at least one of them will converge to good solution. Simply put, the more the better. So before we will answer this question properly, let's discuss some key observations about algorithm.
 
@@ -264,113 +265,98 @@ In this section we will describe important observations which will help us to fo
 
 % *************************************************SELECTIVE ITERATION  ***************************************%
 \subsubsection{Selective iteration}
+The most computationally demanding part of one C-step is computation of OLS on $H_i$ subset and then 
+calculation of $n$ absolute residuals. How we stated above, convergence is usually achieved under 20 steps. 
+So for fast algorithm run we would like to repeat C-step as little as possible and in the same time didn't loose performance of algorithm. 
+
+Due to that convergence of repeating C-step is very fast, it turns out, that we are able to distinguish between starts that will lead to good solutions and those who won't even after very little C-steps iterations. <based on empiric observation, we can distinguish good or bad solution already after two or three iterations of C-steps based on $RSS(\what{3})$ or $RSS(\what{4})$ respectively. 
+
+So even though authors don't specify size of $m$ explicitly, they propose that after a few C-steps we can choose (say~10) best solutions among all $H_1$ starts and continue C-steps till convergence only on those best solutions.
+This process is called Selective iteration.
+
+\begin{itshape}
+	We can choose $m$ with respect to observation \ref{cStepM}. In ideal case we would like to have probability of existence at least one initial $H_1$ subset close to $1$. As we see $m$ is exponentially dependent on $p$ and at the same time in practice we don't know percentage of outliers in dataset. So it is difficult to mention exact value. Specific values of $m$ in respect to data size is visible in table $\boldsymbol{TODO}$. So we can say that with $p < 10$ choosing $m = 500$ is usually safe starting point.
+\end{itshape}
+
+\subsubsection{Nested extension}
+C-step computation is usually very fast for small $n$. Problem starts with very high $n$ say $n > 10^3$ because we need to compute OLS on $H_i$ subset of size $h$ which is dependent on $n$. And then calculate $n$ absolute residuals.
+
+Authors came up with solution they call Nested extension. We will describe it briefly now.
+\begin{itemize}
+	\item If $n$ is greater than limit $l$, we'll create subset of data samples $L\,, |L| = l$ and divide this subset into $s$ disjunctive sets $P_1,P_2,\ldots,P_s\,, |P_i| = \frac{l}{s}\,, P_i\cap P_j  = \emptyset\,, \bigcup_{i=1}^{s} P_{i} = L$.
+	\item For every $P_i$ we'll set number of starts $m_{P_i} = \frac{m}{l}$. 
+	\item Next in every $P_i$ we'll create $m_{P_i}$ number of initial $H_{P_{i_1}}$ subsets and iterate C-steps for two iterations.
+	\item Then we'll choose $10$ best results from each subsets and merge them together. We'll get family of sets
+	$F_{merged}$ containing $10$ best $H_{P_{i_3}}$ subsets from each $P_i$.
+	\item On each subset from  $F_{merged}$ family of subsets we'll again iterate $2$ C-steps and then choose $10$ best results.
+	\item Finally we'll use these best $10$ subsets and use them to iterate C-steps till convergence.
+	\item As a result we'll choose best of those $10$ converged results.
+\end{itemize} 
+
+\subsubsection{Putting all together}
+We've described all major parts of the algorithm FAST-LTS. One last thing we need to mention is that even though C-steps iteration usually converge under $20$ steps it is appropriate to introduce two parameters $max_iteration$ and $threshold$ which will limit number of C-steps iterations in some rare cases when convergence is too slow. Parameter $max_iteration$ denotes maximum number of iterations in final C-step iteration till convergence. Parameter $threshold$ denotes stopping criterion such that $| RSS(\what{{i}}) - RSS(\what{{i+1}})| \leq threshold$ instead of 
+$RSS_{i} == RSS_{i+1}$ . When we put all together, we'll get FAST-LTS algorithm which is described by following pseudocode.
+
+
+\begin{algorithm}[H]
+	\label{alg:FAST-LTS}
+	\KwIn{$\boldsymbol{X} \in \in \mathbb{R}^{n \times p}, \boldsymbol{y} \in \mathbb{R}^{n \times 1}, m, l, s, max_iteration, threshold $}
+    \KwOut{ $\vec{\hat{w_{final}}}$, $H_{final}$ }
+	\caption{FAST-LTS}
+	\SetKw{Break}{break}
+	$\what{{final}} \gets \emptyset$\;
+	$H_{final} \gets \emptyset$\;
+	$F_{best} \gets \emptyset$\;
+
+	\uIf{$n \geq l$}{
+		$F_{merged} \gets \emptyset$\;
+		% for each split
+		\For{$i \gets 0$ \textbf{to} $s$}{
+			% create xx number of starts
+			$F_{selected}  \gets \emptyset$\;
+			\For{$j \gets 0$ \textbf{to} $\frac{l}{s}$}{
+			  $F_{initial} \gets Selective~iteration(\frac{m}{l})$\;
+			  % on each starts iterate few c steps
+			  \For{$H_i$ \textbf{in} $F_{initial}$}{
+				$H_i \gets Iterate~C~step~few~times(H_i)$\;
+				$F_{selected} \gets  F_{selected} \cup \{{ H_i \}} $\;
+			  }
+			}
+			% among all starts select 10 best and add it to merged set
+			$F_{merged} \gets F_{merged} \cup Select~10~best~subsets~from~F_{selected}$\;
+		  }
+		
+		  % for each, say 50 best, iterate few and add it to best
+		  \For{$H_i$ \textbf{in} $F_{merged}$}{
+			$H_i \gets Iterate~C~step~few~times(H_i)$\;
+			$F_{best} \gets F_{best} \cup \{{ H_i \}} $\;
+		  }
+		  $F_{best} \gets  Select~10~best~subsets~from~F_{best} $\;
+	}
+	\Else{
+		$F_{initial} \gets Selective~iteration(m)$\;
+		$F_{best} \gets  Select~10~best~subsets~from~F_{initial} $\;
+	}
+
+	% iterate till convergence on few best final results
+	$F_{final} \gets \emptyset$\;
+	$W_{final} \gets \emptyset$\;
+	\For{$H_i$ \textbf{in} $F_{best}$}{
+			$H_i, \what{i} \gets Iterate~C~step~till~convergence(H_i, max_iteration, threshold)$\;
+			$F_{final} \gets F_{final} \cup \{{ H_i \}}$\;
+			$W_{final} \gets W_{final} \cup \{{ \what{i} \}}$\;
+	}
+
+	% select one best result
+	$\what{{final}}, H_{final} \gets select~what~with~best~RSS(F_{final}, W_{final})$\;
+
+	\Return{ $\what{{final}}, H_{final}$  }\;
+\end{algorithm}
+
 
 %********************************************************************************************************%
 %******************************************** END *******************************************************%
 %********************************************************************************************************%
-
-\begin{algorithm}
-	\DontPrintSemicolon % Some LaTeX compilers require you to use \dontprintsemicolon instead
-	\KwIn{A finite set $A=\{a_1, a_2, \ldots, a_n\}$ of integers}
-	\KwOut{The largest element in the set}
-	$max \gets a_1$\;
-	\For{$i \gets 2$ \textbf{to} $n$} {
-	  \If{$a_i > max$} {
-		$max \gets a_i$\;
-	  }
-	}
-	\Return{$max$}\;
-	\label{algo:max}
-	\end{algorithm}
-	
-	Algorithm~\ref{algo:change} is a greedy change-making algorithm (Slide 19 in Class Slides).
-	
-	\begin{algorithm}
-	\DontPrintSemicolon % Some LaTeX compilers require you to use \dontprintsemicolon instead 
-	\KwIn{A set $C = \{c_1, c_2, \ldots, c_r\}$ of denominations of coins, where $c_i > c_2 > \ldots > c_r$ and a positive number $n$}
-	\KwOut{A list of coins $d_1,d_2,\ldots,d_k$, such that $\sum_{i=1}^k d_i = n$ and $k$ is minimized}
-	$C \gets \emptyset$\;
-	\For{$i \gets 1$ \textbf{to} $r$}{
-	  \While{$n \geq c_i$} {
-		$C \gets C \cup \{c_i\}$\;
-		$n \gets n - c_i$\;
-	  }
-	}
-	\Return{$C$}\;
-	\label{algo:change}
-	\end{algorithm}
-	
-	Algorithm~\ref{algo:duplicate} and Algorithm~\ref{algo:duplicate2} will
-	find the first duplicate element in a sequence of integers.
-	
-	\begin{algorithm}
-	\DontPrintSemicolon % Some LaTeX compilers require you to use \dontprintsemicolon instead
-	\KwIn{A sequence of integers $\langle a_1, a_2, \ldots, a_n \rangle$}
-	\KwOut{The index of first location witht he same value as in a previous location in the sequence}
-	$location \gets 0$\;
-	$i \gets 2$\;
-	\While{$i \leq n$ \textbf{and} $location = 0$}{
-	  $j \gets 1$\;
-	  \While{$j < i$ \textbf{and} $location = 0$}{
-		% The "u" before the "If" makes it so there is no "end" after the statement, so the else will then follow
-		\uIf{$a_i = a_j$}{
-		  $location \gets i$\;
-		}
-		\Else{
-		  $j \gets j + 1$\;
-		}
-	  }
-	  $i \gets i + 1$\;
-	}
-	\Return{location}\;
-	\label{algo:duplicate}
-	\end{algorithm}
-	
-	\begin{algorithm}
-	\DontPrintSemicolon
-	\KwIn{A sequence of integers $\langle a_1, a_2, \ldots, a_n \rangle$}
-	\KwOut{The index of first location witht he same value as in a previous location in the sequence}
-	$location \gets 0$\;
-	$i \gets 2$\;
-	\While{$i \leq n \land location = 0$}{
-	  $j \gets 1$\;
-	  \While{$j < i \land location = 0$}{
-		% The "l" before the If makes it so it does not expand to a second line
-		\lIf{$a_i = a_j$}{
-		  $location \gets i$\;
-		}
-		\lElse{
-		  $j \gets j + 1$\;
-		}
-	  }
-	  $i \gets i + 1$\;
-	}
-	\Return{location}\;
-	\label{algo:duplicate2}
-	\end{algorithm}
-% algorithm - float wrapper == similar to table or figure (stay on one page)
-% type settings environments
-% algorithmic, algorithmic-x, algorithm2e
-% alg-pseudocode - layout for algorithmic-x
-% algorithmic-x + alg-pseudocode  >> algorithmic
-% algorithmic-x + alg-pseudocode similar to algorithm2e
-% but algorithm2e  clearer syntax ! and suitable for latex2e
-
-%$   F(x):=\frac{a_0}{2} + \sum_{k=1}^\infty a_k \cos\frac{k\pi x}{T} + b_k \sin\frac{k\pi x}{T}\,, \quad \forall x\in\mathbb{R}\,,$
-% \begin{veta}\label{vet:Fourier_exp}
-
-% \begin{enumerate}[(i)]
-% 	\item 
-% \end{enumerate}
-
-
-	
-   
-In this section we will describe FAST-LTS algorithm and its main properties. The main idea of this algorithm is based on the fact that from one approximation of the algorithm we can compute another which can have lower objective function.
- TA DAAAAAAAAAAAAAAAAA
-Theorem 1: \cite{rybicka}
-Let w0 ... wp be the LTS estimate.
-for each data sample we can compute |y-wx|
 
 
 % \begin{description}

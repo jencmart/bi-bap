@@ -17,11 +17,13 @@
 \contentsline {subsubsection}{\numberline {3.1.2.2}P-subset selection}{10}{subsubsection.3.1.2.2}
 \contentsline {subsection}{\numberline {3.1.3}Speed-up of the algorithm}{11}{subsection.3.1.3}
 \contentsline {subsubsection}{\numberline {3.1.3.1}Selective iteration}{11}{subsubsection.3.1.3.1}
-\contentsline {section}{\numberline {3.2}Exact algorithm}{13}{section.3.2}
-\contentsline {section}{\numberline {3.3}Feasible solution}{13}{section.3.3}
-\contentsline {section}{\numberline {3.4}MMEA}{13}{section.3.4}
-\contentsline {section}{\numberline {3.5}Branch and bound}{13}{section.3.5}
-\contentsline {section}{\numberline {3.6}Adding row}{13}{section.3.6}
+\contentsline {subsubsection}{\numberline {3.1.3.2}Nested extension}{12}{subsubsection.3.1.3.2}
+\contentsline {subsubsection}{\numberline {3.1.3.3}Putting all together}{12}{subsubsection.3.1.3.3}
+\contentsline {section}{\numberline {3.2}Exact algorithm}{14}{section.3.2}
+\contentsline {section}{\numberline {3.3}Feasible solution}{14}{section.3.3}
+\contentsline {section}{\numberline {3.4}MMEA}{14}{section.3.4}
+\contentsline {section}{\numberline {3.5}Branch and bound}{14}{section.3.5}
+\contentsline {section}{\numberline {3.6}Adding row}{14}{section.3.6}
 \contentsline {chapter}{\chapternumberline {4}Experiments}{15}{chapter.4}
 \contentsline {section}{\numberline {4.1}Data}{15}{section.4.1}
 \contentsline {section}{\numberline {4.2}Results}{15}{section.4.2}
