@@ -197,22 +197,73 @@ That is not enough for the algorithm $Repeat-C-step$ to converge to global minim
 
 Choose a lot of initial subsets $H_1$ and on each of them apply algorithm Repeat-C-step. From all converged subsets with corresponding $\hat{w}$ estimates choose that which has lowest $RSS(\hat{w})$. 
 
-
 Before we can construct final algorithm we must decide how to choose initial subset $H_1$ and how many of them mean ``\emph{a lot of}''. First let's focus on how to choose initial subset $H_1$.
 
-\renewcommand{\O}[1]{$\mathcal{O}(#1)$}
+% \renewcommand{\O}[1]{$\mathcal{O}(#1)$}
 
-
+% ************************************************	INITIAL H_1 SUBSET *************************************%
 \subsection{Choosing initial $H_1$subset}
 
-We have couple of different options.
-
-\begin{description}
-	\item[Random] 
-	\item[Not random] 
-\end{description}
+It is important to note, that when we choose $H_1$ subset such that it contains outliers, then iteration of  C-steps
+usually won't converge to good results, so we should focus on methods with non zero probability of selecting $H_1$ such that it won't contain outliers.
+There are a lot of possibilities how to create initial $hH_1$ subset. Lets start with most trivial one.
 
 
+% ************************************************** RANDOM SELECTION **************************************%
+\subsubsection{Random selection}
+Most basic way of creating $H_1$ subset is simply to choose random $H_1 \subset \{{1,2,\ldots , n\}}$. Following observation will show that it not the best way.
+
+\begin{observation}
+	With increasing number of data samples, thus with increasing $n$, the probability of choosing among $m$ random selections of $H_{1_1}, \ldots ,H_{1_m}$ the probability of selecting
+	at least one $H_{1_i}$ such that its corresponding data samples does not contains outliers, goes to $0$.
+\end{observation}
+
+\begin{proof}
+	Consider dataset of $n$ containing $\epsilon > 0$ relative amount of outliers. Let $h=(n+p+1)/2$ and $m$ is number of selections random $|H| = h$ subsets. Then
+	\begin{align*}
+		P(one~random~data~sample~not~outliers) &= (1-\epsilon) \\
+		P(one~subset~without~outliers) &= (1-\epsilon)^h \\
+		P(one~subset~with~at~least~one~outlier) &= 1-(1-\epsilon)^h \\
+		P(m~subsets~with~at~least~one~outlier~in~each) &= (1-(1-\epsilon)^h)^m \\
+		P(m~subsets~with~at~least~one~subset~without~outliers) &= 1-(1-(1-\epsilon)^h)^m \\
+	\end{align*}
+
+	Because $n \rightarrow \infty 	
+	\Rightarrow (1-\epsilon)^h  \rightarrow 0 	
+	\Rightarrow 1- (1-\epsilon)^h  \rightarrow 1
+	\Rightarrow (1-(1-\epsilon)^h)^m  \rightarrow 1
+	\Rightarrow 1- (1-(1-\epsilon)^h)^m  \rightarrow 0 $
+\end{proof}
+
+That means that we should consider other options of selecting $H_1$ subset. Actually if we would like to continue with selecting some random subsets, previous observation gives us clue, that we should choose it independent of $n$. Authors of algorithm came with such solution and it goes as follows.
+
+% ***************************************************** P - SELECTION ***************************************%
+\subsubsection{P-subset selection}
+Let's choose subset $J \subset \{{1,2,\ldots,n\}}\,, |J| = p$. Next compute rank of matrix $\m{X}_{J:}$. If $rank(\m{X}_{J:}) < p$ add randomly selected rows to $\m{X}_{J:}$ without repetition until $rank(\m{X}_{J:}) = p$. Let's from now on suppose that $rank(\m{X}_{J:}) = p$. Next let us mark $\what{0} = OLS(J)$ and corresponding $(r_0(1)), (r_0(2)), \ldots ,(r_0(n))$ residuals.  Now mark $\hat{n} = \{{1,2,\ldots,n\}}$ and let
+$\pi: \hat{n} \rightarrow \hat{n}$ be permutation of $\hat{n}$ such that $|r({\pi(1)})| \leq |r({\pi(2)})| \leq \ldots \leq |r({\pi(n)})|$. Finally put $H_1 = \{{\pi(1)\,, \pi(2)\,,... \pi(h)\}}$ set of $h$ indexes corresponding to $h$ smallest absolute residuals $r_0(i)$.
+
+\begin{observation}
+	With increasing number of data samples, thus with increasing $n$, the probability of choosing among $m$ random selections of $J_{1_1}, \ldots ,J_{1_m}$ the probability of selecting
+	at least one $J_{1_i}$ such that its corresponding data samples does not contains outliers, goes toho
+	$$ 1-(1-(1-\epsilon)^h)^m  > 0$$
+\end{observation}
+
+\begin{proof}
+	Similarly as in previous observation.
+\end{proof}
+
+Note that there are other possibilities of choosing $H_1$ subset other than these presented in \cite{rouss:2000}.
+We'll properly discuss them in chapter $\boldsymbol{TODO}$.
+
+Last missing piece of the algorithm is determining number of $m$ initial $H_1$ subsets, which will maximize probability to at least one of them will converge to good solution. Simply put, the more the better. So before we will answer this question properly, let's discuss some key observations about algorithm.
+
+% ***************************************************** SPEED-UP ***************************************%
+
+\subsection{Speed-up of the algorithm}
+In this section we will describe important observations which will help us to formulate final algorithm. In two subsections we'll briefly describe how to optimize current algorithm. 
+
+% *************************************************SELECTIVE ITERATION  ***************************************%
+\subsubsection{Selective iteration}
 
 %********************************************************************************************************%
 %******************************************** END *******************************************************%

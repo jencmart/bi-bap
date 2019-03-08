@@ -13,16 +13,20 @@
 \contentsline {section}{\numberline {3.1}FAST-LTS}{7}{section.3.1}
 \contentsline {subsection}{\numberline {3.1.1}C-step}{7}{subsection.3.1.1}
 \contentsline {subsection}{\numberline {3.1.2}Choosing initial $H_1$subset}{10}{subsection.3.1.2}
-\contentsline {section}{\numberline {3.2}Exact algorithm}{12}{section.3.2}
-\contentsline {section}{\numberline {3.3}Feasible solution}{12}{section.3.3}
-\contentsline {section}{\numberline {3.4}MMEA}{12}{section.3.4}
-\contentsline {section}{\numberline {3.5}Branch and bound}{12}{section.3.5}
-\contentsline {section}{\numberline {3.6}Adding row}{12}{section.3.6}
-\contentsline {chapter}{\chapternumberline {4}Experiments}{13}{chapter.4}
-\contentsline {section}{\numberline {4.1}Data}{13}{section.4.1}
-\contentsline {section}{\numberline {4.2}Results}{13}{section.4.2}
-\contentsline {section}{\numberline {4.3}Outlier detection}{13}{section.4.3}
-\contentsline {chapter}{Conclusion}{15}{chapter*.6}
-\contentsline {chapter}{Bibliography}{17}{section*.8}
-\contentsline {appendix}{\chapternumberline {A}Datasets}{19}{appendix.A}
-\contentsline {appendix}{\chapternumberline {B}Contents of enclosed CD}{21}{appendix.B}
+\contentsline {subsubsection}{\numberline {3.1.2.1}Random selection}{10}{subsubsection.3.1.2.1}
+\contentsline {subsubsection}{\numberline {3.1.2.2}P-subset selection}{10}{subsubsection.3.1.2.2}
+\contentsline {subsection}{\numberline {3.1.3}Speed-up of the algorithm}{11}{subsection.3.1.3}
+\contentsline {subsubsection}{\numberline {3.1.3.1}Selective iteration}{11}{subsubsection.3.1.3.1}
+\contentsline {section}{\numberline {3.2}Exact algorithm}{13}{section.3.2}
+\contentsline {section}{\numberline {3.3}Feasible solution}{13}{section.3.3}
+\contentsline {section}{\numberline {3.4}MMEA}{13}{section.3.4}
+\contentsline {section}{\numberline {3.5}Branch and bound}{13}{section.3.5}
+\contentsline {section}{\numberline {3.6}Adding row}{13}{section.3.6}
+\contentsline {chapter}{\chapternumberline {4}Experiments}{15}{chapter.4}
+\contentsline {section}{\numberline {4.1}Data}{15}{section.4.1}
+\contentsline {section}{\numberline {4.2}Results}{15}{section.4.2}
+\contentsline {section}{\numberline {4.3}Outlier detection}{15}{section.4.3}
+\contentsline {chapter}{Conclusion}{17}{chapter*.6}
+\contentsline {chapter}{Bibliography}{19}{section*.8}
+\contentsline {appendix}{\chapternumberline {A}Datasets}{21}{appendix.A}
+\contentsline {appendix}{\chapternumberline {B}Contents of enclosed CD}{23}{appendix.B}
