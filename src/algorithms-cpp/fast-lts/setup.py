@@ -23,8 +23,9 @@ class get_pybind_include(object):
 
 ext_modules = [
     Extension(
-        'python_example',
-        ['src/main.cpp'],
+		# name of the dynamic module - you'll import this
+        'pokuspokus',
+        ['src/fastlts.cpp'],
         include_dirs=[
             # Path to pybind11 headers
             get_pybind_include(),
@@ -33,7 +34,6 @@ ext_modules = [
         ],
  		# extra_compile_args=['--std=c++11', '-Wno-unused-function'],
 		#extra_link_args=['--std=c++11'],
-
         language='c++'
     ),
 ]
@@ -94,12 +94,13 @@ class BuildExt(build_ext):
         build_ext.build_extensions(self)
 
 setup(
-    name='python_example',
+	# name of the package
+    name='pokuspokus',
     version=__version__,
-    author='Sylvain Corlay',
-    author_email='sylvain.corlay@gmail.com',
-    url='https://github.com/pybind/python_example',
-    description='A test project using pybind11',
+    author='Martin Jenc',
+    author_email='jencmart@fit.cvut.cz',
+    url='https://github.com/jencmart',
+    description='fast lts algorithm implemented in c++',
     long_description='',
     ext_modules=ext_modules,
     install_requires=['pybind11>=2.2'],
