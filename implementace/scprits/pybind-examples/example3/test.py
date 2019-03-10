@@ -359,7 +359,7 @@ if __name__ == '__main__':
 
 if __name__ == '__main__':
 	x = np.arange(12)
-	print(x)
+
 	print(code.add_arrays(x, x))
 
 	A = np.array([[1,2,1],

@@ -50,7 +50,7 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/test.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1922">
+                <state relative-caret-position="484">
                   <caret line="315" column="8" selection-start-line="315" selection-start-column="8" selection-end-line="315" selection-end-column="8" />
                   <folding>
                     <element signature="e#0#16#0" expanded="true" />
@@ -87,7 +87,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$USER_HOME$/fit/bi-bap/implementace/scprits/lts-eigen/src/.rendered.somecode.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="5634">
+                <state relative-caret-position="5706">
                   <caret line="317" column="31" selection-start-line="317" selection-start-column="31" selection-end-line="317" selection-end-column="31" />
                 </state>
               </provider>
@@ -155,8 +155,8 @@
   <component name="ProjectFrameBounds">
     <option name="x" value="32" />
     <option name="y" value="48" />
-    <option name="width" value="911" />
-    <option name="height" value="1000" />
+    <option name="width" value="1916" />
+    <option name="height" value="1060" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -296,11 +296,12 @@
       <workItem from="1551609241224" duration="2160000" />
       <workItem from="1551611427749" duration="10637000" />
       <workItem from="1551688550026" duration="1982000" />
+      <workItem from="1552211878002" duration="624000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="104529000" />
+    <option name="totallyTimeSpent" value="105153000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -312,8 +313,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="32" y="48" width="911" height="1000" extended-state="0" />
-    <editor active="true" />
+    <frame x="32" y="48" width="1916" height="1060" extended-state="0" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.044871796" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -329,14 +329,14 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32959184" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50174624" side_tool="true" weight="0.39318183" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" sideWeight="0.4982538" visible="true" weight="0.39318183" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" sideWeight="0.4982538" visible="true" weight="0.3148936" />
       <window_info anchor="bottom" id="Python Console" order="12" sideWeight="0.49946582" weight="0.29591838" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="SciView" order="3" sideWeight="0.49155146" weight="0.050213676" />
       <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" x="0" y="0" width="177" height="800" id="Documentation" order="5" sideWeight="0.50844854" side_tool="true" visible="true" weight="0.034924332" />
+      <window_info anchor="right" x="0" y="0" width="177" height="800" id="Documentation" order="5" sideWeight="0.50844854" side_tool="true" visible="true" weight="0.034871243" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -373,16 +373,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/fit/bi-bap/implementace/scprits/lts-eigen/src/.rendered.somecode.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5634">
-          <caret line="317" column="31" selection-start-line="317" selection-start-column="31" selection-end-line="317" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1922">
+        <state relative-caret-position="484">
           <caret line="315" column="8" selection-start-line="315" selection-start-column="8" selection-end-line="315" selection-end-column="8" />
           <folding>
             <element signature="e#0#16#0" expanded="true" />
@@ -394,6 +387,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="383">
           <caret line="238" column="16" selection-start-line="238" selection-start-column="16" selection-end-line="238" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/fit/bi-bap/implementace/scprits/lts-eigen/src/.rendered.somecode.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5706">
+          <caret line="317" column="31" selection-start-line="317" selection-start-column="31" selection-end-line="317" selection-end-column="31" />
         </state>
       </provider>
     </entry>
