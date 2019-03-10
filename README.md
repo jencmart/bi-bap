@@ -79,6 +79,10 @@ mkdir example-program
 cd example-program
 touch funcs.hpp funcs.cpp wrap.cpp setup.py test_funcs.py
 
+* inside docker container
+conda install -c conda-forge pybind11 
+conda install pip
+pip install cppimport
 ```
 
 # Teoretical part
