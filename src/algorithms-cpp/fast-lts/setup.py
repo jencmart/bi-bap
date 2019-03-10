@@ -23,19 +23,19 @@ class get_pybind_include(object):
 
 ext_modules = [
     Extension(
-		# name of the dynamic module - you'll import this
-		# needs to be same as annotation in fastlts.cpp
+        # name of the dynamic module - you'll import this
+        # needs to be same as annotation in fastlts.cpp
         'fastlts',
-		# filename - may be whatever you want
+        # filename - may be whatever you want
         ['src/fastlts.cpp'],
         include_dirs=[
             # Path to pybind11 headers
             get_pybind_include(),
             get_pybind_include(user=True),
-			'lib/eigen' # path to link eigen lib
+            'lib/eigen' # path to link eigen lib
         ],
- 		# extra_compile_args=['--std=c++11', '-Wno-unused-function'],
-		#extra_link_args=['--std=c++11'],
+        # extra_compile_args=['--std=c++11', '-Wno-unused-function'],
+        # extra_link_args=['--std=c++11'],
         language='c++'
     ),
 ]
@@ -95,8 +95,9 @@ class BuildExt(build_ext):
             ext.extra_compile_args = opts
         build_ext.build_extensions(self)
 
+
 setup(
-	# name of the package
+    # name of the package
     name='fastlts',
     version=__version__,
     author='Martin Jenc',
