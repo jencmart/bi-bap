@@ -24,13 +24,15 @@ class get_pybind_include(object):
 ext_modules = [
     Extension(
 		# name of the dynamic module - you'll import this
-        'pokuspokus',
+		# needs to be same as annotation in fastlts.cpp
+        'fastlts',
+		# filename - may be whatever you want
         ['src/fastlts.cpp'],
         include_dirs=[
             # Path to pybind11 headers
             get_pybind_include(),
             get_pybind_include(user=True),
-			'src/lib/eigen' # path to link eigen lib
+			'lib/eigen' # path to link eigen lib
         ],
  		# extra_compile_args=['--std=c++11', '-Wno-unused-function'],
 		#extra_link_args=['--std=c++11'],
@@ -95,7 +97,7 @@ class BuildExt(build_ext):
 
 setup(
 	# name of the package
-    name='pokuspokus',
+    name='fastlts',
     version=__version__,
     author='Martin Jenc',
     author_email='jencmart@fit.cvut.cz',
