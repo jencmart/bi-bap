@@ -2,6 +2,10 @@
   <dictionary name="jencmart">
     <words>
       <w>coef</w>
+      <w>cppimport</w>
+      <w>denom</w>
+      <w>eigen</w>
+      <w>pybind</w>
       <w>regressor</w>
     </words>
   </dictionary>

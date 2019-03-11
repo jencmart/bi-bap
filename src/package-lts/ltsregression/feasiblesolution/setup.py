@@ -27,7 +27,7 @@ ext_modules = [
         # needs to be same as annotation in fastlts.cpp
         'feasible_solution',
         # filename - may be whatever you want
-        ['src/feasibleSolution.cpp'],
+        ['src/feasible_solution.cpp'],
         include_dirs=[
             # Path to pybind11 headers
             get_pybind_include(),
