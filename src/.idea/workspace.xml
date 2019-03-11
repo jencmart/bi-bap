@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5818e2d1-7629-47ec-a2bd-d6037228392b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/algorithms-cpp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/algorithms-cpp/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/algorithms-cpp/example" beforeDir="false" afterPath="$PROJECT_DIR$/algorithms-cpp/example" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/algorithms-cpp/example/.appveyor.yml" beforeDir="false" />
@@ -150,12 +149,12 @@
       <updated>1552240144097</updated>
       <workItem from="1552240147473" duration="346000" />
       <workItem from="1552240906731" duration="3299000" />
-      <workItem from="1552300222601" duration="2817000" />
+      <workItem from="1552300222601" duration="6113000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6462000" />
+    <option name="totallyTimeSpent" value="9758000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="2" y="18" width="956" height="1060" extended-state="0" />

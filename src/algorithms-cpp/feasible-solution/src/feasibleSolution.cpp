@@ -16,9 +16,6 @@ setup_pybind11(cfg)
 #include <vector>
 #include <algorithm>
 #include <cmath>
-//#include <chrono>
-//#include <ctime>
-//#include <time.h>
 #include <time.h>
 /*
 system_clock - real time clock which is actually the clock used by system
@@ -43,12 +40,14 @@ struct Result {
             rss = RSS;
             n_iter = n_iterations;
             converged = false;
+            time1 = 0;
+            time2 = 0;
+            time3 = 0;
         }
 
         double getRSS(){
             return rss;
         }
-
         double getTime1(){
             return time1;
         }
@@ -58,234 +57,48 @@ struct Result {
         double getTime3(){
             return time3;
         }
-
         Eigen::MatrixXd getTheta(){
             return theta;
         }
-
         std::vector<int> getHSubset(){
         return hSubset;
         }
-
         int getNIter(){
            return n_iter;
         }
-
 };
 
-// *********************************************************************************************************************
-// ************************   Q U I C K  -  S E L E C T   **************************************************************
-// *********************************************************************************************************************
-// todo - this was tested i belive it works ok
-void kth_smallest_recursive_inplace(Eigen::MatrixXd & arr, std::vector<int> & indexes, int left, int right, int k) {
-    double pivot = arr(right,0);
-    int pos = left;
-
-    // iterate unsorted part
-    for (int i = left; i < right; ++i){
-        if (arr(i,0) <= pivot){  // if current pos <= pivot, then swap
-            double tmp = arr(pos,0);
-            arr(pos,0) = arr(i,0);
-            arr(i,0) = tmp;
-            // swap indexes array also...
-            tmp = indexes[pos];
-            indexes[pos] = indexes[i];
-            indexes[i] = tmp;
-            // position is now shifted
-            pos += 1;
-        }
-    }
-
-    // pos is now right
-    double tmp = arr(pos,0);
-    arr(pos,0) = arr(right,0);
-    arr(right,0) =  tmp;
-    // dont forget on second array
-    tmp = indexes[pos];
-    indexes[pos] = indexes[right];
-    indexes[right] =  tmp;
-
-    // end
-    if (pos - left == k - 1)
-        return;
-
-    // kth smallest is in left part
-    if (pos - left > k - 1)
-        return kth_smallest_recursive_inplace(arr, indexes, left, pos-1, k);
-
-    // kth smallest is in right part
-    else
-        return kth_smallest_recursive_inplace(arr, indexes, pos+1, right, k - pos + left - 1);
-}
-
 
 
 // *********************************************************************************************************************
-// ******************** KTH SMALLEST RECURSIVE INPLACE  ****************************************************************
+// ************************   T R Y   -   A L L  -  P A I R S  *********************************************************
 // *********************************************************************************************************************
-// TODO - i belive this is ok (at least this is not cause of this error right now)
-void kth_smallest_recursive_inplace_NoIndex(std::vector<Result*> & subsetResults, int left, int right, int k){
-    double pivot = subsetResults[0]->rss; // todo revrite it all to wrap class and implement '<=' and getPivot
-    int pos = left;
+/* Go through all pairs between J and M and calculate deltaRSS, save the smallest delta
+ * together with indexes of that pair
+ * */
+void goThroughAllPairs(double & delta, int & iSwap, int & jSwap, const Eigen::MatrixXd & dataJX,
+        const Eigen::MatrixXd & dataMX, const Eigen::MatrixXd & residuals,
+        const Eigen::ColPivHouseholderQR<Eigen::MatrixXd> & inversion, const std::vector<int> & indexesJ,
+        const std::vector<int> & indexesM) {
 
-    // iterate unsorted part
-    for (int i = left; i < right; ++i){
-        if (subsetResults[i]->rss <= pivot){  // if current pos <= pivot, then swap
-            Result* tmp = subsetResults[pos];
-            subsetResults[pos] = subsetResults[i];
-            subsetResults[i] = tmp;
+    unsigned h = dataJX.rows();
+    unsigned nMinusH = dataMX.rows();
 
-            // position is now shifted
-            pos += 1;
-        }
-    }
+    for (unsigned i = 0; i < h; ++i) {
+        for (unsigned j = 0; j < nMinusH; ++j) {
 
-    // pos is now right
-    Result* tmp = subsetResults[pos];
-    subsetResults[pos] = subsetResults[right];
-    subsetResults[right] =  tmp;
+            // calculate delta RSS - first prepare parameters
+            double eI = residuals(indexesJ[i], 0); // todo melo by byt ok
+            double eJ = residuals(indexesM[j], 0);
+            double hII = dataJX(i, Eigen::all) * inversion * dataJX(i, Eigen::all); // todo bude asi zle
+            double hIJ = dataJX(i, Eigen::all) * inversion * dataMX(j, Eigen::all);
+            double hJJ = dataMX(j, Eigen::all) * inversion * dataMX(j, Eigen::all);
 
-    // end
-    if (pos - left == k - 1)
-        return;
+            // next - do the calculation
+            double nom = (eJ * eJ * (1 - hII) ) - ( eI * eI * (1 + hJJ)) + 2*eI*eJ*hIJ;
+            double deNom = (1 - hII)*(1 + hJJ) + hIJ * hIJ;
+            double newDelta = nom / deNom;
 
-    // kth smallest is in left part
-    if (pos - left > k - 1)
-        return kth_smallest_recursive_inplace_NoIndex(subsetResults, left, pos-1, k);
-
-    // kth smallest is in right part
-    else
-        return kth_smallest_recursive_inplace_NoIndex(subsetResults, pos+1, right, k - pos + left - 1);
-}
-
-
-// *********************************************************************************************************************
-// *****************  GENERATE ALL H1  *********************************************************************************
-// *********************************************************************************************************************
-void generateSubsets(std::vector<Result*> & subsetResults, const Eigen::MatrixXd & X, const Eigen::MatrixXd & y, int numStarts, int hSize ) {
-    unsigned p = X.cols();
-    unsigned N = X.rows();
-
-    for(int i = 0; i < numStarts; ++i){
-         // generate random permutation of [pi(0) ... pi(N)]
-         std::vector<int> permutation(N);
-         std::iota(permutation.begin(), permutation.end(), 0);
-         std::random_shuffle ( permutation.begin(), permutation.end());
-
-         //  and slice first p elements of this permutation
-         std::vector<int> ind(permutation.begin(), permutation.begin() + p);
-
-         // ColPivHouseholderQR, FullPivLU ... todo try JacobiRotations
-         Eigen::ColPivHouseholderQR<Eigen::MatrixXd> qr_decomp(X(ind, Eigen::all));
-         // and reveal rank from the decompositon
-         auto rank = qr_decomp.rank();
-
-         // add samples till rank is equal p
-         while(rank < p && ind.size() < N) {
-            ind.push_back(permutation[ind.size()]);
-             qr_decomp = qr_decomp.compute(X(ind, Eigen::all)); // todo possible segfault
-             rank = qr_decomp.rank();
-         }
-
-         // compute OLS on this random subset matrix of rank p
-         Eigen::MatrixXd ols_J = qr_decomp.solve(y(ind, Eigen::all));
-
-         // -----------
-         // calculate absolute residuals for each data sample from theta Hyperplane
-         Eigen::MatrixXd L1_norm = ( y - X * ols_J ).rowwise().lpNorm<1>();
-
-         // Calculate hSize smallest indexes
-         std::vector<int> indexes(N);
-         std::iota(indexes.begin(), indexes.end(), 0);
-         kth_smallest_recursive_inplace(L1_norm, indexes, 0, N-1, hSize);
-         // and slice 0 .. hsize-1
-         std::vector<int> slicedVec(indexes.begin(), indexes.begin() + hSize);
-
-         // calculate OLS on this smallest h1 subset
-         Eigen::HouseholderQR<Eigen::MatrixXd> finalDecomp(X(slicedVec, Eigen::all));
-         Eigen::MatrixXd theta_final = qr_decomp.solve(y(slicedVec, Eigen::all));
-         // ------------
-
-
-         // save H1, OLS, RSS, and #cSteps
-         subsetResults.push_back(new Result(slicedVec, theta_final, -1.0, 0) );
-    }
-    return;
-}
-
-
-// *********************************************************************************************************************
-// ****************   PERFORM C STEPS   ********************************************************************************
-// *********************************************************************************************************************
-// todo - here I suspect problem - SOLVED
-void performCStepsInPlace(Result* result,  const Eigen::MatrixXd & X, const Eigen::MatrixXd & y, int hSize, int numSteps,  double threshold) {
-
-    // come results may already converged
-    if(result->converged)
-        return;
-
-    for (int i = 0; i < numSteps; ++i){
-        // -----------
-        // calculate absolute residuals for each data sample from theta Hyperplane
-        Eigen::MatrixXd L1_norm = ( y - X * result->theta ).rowwise().lpNorm<1>();
-        unsigned N = X.rows();
-        // Calculate hSize smallest indexes
-        std::vector<int> indexes(N);
-        std::iota(indexes.begin(), indexes.end(), 0);
-        kth_smallest_recursive_inplace(L1_norm, indexes, 0, N-1, hSize);
-        // and slsllice 0 .. hsize-1
-        std::vector<int> slicedVec(indexes.begin(), indexes.begin() + hSize);
-
-        // calculate OLS on this smallest h1 subset
-        Eigen::HouseholderQR<Eigen::MatrixXd> finalDecomp(X(slicedVec, Eigen::all));
-        Eigen::MatrixXd theta_new = finalDecomp.solve(y(slicedVec, Eigen::all));
-        // -----------
-
-        // save theta
-        result->theta = theta_new; // theta se zmenila
-
-        // >>check stopping criterion<<
-        if(threshold > 0) {
-            Eigen::MatrixXd yy = y(slicedVec, Eigen::all);
-            Eigen::MatrixXd XX = X(slicedVec, Eigen::all);
-
-            double rssOld = result->rss;
-            result->rss = ((yy - XX * result->theta).transpose() * (yy -XX * result->theta) )(0,0);
-            if(std::fabs(rssOld - result->rss) < threshold) {
-                result->hSubset = slicedVec;
-                result->n_iter +=  i+1; // include this step
-                result->converged = true;
-                return;
-            }
-        }
-        // >>>> /criterion <<<
-
-        // save hSubset in last step
-        if(i+1 == numSteps){
-            Eigen::MatrixXd yy = y(slicedVec, Eigen::all);
-            Eigen::MatrixXd XX = X(slicedVec, Eigen::all);
-
-            result->hSubset = slicedVec;
-            result->rss =  ( (yy - XX * result->theta).transpose() * (yy - XX * result->theta) )(0,0);
-            result->n_iter +=  i + 1; // include this step
-            return;
-        }
-    }
-
-    // calculate RSS and update num of iterations
-
-
-}
-
-
-
-void goThroughAllPairs(double & delta, int & iSwap, int & jSwap ) { //todo
-    int h; //todo
-    int nMinusH; //todo
-
-    for (int i = 0; i < h; ++i) {
-        for (int j = 0; j < nMinusH; ++j) {
-            double newDelta = calculateDelta();//todo
             if(newDelta < delta){
                 delta = newDelta;
                 iSwap = i;
@@ -295,129 +108,90 @@ void goThroughAllPairs(double & delta, int & iSwap, int & jSwap ) { //todo
     }
 }
 
+
+
+// *********************************************************************************************************************
+// ************************   R E F I N E M E N T   -    P R O C E S S   ***********************************************
+// *********************************************************************************************************************
 void refinementProcess(const std::vector<int> & indexesJ, const std::vector<int> & indexesM, const Eigen::MatrixXd & X, const Eigen::MatrixXd & y ) {
-
     Eigen::MatrixXd dataJX = X(indexesJ, Eigen::all);
-    Eigen::MatrixXd dataJy = y(indexesJ, Eigen::all);
-
-    Eigen::MatrixXd dataMX = X(indexesM, Eigen::all); // okopiruji hodne dat
-    Eigen::MatrixXd dataMy = y(indexesM, Eigen::all);
+    Eigen::MatrixXd dataMX = X(indexesM, Eigen::all); // okopiruji hodne dat -jinak ale indexuji 30x ve while
     int steps = 0;
 
-
+    //Eigen::MatrixXd dataJy = y(indexesJ, Eigen::all);
+    //Eigen::MatrixXd dataMy = y(indexesM, Eigen::all);
     while(true) {
-        // kdybych je nekopiroval, musim je tady ~ 30x zaindexovat
-        // inverze =  (xT X).I
-        // theta = inversion * x.T * y
-        // residuals = all y - all * theta
-        Eigen::ColPivHouseholderQR<Eigen::MatrixXd> qr_decomp(dataJX.transpose() * dataJX);
-        qr_decomp = qr_decomp.inverse();
-        Eigen::MatrixXd theta = qr_decomp * dataJX.transpose();
-        residuals = y - X * theta;
+        // inversion =  (xT X).I ; theta = inversion * x.T * y ; esiduals = all y - all * theta
+        Eigen::ColPivHouseholderQR<Eigen::MatrixXd> inversion(dataJX.transpose() * dataJX);
+        inversion = inversion.inverse();
+        Eigen::MatrixXd theta = inversion * dataJX.transpose();
+        Eigen::MatrixXd residuals = y - X * theta;
 
         // go through all pairs
         double delta = 0;
         int iSwap;
         int jSwap;
+        goThroughAllPairs(delta, iSwap,jSwap, dataJX, dataMX, residuals, inversion, indexesJ, indexesM);
 
-        goThroughAllPairs()
-
+       // if delta < 0 := better solution, do the swap
        if (delta < 0) {
-           // do the swap
-           double tmp;
+           // data
+           Eigen::MatrixXd tmp = dataJX(iSwap, Eigen::all); // todo tohle bude zle
+           //dataJX(iSwap, Eigen::all) = dataMX(jSwap, Eigen::all);
+           //dataMX(jSwap, Eigen::all) = tmp;
+           dataJX.row(iSwap).swap( dataMX.row(jSwap) );
+           dataMX.row(jSwap).swap(tmp.row(0));
+           // and also indexes
+           int tmp = indexesJ[iSwap];
+           ndexesJ[iSwap] = indexesM[jSwap];
+           indexesM[jSwap] = tmp;
+           // finally increase number of steps
            steps += 1;
            continue;
        }
-
        break;
     }
-
-    // return the results (theta, indexes, rss, steps)
-
+    // save the result - todo optimize this
+    Eigen::MatrixXd yy = y(indexesJ, Eigen::all);
+    Eigen::MatrixXd XX = X(indexesJ, Eigen::all);
+    Eigen::HouseholderQR<Eigen::MatrixXd> finalDecomp(XX);
+    Eigen::MatrixXd theta_final = finalDecomp.solve(y(yy);
+    double rss =  ( (yy - XX * theta_final).transpose() * (yy - XX * theta_final) )(0,0);
+    return new Result(indexesJ, theta_final, rss, steps);
 }
 
 // *********************************************************************************************************************
-// *********************   F A S T  -  L T S   *************************************************************************
+// *********************   F E A S I B L E   -  S O L U T I O N   ******************************************************
 // *********************************************************************************************************************
-Result* fast_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int numStarts, int hSize) {
+Result* fs_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int numStarts, int hSize) {
     std::vector<Result*> subsetResults;
     clock_t t;
+    t = clock();
 
-     t = clock();
-
+    // for all stars
     for (int i = 0; i < numStarts; ++i) {
-
-        // select initial random J, M
-
-        // generate random permutation of [pi(0) ... pi(N)]
+        // select initial random array of indexes |J| = p, |M|= n-p
         std::vector<int> permutation(N);
         std::iota(permutation.begin(), permutation.end(), 0);
         std::random_shuffle ( permutation.begin(), permutation.end());
-
-        //  and slice first h elements of this permutation
         std::vector<int> indexesJ(permutation.begin(), permutation.begin() + hSize);
         std::vector<int> indexesM(permutation.begin() + hSize, permutation.end() );
 
-        // do the refinement process(J, M, indexes J, indexes M , all x, all y)
+        // do the refinement process on (indexes J, indexes M , X, Y)
         Result * result = refinementProcess(indexesJ, indexesM, X, y);
 
         // append result to result array
         subsetResults.push_back(result);
     }
+    float time1 = ((float)(clock() - t))/CLOCKS_PER_SEC;
 
-
-    unsigned p = X.cols();
-    unsigned N = X.rows();
-
-    // find best results
+    // find and return best results
     Result* best = subsetResults[0];
     for (int i = 0 ; i < numStarts; ++i)
         best = subsetResults[i]->rss < best->rss ? subsetResults[i] : best;
-
-    //return best;
-
-    // todo - delete all bellow
-    //********************************************************
-    // generate initial H1_subsets ( #H1_subsets == numStarts)
-    generateSubsets(subsetResults, X, y, numStarts, hSize);
-    //********************************************************
-    float time1 = ((float)(clock() - t))/CLOCKS_PER_SEC;
-
-
-    t = clock();
-    //********************************************************
-    // -- INITIAL - few c steps on all subsets
-    // numStarts represent range thus we mean to iterate cSteps on all of initial H1 subsets for now
-    for (int i = 0; i < numStarts; ++i){
-            performCStepsInPlace(subsetResults[i], X, y, hSize, numInitialCSteps, 0);
-    }
-
-    // sort it
-    kth_smallest_recursive_inplace_NoIndex(subsetResults, 0, subsetResults.size()-1, numStartsToFinish);
-    //********************************************************
-    float time2 = ((float)(clock() - t))/CLOCKS_PER_SEC;
-
-
-
-
-    t = clock();
-    //********************************************************
-    // -- FINAL - iterate cSteps till convergence on best (say 10) final subset
-    for (int i = 0; i < numStartsToFinish; ++i)
-        performCStepsInPlace(subsetResults[i], X, y, hSize, maxCSteps, threshold);
-    // find the best one
-    Result* best = subsetResults[0];
-    for (int i = 0 ; i < numStartsToFinish; ++i)
-        best = subsetResults[i]->rss < best->rss ? subsetResults[i] : best;
-     //********************************************************
-    float time3 = ((float)(clock() - t))/CLOCKS_PER_SEC;
-
-
+    // save total time (performance statistics)
     best->time1 = time1;
-    best->time2 = time2;
-    best->time3 = time3;
 
-    // find best
     return best;
 }
 
@@ -438,7 +212,6 @@ Result* fast_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int numStarts, int hSize)
 // test.py
 //	my_import =  cppimport.imp("xxx")
 
-
 PYBIND11_MODULE(feasible_solution, m) {
 
 	// documentation - not necessary
@@ -455,7 +228,7 @@ PYBIND11_MODULE(feasible_solution, m) {
 		)pbdoc";
 
 
-    // bind functions - use documentation
+    // bind functions - and use documentation
     m.def("fs_lts", &fs_lts,  R"pbdoc(
         Fast-LTS algorithm
 
@@ -469,9 +242,9 @@ PYBIND11_MODULE(feasible_solution, m) {
     .def("get_theta", &Result::getTheta)
     .def("get_h_subset", &Result::getHSubset)
     .def("get_n_inter", &Result::getNIter)
-    .def("get_time_1", &Result::getTime1)
-    .def("get_time_2", &Result::getTime2)
-    .def("get_time_3", &Result::getTime3, "return time 3")
+    .def("get_time_1", &Result::getTime1, "total time")
+    .def("get_time_2", &Result::getTime2, "unused")
+    .def("get_time_3", &Result::getTime3, "unused")
     ;
 
 // version info - not neccesary

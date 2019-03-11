@@ -10,8 +10,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="27ef25dd-db55-4824-a41b-df240996121d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example" beforeDir="false" afterPath="$PROJECT_DIR$/example" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/.appveyor.yml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/example/.gitignore" beforeDir="false" />
@@ -38,11 +36,17 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/feasible-solution/src/feasibleSolution.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="329">
-              <caret line="376" column="18" lean-forward="true" selection-start-line="376" selection-start-column="18" selection-end-line="376" selection-end-column="18" />
+            <state relative-caret-position="462">
+              <caret line="138" column="50" lean-forward="true" selection-start-line="138" selection-start-column="50" selection-end-line="138" selection-end-column="50" />
               <folding>
-                <element signature="e#1723#3337#0" />
-                <element signature="e#3341#4897#0" />
+                <element signature="e#1269#1319#0" />
+                <element signature="e#1329#1383#0" />
+                <element signature="e#1392#1446#0" />
+                <element signature="e#1455#1509#0" />
+                <element signature="e#1519#1582#0" />
+                <element signature="e#1592#1656#0" />
+                <element signature="e#1666#1717#0" />
+                <element signature="e#17717#17754#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -53,6 +57,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>subsetResults</find>
+      <find>p</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -105,15 +110,15 @@
       <option name="presentableId" value="Default" />
       <updated>1552243079523</updated>
       <workItem from="1552243082754" duration="2630000" />
-      <workItem from="1552300232822" duration="3199000" />
+      <workItem from="1552300232822" duration="10028000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5829000" />
+    <option name="totallyTimeSpent" value="12658000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="962" y="18" width="956" height="1060" extended-state="0" />
+    <frame x="-2" y="-18" width="1924" height="1100" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.25" />
@@ -142,11 +147,17 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/feasible-solution/src/feasibleSolution.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="329">
-          <caret line="376" column="18" lean-forward="true" selection-start-line="376" selection-start-column="18" selection-end-line="376" selection-end-column="18" />
+        <state relative-caret-position="462">
+          <caret line="138" column="50" lean-forward="true" selection-start-line="138" selection-start-column="50" selection-end-line="138" selection-end-column="50" />
           <folding>
-            <element signature="e#1723#3337#0" />
-            <element signature="e#3341#4897#0" />
+            <element signature="e#1269#1319#0" />
+            <element signature="e#1329#1383#0" />
+            <element signature="e#1392#1446#0" />
+            <element signature="e#1455#1509#0" />
+            <element signature="e#1519#1582#0" />
+            <element signature="e#1592#1656#0" />
+            <element signature="e#1666#1717#0" />
+            <element signature="e#17717#17754#0" expanded="true" />
           </folding>
         </state>
       </provider>
