@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5818e2d1-7629-47ec-a2bd-d6037228392b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/algorithms-cpp/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/algorithms-cpp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/algorithms-cpp/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/algorithms-cpp/example" beforeDir="false" afterPath="$PROJECT_DIR$/algorithms-cpp/example" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/algorithms-cpp/example/.appveyor.yml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/algorithms-cpp/example/.gitignore" beforeDir="false" />
@@ -17,6 +17,7 @@
       <change beforePath="$PROJECT_DIR$/algorithms-cpp/example/docs/python_example.rst" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/algorithms-cpp/example/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/algorithms-cpp/example/setup.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/algorithms-cpp/example/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/algorithms-cpp/example/src/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/algorithms-cpp/feasible-solution/src/feasibleSolution.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/algorithms-cpp/feasible-solution/src/feasibleSolution.cpp" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -148,15 +149,16 @@
       <option name="presentableId" value="Default" />
       <updated>1552240144097</updated>
       <workItem from="1552240147473" duration="346000" />
-      <workItem from="1552240906731" duration="904000" />
+      <workItem from="1552240906731" duration="3299000" />
+      <workItem from="1552300222601" duration="2817000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1250000" />
+    <option name="totallyTimeSpent" value="6462000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-2" y="-18" width="1924" height="1100" extended-state="0" />
+    <frame x="2" y="18" width="956" height="1060" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.25663716" />
@@ -221,7 +223,7 @@
     <entry file="file://$PROJECT_DIR$/notebooks/02-feasible-solution-numpy.ipynb">
       <provider selected="true" editor-type-id="ipnb-editor">
         <state>
-          <selected id="0" />
+          <selected id="2" />
         </state>
       </provider>
     </entry>

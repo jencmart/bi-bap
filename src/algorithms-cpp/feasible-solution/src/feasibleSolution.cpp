@@ -277,21 +277,62 @@ void performCStepsInPlace(Result* result,  const Eigen::MatrixXd & X, const Eige
 
 }
 
-void refinementProcess() {
 
+
+void goThroughAllPairs(double & delta, int & iSwap, int & jSwap ) { //todo
+    int h; //todo
+    int nMinusH; //todo
+
+    for (int i = 0; i < h; ++i) {
+        for (int j = 0; j < nMinusH; ++j) {
+            double newDelta = calculateDelta();//todo
+            if(newDelta < delta){
+                delta = newDelta;
+                iSwap = i;
+                jSwap = j;
+            }
+        }
+    }
+}
+
+void refinementProcess(const std::vector<int> & indexesJ, const std::vector<int> & indexesM, const Eigen::MatrixXd & X, const Eigen::MatrixXd & y ) {
+
+    Eigen::MatrixXd dataJX = X(indexesJ, Eigen::all);
+    Eigen::MatrixXd dataJy = y(indexesJ, Eigen::all);
+
+    Eigen::MatrixXd dataMX = X(indexesM, Eigen::all); // okopiruji hodne dat
+    Eigen::MatrixXd dataMy = y(indexesM, Eigen::all);
     int steps = 0;
 
 
     while(true) {
-        // x = vyber data -- kdyz to budou jen indexy budu to dealt pokazde znovu, lepsi kopiw
-        // y =
-
+        // kdybych je nekopiroval, musim je tady ~ 30x zaindexovat
         // inverze =  (xT X).I
         // theta = inversion * x.T * y
-        // residuals = resudials na celych datech
+        // residuals = all y - all * theta
+        Eigen::ColPivHouseholderQR<Eigen::MatrixXd> qr_decomp(dataJX.transpose() * dataJX);
+        qr_decomp = qr_decomp.inverse();
+        Eigen::MatrixXd theta = qr_decomp * dataJX.transpose();
+        residuals = y - X * theta;
 
+        // go through all pairs
+        double delta = 0;
+        int iSwap;
+        int jSwap;
+
+        goThroughAllPairs()
+
+       if (delta < 0) {
+           // do the swap
+           double tmp;
+           steps += 1;
+           continue;
+       }
+
+       break;
     }
 
+    // return the results (theta, indexes, rss, steps)
 
 }
 
@@ -305,14 +346,35 @@ Result* fast_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int numStarts, int hSize)
      t = clock();
 
     for (int i = 0; i < numStarts; ++i) {
-        // select initial h1 (J,M) -- maybe only indexes...?
 
-        // do the refinement process(indexes J, indexes M , x y)
+        // select initial random J, M
+
+        // generate random permutation of [pi(0) ... pi(N)]
+        std::vector<int> permutation(N);
+        std::iota(permutation.begin(), permutation.end(), 0);
+        std::random_shuffle ( permutation.begin(), permutation.end());
+
+        //  and slice first h elements of this permutation
+        std::vector<int> indexesJ(permutation.begin(), permutation.begin() + hSize);
+        std::vector<int> indexesM(permutation.begin() + hSize, permutation.end() );
+
+        // do the refinement process(J, M, indexes J, indexes M , all x, all y)
+        Result * result = refinementProcess(indexesJ, indexesM, X, y);
 
         // append result to result array
-
+        subsetResults.push_back(result);
     }
 
+
+    unsigned p = X.cols();
+    unsigned N = X.rows();
+
+    // find best results
+    Result* best = subsetResults[0];
+    for (int i = 0 ; i < numStarts; ++i)
+        best = subsetResults[i]->rss < best->rss ? subsetResults[i] : best;
+
+    //return best;
 
     // todo - delete all bellow
     //********************************************************
