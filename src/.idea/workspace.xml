@@ -2,65 +2,43 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5818e2d1-7629-47ec-a2bd-d6037228392b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/jencmart.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/feasiblesolution/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/feasiblesolution/abstract_lts_regressor_fs.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/feasiblesolution/feasible_solution.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/feasiblesolution/feasible_solution_cpp.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/feasiblesolution/tests/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/package-lts/requirements.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/package-lts/setup.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/.idea/algorithms-cpp.iml" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/.idea/algorithms-cpp.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/example" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/fast-lts/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/fast-lts/conda.recipe/bld.bat" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/conda.recipe/bld.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/fast-lts/conda.recipe/build.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/conda.recipe/build.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/fast-lts/conda.recipe/meta.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/conda.recipe/meta.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/fast-lts/lib/eigen" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/fast-lts/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/setup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/fast-lts/src/clean.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/src/clean.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/fast-lts/src/fastlts.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/src/fastlts.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/fast-lts/tests/test-dev.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/tests/test-dev.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/fast-lts/tests/test-setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/tests/test-setup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/feasible-solution/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/feasible-solution/conda.recipe/bld.bat" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/conda.recipe/bld.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/feasible-solution/conda.recipe/build.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/conda.recipe/build.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/feasible-solution/conda.recipe/meta.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/conda.recipe/meta.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/feasible-solution/lib/eigen" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/feasible-solution/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/setup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/feasible-solution/src/clean.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/feasiblesolution/cpp/clean.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/feasible-solution/src/feasibleSolution.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/feasiblesolution/cpp/feasibleSolution.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/feasible-solution/tests/feasible_solution.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/feasible-solution/tests/test-dev.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/feasiblesolution/tests/test-dev.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithms-cpp/feasible-solution/tests/test-setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/feasiblesolution/tests/test-setup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/example/.appveyor.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/example/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/example/.travis.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/example/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/example/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/example/docs/Makefile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/example/docs/conf.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/example/docs/index.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/example/docs/make.bat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/example/docs/python_example.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/example/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/example/setup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/example/src/lib/eigen/bench/perf_monitoring/run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/example/src/lib/eigen/bench/perf_monitoring/run.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/example/src/lib/eigen/bench/perf_monitoring/runall.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/example/src/lib/eigen/bench/perf_monitoring/runall.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/example/src/lib/eigen/scripts/eigen_monitor_perf.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/example/src/lib/eigen/scripts/eigen_monitor_perf.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/example/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/example/src/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/lib/eigen/bench/perf_monitoring/run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/lib/eigen/bench/perf_monitoring/run.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/lib/eigen/bench/perf_monitoring/runall.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/lib/eigen/bench/perf_monitoring/runall.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/lib/eigen/scripts/eigen_monitor_perf.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/lib/eigen/scripts/eigen_monitor_perf.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/lib/eigen/bench/perf_monitoring/run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/lib/eigen/bench/perf_monitoring/run.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/lib/eigen/bench/perf_monitoring/runall.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/lib/eigen/bench/perf_monitoring/runall.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/lib/eigen/scripts/eigen_monitor_perf.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/lib/eigen/scripts/eigen_monitor_perf.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/conda.recipe/bld.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/conda.recipe/build.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/conda.recipe/meta.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/lib/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/lib/eigen" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/setup.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/src/clean.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/src/fastlts.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/tests/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/tests/test-dev.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/tests/test-setup.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/fastlts/lib/eigen/bench/perf_monitoring/run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/fastlts/lib/eigen/bench/perf_monitoring/run.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/fastlts/lib/eigen/bench/perf_monitoring/runall.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/fastlts/lib/eigen/bench/perf_monitoring/runall.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/fastlts/lib/eigen/scripts/eigen_monitor_perf.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/fastlts/lib/eigen/scripts/eigen_monitor_perf.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/conda.recipe/bld.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/conda.recipe/build.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/conda.recipe/meta.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/feasiblesolution/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/feasiblesolution/abstract_lts_regressor_fs.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/feasiblesolution/cpp/clean.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/feasiblesolution/cpp/feasibleSolution.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/feasiblesolution/feasible_solution.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/feasiblesolution/feasible_solution_cpp.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/feasiblesolution/tests/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/feasiblesolution/tests/test-dev.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/feasiblesolution/tests/test-setup.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/lib/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/lib/eigen" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/setup.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/feasiblesolution/lib/eigen/bench/perf_monitoring/run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/feasiblesolution/lib/eigen/bench/perf_monitoring/run.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/feasiblesolution/lib/eigen/bench/perf_monitoring/runall.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/feasiblesolution/lib/eigen/bench/perf_monitoring/runall.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/ltsregression/feasiblesolution/lib/eigen/scripts/eigen_monitor_perf.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/ltsregression/feasiblesolution/lib/eigen/scripts/eigen_monitor_perf.sh" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -71,45 +49,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/package-lts/ltsregression/example/conda.recipe/meta.yaml">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/package-lts/ltsregression/example/conda.recipe/bld.bat">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/notebooks/02-feasible-solution-numpy.ipynb">
           <provider selected="true" editor-type-id="ipnb-editor">
             <state>
               <selected id="2" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/feasiblesolution/tests/test-dev.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="676">
-              <caret line="126" selection-start-line="11" selection-end-line="126" />
-              <folding>
-                <element signature="e#4500#13691#0" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/feasiblesolution/feasible_solution_cpp.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="20" column="25" lean-forward="true" selection-start-line="20" selection-start-column="25" selection-end-line="20" selection-end-column="25" />
-              <folding>
-                <element signature="e#0#16#0" expanded="true" />
-                <element signature="e#880#2774#0" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -121,33 +64,6 @@
       </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/package-lts/setup.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret lean-forward="true" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/feasiblesolution/abstract_lts_regressor_fs.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="6" column="26" selection-start-line="6" selection-start-column="26" selection-end-line="6" selection-end-column="26" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/feasiblesolution/feasible_solution.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="54">
-              <caret line="3" selection-start-line="3" selection-end-line="3" selection-end-column="11" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/package-lts/ltsregression/feasible-solution/feasiblesolution/__init__.py">
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
@@ -186,7 +102,7 @@
   <component name="ProjectFrameBounds">
     <option name="x" value="2" />
     <option name="y" value="18" />
-    <option name="width" value="1916" />
+    <option name="width" value="956" />
     <option name="height" value="1060" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -212,6 +128,13 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="package-lts" type="462c0819:PsiDirectoryNode" />
               <item name="ltsregression" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="src" type="b2602c69:ProjectViewProjectNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="package-lts" type="462c0819:PsiDirectoryNode" />
+              <item name="ltsregression" type="462c0819:PsiDirectoryNode" />
+              <item name="feasiblesolution" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -262,17 +185,17 @@
       <updated>1552240144097</updated>
       <workItem from="1552240147473" duration="346000" />
       <workItem from="1552240906731" duration="3299000" />
-      <workItem from="1552300222601" duration="11560000" />
+      <workItem from="1552300222601" duration="11829000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="15205000" />
+    <option name="totallyTimeSpent" value="15474000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="2" y="18" width="1916" height="1060" extended-state="0" />
+    <frame x="2" y="18" width="956" height="1060" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25751072" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.53097343" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -285,7 +208,7 @@
       <window_info anchor="bottom" id="Docker" order="7" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" weight="0.32959184" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" weight="0.3287234" />
       <window_info anchor="bottom" id="Terminal" order="11" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -383,11 +306,7 @@
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/package-lts/setup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret lean-forward="true" />
-        </state>
-      </provider>
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
   </component>
 </project>
