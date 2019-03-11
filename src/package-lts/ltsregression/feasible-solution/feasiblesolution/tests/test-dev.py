@@ -1,3 +1,8 @@
+import importlib
+moduleName = input('Enter module name:')
+importlib.import_module(moduleName)
+
+
 import cppimport
 import numpy as np
 import math

@@ -23,7 +23,6 @@
       <change beforePath="$PROJECT_DIR$/example/docs/python_example.rst" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/example/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/example/setup.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/example/src/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feasible-solution/src/feasibleSolution.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/feasible-solution/src/feasibleSolution.cpp" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -36,8 +35,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/feasible-solution/src/feasibleSolution.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="462">
-              <caret line="138" column="50" lean-forward="true" selection-start-line="138" selection-start-column="50" selection-end-line="138" selection-end-column="50" />
+            <state relative-caret-position="483">
+              <caret line="92" column="104" selection-start-line="92" selection-start-column="104" selection-end-line="92" selection-end-column="104" />
               <folding>
                 <element signature="e#1269#1319#0" />
                 <element signature="e#1329#1383#0" />
@@ -71,9 +70,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="962" />
+    <option name="x" value="1282" />
     <option name="y" value="18" />
-    <option name="width" value="956" />
+    <option name="width" value="636" />
     <option name="height" value="1060" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -110,16 +109,15 @@
       <option name="presentableId" value="Default" />
       <updated>1552243079523</updated>
       <workItem from="1552243082754" duration="2630000" />
-      <workItem from="1552300232822" duration="10028000" />
+      <workItem from="1552300232822" duration="10984000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12658000" />
+    <option name="totallyTimeSpent" value="13614000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-2" y="-18" width="1924" height="1100" extended-state="0" />
-    <editor active="true" />
+    <frame x="1282" y="18" width="636" height="1060" extended-state="0" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.25" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -147,8 +145,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/feasible-solution/src/feasibleSolution.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="462">
-          <caret line="138" column="50" lean-forward="true" selection-start-line="138" selection-start-column="50" selection-end-line="138" selection-end-column="50" />
+        <state relative-caret-position="483">
+          <caret line="92" column="104" selection-start-line="92" selection-start-column="104" selection-end-line="92" selection-end-column="104" />
           <folding>
             <element signature="e#1269#1319#0" />
             <element signature="e#1329#1383#0" />
