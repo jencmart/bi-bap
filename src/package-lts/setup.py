@@ -100,7 +100,7 @@ setup(
     name='fastlts',  # name of the package
     version=__version__,  # package version
     author='Martin Jenc',  # author of the package
-    author_email='jencmart@fit.cvut.cz',
+    author_email='jencmart@fit.cvut.cz',  # author email
     url='https://gitlab.fit.cvut.cz/jencmart',
     description='lts algorithms implemented in c++ & numpy',
     long_description='',
