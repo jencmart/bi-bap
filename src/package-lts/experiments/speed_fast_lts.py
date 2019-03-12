@@ -61,7 +61,7 @@ def fast_lts_cpp_only(output='./out/fast_lts_cpp_results.csv'):
     experiments = [(100, 2), (100, 3), (100, 5), (500, 2), (500, 3), (500, 5), (1000, 2),
                    (1000, 5), (1000, 10), (10000, 2), (10000, 5), (10000, 10), (50000, 2), (50000, 5), (50000, 10),
                    (100000, 5), (100000, 10), (500000, 5), (500000, 10), (1000000, 5), (1000000, 10),
-                   (2500000, 5), (2500000, 10), (3000000, 2), (3000000, 3)]
+                   (2500000, 5), (2500000, 10), (3000000, 2), (3000000, 3), (3000000, 5)]
 
     cnt_experiments = len(experiments)
 
@@ -99,7 +99,7 @@ def fast_lts_cpp_big(output='./out/fast_lts_cpp_big_results.csv'):
     inter = True
 
     # same as in FAST-LTS paper -- so its a benchmark, not experiment
-    experiments = [(3000000, 5), (3500000, 5), (4000000, 2), (4000000, 5)]
+    experiments = [(3500000, 5), (4000000, 2), (4000000, 5)]
 
     cnt_experiments = len(experiments)
 
