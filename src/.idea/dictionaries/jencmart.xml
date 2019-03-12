@@ -6,8 +6,12 @@
       <w>denom</w>
       <w>eigen</w>
       <w>fastlts</w>
+      <w>iters</w>
       <w>pybind</w>
+      <w>pythonpath</w>
       <w>regressor</w>
+      <w>scikit</w>
+      <w>scipy</w>
     </words>
   </dictionary>
 </component>

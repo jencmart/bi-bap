@@ -1,5 +1,8 @@
 # PIBYND 11 + cppimport + setuptools
 
+# !!!note!!!
+* `setup.py` does not work right now ! don't even try !
+
 ## 0. For new packages
 
 #### for cppimport chage
