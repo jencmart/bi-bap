@@ -5,6 +5,7 @@
       <w>cppimport</w>
       <w>denom</w>
       <w>eigen</w>
+      <w>fastlts</w>
       <w>pybind</w>
       <w>regressor</w>
     </words>

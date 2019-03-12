@@ -1,0 +1,172 @@
+
+#  module -  file.py
+#  built-in module - c code compiled into Python interpret, no .py
+#  package - folder with __init__.py (from 3.3 even without)
+
+#  imported module  - python run code in module file
+#  imported package - python run code in __init__.py
+#  build in modules can be overwritten
+    # import math .. imports pythons math, not math.py form same dir
+    # import random .. if random.py in current dir, it is preferred
+#  import is case sensitive
+#  sys.path
+    #  list of paths (strings) that specifies search path for modules
+    # initialized from env. variable PYTHONPATH + install-dependent default
+    # sys.path[0] .. directory containing script used to invoke Python interpret
+    # if not available (script from stdin || interpret invoked interactively)
+    # then sys.path[0] is empty string -> python search current dir
+
+    # 1. IMPORTANT
+    # sys.path doesn't care about current work directory
+    #   /home/folder/test$ python ./packA/subA/subA1.py
+    #       sys.path[0] := /home/folder/test/packA/subA
+
+    # 2. IMPORTANT
+    # sys.path is shared across all imported modules
+    # test/start.py -> imports mod.py
+    # test/other.py
+    # test/packageA/mod.py -> it prints sys.path
+    # python ./start.py
+    #   ../../test/
+    #   THAT MEANS: mod.py can import other.py because it is in path !!!
+
+#  __init__.py
+    # 2 functions:
+    #   1. convert folder/scripts into importable packages (before Python 3.3)
+    #   2. run package initialization code
+
+    # ad 1.
+    #   not needed from 3.3 due to implicit namespace packages
+
+    # ad 2.
+    #   first time package is imported, Python will execute __init__.py
+    #   in root folder of the package (if exist)
+
+    # python script dir is not considered as package
+
+# importing
+    # import <package>
+    # import <module>
+    # from <package> import <module / submodule / object>
+    # from <module>  import <object>
+
+    # example
+    # import packA as pA, packA.a1, packA.subA.sa1 as sa1
+
+    # IMPORTING OBJECTS FROM MODULE OR PACKAGE
+    #
+    # example: start.py needs to import hello_world from sa1.py
+    #   solution 1: from packA.subA.sa1 import hello_world
+    #               x = hello_world()
+    #
+    #   solution 2: from packA.subA import sa1
+    #   solution 2: import packA.subA.sa1 as sa1 (does the same)
+    #               x = sa1.helloWorld()
+    #               # this is preferred best way
+    #
+    #   solution3: import packA.subA.sa1
+    #               x = packA.subA.sa1.helloWorld()
+    #               # this is worst way
+
+    # IMPORTING PACKAGES
+    #
+    #   it is conceptually same as importing package's __init__.py as module
+    #   only objects declared in __init__.py are accessible to importer !!!
+
+# Absolute X Relative Import
+#
+# Absolute import - full path (starting from project root folder)
+#
+# Relative path - starting from path of current module to the desired module to import
+#
+#   Two types of relative import:
+#       explicit relative:  from .<module/package> import x
+#                   dots indicate how many directories traverse
+#                          (. := current dir) (.. := folder up)
+#
+#       implicit relative: written as if current directory is part of sys.path
+#                          !! NOT IN PYTHON 3 !!
+
+#   python3 example:
+#   run start.py
+#   import test.py from subdir
+#   test import following:
+#             import other      # absolute -- sys.path -- same folder as start.py
+#             from . import a2  # relative -- same dir ast test.py
+#             from .subA import sa1  # relative -- sub folder subA.
+#             from .. import other # -- invalid !!!
+#             !!!   explicit relative import cant include directory containing run script
+#                   -- attempted relative import beyond top-level package
+
+# Absolute imports are preferred over relative imports because:
+#   1. avoid confusion...
+#   2. any script with explicit relative imports CANNOT be run directly
+#       -- relative imports are based on the name of current module
+#       -- name of main module is always main
+#       -- modules intended for use as main module of python app must always use absolute imports
+
+# E X A M P L E S
+
+# Case 1: sys.path is known -- you always call only modules from 'root' dir
+# solution from packA.subA.sa1 import helloWorld -- this can be in all modules in package
+
+# Case 2: sys.path could change
+
+# if we want to be flexible - we'll run into problems
+
+#    if module is never imported - it's easy, we now that sys.path is same
+#       when we set up all imports against it, we're ok
+#       but when we want to use some of it's import on its own - PROBLEM
+#
+#       /root-folder
+#              start.py
+#              packA/
+#                   a1.py
+#                   a2.py
+#                   subA/
+#                       sa2.py
+#
+#       RUN   from packA.subA import sa2            from subA import sa2
+#     start.py        OK                                    fail (subA not in test/)
+#     a2.py           fail (packA is not test/packA/)       OK
+
+#   CLEAN SOLUTION: >>doesn't exists<<<
+#       workarounds
+#       1. use absolute rooted import (:= packA.subA)
+#               start.py will work
+#               to run a2.py -> run it as imported module instead of script
+#                   ==> cd /root-folder ; python -m packA.a2
+#
+#       2. same, but to run a2.py modify sys.path
+#                   so that it include test/packA before sa2 is imported
+#
+#            import os, sys
+#            sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+#            from packA.subA import sa2 # this works even when a2.py run directly
+#
+#       3. only use python 2 << BAD SOLUTION
+#       4. use absolute imports (again) ; add root-folder to PYTHONPATH
+#           >>BAD SOLUTION<< (not portable)
+#
+#   CASE 3:
+#     we have two modules in two different dirs that both import same module
+#     >> we need to use workaround 2., 3., or 4. . (2. is preferred)
+#
+#   CASE 4:
+#       importing from parent directory
+#       >> impossible in python <<< (only solution 2. or 4.)
+#       >> simply don't do this !!!
+
+
+# INSTALLING PACKAGES FOR DEVELOPMENTS
+# pip install -e .   # ( inside virtualenv )
+#   almost same  as python setup.py develop
+
+# ???????
+# import importlib
+# moduleName = input('Enter module name:')
+# importlib.import_module(moduleName)
+
+# dont use __import__
+# use importlib.import_module() wrapper instead !
+#

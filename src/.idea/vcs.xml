@@ -10,6 +10,7 @@
     <mapping directory="$PROJECT_DIR$/ltsregression/example/src/lib/eigen" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ltsregression/fast-lts/lib/eigen" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ltsregression/feasible-solution/lib/eigen" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/package-lts/lib/eigen" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/package-lts/ltsregression/example" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/package-lts/ltsregression/example/src/lib/eigen" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/package-lts/ltsregression/fast-lts/lib/eigen" vcs="Git" />

@@ -1,0 +1,7 @@
+cppimport
+numpy
+pandas
+pybind11
+scikit-learn
+scipy
+setuptools
