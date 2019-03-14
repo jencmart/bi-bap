@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2019.3.5)  14 MAR 2019 13:41
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2019.3.5)  14 MAR 2019 21:06
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -846,14 +846,14 @@ l.1 \chapter
             {Linear Regression} [2
 
 
-]) [3]
+] [3]) [4]
 \openout2 = `chapters/02_lts.aux'.
 
- (./chapters/02_lts.tex [4
+ (./chapters/02_lts.tex) [5
 
 
 
-]) [5]
+]
 \openout2 = `chapters/03_algorithms.aux'.
 
  (./chapters/03_algorithms.tex [6
@@ -864,18 +864,18 @@ l.1 \chapter
 
 Package amsmath Warning: Foreign command \atopwithdelims;
 (amsmath)                \frac or \genfrac should be used instead
-(amsmath)                 on input line 155.
+(amsmath)                 on input line 140.
 
 [9]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 203.
+(Font)              <12> on input line 188.
 
-Overfull \hbox (6.96513pt too wide) in paragraph at lines 227--227
+Overfull \hbox (6.96513pt too wide) in paragraph at lines 212--212
 [] 
  []
 
 [10]
-Underfull \hbox (badness 10000) in paragraph at lines 255--258
+Underfull \hbox (badness 10000) in paragraph at lines 240--243
 
  []
 
@@ -924,7 +924,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 159.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 159.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 159.
 Package rerunfilecheck Info: File `BP_Jenc_Martin_2019.out' has not changed.
-(rerunfilecheck)             Checksum: 714CE1778EC734841A17CB3CC72A2CB2;2376.
+(rerunfilecheck)             Checksum: F083CE73D8FE10DC5546C6841569CF63;2503.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
@@ -932,18 +932,18 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 159.
  ) 
 Here is how much of TeX's memory you used:
- 15057 strings out of 494945
- 209585 string characters out of 6181033
- 355250 words of memory out of 5000000
- 18003 multiletter control sequences out of 15000+600000
+ 15060 strings out of 494945
+ 209646 string characters out of 6181033
+ 355402 words of memory out of 5000000
+ 18004 multiletter control sequences out of 15000+600000
  73575 words of font info for 64 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  41i,21n,36p,1155b,657s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-rmtt.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rmsc.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx6.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx8.pfb></usr/share/texmf/fonts/type1/public/lm/lmbxi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmcsc10.pfb></usr/share/texmf/fonts/type1/public/lm/lmex10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi12.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi6.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi8.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr6.pfb></usr/share/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on BP_Jenc_Martin_2019.pdf (37 pages, 405816 bytes).
+Output written on BP_Jenc_Martin_2019.pdf (37 pages, 415930 bytes).
 PDF statistics:
- 491 PDF objects out of 1000 (max. 8388607)
- 423 compressed objects within 5 object streams
- 140 named destinations out of 1000 (max. 500000)
+ 493 PDF objects out of 1000 (max. 8388607)
+ 425 compressed objects within 5 object streams
+ 142 named destinations out of 1000 (max. 500000)
  174 words of extra memory for PDF output out of 10000 (max. 10000000)
 

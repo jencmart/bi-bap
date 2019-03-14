@@ -1,17 +1,5 @@
 \chapter{Algorithms}
 
-\newcommand{\paramhat}[1]{\boldsymbol{\hat{\textbf{#1}}}}
-\newcommand{\param}[1]{\textbf{\text{#1}}}
-\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
-% vector x = x1,x2,...,xn
-\newcommand{\showVec}[3]{\vec{#1} = (\lowercase{#2}_1, \lowercase{#2}_2,\ldots,\lowercase{#2}_#3)}
-% matrix notation
-\newcommand{\m}[1]{\boldsymbol{\uppercase{#1}}}
-% \cite{rouss:2000}
-
-% \usepackage{amssymb}
-\let\vec\boldsymbol
-
 
 % \textbf{X} - bold
 % \pmb{X} - strong bolda
@@ -22,12 +10,16 @@
 % mathbf give bold 
 % bold-symbol gives bold cursive
 % **********************************************************************************
-% ************************* FAST - LTS *********************************************
+% *************% ************* ************ FAST - LTS *********************************************
+% ************* ************ FAST - LTS *********************************************
+% ************* ************ FAST - LTS *********************************************
+% ************* ************ FAST - LTS *********************************************
+% ************ FAST - LTS *********************************************
 % **********************************************************************************
 \section{FAST-LTS}
 In this section we will introduce FAST-LTS algorithm\cite{rouss:2000}. 
 It is, as well as in other cases, iterative algorithm. We will discuss all main components
-of the algorithm starting with its core idea called concentration step which 
+of the algorithm starting with its core idea called concentration step which '
 authors simply call C-step.
 
 % $\showVec{\hat{w}}{w}{n}$
@@ -40,13 +32,6 @@ function is less or equal to the old one. Based on this property we will be able
 to create sequence of LTS estimates which will lead to better results.
 
 % \usepackage{etoolbox}
-
-\newcommand{\what}[1]{
-	\vec{\hat{w}_#1}
-}
-\newcommand{\whatn}{
-	\vec{\hat{w}}
-}
 
 
 %******************************** C-STEP theorem  ***************************************************%

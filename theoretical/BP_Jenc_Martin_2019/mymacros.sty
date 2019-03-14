@@ -19,10 +19,36 @@
 \newtheorem{corollary}[defi]{Corollary}
 \newtheorem{lemma}[defi]{Lemma}
 \newtheorem{observation}[defi]{Observation}
+\newtheorem{definition}[defi]{Definition}
 
 % \theoremstyle{remark}
 % \newtheorem{note}[defi]{Note}
 
-\newtheorem{prik}[defi]{Příklad}
+
 \newtheorem{cvi}{Cvičení}[section]
 \newtheorem{cvi*}{Cvičení}[cvi]
+
+
+% other usefull tools
+\newcommand{\paramhat}[1]{\boldsymbol{\hat{\textbf{#1}}}}
+
+\newcommand{\param}[1]{\textbf{\text{#1}}}
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+% vector x = x1,x2,...,xn
+\newcommand{\showVec}[3]{\vec{#1} = (\lowercase{#2}_1, \lowercase{#2}_2,\ldots,\lowercase{#2}_#3)}
+% matrix notation
+\newcommand{\m}[1]{\boldsymbol{\uppercase{#1}}}
+% \cite{rouss:2000}
+
+% \usepackage{amssymb}
+\let\vec\boldsymbol
+
+
+% shortcuts
+\newcommand{\what}[1]{
+	\vec{\hat{w}_#1}
+}
+\newcommand{\whatn}{
+	\vec{\hat{w}}
+}
+
