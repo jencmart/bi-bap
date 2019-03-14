@@ -14,7 +14,7 @@
 
 
 % \textbf{X} - bold
-% \pmb{X} - strong bold
+% \pmb{X} - strong bolda
 % \boldmath{X} - quite normal
 %  $\textbf{X}^T$ - TRANSPOSED MATRIX
 
@@ -54,7 +54,7 @@ to create sequence of LTS estimates which will lead to better results.
 \begin{theorem}
 Consider dataset consisting of
 $\vec{x_1}, \vec{x_2} \ldots,\vec{x_n}$ explanatory variables where 
-$\vec{x_i}\in\mathbb{R}^p\,, \forall \vec{x_i} = (x^i_1, x^i_2,\ldots,x^i_p)$ where $x^i_1 = 1$
+$\vec{x_i}\in\mathbb{R}^p\,, \forall \vec{x_i} = (fx^i_1, x^i_2,\ldots,x^i_p)$ where $x^i_1 = 1$
 and its corresponding $y_1, y_2,\ldots,y_n$ response variables. 
 Let's also have $\vec{\hat{w}_0}\in\mathbb{R}^p$ any p-dimensional vector and 
 $H_0 = \{{h_i ; h_i \in\mathbb{Z}\,, 1 \leq h_i \leq n\}}\,, |H_0| = h$. 
@@ -79,7 +79,7 @@ and its corresponding $RSS(\what{1}) = \sum_{i\in H_1} (r_1(i))^2$ sum of least 
 	Together we get $$RSS(\what{1})=\sum_{i\in H_1}(r_1(i))^2\leq\sum_{i\in H_1}(r_0(i))^2\leq\sum_{i\in H_0}(r_0(i))^2=RSS(\what{0})$$
 \end{proof}
 
-%******************************** C-STEP algorithm **********************************************%
+%******************************** C-STEP algorithm ***************************************************************************%
 
 \begin{corollary} 
 	Based on previous theorem, using some $\vec{\hat{w}^{OLS(H_{old})}}$  on $H_{old}$ subset of observations we can
