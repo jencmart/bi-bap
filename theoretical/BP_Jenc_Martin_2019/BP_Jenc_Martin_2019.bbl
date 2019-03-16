@@ -7,6 +7,17 @@
   \urlstyle{rm}\Url}\fi
 \providecommand{\eprint}[2][]{\biburl{#2}}
 
+\bibitem{rouss:1990}
+Rousseeuw, P.; C.~van Zomeren, B. Unmasking Multivariate Outliers and Leverage
+  Points. \emph{Journal of The American Statistical Association - J AMER
+  STATIST ASSN}, volume~85, 06 1990: pp. 633--639,
+  \doi{10.1080/01621459.1990.10474920}.
+
+\bibitem{rouss:1986}
+Massart, D.~L.; Kaufman, L.; et al. Least median of squares: a robust method
+  for outlier and model error detection in regression and calibration.
+  \emph{Analytica Chimica Acta}, volume 187, 1986: pp. 171--179.
+
 \bibitem{rouss:2000}
 Rousseeuw, P.~J.; Driessen, K.~V. An Algorithm for Positive-Breakdown
   Regression Based on Concentration Steps. In \emph{Data Analysis: Scientific

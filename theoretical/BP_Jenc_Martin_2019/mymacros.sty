@@ -44,6 +44,8 @@
 % \usepackage{amssymb}
 \let\vec\boldsymbol
 
+\newcommand{\defterm}[1]{\textit{#1}}
+
 
 % shortcuts
 \newcommand{\what}[1]{
@@ -54,4 +56,23 @@
 }
 
 
+\usepackage{amsmath}
+% limits underneath
 \DeclareMathOperator*{\argmin}{arg\,min}
+
+\DeclareMathOperator{\bdpoint}{bdpoint}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% \DeclareMathOperator{\minim}{minimize}
+
+%\DeclareMathOperator*{\argmin}{arg\,min}
+
+% \DeclareMathOperator{\minim}{minimize}
+% \DeclareMathOperator{\maxim}{maximize\quad}
+% \DeclareMathOperator{\minimwrt}{minimize\ (w.r.t.\ K)\quad}
+% \DeclareMathOperator{\st}{subject\ to\quad}
+% \DeclareMathOperator{\find}{find\quad}
+
+
+
+
