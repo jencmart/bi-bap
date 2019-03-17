@@ -2,6 +2,31 @@
 
 In this chapter we'll introduce currently popular algorithms of computing FAST-LTS estimate.
 
+\section{Computing OLS}  \label{ols:computing}
+In this section we'll describe what algorithms of computing OLS exists. We'll see that beside computing OLS directly from the objective function there are better ways. Let's now start with this straightforward  approach.
+
+\begin{lemma}
+	Time complexity of OLS  on $\m{X}^{n \times p}$ and $\m{Y}^{n \times 1}$ is $O(p^2n)$.
+\end{lemma}
+
+\begin{proof}
+	Normal equation of OLS is $\vec{\hat{w}} = (\m{X^T}\m{X})^{-1}\m{X^T}\m{Y}$.
+	Time complexity  of matrix multiplication $\m{A}^{m \times n}$ and  $\m{B}^{n \times p}$ is $\sim \mathcal{O}(mnp)$.
+	Time complexity of matrix $\m{C}^{m \times m}$ is $\sim \mathcal{O}(m^3)$
+	So we need to compute 
+	$\m{A} = \m{X^T}\m{X} \sim \mathcal{O}(p^2n)$ and
+	$\m{B} = \m{X^T}\m{Y} \sim \mathcal{O}(pn)$ and
+	$\m{C} = \m{A}^{-1} \sim \mathcal{O}(p^3)$ and finally 
+	$\m{C}\m{B} \sim \mathcal{O}(p^2)$. 
+	That gives us $\mathcal{O}(p^2n + pn + p^3 + p^2)$. Because  $\mathcal{O}(p^2n)$ and 
+	$\mathcal{O}(p^3)$ asymptotically dominates over $\mathcal{O}(p^2)$ and $\mathcal{O}(pn)$ we can
+	write $\mathcal{O}(p^2n + p^3)$.
+
+	\todo{ CO zo toho je vic? Neni casove narocnejsi vynasobeni $\m{X^T}\m{X}$ nez inverze, kdyz bereme v uvahu $n >> p$ ???}
+	
+\end{proof}
+\todo{complete this section with describing computation of OLS using matrix decomposition}
+
 \section{Computing LTS}
 
 \begin{note}
@@ -81,6 +106,7 @@ and its corresponding $RSS(\what{1}) = \sum_{i\in H_1} (r_1(i))^2$ sum of least 
 	$RSS(\what{{old}}) \leq RSS(\what{{new}}) \leq \ldots$. One step of this process is described by following pseudocode. Note that for C-step we actually need only $\vec{\hat{w}}$ 
 	 without need of passing  $H$.
 \end{corollary}
+\todo{include and reference nice image showing one c-step }
 
 \begin{algorithm}[H]
 	\label{alg:Cstep}
@@ -102,35 +128,15 @@ and its corresponding $RSS(\what{1}) = \sum_{i\in H_1} (r_1(i))^2$ sum of least 
 %******************************** C-STEP alg. time complexity ******************************************%
 \begin{observation} 
 	Time complexity of algorithm C-step \ref{alg:Cstep} is the same as time complexity as OLS. Thus $O(p^2n)$
-	$\boldsymbol{{TODO}}$
+	\todo{create better proof. And take into account both versions - directly vs. using decomposition}
 \end{observation} 
 
-\begin{lemma}
-	Time complexity of OLS  on $\m{X}^{n \times p}$ and $\m{Y}^{n \times 1}$ is $O(p^2n)$.
-\end{lemma}
-
-\begin{proof}
-	Normal equation of OLS is $\vec{\hat{w}} = (\m{X^T}\m{X})^{-1}\m{X^T}\m{Y}$.
-	Time complexity  of matrix multiplication $\m{A}^{m \times n}$ and  $\m{B}^{n \times p}$ is $\sim \mathcal{O}(mnp)$.
-	Time complexity of matrix $\m{C}^{m \times m}$ is $\sim \mathcal{O}(m^3)$
-	So we need to compute 
-	$\m{A} = \m{X^T}\m{X} \sim \mathcal{O}(p^2n)$ and
-	$\m{B} = \m{X^T}\m{Y} \sim \mathcal{O}(pn)$ and
-	$\m{C} = \m{A}^{-1} \sim \mathcal{O}(p^3)$ and finally 
-	$\m{C}\m{B} \sim \mathcal{O}(p^2)$. 
-	That gives us $\mathcal{O}(p^2n + pn + p^3 + p^2)$. Because  $\mathcal{O}(p^2n)$ and 
-	$\mathcal{O}(p^3)$ asymptotically dominates over $\mathcal{O}(p^2)$ and $\mathcal{O}(pn)$ we can
-	write $\mathcal{O}(p^2n + p^3)$.
-
-	$\boldsymbol{{TODO}}$ CO zo toho je vic? Neni casove narocnejsi vynasobeni $\m{X^T}\m{X}$ nez inverze, kdyz bereme v uvahu $n >> p$ ???
-\end{proof}
 
 \begin{proof}
 	In C-step we must compute $n$ absolute residuals. Computation of one absolute residual consists of
 	matrix multiplication of shapes $1 \times p$ and $p \times 1$ that gives us $\mathcal{O}(p)$. Rest is in constant time.
 	So time of computation $n$ residuals is $\mathcal{O}(np)$.
-	Next we must select set of $h$ smallest residuals which can be done in $\mathcal{O}(n)$ using modification 
-	of algorithm QuickSelect. reference: $\boldsymbol{{TODO}}$
+	Next we must select set of $h$ smallest residuals which can be done in $\mathcal{O}(n)$ using modification of algorithm QuickSelect. \todo{reference or define quick select} 
 	Finally we must compute $\hat{w}$ OLS estimate on $h$ subset of data.
 	Because $h$ is linearly dependent on $n$, we can say that it is $\mathcal{O}(p^2n + p^3)$ which 
 	is asymptotically dominant against previous steps which are $\mathcal{O}(np + n)$.
@@ -183,7 +189,8 @@ Above theorem gives us clue to create algorithm described by following pseudocod
 	\Return{ $\what{{new}}$, $H_{new}$ }\;
 \end{algorithm}
 
-It is important to note, that although maximum number of steps of this algorithm is ${n \choose h}$ in practice it is very low, most often under $20$ steps. $\boldsymbol{TODO}$ nejaky hezky grafik ktery to ukazuje....
+It is important to note, that although maximum number of steps of this algorithm is ${n \choose h}$ in practice it is very low, most often under $20$ steps.
+\todo{include sime nice grap which show this. or table ?}
 That is not enough for the algorithm $Repeat-C-step$ to converge to global minimum, but it is necessary condition. That gives us an idea how to create the final algorithm. \cite{rouss:2000}
 
 Choose a lot of initial subsets $H_1$ and on each of them apply algorithm Repeat-C-step. From all converged subsets with corresponding $\hat{w}$ estimates choose that which has lowest $RSS(\hat{w})$. 
@@ -246,7 +253,7 @@ $\pi: \hat{n} \rightarrow \hat{n}$ be permutation of $\hat{n}$ such that $|r({\p
 
 \begin{itshape}
 Note that there are other possibilities of choosing $H_1$ subset other than these presented in \cite{rouss:2000}.
-We'll properly discuss them in chapter $\boldsymbol{TODO}$.\\
+We'll properly discuss them in chapter \todo{write reference to section where this'll be}
 \end{itshape}
 
 Last missing piece of the algorithm is determining number of $m$ initial $H_1$ subsets, which will maximize probability to at least one of them will converge to good solution. Simply put, the more the better. So before we will answer this question properly, let's discuss some key observations about algorithm.
@@ -268,7 +275,7 @@ So even though authors don't specify size of $m$ explicitly, they propose that a
 This process is called Selective iteration.
 
 \begin{itshape}
-	We can choose $m$ with respect to observation \ref{cStepM}. In ideal case we would like to have probability of existence at least one initial $H_1$ subset close to $1$. As we see $m$ is exponentially dependent on $p$ and at the same time in practice we don't know percentage of outliers in dataset. So it is difficult to mention exact value. Specific values of $m$ in respect to data size is visible in table $\boldsymbol{TODO}$. So we can say that with $p < 10$ choosing $m = 500$ is usually safe starting point.
+	We can choose $m$ with respect to observation \ref{cStepM}. In ideal case we would like to have probability of existence at least one initial $H_1$ subset close to $1$. As we see $m$ is exponentially dependent on $p$ and at the same time in practice we don't know percentage of outliers in dataset. So it is difficult to mention exact value. Specific values of $m$ in respect to data size is visible in table \todo{include some nice table}. So we can say that with $p < 10$ choosing $m = 500$ is usually safe starting point.
 \end{itshape}
 
 \subsubsection{Nested extension}
