@@ -33,7 +33,7 @@
 \contentsline {section}{\numberline {3.1}Data}{25}{section.3.1}
 \contentsline {section}{\numberline {3.2}Results}{25}{section.3.2}
 \contentsline {section}{\numberline {3.3}Outlier detection}{25}{section.3.3}
-\contentsline {chapter}{Conclusion}{27}{chapter*.22}
-\contentsline {chapter}{Bibliography}{29}{section*.24}
+\contentsline {chapter}{Conclusion}{27}{chapter*.21}
+\contentsline {chapter}{Bibliography}{29}{section*.23}
 \contentsline {appendix}{\chapternumberline {A}Datasets}{31}{appendix.A}
 \contentsline {appendix}{\chapternumberline {B}Contents of enclosed CD}{33}{appendix.B}

@@ -242,38 +242,80 @@ For increasing number of data samples $n$ this tends to zero. We can see that or
 Least trimmed squares (LTS) estimator builds on OLS but is more robust. In this section we'll define LTS estimator and show that it's breakdown point is variable and can go upt to maximum possible value of breakdown point, thus $0.5$.
 
 
-\begin{definition} Estimate of regression parameters using least trimmed squares (LTS) on $h$ observations out of $n$ is defined as
-    \begin{equation}
-        \vec{\hat{w}^{LTS, h, n}} =  \sum\limits_{i=1}^h r_{i:n}^2(\vec{w}) 
+\begin{definition} Let's have $\vec{X} \in \mathbb{R}^{n,p}$, $\vec{y} \in \mathbb{R}^{n,1}$, 
+    $\vec{w} \in \mathbb{R}^p$ and $h$, $ n/2 \leq h \leq n$. Objective function of LTS is then denoted as 
+    \begin{equation} 
+        \of^{(LTS,\vec{X}, \vec{y})}(\vec{w}) =  \sum\limits_{i=1}^h r_{i:n}^2(\vec{w})  
     \end{equation}
-    where $h$ such that $ n/2 \leq h \leq n$ is number of used observations and 
-    $r_{1:n}(\vec{w}), r_{2:n}(\vec{w}),\ldots, r_{h:n}(\vec{w})$ are $h$ smallest residuals.
 \end{definition}
 
-Even though that estimation using LTS seems similar to the estimation using OLS the computation is much more complex because the smallest residuals are dependent on $\vec{w}$. This fact makes from finding LTS estimate non-convex optimization problem and finding global minimum is NP-hard. 
+Even though that objective function of LTS seems similar to the OLS objective function, finding minimum is much more complex because the smallest residuals are dependent on $\vec{w}$. This fact makes from finding LTS estimate non-convex optimization problem and finding global minimum is NP-hard. 
 \todo{reference}
 
-Let's denote how actually objective function of LTS which we wants to minimize looks like.
+From this form of objective function we can hardly see how to optimize it, because we have $h$ smallest residuals $r_i$ which are dependent on vector of regression coefficients $\vec{w}$. 
+Let's try to transform this objective function to another form and from which it'll be clear what we need to do in order to minimize this objective function.
 
-\begin{definition} 
-    $\of^{(LTS,\vec{X}, \vec{y})}(\vec{w}) = \sum\limits_{i=1}^n (y_i - \vec{w}^T\vec{x_i})^2 $
-\end{definition}
+% First let's introduce extended version of model of linear regression. We have couple of options. One option is that if we want to take into account that our model include outliers we can assume that errors $\varepsilon$ are not from normal distribution $\mathcal{N}(0,\,\sigma^{2})$ but from some other unknown distribution which is most probably heavy-tailed. But that wouldn't help us much. Other option is thats called \defterm{mean shift outlier model} \cite{hawkins:1994} that extends standard linear regression model so that
 
-\todo{denote better form of objective function}
-% z teto formulace objektove funkce lze tezko videt jakym zpusobem mame tutuo funkci minimalizovat
-% protoze zde mame h nejmensich rezidui ktere jsou ale zavisle na wektoru w 
-% Pojdme tedy tento tvar preformulovat na jiny, ktery je uvaden v literature a na zaklade ktere budueme mit lepsi prestavu o teto funkci.
+% \begin{equation} \label{extendedlrmodel}
+%    \vec{y} = \vec{X}\vec{w} + \vec{I}\vec{\lambda} + \vec{\varepsilon}
+% \end{equation}
+% where  $\vec{\lambda} \in \mathbb{R}^{n\times 1}$ is vector which contains values which represents outlier displacements. We assume that at least half of the values of the vector are zeros. 
+% Due to that errors are still normally distributed.
+% \todo{or like this ?}
 
-% Pojdme nyni formulovat rozsirenou verzi modelu linearni regrese. Moznosti jsou v zasade dve. Jedna z nich je definovana tak, ze misto predpokladu ze errory maji normalni rozdeleni predpokladame, ze toto rozdeleni je nejake jine, nezname. druha varinta je pro nase ucely vhodnejsi a je definovana tak, ze ze y= xw + Ilambda + err kde erory jsou normalne rozdelene, ale ze lembda je vektor, ktery obsahuje hodnoty ktere reprezentuji posun v chybnem mereni. Predpokladame ze tento vektor obsahuje alespon z poloviny nuly. Kdybychom potom chteli vytvorit model, vytvorime ho tak, ze najdeme pozice, kde jsou tyto nenulove hodnoty a udelame standardni ols fit na tomto subsetu. to je v zasade prinicp metodty lts.
+Let's assume for now that we know $\vec{\hat{w}^{LTS, h, n}}$ vector of regression coefficients. With this in mind create permutation of $\hat{n} = \{{1,2,\ldots, n\}}$ such that 
+\begin{equation}
+    r_{i:n} = r_{\pi(j)}\\, \ \ j \in \hat{n}
+\end{equation}
+Next let's mark set
+ \begin{equation}
+   Q^{(n,h)} = \{{\vec{m} \in \mathbb{R}^n \\, m_i \in \{{0, 1\}} \\,i \in \hat{n} \\, \vec{1}\vec{m} = h \}}
+\end{equation}
+which is simply set of all vectors $\vec{m} \in \mathbb{R}^n$ which contain $h$ ones and $n-h$ zeros. We can now mark $\vec{m}_{LTS} \in Q^{(n,h)}$  such that  $m^{(LTS)}_j = 1$ when $\pi(j) \leq h$ and $m^{(LTS)}_j = 0$ otherwise. Then
 
-% Predstavme si nyni ze tyto pozice zname a oznacme vektor e 0,1 delky n takovy, ze obsahuje jednicky prave na mistech kde jsou nenulove hodnty ve vektoru lamda. potom bychom mohli rici, ze 
-% lts odhad w = suma do n takova, kde nasobime tim vektorem.
+\begin{equation} \label{ltshat}
+    \vec{\hat{w}^{LTS, h, n}} =  \sum\limits_{i=1}^h r_{i:n}^2(\vec{w}) =  \sum\limits_{i=1}^n 
+    m^{(LTS)}_i r_{i}^2(\vec{w})
+\end{equation}
+What that simply means that if we know vector $\vec{m}_{LTS}$ than we can simply compute LTS estimate as OLS estimate with $\vec{X}$ and $\vec{Y}$ multiplied by $\vec{M}_{LTS} = diag(\vec{m}^T_{LTS})$. Thus 
 
-% My ale predem takovy vektor nezme. Pojme nyni tedy podrobne prozkoumat vlastnosti takoveho vektoru.
-% Tento vektor je jiste elem mnzoina vsech binarnich vektoru kde je 0 az h jednicek kde h mensi rovno polovina. takovych vektoru je ocividne n nad h. Jedna z moznosti reseni tedy existuje najit takovy vektor pro ktery ma ols nejmensi. 
-% Muzeme si uvedomit ze tato definice je ekvivalentni definici na standardnim modelu linearni regrese. Pokud bychom ji chteli vyjadrit i tak, zavedeme nejdrive permutaci
-% pi takovou, ze 
+\begin{equation} 
+    \vec{\hat{w}^{LTS, h, n}} = (\vec{X}^T\vec{M}^T_{LTS}\vec{X}\vec{M}_{LTS})^{-1}\vec{X}^T\vec{M}^T_{LTS}\vec{M}_{LTS}\vec{y}
+\end{equation}
+That means finding minimum of LTS objective function is equal to solving OLS over all vectors 
+$\vec{m} \in Q^{(n,h)}$. Thus if we mark $\tilde{X} = \vec{M}\vec{X} $ and $\tilde{y} = \vec{M}\vec{y} $, then
 
-% $\pi: \hat{n} \rightarrow \hat{n}$ permutation of $\hat{n}$ such that $|r_0({\pi(1)})| \leq |r_0({\pi(2)})| \leq \ldots \leq |r_0({\pi(n)})|$
+\begin{align*} 
+    \vec{\hat{w}^{LTS, h, n}}
+     &=  \sum\limits_{i=1}^n 
+     m_i r_{i}^2(\vec{w})\\
+    &= \minim_{\vec{m} \in Q^{(n,h)}} 
+    \Big( \argmin_{\vec{w} \in\mathbb{R}^p} 
+    \of^{(OLS,\vec{M}\vec{X},  \vec{M}\vec{y} )} \Big)\\
+    &= \minim_{\vec{m} \in Q^{(n,h)}} 
+    \Big(\minim_{\vec{w} \in\mathbb{R}^p}  \norm{ \vec{M}\vec{y} -   \vec{M}\vec{X}\vec{w}  }^2 \Big)
+\end{align*}
+
+Finally we can minimize inner part by substituting $\vec{w}$ with \ref{ltshat}. By that we get
+
+\begin{align*}
+    \vec{\hat{w}^{LTS, h, n}}
+    &=  \minim_{\vec{m} \in Q^{(n,h)}} 
+    \Big( \norm{ \vec{M}\vec{y} -  \vec{M}\vec{X}(\vec{X}^T\vec{M}^T\vec{M}\vec{X})^{-1}\vec{X}^T\vec{M}^T\vec{M}\vec{y}  }^2 \Big)\\
+    &= \minim_{\vec{m} \in Q^{(n,h)}} 
+    \Big( \norm{ \vec{M}\vec{y} -  \vec{M}\vec{X}(\vec{X}^T\vec{M}\vec{X})^{-1}\vec{X}^T\vec{M}\vec{y}  }^2 \Big)
+\end{align*}
+
+We can easily see, that we've got objective function with argument $\vec{m} \in Q^{(n,h)}$. We can also clearly see that solution to minimizing this OF could by done straightforwardly by iterating over the  $Q^{(n,h)}$ set. 
+
+Unfortunately this set is very big namely $\binom{n}{h}$ so this approach will fail if the $n$ will be greater that $30$ or $40$. To overcome this problem multiple algorithms was proposed. Majority of them are probabilistic algorithms but beside that some exact algorithms were proposed. 
+
+Before moving to the next chapter and start describing those algorithms lets point out some fact about the number of residuals $h$ and how it actually makes least trimmed squares robust estimator.
+LTS reaches maximum breakdown point when $h = [(n/2] + [(p+1)/2]$ (where $[.]$ denotes largest integer function) and that is  which $0.5$. That means that up to $50\%$ of the data can be outliers. In practice this number is usually lower and if upper bound of percentage of outliers is known, then $h$ should be set to match this percentage.
+
+% \begin{theorem} % rouss leroy 1984 page 132 (145)
+%     Breakdown value of LTS estimator is equal to $h/n$.
+
 
 
