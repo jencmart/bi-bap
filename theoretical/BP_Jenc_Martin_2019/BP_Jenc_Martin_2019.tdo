@@ -2,11 +2,11 @@
 \contentsline {todo}{ols estimate is BLUE if we assume this and that}{10}{section*.10}
 \contentsline {todo}{include some nice image showing 1/n robustness}{12}{section*.11}
 \contentsline {todo}{reference}{12}{section*.12}
-\contentsline {todo}{ CO zo toho je vic? Neni casove narocnejsi vynasobeni $\boldsymbol {\uppercase {X^T}}\boldsymbol {\uppercase {X}}$ nez inverze, kdyz bereme v uvahu $n >> p$ ???}{15}{section*.13}
-\contentsline {todo}{complete this section with describing computation of OLS using matrix decomposition}{15}{section*.14}
-\contentsline {todo}{include and reference nice image showing one c-step }{17}{section*.15}
-\contentsline {todo}{create better proof. And take into account both versions - directly vs. using decomposition}{17}{section*.16}
-\contentsline {todo}{reference or define quick select}{17}{section*.17}
-\contentsline {todo}{include sime nice grap which show this. or table ?}{18}{section*.18}
-\contentsline {todo}{write reference to section where this'll be}{20}{section*.19}
-\contentsline {todo}{include some nice table}{20}{section*.20}
+\contentsline {todo}{ CO zo toho je vic? Neni casove narocnejsi vynasobeni $\boldsymbol {\uppercase {X^T}}\boldsymbol {\uppercase {X}}$ nez inverze, kdyz bereme v uvahu $n >> p$ ???}{16}{section*.13}
+\contentsline {todo}{complete this section with describing computation of OLS using matrix decomposition}{16}{section*.14}
+\contentsline {todo}{include and reference nice image showing one c-step }{18}{section*.15}
+\contentsline {todo}{create better proof. And take into account both versions - directly vs. using decomposition}{18}{section*.16}
+\contentsline {todo}{reference or define quick select}{18}{section*.17}
+\contentsline {todo}{include sime nice grap which show this. or table ?}{19}{section*.18}
+\contentsline {todo}{write reference to section where this'll be}{21}{section*.19}
+\contentsline {todo}{include some nice table}{21}{section*.20}

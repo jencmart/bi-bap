@@ -1,6 +1,74 @@
 \chapter{Algorithms}
 
-In this chapter we'll introduce currently popular algorithms of computing LTS estimate. Before 
+% mathbb - double -> R,N,Z ...
+% mathcal - curved -> N, O
+% sigma tilde hat 
+In previous chapter we've covered necessary theory needed to implement algorithms that are in this chapter. Let's quickly recap most important fact that we know so far.
+
+With robust linear regression problem we assume that our model with intercept
+\begin{equation}
+		y_i = \vec{w}^T\vec{x_i} + \varepsilon_i
+\end{equation}
+where $\varepsilon_i \sim \mathcal{N}(0, \sigma^2)$ is $i.i.d.$ random variable has some displacements in upmost half of the explanatory $\vec{x_i}$ or dependent $y_i$ variables. Thus only some subset $\vec{\tilde{X}} = \vec{M}\vec{X}$ with corresponding $\vec{\tilde{y}} = \vec{}\vec{y}$ where $\vec{M} = diag(\vec{m})$ and $\vec{m} \in Q^{(n,h)}$ can be perceived so that 
+
+\begin{equation}
+	\tilde{y}_i \sim \mathcal{N}(\vec{w}^T\vec{\tilde{x}_i}, \sigma^2).
+\end{equation}
+We'll denote this subset simply as $h subset$ of data in order to simplify following text.
+We've also learnt that finding solution of LTS we need to find correct $h$ subset and then calculate estimate of regression coefficients $\tilde{w}$. 
+So to find exact solution of LTS we need to go through all h subsets, find the correct one and calculate ordinary least squares fit to get the regression coefficients. There are not much of other options because objective function is non-differentiable and non-convex with lots of local minima.  
+
+We also know that exhaustive approach will fail due  exponential size of $Q^{(n,h)}$. So what are the possibilities? First attempts were based on iterative removal data samples whose residuum had the highest value based on OLS fit on whole dataset. Such attempts were proven to be completely wrong because initial OLS fit is usually already  heavily affected by outliers and we my end up removing data samples which represents original model.
+
+Then there are algorithms based on purely on random approach. 
+
+On such algorithm  is Random solution algorithm \cite{bai2003random} which is basically randomly selects $L$ $h$ subsets and subsequently compute OLS fit on each of them and selecting fit with smallest $RSS$ and consider it a approximate solution. Such approach is very simple, but in general probability of selecting at least one such subset from $L$ subsets which don't contain outliers thus has a chance of producing good result goes to zero for increasing number of data samples $n$ as we'll describe in detail in \ref{hrandomsamples}.
+
+Another very similar algorithm called Resampling algorithm introduced in \cite{rousseeuw1987robust}
+have basically just a little difference and that it select vectors from $Q^{(n,p+1)}$ instead of 
+$Q^{(n, h)}$. This minor tweak has not only higher chance to succeed because number of vectors in this set is significantly lower than in $Q^{(n, h)}$ (at least if $h$ conservatively chosen thus $h = [(n/2] + [(p+1)/2]$) but also because probability of selecting $L$ subsets of size which is independent of $n$ gives nonzero probability of selecting at least one subset such that it don't include outliers see \ref{prandomsamples} for more details.
+
+Generating all possible h subsets is computationally hard and relying on selecting random subsets don't produce sufficiently good results. So what are our options? In \cite{hawkins1999improved} two criterions called \defterm{necessary conditions} are introduced. They talk about necessary properties which some $h$ subset must satisfy so it could be set which leads to global optima of LTS. Let's introduce those two necessary conditions. For that it's convenient not to only label $h$ subset of used observations but also complementary subset of not used observations. We'll refer to this complementary subset as $g$ subset.
+
+\begin{theorem} Strong necessary condition.
+The criterion cannot be improved by exchanging any of the observations from $g$ subset 
+for any of the currently used observations in $h$ subset. Thus $\vec{m} \in Q^{(n, h)}$ meets the criterion if  $J(\vec{m}) \leq J(\vec{m_{swap}})$ where $\vec{m_{swap}}$ is any vector from $Q^{(n, h)}$ such that it has same values except one swapped.
+\end{theorem}
+
+\begin{proof}
+	Trivial. LTS uses subset of $h$ observations that minimize it's objective function. To be this true none of the swaps between observations from $h$ subset and $g$ subset  must not improve (reduce) it's objective function. 
+\end{proof}
+Based on this idea algorithm can be created. We'll discuss it in detail in \ref{section_feasible_solution}.
+
+Second necessary condition named \defterm{weak necessary condition} 
+\begin{theorem}
+	$\vec{m} \in Q^{(n, h)}$ meets the criterion if for each observation from $h$ subset has smaller (or equal) squared residual than any observation from $g$ subset.
+\end{theorem}	
+Again, based on this criterion an algorithm can be crated. Corollary of this criteria together with proof can be found in \ref{section_fast_lts}. 
+
+Very interesting consequence which we'll use later gives us following lemma.
+
+\begin{lemma} \label{lemma_conditions}
+	Strong necessary condition is not satisfied unless weak necessary condition in satisfied. Thus if strong condition is satisfied then weak is also. 
+\end{lemma}
+
+\begin{proof}
+	We'll make proof by contradiction. Let's assume that we have $\vec{m} \in Q^{(n, h)}$ and $J(\vec{m})$ for which strong necessary condition is satisfied but weak necessary condition is not. That means there exists $\vec{x_i}$ with $y_i$ from $h$ subset and $\vec{x_j}$ and $y_j$ from $g$ subset such that $r_j^2 < r_i^2$. Thus 
+
+	\begin{equation} 
+		\oflts(\vec{m}) > \oflts(\vec{m}) + r_j^2 - r_i^2  
+	\end{equation}
+
+	Now we just need to show that $\vec{m_{swap}}$ vector that is created by swapping that $j$th observation from $g$ subset with $i$th observation from $h$ subset leads to 
+
+	\begin{equation} 
+	  \oflts(\vec{m}) + r_j^2 - r_i^2  \geq \oflts(\vec{m_{swap}}).
+	\end{equation}
+	That's indeed trivial because $\oflts(\vec{m_{swap}})$ is in fact just OLS hat minimize objective function on given subset of observations. Thats of course contradiction with our assumption which says that strong necessary condition is already satisfied. 
+\end{proof}
+When we'll discuss algorithms based on this conditions we'll show that algorithm based on weak necessary condition is much faster than algorithm based on strong necessary condition which will lead us to another algorithm where we'll use \ref{lemma_conditions}.
+
+Now we've covered all necessary theoretical background and it's time to introduce currently popular algorithms of computing LTS estimate.
 
 \section{Computing OLS}  \label{ols:computing}
 In this section we'll describe what algorithms of computing OLS exists. We'll see that beside computing OLS directly from the objective function there are better ways. Let's now start with this straightforward  approach.
@@ -49,7 +117,7 @@ In this section we'll describe what algorithms of computing OLS exists. We'll se
 % ************* ************ FAST - LTS *********************************************
 % ************ FAST - LTS *********************************************
 % **********************************************************************************
-\section{FAST-LTS}
+\section{FAST-LTS} \label{section_fast_lts}
 In this section we will introduce FAST-LTS algorithm\cite{rouss:2000}. 
 It is, as well as in other cases, iterative algorithm. We will discuss all main components
 of the algorithm starting with its core idea called concentration step which '
@@ -211,7 +279,7 @@ There are a lot of possibilities how to create initial $hH_1$ subset. Lets start
 \subsubsection{Random selection}
 Most basic way of creating $H_1$ subset is simply to choose random $H_1 \subset \{{1,2,\ldots , n\}}$. Following observation will show that it not the best way.
 
-\begin{observation}
+\begin{observation} \label{hrandomsamples}
 	With increasing number of data samples, thus with increasing $n$, the probability of choosing among $m$ random selections of $H_{1_1}, \ldots ,H_{1_m}$ the probability of selecting
 	at least one $H_{1_i}$ such that its corresponding data samples does not contains outliers, goes to $0$.
 \end{observation}
@@ -240,8 +308,7 @@ That means that we should consider other options of selecting $H_1$ subset. Actu
 Let's choose subset $J \subset \{{1,2,\ldots,n\}}\,, |J| = p$. Next compute rank of matrix $\m{X}_{J:}$. If $rank(\m{X}_{J:}) < p$ add randomly selected rows to $\m{X}_{J:}$ without repetition until $rank(\m{X}_{J:}) = p$. Let's from now on suppose that $rank(\m{X}_{J:}) = p$. Next let us mark $\what{0} = OLS(J)$ and corresponding $(r_0(1)), (r_0(2)), \ldots ,(r_0(n))$ residuals.  Now mark $\hat{n} = \{{1,2,\ldots,n\}}$ and let
 $\pi: \hat{n} \rightarrow \hat{n}$ be permutation of $\hat{n}$ such that $|r({\pi(1)})| \leq |r({\pi(2)})| \leq \ldots \leq |r({\pi(n)})|$. Finally put $H_1 = \{{\pi(1)\,, \pi(2)\,,... \pi(h)\}}$ set of $h$ indexes corresponding to $h$ smallest absolute residuals $r_0(i)$.
 
-\begin{observation}
-	\label{cStepM}
+\begin{observation} \label{prandomsamples}
 	With increasing number of data samples, thus with increasing $n$, the probability of choosing among $m$ random selections of $J_{1_1}, \ldots ,J_{1_m}$ the probability of selecting
 	at least one $J_{1_i}$ such that its corresponding data samples does not contains outliers, goes toho
 	$$ 1-(1-(1-\epsilon)^h)^m  > 0$$
@@ -275,7 +342,7 @@ So even though authors don't specify size of $m$ explicitly, they propose that a
 This process is called Selective iteration.
 
 \begin{itshape}
-	We can choose $m$ with respect to observation \ref{cStepM}. In ideal case we would like to have probability of existence at least one initial $H_1$ subset close to $1$. As we see $m$ is exponentially dependent on $p$ and at the same time in practice we don't know percentage of outliers in dataset. So it is difficult to mention exact value. Specific values of $m$ in respect to data size is visible in table \todo{include some nice table}. So we can say that with $p < 10$ choosing $m = 500$ is usually safe starting point.
+	We can choose $m$ with respect to observation \ref{prandomsamples}. In ideal case we would like to have probability of existence at least one initial $H_1$ subset close to $1$. As we see $m$ is exponentially dependent on $p$ and at the same time in practice we don't know percentage of outliers in dataset. So it is difficult to mention exact value. Specific values of $m$ in respect to data size is visible in table \todo{include some nice table}. So we can say that with $p < 10$ choosing $m = 500$ is usually safe starting point.
 \end{itshape}
 
 \subsubsection{Nested extension}
@@ -354,22 +421,36 @@ $RSS_{i} == RSS_{i+1}$ . When we put all together, we'll get FAST-LTS algorithm 
 \end{algorithm}
 
 
-%********************************************************************************************************%
-%******************************************** END *******************************************************%
-%********************************************************************************************************%
-
-
 % \begin{description}
 % 	\item[BP] 
 % 	\item[DP] 
 % \end{description}
 
 
+
+% ****************************************************************************************************
+% ************************* FEASIBLE SOLUTION ******************************************************
+% **************************************************************************************************
+\section{Feasible solution} \label{section_feasible_solution}
+In practical terms,
+there is a decision to be made in considering the swaps – should one
+1. Accept the first swap that leads to an improvement in the criterion,
+2. Search for the swap that leads to the greatest improvement, or
+3. Search for a while, stopping at the first subset has been found that gives at least
+some minimum threshold of improvement.
+In complexity terms, there is no difference between these three approaches (since in
+all of them to establish that a trial solution is feasible you need to evaluate all possible
+swaps), but in practical terms 3 is a clear winner since it leads to many fewer inner
+iterations than 1, and mostly much faster inner iterations than 2. However the overall
+complexity of O(n2p) or O(n3p) remains, and means that the feasible solution algorithms
+based on the case-swap necessary condition cannot be used for very large data sets.
+
+
 % **********************************************************************************
 % ************************* EXACT POLYNOMIAL ALGORITHM *****************************
 % **********************************************************************************
 \section{Exact algorithm}
-\section{Feasible solution}
+
 \section{MMEA}
 \section{Branch and bound}
 \section{Adding row}

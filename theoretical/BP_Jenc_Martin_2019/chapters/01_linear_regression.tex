@@ -1,4 +1,4 @@
-\listoftodos
+% \listoftodos
 
 \chapter{Least trimmed squares}
 In this chapter will be introduced one of the most common regression analysis models which is linear regression model. This model tries to model relationship between one variable which is considered to be dependent and one or more variables which are considered to be explanatory. Relationship is based on model function with parameters which are not known in advance and are estimated from data. We will also introduce one of the most commons methods of finding those parameters in this model, namely ordinary least squares.
@@ -307,7 +307,12 @@ Finally we can minimize inner part by substituting $\vec{w}$ with \ref{ltshat}. 
     \Big( \norm{ \vec{M}\vec{y} -  \vec{M}\vec{X}(\vec{X}^T\vec{M}\vec{X})^{-1}\vec{X}^T\vec{M}\vec{y}  }^2 \Big)
 \end{align*}
 
-We can easily see, that we've got objective function with argument $\vec{m} \in Q^{(n,h)}$. We can also clearly see that solution to minimizing this OF could by done straightforwardly by iterating over the  $Q^{(n,h)}$ set. 
+We can easily see, that we've got objective function with argument $\vec{m} \in Q^{(n,h)}$. This objective function we'll mark as 
+
+\begin{equation} 
+    \oflts(\vec{m}) =  \norm{ \vec{M}\vec{y} -  \vec{M}\vec{X}(\vec{X}^T\vec{M}\vec{X})^{-1}\vec{X}^T\vec{M}\vec{y}  }^2.
+\end{equation}
+We can also clearly see that solution to minimizing this OF could by done straightforwardly by iterating over the  $Q^{(n,h)}$ set.
 
 Unfortunately this set is very big namely $\binom{n}{h}$ so this approach will fail if the $n$ will be greater that $30$ or $40$. To overcome this problem multiple algorithms was proposed. Majority of them are probabilistic algorithms but beside that some exact algorithms were proposed. 
 

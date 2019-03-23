@@ -18,7 +18,9 @@
 			"MMEA",
 			"dataset",
 			"hyperplane",
-			"pseudocode"
+			"mathbb",
+			"pseudocode",
+			"resampling"
 		]
 	}
 }
