@@ -217,7 +217,7 @@ $RSS(\what{{i}}) == RSS(\what{{i+1}})$.
 Answer to this question will be presented by the following theorem.
 
 
-%******************************** C-STEP alg. will converge ********************************************%
+%******************************** C-STEP alg. will converge ***********************%
 \begin{theorem}
 	Sequence of C-step will converge to $\what{{m}}$ after maximum of $m = {n \choose h}$
 	so that $RSS(\what{{m}}) == RSS(\what{{n}})\,, \forall n\geq m$ where $n$ is number of data samples 
@@ -230,7 +230,7 @@ Answer to this question will be presented by the following theorem.
 	$H_i \subset \{{1,2,\ldots,n\}}$. When there is finite number of subsets of size $h$ out of $n$ samples, namely ${n \choose h}$, the sequence will converge at the latest after this number of steps.
 \end{proof}
 
-%******************************** ITERATE-C-STEP algorithm **********************************************%
+%******************************** ITERATE-C-STEP algorithm ****************************%
 Above theorem gives us clue to create algorithm described by following pseudocode.
 
 \begin{algorithm}[H]
@@ -361,14 +361,14 @@ Authors came up with solution they call Nested extension. We will describe it br
 \end{itemize} 
 
 \subsubsection{Putting all together}
-We've described all major parts of the algorithm FAST-LTS. One last thing we need to mention is that even though C-steps iteration usually converge under $20$ steps it is appropriate to introduce two parameters $max_iteration$ and $threshold$ which will limit number of C-steps iterations in some rare cases when convergence is too slow. Parameter $max_iteration$ denotes maximum number of iterations in final C-step iteration till convergence. Parameter $threshold$ denotes stopping criterion such that $| RSS(\what{{i}}) - RSS(\what{{i+1}})| \leq threshold$ instead of 
+We've described all major parts of the algorithm FAST-LTS. One last thing we need to mention is that even though C-steps iteration usually converge under $20$ steps it is appropriate to introduce two parameters $max\_iteration$ and $threshold$ which will limit number of C-steps iterations in some rare cases when convergence is too slow. Parameter $max\_iteration$ denotes maximum number of iterations in final C-step iteration till convergence. Parameter $threshold$ denotes stopping criterion such that $| RSS(\what{{i}}) - RSS(\what{{i+1}})| \leq threshold$ instead of 
 $RSS_{i} == RSS_{i+1}$ . When we put all together, we'll get FAST-LTS algorithm which is described by following pseudocode.
 
 
 \begin{algorithm}[H]
 	\label{alg:FAST-LTS}
-	\KwIn{$\boldsymbol{X} \in \in \mathbb{R}^{n \times p}, \boldsymbol{y} \in \mathbb{R}^{n \times 1}, m, l, s, max_iteration, threshold $}
-    \KwOut{ $\vec{\hat{w_{final}}}$, $H_{final}$ }
+	\KwIn{$\boldsymbol{X} \in \mathbb{R}^{n \times p}, \boldsymbol{y} \in \mathbb{R}^{n \times 1}, m, l, s, max\_iteration, threshold $}
+    \KwOut{ $\vec{\hat{w}_{final}}$, $H_{final}$ }
 	\caption{FAST-LTS}
 	\SetKw{Break}{break}
 	$\what{{final}} \gets \emptyset$\;
@@ -409,7 +409,7 @@ $RSS_{i} == RSS_{i+1}$ . When we put all together, we'll get FAST-LTS algorithm 
 	$F_{final} \gets \emptyset$\;
 	$W_{final} \gets \emptyset$\;
 	\For{$H_i$ \textbf{in} $F_{best}$}{
-			$H_i, \what{i} \gets Iterate~C~step~till~convergence(H_i, max_iteration, threshold)$\;
+			$H_i, \what{i} \gets Iterate~C~step~till~convergence(H_i, max\_iteration, threshold)$\;
 			$F_{final} \gets F_{final} \cup \{{ H_i \}}$\;
 			$W_{final} \gets W_{final} \cup \{{ \what{i} \}}$\;
 	}
@@ -440,9 +440,9 @@ Let's consider that we have some $\vec{m} \in Q^{(n,h)}$. It'll be convenient wh
 
 With this in mind we can mark let's mark 
 \begin{equation}
-	\Delta S^{(m)}_{i,j} = \oflts(\vec{m}^{(i,j)}) - \oflts(\vec{m})
+	\Delta S^{(\vec{m})}_{i,j} = \oflts(\vec{m}^{(i,j)}) - \oflts(\vec{m})
 \end{equation}
-thus change of the LTS objective function by swapping one observation from $h$ subset with another from $g$ subset. To calculate this we can obviously first calculate  $\oflts(\vec{m})$ and $ \oflts(\vec{m}^{(i,j)})$ and finally subtract both results. Although it is a option, it it computationally hard. So the question is if there is easier way of calculating $\Delta S^{(m)}_{i,j}$ and the answer is positive. 
+thus change of the LTS objective function by swapping one observation from $h$ subset with another from $g$ subset. To calculate this we can obviously first calculate  $\oflts(\vec{m})$ and $ \oflts(\vec{m}^{(i,j)})$ and finally subtract both results. Although it is a option, it it computationally hard. So the question is if there is easier way of calculating $\Delta S^{(\vec{m})}_{i,j}$ and the answer is positive. 
 
 Let's mark  
 $M = diag(\vec{m}$ and 
@@ -450,24 +450,24 @@ $M^(i,j) = diag(\vec{m}^{(i,j)})$ and also
 $\vec{H} = (\vec{X}^T\vec{M}^T\vec{X})$
 For now let's assume that we already calculated
 $\vec{H}^{-1}$ and also $\vec{\hat{w}} = \vec{H}^{-1}\vec{X}^T\vec{M}\vec{y}$
-we now want to calculate $\Delta S^{(m)}_{i,j}$
+we now want to calculate $\Delta S^{(\vec{m})}_{i,j}$
 Let's mark vector of residuals 
 $\vec{r}^{(m)} = \vec{Y} - \vec{X} \vec{\hat{w}} $
 and also $d_{r,s} = \vec{x_r} \vec{H}^{-1}  \vec{x_s} $
 then by equation from \cite{hawkins:1994} we get
 
 \begin{equation}
-	\Delta S^{(m)}_{i,j} = 
+	\Delta S^{(\vec{m})}_{i,j} = 
 	\frac{({r}^{(m)}_{j})^2(1-d_{i,i})- ({r}^{(m)}_{i})^2(1+d_{j,j}) + 2{r}^{(m)}_{i}{r}^{(m)}_{j}d_{j,j}}
 	{(1-d_{i,i})(1+d_{j,j}) + d_{i,j}^2}.
 \end{equation}
 
-Let's now describe core of the algorithm. It's a  similar to the FAST-LTS algorithm in the sense of iterative refinement of $h$ subset. So let's assume that we have some vector  $\vec{m} \in Q^{(n,h)}$. No we'll compute  $\Delta S^{(m)}_{i,j}$ for all $i \in O$ and $j \in Z$. This may lead to several different outcomes
+Let's now describe core of the algorithm. It's a  similar to the FAST-LTS algorithm in the sense of iterative refinement of $h$ subset. So let's assume that we have some vector  $\vec{m} \in Q^{(n,h)}$. No we'll compute  $\Delta S^{(\vec{m})}_{i,j}$ for all $i \in O$ and $j \in Z$. This may lead to several different outcomes
 
 \begin{enumerate}
-	\item all $S^{(m)}_{i,j}$ are non-negative
-	\item one $S^{(m)}_{i,j}$ is positive
-	\item multiple $S^{(m)}_{i,j}$ are positive
+	\item all $S^{(\vec{m})}_{i,j}$ are non-negative
+	\item one $S^{(\vec{m})}_{i,j}$ is positive
+	\item multiple $S^{(\vec{m})}_{i,j}$ are positive
 \end{enumerate}
 
 In the first case, all $\oflts(\vec{m}^{(i,j)})$ are higher than $\oflts(\vec{m})$ so none swap will lead to an improvement. That also means that strong necessary condition is satisfied and the algorithm ends.
@@ -479,31 +479,13 @@ In the second and third case strong necessary condition is not satisfied and we 
 	\item use the first swap that has improvement higher than some given threshold
 \end{enumerate}
 We'll discuss those options later and let's now assume that we'll use case number two.
-So if there positive  $S^{(m)}_{i,j}$ we'll make the swap and repeat the process again. 
-Algorithm ends when there is no possible improvement i.e. when all $S^{(m)}_{i,j}$ are non-negative.
-
-We didn't yet mention how to create initial $h$ subset respectively initial $\vec{m}$. We already had this discussion when describing FAST-LTS algorithm. The \cite{hawkins:1994} describes only random starting $h$ subsets, but using $p$ subsets instead may lead to improvement \todo{experiment with this and reffer here}. More importantly as we already suggested $h$ subset satisfying weak necessary condition don't need to satisfy strong necessary condition so passing such a $h$ subset as input to this algorithm is another option and we'll discuss it in detail later. For that reasons we'll now describe feasible algorithm with pseudocode and we'll assume that we already have some $h$ subset e.g. random one.
-
-\begin{algorithm}[H]
-	\label{alg:Feasible solution}
-    % \SetKwInOut{Input}{input}
-    % \SetKwInOut{Output}{output}
-    \KwIn{dataset consiting of $\boldsymbol{X} \in \mathbb{R}^{n \times p}$ and $\boldsymbol{y} \in \mathbb{R}^{n \times 1}$,  $\what{{old}} \in \mathbb{R}^{p \times 1}$}
-    \KwOut{ $\what{{new}}$, $H_{new}$ }
-	\caption{C-step}
-	
-	$R \gets \emptyset$\;
-	\For{$i \gets 1$ \textbf{to} $n$}{  
-		$R \gets R \cup \{ |y_i - \what{{old}} \vec{x_i}^T |\}$\;
-	}
-	$H_{new} \gets $ select set of $h$ smallest absolute residuals from $R$\;
-	$\what{{new}} \gets OLS(H_{new})$\;
-	\Return{ $\what{{new}}$\,, $H_{new}$ }\;
-\end{algorithm}
-
-
-
-
+So if there positive  $S^{(\vec{m})}_{i,j}$ we'll make the swap and repeat the process again. 
+Algorithm ends when there is no possible improvement i.e. when all $S^{(\vec{m})}_{i,j}$ are non-negative.
+Number of iterations needed till algorithm stops is usually quite low, but for practical usage it's still convenient to use some parameter $max\_iteration$ after which algorithm will stop without finding $h$ subset satisfying strong necessary condition. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 there is a decision to be made in considering the swaps – should one
 1. Accept the first swap that leads to an improvement in the criterion,
 2. Search for the swap that leads to the greatest improvement, or
@@ -517,11 +499,123 @@ complexity of O(n2p) or O(n3p) remains, and means that the feasible solution alg
 based on the case-swap necessary condition cannot be used for very large data sets.
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\todo{put sem part of the pseudocode describing core iteration?}
+\begin{observation} 
+	Time complexity of algorithm C-step \ref{alg:Cstep} is the same as time complexity as OLS. Thus $O(p^2n)$
+	\todo{create better proof. And take into account both versions - directly vs. using decomposition}
+\end{observation} 
+
+
+\begin{proof}
+	In C-step we must compute $n$ absolute residuals. Computation of one absolute residual consists of
+	matrix multiplication of shapes $1 \times p$ and $p \times 1$ that gives us $\mathcal{O}(p)$. Rest is in constant time.
+	So time of computation $n$ residuals is $\mathcal{O}(np)$.
+	Next we must select set of $h$ smallest residuals which can be done in $\mathcal{O}(n)$ using modification of algorithm QuickSelect. \todo{reference or define quick select} 
+	Finally we must compute $\hat{w}$ OLS estimate on $h$ subset of data.
+	Because $h$ is linearly dependent on $n$, we can say that it is $\mathcal{O}(p^2n + p^3)$ which 
+	is asymptotically dominant against previous steps which are $\mathcal{O}(np + n)$.
+\end{proof}
+
+As we stated above, repeating algorithm C-step will lead to sequence of $\what{1}, \what{2} \ldots$ 
+on subsets $H_1, H_2 \ldots$ with corresponding residual sum of squares
+$RSS(\what{{1}}) \geq RSS(\what{{2}}) \geq \ldots$. One could ask if this sequence will converge, so that
+$RSS(\what{{i}}) == RSS(\what{{i+1}})$. 
+Answer to this question will be presented by the following theorem.
+
+
+%******************************** C-STEP alg. will converge ***********************%
+\begin{theorem}
+	Sequence of C-step will converge to $\what{{m}}$ after maximum of $m = {n \choose h}$
+	so that $RSS(\what{{m}}) == RSS(\what{{n}})\,, \forall n\geq m$ where $n$ is number of data samples 
+	and $h$ is size of subset $H_i$.
+\end{theorem}
+
+\begin{proof}
+	Since  $RSS(\what{{i}})$ is non-negative and $RSS(\what{{i}}) \leq RSS(\what{{i+i}})$ the 
+	sequence will converge. $\what{{i}}$  is computed out of subset 
+	$H_i \subset \{{1,2,\ldots,n\}}$. When there is finite number of subsets of size $h$ out of $n$ samples, namely ${n \choose h}$, the sequence will converge at the latest after this number of steps.
+\end{proof}
+
+
+\todo{REWRITE UP FROM THIS TO MATCH FEASIBLE SOLUTION}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+One run of this iteration process will lead to some local optima i.e. set satisfying strong necessary condition. In \cite{hawkins:1994} they refer to to this set as to \defterm{feasible set}.
+This because it is not global optima the algorithm needs to be run multiple times say $N$ times. As a final solution is taken such $h$  subset with the smallest residual sum of squares. 
+
+We didn't yet mention how to create initial $h$ subset respectively initial $\vec{m}$. We already had this discussion when describing FAST-LTS algorithm. The \cite{hawkins:1994} describes only random starting $h$ subsets, but using $p$ subsets instead may lead to improvement \todo{experiment with this and reffer here}. More importantly as we already suggested $h$ subset satisfying weak necessary condition don't need to satisfy strong necessary condition so passing such a $h$ subset as input to this algorithm is another option and we'll discuss it in detail later. For that reasons we'll now describe feasible algorithm with pseudocode and we'll assume that we already have some function that generates for us $h$ subsets e.g. random one. 
+
+\newcommand\mycommfont[1]{\footnotesize\ttfamily\textcolor{blue}{#1}}
+\SetCommentSty{mycommfont}
+
+\begin{algorithm}[H]
+	\label{alg:feasible_solution}
+		\KwIn{$\boldsymbol{X} \in \mathbb{R}^{n \times p}, \boldsymbol{y} \in \mathbb{R}^{n \times 1},  max\_iteration, N $}
+		\KwOut{ $\vec{\hat{w}_{final}}$, $H_{final}$ }
+		
+	\caption{Feasible solution}
+	\SetKw{Break}{break}
+	$\vec{\hat{w}_{final}} \gets \emptyset$\;
+	$H_{final} \gets \emptyset$\;
+	$Results \gets \emptyset$\;
+
+	\For{$k \gets 0$ \textbf{to} $N$}{
+		$\vec{m} \gets generate\_intial\_subset()$  \tcp*{e.g. random $\vec{m} \in Q^{(n,h)}$}
+		\While{$True$}{ 
+			$best_i \gets 0$ \;
+			$best_j \gets 0$ \;
+			$best_{delta} \gets 0$ \;
+			\For{$ i \in O_m$}{ 
+				\For{$j \in Z_m$}{ 
+					$delta \gets calculate \Delta S^{(\vec{m})}_{i,j}$\;
+					\If{$delta >  best_{delta}$}{
+						$best_{delta} \gets delta$\;
+						$best_i \gets i$ \;
+						$best_j \gets j$ \;
+					}
+				}
+			}
+			\If{$best_{delta} > 0$}{
+				$\vec{m} \gets \vec{m}^{(i,j)}$\;
+			}
+			\Else {
+				$H \gets h\ subset\ corresponding\ to\ \vec{m}$\;
+				$\vec{M} \gets diag(\vec{m})$\;
+				${\hat{w}} \gets \of^{(OLS,\vec{M}\vec{X},  \vec{M}\vec{y} )}$\;
+				$Results \gets Results \cup \{ H, {\hat{w}} \}$\;
+				\Break\;
+			}
+		}		
+	}
+	$H_{final}, \vec{\hat{w}_{final}}  \gets $ select best from $Results$ based on smallest $RSS$\;
+	\Return{ $\what{{final}}$\,, $H_{final}$ }\;
+\end{algorithm}
+
+
+\section{Combined algorithm}
+Here we'll describe what we've indicated above and that is combination of both previous algorithms.
+Two options. 
+
+\begin{enumerate}
+	\item Let fast-lts converge and then run FSA and let it converge
+	\item Let fast-lts converge make one step of FSA and try fast-LTS again and iterate between this
+\end{enumerate}
+
+Second option would be faster ? Let's think about it.. etc etc..
+
 % **********************************************************************************
 % ************************* EXACT POLYNOMIAL ALGORITHM *****************************
 % **********************************************************************************
-\section{Exact algorithm}
+\todo{make CHAPTER approximate ALGORITHMS AND chapter EXACT ALGORITHMS?}
 
+\section{Adding row}
+\section{Adding row v2.}
 \section{MMEA}
 \section{Branch and bound}
-\section{Adding row}
+\section{Klouda algorithm}
