@@ -30,7 +30,7 @@ $Q^{(n, h)}$. This minor tweak has not only higher chance to succeed because num
 
 Generating all possible h subsets is computationally hard and relying on selecting random subsets don't produce sufficiently good results. So what are our options? In \cite{hawkins1999improved} two criterions called \defterm{necessary conditions} are introduced. They talk about necessary properties which some $h$ subset must satisfy so it could be set which leads to global optima of LTS. Let's introduce those two necessary conditions. For that it's convenient not to only label $h$ subset of used observations but also complementary subset of not used observations. We'll refer to this complementary subset as $g$ subset.
 
-\begin{theorem} Strong necessary condition.
+\begin{theorem} \label{strong_condition}Strong necessary condition.
 The criterion cannot be improved by exchanging any of the observations from $g$ subset 
 for any of the currently used observations in $h$ subset. Thus $\vec{m} \in Q^{(n, h)}$ meets the criterion if  $J(\vec{m}) \leq J(\vec{m_{swap}})$ where $\vec{m_{swap}}$ is any vector from $Q^{(n, h)}$ such that it has same values except one swapped.
 \end{theorem}
@@ -432,8 +432,78 @@ $RSS_{i} == RSS_{i+1}$ . When we put all together, we'll get FAST-LTS algorithm 
 % ************************* FEASIBLE SOLUTION ******************************************************
 % **************************************************************************************************
 \section{Feasible solution} \label{section_feasible_solution}
-In this section we'll introduce feasible solution algorithm. 
-In practical terms,
+In this section we'll introduce feasible solution algorithm first introduced in \cite{hawkins:1994}.
+It is based on strong necessary condition we've described at \ref{strong_condition}. 
+The basic idea can be described as follows.
+
+Let's consider that we have some $\vec{m} \in Q^{(n,h)}$. It'll be convenient when we'll mark in the following text $O_m = \{{i \in  \set{ 1,2,\ldots , n } ;w_i = 1\}}$ and $Z_m = \{{j \in  \set{ 1,2,\ldots , n } ;w_j = 0\}}$ thus sets of indexes of positions where is $0$ respectively $1$ in vector $\vec{m}$. We can think about it as indexes of observations in $h$ set and $g$ set respectively. Then we can mark $\vec{m}^{(i,j)}$ as a vector which is constructed by swap of its ith and jth element where $i \in O$ and $j \in Z$. Such vector correspond to vector $\vec{m_{swap}}$ which we marked at \ref{strong_condition}.
+
+With this in mind we can mark let's mark 
+\begin{equation}
+	\Delta S^{(m)}_{i,j} = \oflts(\vec{m}^{(i,j)}) - \oflts(\vec{m})
+\end{equation}
+thus change of the LTS objective function by swapping one observation from $h$ subset with another from $g$ subset. To calculate this we can obviously first calculate  $\oflts(\vec{m})$ and $ \oflts(\vec{m}^{(i,j)})$ and finally subtract both results. Although it is a option, it it computationally hard. So the question is if there is easier way of calculating $\Delta S^{(m)}_{i,j}$ and the answer is positive. 
+
+Let's mark  
+$M = diag(\vec{m}$ and 
+$M^(i,j) = diag(\vec{m}^{(i,j)})$ and also
+$\vec{H} = (\vec{X}^T\vec{M}^T\vec{X})$
+For now let's assume that we already calculated
+$\vec{H}^{-1}$ and also $\vec{\hat{w}} = \vec{H}^{-1}\vec{X}^T\vec{M}\vec{y}$
+we now want to calculate $\Delta S^{(m)}_{i,j}$
+Let's mark vector of residuals 
+$\vec{r}^{(m)} = \vec{Y} - \vec{X} \vec{\hat{w}} $
+and also $d_{r,s} = \vec{x_r} \vec{H}^{-1}  \vec{x_s} $
+then by equation from \cite{hawkins:1994} we get
+
+\begin{equation}
+	\Delta S^{(m)}_{i,j} = 
+	\frac{({r}^{(m)}_{j})^2(1-d_{i,i})- ({r}^{(m)}_{i})^2(1+d_{j,j}) + 2{r}^{(m)}_{i}{r}^{(m)}_{j}d_{j,j}}
+	{(1-d_{i,i})(1+d_{j,j}) + d_{i,j}^2}.
+\end{equation}
+
+Let's now describe core of the algorithm. It's a  similar to the FAST-LTS algorithm in the sense of iterative refinement of $h$ subset. So let's assume that we have some vector  $\vec{m} \in Q^{(n,h)}$. No we'll compute  $\Delta S^{(m)}_{i,j}$ for all $i \in O$ and $j \in Z$. This may lead to several different outcomes
+
+\begin{enumerate}
+	\item all $S^{(m)}_{i,j}$ are non-negative
+	\item one $S^{(m)}_{i,j}$ is positive
+	\item multiple $S^{(m)}_{i,j}$ are positive
+\end{enumerate}
+
+In the first case, all $\oflts(\vec{m}^{(i,j)})$ are higher than $\oflts(\vec{m})$ so none swap will lead to an improvement. That also means that strong necessary condition is satisfied and the algorithm ends.
+
+In the second and third case strong necessary condition is not satisfied and we make the swap. In second case it's easy which one to choose, because we have only one. in the third case we have couple of options again. 
+\begin{enumerate}
+	\item use the first swap that leads to the improvement (so don't event try to find different swap)
+	\item from all possible swaps choose one that has highest improvement value  $\oflts(\vec{m}^{(i,j)})$
+	\item use the first swap that has improvement higher than some given threshold
+\end{enumerate}
+We'll discuss those options later and let's now assume that we'll use case number two.
+So if there positive  $S^{(m)}_{i,j}$ we'll make the swap and repeat the process again. 
+Algorithm ends when there is no possible improvement i.e. when all $S^{(m)}_{i,j}$ are non-negative.
+
+We didn't yet mention how to create initial $h$ subset respectively initial $\vec{m}$. We already had this discussion when describing FAST-LTS algorithm. The \cite{hawkins:1994} describes only random starting $h$ subsets, but using $p$ subsets instead may lead to improvement \todo{experiment with this and reffer here}. More importantly as we already suggested $h$ subset satisfying weak necessary condition don't need to satisfy strong necessary condition so passing such a $h$ subset as input to this algorithm is another option and we'll discuss it in detail later. For that reasons we'll now describe feasible algorithm with pseudocode and we'll assume that we already have some $h$ subset e.g. random one.
+
+\begin{algorithm}[H]
+	\label{alg:Feasible solution}
+    % \SetKwInOut{Input}{input}
+    % \SetKwInOut{Output}{output}
+    \KwIn{dataset consiting of $\boldsymbol{X} \in \mathbb{R}^{n \times p}$ and $\boldsymbol{y} \in \mathbb{R}^{n \times 1}$,  $\what{{old}} \in \mathbb{R}^{p \times 1}$}
+    \KwOut{ $\what{{new}}$, $H_{new}$ }
+	\caption{C-step}
+	
+	$R \gets \emptyset$\;
+	\For{$i \gets 1$ \textbf{to} $n$}{  
+		$R \gets R \cup \{ |y_i - \what{{old}} \vec{x_i}^T |\}$\;
+	}
+	$H_{new} \gets $ select set of $h$ smallest absolute residuals from $R$\;
+	$\what{{new}} \gets OLS(H_{new})$\;
+	\Return{ $\what{{new}}$\,, $H_{new}$ }\;
+\end{algorithm}
+
+
+
+
 there is a decision to be made in considering the swaps – should one
 1. Accept the first swap that leads to an improvement in the criterion,
 2. Search for the swap that leads to the greatest improvement, or

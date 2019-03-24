@@ -37,4 +37,9 @@ Rousseeuw, P.~J.; Driessen, K.~V. An Algorithm for Positive-Breakdown
   Modeling and Practical Application}, edited by M.~S. W.~Gaul, O.~Opitz,
   Springer-Verlag Berlin Heidelberg, 2000, pp. 335--346.
 
+\bibitem{hawkins:1994}
+Hawkins, D.~M. The feasible solution algorithm for least trimmed squares
+  regression. \emph{Computational statistics \& data analysis}, volume~17,
+  no.~2, 1994: pp. 185--196.
+
 \end{thebibliography}

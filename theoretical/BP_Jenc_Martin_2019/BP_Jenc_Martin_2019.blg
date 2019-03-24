@@ -9,44 +9,44 @@ A level-1 auxiliary file: chapters/99_conclusion.aux
 The style file: bib/iso690.bst
 Database file #1: bib/mybibliographyfile.bib
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
-You've used 6 entries,
+You've used 7 entries,
             3146 wiz_defined-function locations,
-            697 strings with 6530 characters,
-and the built_in function-call counts, 3434 in all, are:
-= -- 276
-> -- 90
-< -- 11
-+ -- 47
-- -- 26
-* -- 194
-:= -- 381
-add.period$ -- 18
-call.type$ -- 6
-change.case$ -- 26
+            703 strings with 6642 characters,
+and the built_in function-call counts, 3972 in all, are:
+= -- 321
+> -- 97
+< -- 14
++ -- 51
+- -- 28
+* -- 224
+:= -- 437
+add.period$ -- 21
+call.type$ -- 7
+change.case$ -- 29
 chr.to.int$ -- 0
-cite$ -- 6
-duplicate$ -- 318
-empty$ -- 300
-format.name$ -- 31
-if$ -- 757
+cite$ -- 7
+duplicate$ -- 371
+empty$ -- 349
+format.name$ -- 33
+if$ -- 877
 int.to.chr$ -- 0
-int.to.str$ -- 6
-missing$ -- 73
-newline$ -- 27
-num.names$ -- 13
-pop$ -- 144
+int.to.str$ -- 7
+missing$ -- 84
+newline$ -- 30
+num.names$ -- 15
+pop$ -- 162
 preamble$ -- 1
-purify$ -- 24
+purify$ -- 27
 quote$ -- 0
-skip$ -- 144
+skip$ -- 168
 stack$ -- 0
-substring$ -- 183
-swap$ -- 202
-text.length$ -- 11
+substring$ -- 221
+swap$ -- 239
+text.length$ -- 14
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 22
+type$ -- 26
 warning$ -- 0
-while$ -- 27
-width$ -- 7
-write$ -- 63
+while$ -- 32
+width$ -- 8
+write$ -- 72
