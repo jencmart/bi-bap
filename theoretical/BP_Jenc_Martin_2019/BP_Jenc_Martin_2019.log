@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2019.3.5)  24 MAR 2019 20:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2019.3.5)  25 MAR 2019 15:09
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1032,7 +1032,10 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 LaTeX Font Info:    Try loading font information for U+rsfs on input line 4.
  (/usr/share/texlive/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
-) [9]) [10] (./BP_Jenc_Martin_2019.lof) [11
+)
+Underfull \vbox (badness 1281) has occurred while \output is active []
+
+ [9]) [10] (./BP_Jenc_Martin_2019.lof) [11
 
 ] [12
 
@@ -1128,32 +1131,34 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [25] [26]) [27]
-\openout2 = `chapters/04_experiments.aux'.
-
- (./chapters/04_experiments.tex [28
-
-
+ [25] [26] [27] [28
 
 ]) [29]
+\openout2 = `chapters/04_experiments.aux'.
+
+ (./chapters/04_experiments.tex [30
+
+
+
+]) [31]
 \openout2 = `chapters/99_conclusion.aux'.
 
 
 No file chapters/99_conclusion.tex.
-[30
+[32
 
 
 
 
-] (./BP_Jenc_Martin_2019.bbl [31] [32
+] (./BP_Jenc_Martin_2019.bbl [33] [34
 
 ]
 bibitemlist
-) [33] [34
+) [35] [36
 
-] [35] [36
+] [37] [38
 
-] [37]
+] [39]
 \tf@toc=\write6
 \openout6 = `BP_Jenc_Martin_2019.toc'.
 
@@ -1166,7 +1171,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 165.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 165.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 165.
 Package rerunfilecheck Info: File `BP_Jenc_Martin_2019.out' has not changed.
-(rerunfilecheck)             Checksum: 72D821DD81F604F1C5393D46C28D1556;3195.
+(rerunfilecheck)             Checksum: 7A87DFDF074E1F64811EE908E8A6C517;3337.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
@@ -1174,18 +1179,18 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 165.
  ) 
 Here is how much of TeX's memory you used:
- 25839 strings out of 494945
- 437914 string characters out of 6181033
- 578393 words of memory out of 5000000
+ 25843 strings out of 494945
+ 437954 string characters out of 6181033
+ 579395 words of memory out of 5000000
  28416 multiletter control sequences out of 15000+600000
  89417 words of font info for 83 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  68i,25n,78p,1159b,888s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-rmtt.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rmsc.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx6.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx8.pfb></usr/share/texmf/fonts/type1/public/lm/lmbxi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmcsc10.pfb></usr/share/texmf/fonts/type1/public/lm/lmex10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi12.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi6.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi8.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi9.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr6.pfb></usr/share/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy9.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on BP_Jenc_Martin_2019.pdf (51 pages, 505604 bytes).
+Output written on BP_Jenc_Martin_2019.pdf (53 pages, 506913 bytes).
 PDF statistics:
- 754 PDF objects out of 1000 (max. 8388607)
- 667 compressed objects within 7 object streams
- 273 named destinations out of 1000 (max. 500000)
+ 765 PDF objects out of 1000 (max. 8388607)
+ 676 compressed objects within 7 object streams
+ 277 named destinations out of 1000 (max. 500000)
  226 words of extra memory for PDF output out of 10000 (max. 10000000)
 

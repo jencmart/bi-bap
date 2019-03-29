@@ -30,7 +30,7 @@ def test_cpp(n=100, p=2):
 def test_numpy(n=100, p=2):
     print('test started...')
     x, y, x_clean, y_clean = generate_data_ND(n, p)
-    lts = feasible.FSRegressorCPP()
+    lts = feasible.FSRegressor()
     lts.fit(x, y, use_intercept=True, num_starts=10)
 
     # lts
