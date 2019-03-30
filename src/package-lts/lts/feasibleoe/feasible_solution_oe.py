@@ -118,9 +118,36 @@ class FSRegressor(AbstractRegression):
             # save splitted data
             J = np.matrix(self._data[idx_initial], copy=True)
             M = np.matrix(self._data[idx_rest], copy=True)
-            # do the refinement process
-            res = self.refinement_process(J, M, idx_initial, idx_rest)
 
+            J2 = np.copy(J)
+            M2 = np.copy(M)
+            idx_initial2 = np.copy(idx_initial)
+            idx_rest2 = np.copy(idx_rest)
+
+            J2 = np.asmatrix(J2)
+            M2 = np.asmatrix(M2)
+            # do the refinement process
+            res2 = self.refinement_process_fsa_oe_qr(J, M, idx_initial, idx_rest)
+            res = self.refinement_process_fsa(J2, M2, idx_initial2, idx_rest2)
+
+            # todo - porovnani results
+
+            #print('**** RESULT *******')
+            # print('theta ')
+            # print(res.theta_hat)
+            # print('theta 2')
+            # print(res2.theta_hat)
+            print('rss [{}], [{}]'.format(res.rss, res2.rss))
+            print('steps [{}], [{}]'.format(res.steps, res2.steps))
+            # print('h ')
+            # print(res.h_index)
+            # print('h 2')
+            # print(res2.h_index)
+            # print('*******************')
+
+            #if res.steps > 0 and res2.steps == 0:
+            #    print('fuck')
+             #   exit(1)
             # store the results
             results.append(res)
 
@@ -151,78 +178,35 @@ class FSRegressor(AbstractRegression):
         self.coef_ = np.ravel(self.coef_)  # RAVELED
 
     # ###########################################################################
-    # ############### ALL PAIRS  ################################################
+    # ############### FSA VERSION  ##############################################
     # ###########################################################################
-    def go_through_all_pairs(self, J, M, R, rss, inversion, residuals_J, residuals_M):
-        delta = 1
-        i_to_swap = None
-        j_to_swap = None
-        i_to_swap_oe = None
-        j_to_swap_oe = None
-        delta_oe = 2
-        # go through all combinations
-        for i in range(J.shape[0]):
-            for j in range(M.shape[0]):
-                # . calculate deltaRSS
-                tmp_delta = self.calculate_delta_rss(J, M, inversion, residuals_J, residuals_M, i, j)
-                tmp_delta_2 = self.calculate_delta_rss_oe(J, M, R, rss, inversion, residuals_J, residuals_M, i, j)
-
-               # print('rss1, {}  [= {} + {}]'.format(rss[0, 0] + tmp_delta,   rss[0, 0], tmp_delta))
-                #print('rss2, {}  [= {} * {}]'.format(rss[0, 0] * tmp_delta_2, rss[0, 0], tmp_delta_2))
-
-                #print('-----')
-                # todo POROVNEJ DELTY !
-
-                # if delta rss < bestDeltaRss
-                if tmp_delta < 0 and tmp_delta < delta:
-                    delta = tmp_delta
-                    i_to_swap = i
-                    j_to_swap = j
-
-                if tmp_delta_2 < 1 and tmp_delta_2 > 0 and tmp_delta_2 < delta_oe: # vetsi nez nula musi byt vzdy, ne ?
-                    delta_oe = tmp_delta_2
-                    i_to_swap_oe = i
-                    j_to_swap_oe = j
-
-        #if i_to_swap is None and i_to_swap_oe is not None:
-         #   raise EnvironmentError
-        #if i_to_swap is not None:
-         #   print('returning i[{}] j[{}]'.format(i_to_swap, j_to_swap))
-          #  print('returning i[{}] j[{}]'.format(i_to_swap_oe, j_to_swap_oe))
-        return i_to_swap, j_to_swap, delta, delta_oe
-
-    # ###########################################################################
-    # ############### REFINEMENT ################################################
-    # ###########################################################################
-
-    def refinement_process(self, J, M, idx_initial, idx_rest):
+    def refinement_process_fsa(self, J, M, idx_initial, idx_rest):
         steps = 0
-
+        #J = np.asmatrix(J)
+        #M = np.asmatrix(M)
         while True:
             # data for delata eqation
             y = J[:, [0]]
             x = J[:, 1:]
 
             q, r = linalg.qr(x)  # X = QR ; x.T x = R.T R ; (pozor: cholesky je L * L.T kde l = R.T)
-            # Q ... n x n
-            # R ... n x p
-            #
-            #  Q.T *  ( x * w - y ) ^ 2
-            #  Q.T * Q * R * w - Q.T * y
-            #  R * w - Q.T * y
-            #  R * w = Q.T * y
-            #  r je ale n x p ... a od p do n jenom 0 (respektive h x p )
+            # # Q ... n x n
+            # # R ... n x p
+            # #
+            # #  Q.T *  ( x * w - y ) ^ 2
+            # #  Q.T * Q * R * w - Q.T * y
+            # #  R * w - Q.T * y
+            # #  R * w = Q.T * y
+            # #  r je ale n x p ... a od p do n jenom 0 (respektive h x p )
             p = x.shape[1]
-
+            #
             r1 = r[:p, :]  # only first p rows
-            # transpose first
-            qt = q.T
-
-            q1 = qt[:p, :]  # only first p rows
-
-
-            # Solve the equation x w = c for x, assuming a is a triangular matrix
-            theta = linalg.solve_triangular(r1, q1*y)  # p x substitution -- works as expected
+            # # transpose first
+            # qt = q.T
+            # q1 = qt[:p, :]  # only first p rows
+            #
+            # # Solve the equation x w = c for x, assuming a is a triangular matrix
+            # theta = linalg.solve_triangular(r1, q1*y)  # p x substitution -- works as expected
             inversion = (x.T * x).I
             theta = inversion * x.T * y  # OLS
 
@@ -231,42 +215,43 @@ class FSRegressor(AbstractRegression):
             # rss todo
             rss = residuals_J.T * residuals_J
 
-            i_to_swap, j_to_swap, delta, delta_oe = self.go_through_all_pairs(J, M, r1, rss, inversion, residuals_J, residuals_M)
-            if delta >= 0: # todo zmenit pak podminku na delta_oe < 1
+            i_to_swap, j_to_swap, delta1 = self.all_pairs_fsa(J, M, inversion, residuals_J, residuals_M)
+
+            i_to_swap2, j_to_swap2, delta2 = self.all_pairs_fsa_oe_qr(J, M, r1, rss, residuals_J, residuals_M)
+            if (delta2 < 0):
+                print('madafaaakakakakakaka')
+                exit(1)
+            #rss1 = rss[0, 0] + delta1
+            #rss2 = (rss[0, 0] * delta2)
+
+
+
+            # if i_to_swap != i_to_swap2 or j_to_swap != j_to_swap2:
+            #     print('fuck')
+            #     exit(1)
+            #
+            # if i_to_swap2 is not None:
+            #     if not (math.isclose(rss1, rss2, rel_tol=1e-5)):
+            #         print('fuckkkk')
+            #         exit(1)
+
+            if delta1 >= 0:  # todo zmenit pak podminku na delta_oe >= 1
                 break
 
             else:  # swap i and j [TOGHETHER WITH INDEXES] ; je to ok - SWAPUJEME SPRAVNE
 
                 # todo - update RSS (easy) ;
-                rss = rss * delta_oe
-                row_to_add = np.copy(M[j_to_swap, 1:])
 
-                # qr_update copies it
-                q_added, r_added = self.qr_update(q,r, row_to_add)
+                # row_to_add = np.copy(M[j_to_swap, 1:])
 
-                q_added_correct, r_added_correct = linalg.qr_insert(q, r, row_to_add, q.shape[0])
+                # todo - update QR decomposition aka. update (X.T X)^1 --- soucasne O(n^2) kdyz udelame ekonomicky, bude O(p^2) ; nebo lepsi ?
+                #q_added, r_added = self.qr_insert(q, r, row_to_add, i_to_swap + 1)  # after the row we'll extract
+                # q_added_removed, r_added_removed = self.qr_delete(q_added, r_added, i_to_swap)  # remove this row
 
-                print('*********************************************')
-                print('*********************************************')
-                #print('------- R MATRIXES -----------------')
-                #print(r_added)
-                #print('------ and correct R')
-                #print(r_added_correct)
+                # todo - update theta - easy kdyz mam xtx-1
 
-                #print('---------Q MATRIXES ----------------')
-
-                # print(np.allclose(np.dot(q_added.T, q_added), np.eye(q_added.shape[0])))
-                print(q_added - q_added_correct) # lisi se jen znamenkama
-                print('------ and correct Q')
-                #print()
-                print('*********************************************')
-                print('*********************************************')
-
-                #
-                # todo - update X.T X -1 --- problem  ;
-                # todo - s tim se poji - update Q and R
-                #
-                #  todo - update theta - easy kdyz mam xtx-1
+                #q_added_correct, r_added_correct = linalg.qr_insert(q, r, row_to_add, i_to_swap + 1)
+                #q_added_removed_correct, r_added_remved_correct = linalg.qr_delete(q_added_correct, r_added_correct, k=i_to_swap)
 
                 tmp = np.copy(J[i_to_swap])
                 J[i_to_swap] = np.copy(M[j_to_swap])
@@ -286,91 +271,56 @@ class FSRegressor(AbstractRegression):
         # 2. return in
         return self.Result(theta, idx_initial, rss, steps)
 
-    def qr_update(self, q, r, row):
-        n = q.shape[0]  # rows
-        p = r.shape[1]  # cols
-        cnt_rows = 1
+    def all_pairs_fsa(self, J, M, inversion, residuals_J, residuals_M): # todo - odmazat delta 2
+        delta = 0
+        i_to_swap = None
+        j_to_swap = None
+        #delta_2 = 1
 
-        shape = [n + cnt_rows,  n + cnt_rows]
+        # rs_shit = float('inf')
 
-        # create new matrix
-        qnew = np.zeros(shape, dtype=float)
-        shape[1] = p
-        rnew = np.zeros(shape, dtype=float)
+        # go through all combinations
+        for i in range(J.shape[0]):
+            for j in range(M.shape[0]):
+                # . calculate deltaRSS
+                tmp_delta = self.calculate_delta_rss(J, M, inversion, residuals_J, residuals_M, i, j)
+                # J, M, R1, rss, residuals_J, residuals_M, i, j
+                #tmp_delta_2 = self.calculate_delta_rss_oe_qr(J, M, R, rss, residuals_J, residuals_M, i, j)
 
-        # fill matrix r
-        rnew[:n, :] = np.copy(r)
-        rnew[n:, :] = row  # just one row in this case (1,7 into 1,6)
-
-        # fill matrix q
-        qnew[:-cnt_rows, :-cnt_rows] = q
-        for j in range(n, n + cnt_rows): # again, neni treba loop; jen posledni radek
-            qnew[j, j] = 1
-
-        n = n + 1
-        # rotate last row and update both matrix
-        limit = min(n - 1, p) # opet, autimaticky je to p (maji n-1 kvuli fortranu??) ne kvuli poslednimu sloupku q ?
-
-        for j in range(limit):  # 0, 1 ... p-1
-            cos, sin, R = self.calculate_cos_sin(rnew[j,j], rnew[n-1,j]) # edge of triangle , last row
-
-            rnew[j, j] = R # some hack as they have
-            rnew[n - 1, j] = 0
-
-            # rotate rnew
-            num = p-j # mame stale jen p
-            rowX = rnew[j,:]
-            rowY = rnew[n-1,:]
+                #rss1 = rss[0, 0] + tmp_delta
+                #rss2 = (rss[0, 0] * tmp_delta_2)
 
 
-            # blas srot
-            for i in range(j+1, p): # vzdy od j do konce
-                temp = cos * rowX[i] + sin * rowY[i]
-                rnew[n-1, i] = cos * rowY[i] - sin * rowX[i] # Y
-                rnew[j, i] = temp # X
+                #if not (math.isclose(rss1, rss2, rel_tol=1e-5)):
+               # print('rss1, {}  [= {} + {}]'.format(rss[0, 0] + tmp_delta,   rss[0, 0], tmp_delta))
+                #print('rss2, {}  [= {} * {}]'.format(rss[0, 0] * tmp_delta_2, rss[0, 0], tmp_delta_2))
+                #print('delta {}'.format(tmp_delta))
+                 #   exit(1)
+                #
+                # if tmp_delta_2 < 0:
+                #     print('fuck')
+                #     exit(1)
 
-            # rotate qnew
-            qrowX = qnew[:, j] # j ty slouepk
-            qrowY = qnew[:, n-1] # posledni slopek
+                #print('-----')
+                # todo POROVNEJ DELTY !
 
-            # blas srot
-            for i in range(n): # vzdy od j do konce
-                temp = cos * qrowX[i] + sin * qrowY[i]
-                qnew[i, n-1] = cos * qrowY[i] - sin * qrowX[i]  # Y
-                qnew[i, j] = temp  # X
+                # if delta rss < bestDeltaRss
+                if tmp_delta < delta:
+                    # print('**************')
+                    # print(tmp_delta)
+                    # print(delta)
+                    # print('---')
+                    delta = tmp_delta
+                    # print(delta)
+                    # print('**************')
+                    i_to_swap = i
+                    j_to_swap = j
 
-        # permutate ???
-        # nope
+                #if tmp_delta_2 < delta_2:
+                 #   delta_2 = tmp_delta_2
 
-        return qnew, rnew
-
-    # ###########################################################################
-    # ############### DELTA RSS #################################################
-    # ###########################################################################
-
-
-    # lapack  slartg
-    def calculate_cos_sin(self, f, g):
-
-        if g == 0:
-            cos = 1
-            sin = 0
-            r = f
-        elif f == 0:
-            cos = 0
-            sin = 1
-            r = g
-        else:
-            r = math.sqrt( f**2 + g**2)
-            cos = f / r
-            sin = g / r
-
-        if abs(f) > abs(g) and cos < 0:
-            cos = -cos
-            sin = -sin
-            r = -r
-
-        return cos, sin, r
+        #print('returnuji {}'.format(delta))
+        return i_to_swap, j_to_swap, delta
 
     def calculate_delta_rss(self, J, M, inversion,
                             residuals_J, residuals_M, i, j):
@@ -388,7 +338,52 @@ class FSRegressor(AbstractRegression):
         denom = (1 - hii) * (1 + hjj) + hij * hij
         return nom / denom
 
-    def calculate_delta_rss_oe(self, J, M, R1, rss,  inversion, residuals_J, residuals_M, i, j):
+    # J, M, R, rss, residuals_J, residuals_M, i, j
+    # def calculate_delta_rss_oe_qr(self, J, M, R1, rss, residuals_J, residuals_M, i, j):
+    #     # x * (R.T * R ) ^-1 * x = v.T v
+    #     # where
+    #     # R.T * v.T = xi.T
+    #     # pridani
+    #
+    #     xi = M[j, 1:]
+    #     vi = linalg.solve_triangular(R1.T, xi.T, lower=True)
+    #     # print('vi')
+    #     # print(vi.shape)
+    #     # print(type(vi.T))
+    #
+    #     # odebrani
+    #     xj = J[i, 1:]
+    #     vj = linalg.solve_triangular(R1.T, xj.T, lower=True)
+    #     vj = np.asmatrix(vj)
+    #     j_m_j = vj.T * vj
+    #     j_m_j = j_m_j[0, 0]
+    #
+    #
+    #     vi = np.asmatrix(vi)
+    #     i_m_i = vi.T * vi  # vi.T * vi # dot product PRIDANI !!!
+    #     i_m_i = i_m_i[0, 0]
+    #
+    #     # oboje (odebrani rtr pridani)
+    #     # xj * (R.T * R ) ^-1 * xi = xj * u.T
+    #     #  R * u.T = v kde v je resenim R.T * v.T = xi.T (teda vi ??? )
+    #     u = linalg.solve_triangular(R1, vi)
+    #     u = np.asmatrix(u)
+    #     xj = np.asmatrix(xj)
+    #     i_m_j = xj * u  # xj * u  # check if not xi
+    #     i_m_j = i_m_j[0, 0]
+    #
+    #     ei = residuals_J[i, 0]  # mozna bylo opace
+    #     ej = residuals_M[j, 0]
+    #
+    #     nom = (1 + i_m_i + 1 / rss * ei * ei) * (1 - j_m_j - 1 / rss * ej * ej) + (i_m_j + 1 / rss * ei * ej) * (
+    #                 i_m_j + 1 / rss * ei * ej)
+    #     denom = (1 + i_m_i - j_m_j + i_m_j * i_m_j - i_m_i * j_m_j)
+    #     ro = nom / denom
+    #     return ro
+    #
+    #
+
+    def calculate_delta_rss_oe_qr(self, J, M, R1, rss, residuals_J, residuals_M, i, j):
         # x * (R.T * R ) ^-1 * x = v.T v
         # where
         # R.T * v.T = xi.T
@@ -429,14 +424,420 @@ class FSRegressor(AbstractRegression):
         #print('rss')
         #rss = rss[0,0]
         #print('rss---')
+        rss = rss[0,0]
         nom = (1 + i_m_i + 1/rss * ei*ei) * (1 - j_m_j - 1/rss * ej*ej) + (i_m_j + 1/rss * ei*ej) * (i_m_j + 1/rss * ei*ej)
         denom = (1 + i_m_i - j_m_j + i_m_j * i_m_j - i_m_i * j_m_j)
         ro = nom / denom
         #print(ro)
         return ro
+
+    # ###########################################################################
+    # ############### FSA-OE-QR VERSION  ########################################
+    # ###########################################################################
+
+    def refinement_process_fsa_oe_qr(self, J, M, idx_initial, idx_rest):
+        steps = 0
+
+        # data for delata eqation
+        # y = J[:, [0]]
+        # x = J[:, 1:]
+
+        q, r = linalg.qr(J[:, 1:])  # X = QR ; x.T x = R.T R ; (pozor: cholesky je L * L.T kde l = R.T)
+        # # Q ... n x n
+        # # R ... n x p
+        # #  Q.T *  ( x * w - y ) ^ 2
+        # #  Q.T * Q * R * w - Q.T * y
+        # #  R * w - Q.T * y
+        # #  R * w = Q.T * y
+        p = (J[:, 1:]).shape[1]
+        #  r1 pxp
+        r1 = r[:p, :]  # only first p rows
+        qt = q.T
+        q1 = qt[:p, :]  # only first p rows
+
+        # # Solve the equation x w = c for x, assuming a is a triangular matrix
+        theta = linalg.solve_triangular(r1, q1 * J[:, [0]])  # p x substitution -- works as expected
+        # inversion = (x.T * x).I
+        # theta = inversion * x.T * y  # OLS
+
+        residuals_J = J[:, [0]] - J[:, 1:] * theta
+        residuals_M = (M[:, [0]]) - (M[:, 1:]) * theta
+        # rss todo
+        rss = residuals_J.T * residuals_J
+
+        while True:
+            # data for delata eqation
+            #y = J[:, [0]]
+            #x = J[:, 1:]
+
+
+            # rss todo
+            #rss = residuals_J.T * residuals_J
+
+            # i_to_swap, j_to_swap, delta1 = self.all_pairs_fsa(J, M, inversion, residuals_J, residuals_M)
+
+            i_to_swap2, j_to_swap2, delta2 = self.all_pairs_fsa_oe_qr(J, M, r1, rss, residuals_J, residuals_M)
+
+            if delta2 >= 1:
+                break
+
+            else:  # swap i and j [TOGHETHER WITH INDEXES] ; je to ok - SWAPUJEME SPRAVNE
+
+                # todo - update RSS (easy) ;
+                rss = rss * delta2
+                # row_to_add = np.copy(M[j_to_swap, 1:])
+
+                # todo - update QR decomposition aka. update (X.T X)^1 --- soucasne O(n^2) kdyz udelame ekonomicky, bude O(p^2) ; nebo lepsi ?
+                #q_added, r_added = self.qr_insert(q, r, row_to_add, i_to_swap + 1)  # after the row we'll extract
+                # q_added_removed, r_added_removed = self.qr_delete(q_added, r_added, i_to_swap)  # remove this row
+
+                # todo - update theta - easy kdyz mam xtx-1
+
+                #q_added_correct, r_added_correct = linalg.qr_insert(q, r, row_to_add, i_to_swap + 1)
+                #q_added_removed_correct, r_added_remved_correct = linalg.qr_delete(q_added_correct, r_added_correct, k=i_to_swap)
+
+                # todo *****************************************
+                row_to_add = np.copy(M[j_to_swap2, 1:])
+
+
+                tmp = np.copy(J[i_to_swap2])
+                # print(row_to_add.shape)
+
+                J[i_to_swap2] = np.copy(M[j_to_swap2])
+                M[j_to_swap2] = np.copy(tmp)
+                idx_initial[i_to_swap2], idx_rest[j_to_swap2] = idx_rest[j_to_swap2], idx_initial[i_to_swap2]
+
+                # todo - update Q R
+                #
+
+                # q, r = linalg.qr_insert(q, r, row_to_add, i_to_swap2+1, 'row')  # todo - seems ok
+                q, r = self.qr_insert(q, r, row_to_add, i_to_swap2 + 1)
+                # q, r = linalg.qr_delete(q, r, i_to_swap2, 1, 'row')
+                q, r = self.qr_delete(q, r, i_to_swap2)
+
+                # q, r = q3, r3
+                # q, r = linalg.qr(J[:, 1:])  # X = QR ; x.T x = R.T R ; (pozor: cholesky je L * L.T kde l = R.T)
+
+
+                what_we_want = J[:, 1:]
+
+                if not np.allclose(np.dot(q.T, q), np.eye(what_we_want.shape[0])):
+                    print('not orthogonal Q')
+                    exit(1)
+
+                # if not np.allclose(np.dot(q3.T, q3), np.eye(what_we_want.shape[0])):
+                #     print('not orthogonal Q3')
+                #     exit(1)
+
+                if not np.allclose(np.dot(q, r), what_we_want):
+                    print('not similar Q R ')
+                    exit(1)
+
+                # if not np.allclose(np.dot(q3, r3), what_we_want):
+                #     print('not similar Q3 R3 ')
+                #     exit(1)
+
+                # todo - R je stejna (asi ? )
+                # # Q ... n x n
+                # # R ... n x p
+                # #  Q.T *  ( x * w - y ) ^ 2
+                # #  Q.T * Q * R * w - Q.T * y
+                # #  R * w - Q.T * y
+                # #  R * w = Q.T * y
+                # p = (J[:, 1:]).shape[1]
+                #  r1 pxp
+                r1 = r[:p, :]  # only first p rows
+                qt = q.T
+                q1 = qt[:p, :]  # only first p rows
+
+                # # Solve the equation x w = c for x, assuming a is a triangular matrix
+                theta = linalg.solve_triangular(r1, q1 * J[:, [0]])  # p x substitution -- works as expected
+                # inversion = (x.T * x).I
+                # theta = inversion * x.T * y  # OLS
+
+                residuals_J = J[:, [0]] - J[:, 1:] * theta
+                residuals_M = (M[:, [0]]) - (M[:, 1:]) * theta
+
+
+
+                steps += 1
+
+
+
+
+        # Save converged result
+        # 1. calculate rs
+        # y_fin = J[:, [0]]
+        # x_fin = J[:, 1:]
+        # rss = (y_fin - x_fin * theta).T * (y_fin - x_fin * theta)
+        # rss = rss[0, 0]
+        # 2. return in
+        return self.Result(theta, idx_initial, rss, steps)
+
+
+    def refinement_process_fsa_oe_qr_old(self, J, M, idx_initial, idx_rest):
+        steps = 0
+        J = np.asmatrix(J)
+        M = np.asmatrix(M)
+        # Prepare data
+        y = J[:, [0]]
+        x = J[:, 1:]
+        p = x.shape[1]
+
+        # QR
+        q, r = linalg.qr(x)  # X = QR ; x.T x = R.T R ; (pozor: cholesky je L * L.T kde l = R.T)
+
+        # Theta
+        r1 = r[:p, :]  # only first p rows
+        qt = q.T
+        q1 = qt[:p, :]  # only first p rows
+
+       # x = np.asmatrix(x)
+       # q1 = np.asmatrix(q1)
+       # y= np.asmatrix(y)
+        q1 = np.asmatrix(q1)
+        y = np.asmatrix(y)
+        c = q1 * y
+
+        theta = linalg.solve_triangular(r1, c)  # p x substitution -- works as expected
+        # TODO - so far so good
+        #x = np.asmatrix(x)
+        #theta = np.asmatrix(theta)
+
+        # RSS and residuals
+        resid = y - x * theta
+        rss = resid.T * resid
+
+        while True:
+
+            residuals_J = (J[:, [0]]) - (J[:, 1:]) * theta
+            residuals_M = (M[:, [0]]) - (M[:, 1:]) * theta
+
+            i_to_swap, j_to_swap, delta_oe = self.all_pairs_fsa_oe_qr(J, M, r1, rss, residuals_J, residuals_M)
+            if delta_oe >= 1:
+                break
+
+            else:
+
+                # update RSS # todo - ok
+                rss = rss * delta_oe
+                if (delta_oe < 0):
+                    print(delta_oe)
+                    print('mensi nez 0 !!!')
+                    exit(1)
+                # Update indexes
+                tmp = np.copy(J[i_to_swap])
+                J[i_to_swap] = np.copy(M[j_to_swap])
+                M[j_to_swap] = np.copy(tmp)
+                idx_initial[i_to_swap], idx_rest[j_to_swap] = idx_rest[j_to_swap], idx_initial[i_to_swap]
+
+                # update QR
+                # row_to_add = np.copy(M[j_to_swap, 1:])
+                # q, r = linalg.qr_insert(q, r, row_to_add, k=i_to_swap + 1) # todo - seems ok
+                # q, r = linalg.qr_delete(q, r, k=i_to_swap)
+
+                # q_added, r_added = self.qr_insert(q, r, row_to_add, i_to_swap + 1)  # after the row we'll extract
+                # q_added_removed, r_added_removed = self.qr_delete(q_added, r_added, i_to_swap)  # remove this row
+                # q, r = q_added_removed, r_added_removed
+
+                x = J[:, 1:]
+                q, r = linalg.qr(x)
+
+                # update Theta
+                r1 = r[:p, :]
+                qt = q.T
+                q1 = qt[:p, :]
+
+                q1 = np.asmatrix(q1)
+                y = np.asmatrix(y)
+
+                theta = linalg.solve_triangular(r1, q1 * y)
+                theta = np.asmatrix(theta)
+                steps += 1
+                print(steps)
+
+        # Save converged result
+        # 1. calculate rs
+        #y_fin = J[:, [0]]
+        #x_fin = J[:, 1:]
+
+        #theta = np.asmatrix(theta)
+        #x_fin = np.asmatrix(x_fin)
+
+        #y_fin = np.asmatrix(y_fin)
+        #rss = (y_fin - x_fin * theta).T * (y_fin - x_fin * theta) # todo - stane se uz v cyklu
+        #print(rss.shape)
+        #rss = rss[0, 0]
+        # 2. return in
+        return self.Result(theta, idx_initial, rss, steps)
+
+    def all_pairs_fsa_oe_qr(self, J, M, R, rss, residuals_J, residuals_M):
+        delta = 1
+        i_to_swap = None
+        j_to_swap = None
+
+
+        # go through all combinations
+        for i in range(J.shape[0]):
+
+
+            for j in range(M.shape[0]):
+
+                # . calculate deltaRSS
+                tmp_delta = self.calculate_delta_rss_oe_qr(J, M, R, rss, residuals_J, residuals_M, i, j)
+
+                # if delta rss < bestDeltaRss
+                if tmp_delta < delta: # vetsi nez nula musi byt vzdy, ne ?
+                    delta = tmp_delta
+                    i_to_swap = i
+                    j_to_swap = j
+
+        return i_to_swap, j_to_swap, delta
+
+
+
+    # ############### QR OPERATIONS #############################################
+    def qr_delete(self, q, r, idx): # for j in (0, 1 ... n) * for i in (1, 2, ... n) ----> i guess O(n^2) == HODNE
+        qnew = np.copy(q)
+        rnew = np.copy(r)
+        p_del = 1
+
+        if idx != 0: # swap it to the first line
+            for j in range(idx, 0, -1): # jdx ... 3, 2, 1
+                qnew[[j, j-1]] = qnew[[j-1, j]]
+                # swap(qnew[j,:], qnew[j-1, : ]) j jde od posledniho (od vlozeneho) a posouva ho na spravny index
+
+        # for i in range p_del
+        i = 0
+        n = q.shape[0]
+        p = r.shape[1]
+
+        for j in range(n - 2, i -1, -1): # n-2 protoze vzdy o jeden vic (tj. do idx n-1)
+
+            cos, sin, R = self.calculate_cos_sin(qnew[0, j], qnew[0, j+1]) # i, i = 0
+            qnew[0, j] = R
+            qnew[0, j+1] = 0 # myslim ze pro nas nyni zbytecne ?
+
+            # update rows to del - no need
+            # if i + 1 < p_del: #  1 < 1
+            #     rot(p - i - 1, index2(W, ws, i + 1, j), ws[0],
+            #         index2(W, ws, i + 1, j + 1), ws[0], c, s)
+
+            # Rotare R if nonzero row
+            if j < p: # m x n # j - i
+
+                # todo rot( [ p-j-1 ]  [--, j+1 ] [--, j+1]
+                # to znamena naky radky...
+                # a v kazdem du od j+1 do konce
+
+                # rotate rnew
+                rowX = rnew[j, :]
+                rowY = rnew[j + 1, :]
+                # blas srot
+                for i in range(j, p):  # vzdy od j do p konce /todo mozna j+1; ne myslim ze ok
+                    temp = cos * rowX[i] + sin * rowY[i]
+                    rnew[j + 1, i] = cos * rowY[i] - sin * rowX[i]  # Y
+                    rnew[j, i] = temp  # X
+
+            # Rotate Q - pozor - fucking TRICK qs[0]
+            qcolX = qnew[:, j]
+            qcolY = qnew[:, j+1]
+            for i in range(p_del, n): # radky 1, 2, ... n-1 #
+                temp = cos * qcolX[i] + sin * qcolY[i] # todo chyba
+                qnew[i, j+1] = cos * qcolY[i] - sin * qcolX[i]  # Y
+                qnew[i, j] = temp  # X
+
+        return qnew[p_del:, p_del:], rnew[p_del:, :]
+
+    def qr_insert(self, q, r, row, idx): # O(p * n)
+        # idx .. row before which new row will be inserted
+        n = q.shape[0]  # rows
+        p = r.shape[1]  # cols
+        cnt_rows = 1
+
+        shape = [n + cnt_rows,  n + cnt_rows]
+
+        # create new matrix
+        qnew = np.zeros(shape, dtype=float)
+        shape[1] = p
+        rnew = np.zeros(shape, dtype=float)
+
+        # fill matrix r
+        rnew[:n, :] = np.copy(r)
+        rnew[n:, :] = row  # just one row in this case (1,7 into 1,6)
+
+        # fill matrix q
+        qnew[:-cnt_rows, :-cnt_rows] = q
+        for j in range(n, n + cnt_rows): # again, neni treba loop; jen posledni radek
+            qnew[j, j] = 1
+
+        n = n + 1
+        # rotate last row and update both matrix
+        limit = min(n - 1, p) # opet, autimaticky je to p ;  n-1 kvuli poslednimu sloupku q ?
+
+        # we are basically removing just from Q
+        for j in range(limit):  # pro kazdy element posledniho radku (p)
+            cos, sin, R = self.calculate_cos_sin(rnew[j,j], rnew[n-1,j]) # edge of triangle , last row
+            rnew[j, j] = R # some hack as they have
+            rnew[n - 1, j] = 0
+
+            # rotate rnew
+            rowX = rnew[j,:]
+            rowY = rnew[n-1,:]
+            # blas srot
+            for i in range(j+1, p): # vzdy od j do konce (udelej rotaci celeho radku)
+                temp = cos * rowX[i] + sin * rowY[i]
+                rnew[n-1, i] = cos * rowY[i] - sin * rowX[i] # Y
+                rnew[j, i] = temp # X
+
+            # rotate qnew
+            qrowX = qnew[:, j] # j ty slouepk
+            qrowY = qnew[:, n-1] # posledni slopek
+
+            # blas srot
+            for i in range(n): # vzdy od j do konce
+                temp = cos * qrowX[i] + sin * qrowY[i]
+                qnew[i, n-1] = cos * qrowY[i] - sin * qrowX[i]  # Y
+                qnew[i, j] = temp  # X
+
+        # move last (inserted) row to correct position
+        # k je jako idx ? jo. je to jako idx v nove matici
+        # chci ho hodit za ten co potom odstranim (teda idx bude prvdepodobne idxj+1)
+        for j in range(n - 1, idx, -1):
+            # this is bad - it is copy swap !!!
+            qnew[[j-1, j]] = qnew[[j, j-1]]
+            # swap(qnew[j,:], qnew[j-1, : ]) j jde od posledniho (od vlozeneho) a posouva ho na spravny index
+
+        return qnew, rnew
+
+    # lapack  slartg
+    def calculate_cos_sin(self, f, g):
+
+        if g == 0:
+            cos = 1
+            sin = 0
+            r = f
+        elif f == 0:
+            cos = 0
+            sin = 1
+            r = g
+        else:
+            r = math.sqrt( f**2 + g**2)
+            cos = f / r
+            sin = g / r
+
+        if abs(f) > abs(g) and cos < 0:
+            cos = -cos
+            sin = -sin
+            r = -r
+
+        return cos, sin, r
+
+
     # ###########################################################################
     # ############### INITIAL H1 ################################################
     # ###########################################################################
+
     def select_initial_h1(self):
         # create random permutation
         idx_all = np.random.permutation(self._N)

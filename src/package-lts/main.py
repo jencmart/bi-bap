@@ -13,7 +13,7 @@ def test_feasible_solution():
 
 
 def test_feasible_OE_solution():
-    feasible_oe_test.test_numpy(n=6, p=3)
+    feasible_oe_test.test_numpy(n=30, p=3)
 
 def test_fast_lts():
     fast_lts_test.test_cpp(n=10000, p=5)
