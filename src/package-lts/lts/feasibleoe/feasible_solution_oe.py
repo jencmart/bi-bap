@@ -118,16 +118,17 @@ class FSRegressor(AbstractRegression):
             J = np.matrix(self._data[idx_initial], copy=True)
             M = np.matrix(self._data[idx_rest], copy=True)
 
-            J2 = np.copy(J)
-            M2 = np.copy(M)
-            idx_initial2 = np.copy(idx_initial)
-            idx_rest2 = np.copy(idx_rest)
+            #J2 = np.copy(J)
+            #M2 = np.copy(M)
+            #idx_initial2 = np.copy(idx_initial)
+            #idx_rest2 = np.copy(idx_rest)
 
-            J2 = np.asmatrix(J2)
-            M2 = np.asmatrix(M2)
+            #J2 = np.asmatrix(J2)
+            #M2 = np.asmatrix(M2)
             # do the refinement process
+
             res = self.refinement_process_fsa_oe_qr(J, M, idx_initial, idx_rest)
-            res2 = self.refinement_process_fsa(J2, M2, idx_initial2, idx_rest2)
+            # res2 = self.refinement_process_fsa(J2, M2, idx_initial2, idx_rest2)
 
             # todo - porovnani results
 
@@ -254,39 +255,92 @@ class FSRegressor(AbstractRegression):
     # ############### FSA-OE-QR VERSION  ########################################
     # ###########################################################################
 
-    def refinement_process_fsa_oe_qr(self, J, M, idx_initial, idx_rest):
-        steps = 0
 
-        # data for delata eqation
-        # y = J[:, [0]]
-        # x = J[:, 1:]
+    def calculate_theta_qr(self, J):
+        y = J[:, [0]]
+        x = J[:, 1:]
+        q, r = linalg.qr(x)  # X = QR ; x.T x = R.T R ; (pozor: cholesky je L * L.T kde l = R.T)
 
-        q, r = linalg.qr(J[:, 1:])  # X = QR ; x.T x = R.T R ; (pozor: cholesky je L * L.T kde l = R.T)
         # # Q ... n x n
         # # R ... n x p
         # #  Q.T *  ( x * w - y ) ^ 2
         # #  Q.T * Q * R * w - Q.T * y
         # #  R * w - Q.T * y
         # #  R * w = Q.T * y
-        p = (J[:, 1:]).shape[1]
+
+        theta, r1 =  self.update_theta_qr(q,r,J)
+
+        return  theta, q, r, r1
+
+    def update_theta_qr(self, q, r, J):
+        y = J[:, [0]]
+        p = r.shape[1]
         #  r1 pxp
         r1 = r[:p, :]  # only first p rows
         qt = q.T
         q1 = qt[:p, :]  # only first p rows
 
         # # Solve the equation x w = c for x, assuming a is a triangular matrix
-        theta = linalg.solve_triangular(r1, q1 * J[:, [0]])  # p x substitution -- works as expected
+        theta = linalg.solve_triangular(r1, q1 * y)  # p x substitution -- works as expected
         # inversion = (x.T * x).I
         # theta = inversion * x.T * y  # OLS
+        return theta, r1
 
+
+    def calculate_theta_fii(self, Ja):
+        J = np.copy(Ja)
+        J = np.asmatrix(J)
+
+        # dej m na konec
+        first_sloupek = J[:, [0]]
+        J[:, : -1] = J[:, 1:]
+        J[:, [-1] ] = first_sloupek
+
+        qM, rM = linalg.qr(J)
+
+        theta, rss, r1 = self.update_theta_fii(rM)
+
+        # p = rM.shape[1] - 1  # vlastne stejne, proad chceme R
+        # r1 = rM[:p, : -1 ]
+        # fii = rM[:p, [-1]]
+        # theta = linalg.solve_triangular(r1, fii)
+        # rss = rM[p, p ] ** 2
+
+        return theta, qM, rM, r1, rss
+
+    def update_theta_fii(self, rM):
+        p = rM.shape[1] - 1
+
+        r1 = rM[:p, : -1]
+        fii = rM[:p, [-1]]
+        theta = linalg.solve_triangular(r1, fii)
+        rss = rM[p, p] ** 2
+
+        return theta, rss, r1
+
+    def calculate_residuals_y_first(self, J, M, theta):
         residuals_J = J[:, [0]] - J[:, 1:] * theta
         residuals_M = (M[:, [0]]) - (M[:, 1:]) * theta
+        return residuals_J, residuals_M
+
+    def refinement_process_fsa_oe_qr(self, J, M, idx_initial, idx_rest):
+        steps = 0
+
+        #theta, q, r, r1 = self.calculate_theta_qr(J)
+
+
+
         # rss todo
-        rss = residuals_J.T * residuals_J
+        #rss = residuals_J.T * residuals_J
+
+        # todo - new version
+        theta, qM, rM, r1M, rss = self.calculate_theta_fii(J)
+
+        residuals_J, residuals_M = self.calculate_residuals_y_first(J, M , theta)
 
         while True:
 
-            i_to_swap2, j_to_swap2, delta2 = self.all_pairs_fsa_oe_qr(J, M, r1, rss, residuals_J, residuals_M)
+            i_to_swap2, j_to_swap2, delta2 = self.all_pairs_fsa_oe_qr(J, M, r1M, rss, residuals_J, residuals_M)
 
             if delta2 >= 1:
                 break
@@ -294,10 +348,17 @@ class FSRegressor(AbstractRegression):
             else:  # swap i and j [TOGHETHER WITH INDEXES] ; je to ok - SWAPUJEME SPRAVNE
 
                 # Update RSS
-                rss = rss * delta2
+                # rss = rss * delta2 - now updating in M
 
                 # Save row to swap in QR
-                row_to_add = np.copy(M[j_to_swap2, 1:])
+                #row_to_add = np.copy(M[j_to_swap2, 1:])
+                row_to_addM = np.copy(M[j_to_swap2, :])
+
+                # change a fucking sloupek M
+                first_sloupek = row_to_addM[:, [0]]
+                row_to_addM[:, : -1] = row_to_addM[:, 1:]
+                row_to_addM[:, [-1]] = first_sloupek
+
 
                 # Update indexes
                 tmp = np.copy(J[i_to_swap2])
@@ -308,24 +369,30 @@ class FSRegressor(AbstractRegression):
 
                 # Update QR
                 # q, r = linalg.qr_insert(q, r, row_to_add, i_to_swap2+1, 'row', overwrite_qru=True)  # todo - seems ok
-                q, r = self.qr_insert(q, r, row_to_add, i_to_swap2 + 1)
+                #q, r = self.qr_insert(q, r, row_to_add, i_to_swap2 + 1)
                 # q, r = linalg.qr_delete(q, r, i_to_swap2, 1, 'row', overwrite_qr=True)
-                q, r = self.qr_delete(q, r, i_to_swap2)
+                #q, r = self.qr_delete(q, r, i_to_swap2)
+
+                # todo - M version
+                qM, rM = self.qr_insert(qM, rM, row_to_addM, i_to_swap2 + 1)
+                qM, rM = self.qr_delete(qM, rM, i_to_swap2)
 
                 # q, r = q3, r3
                 # q, r = linalg.qr(J[:, 1:])  # X = QR ; x.T x = R.T R ; (pozor: cholesky je L * L.T kde l = R.T)
 
                 # what_we_want = J[:, 1:]
+                # what_we_want = J
+
                 #
-                # if not np.allclose(np.dot(q.T, q), np.eye(what_we_want.shape[0])):
+                # if not np.allclose(np.dot(qM.T, qM), np.eye(what_we_want.shape[0])):
                 #     print('not orthogonal Q')
                 #     exit(1)
-                #
+
                 # # if not np.allclose(np.dot(q3.T, q3), np.eye(what_we_want.shape[0])):
                 # #     print('not orthogonal Q3')
                 # #     exit(1)
                 #
-                # if not np.allclose(np.dot(q, r), what_we_want):
+                # if not np.allclose(np.dot(qM, rM), what_we_want):
                 #     print('not similar Q R ')
                 #     exit(1)
 
@@ -333,30 +400,33 @@ class FSRegressor(AbstractRegression):
                 #     print('not similar Q3 R3 ')
                 #     exit(1)
 
-                # # Q ... n x n
-                # # R ... n x p
-                # #  Q.T *  ( x * w - y ) ^ 2
-                # #  Q.T * Q * R * w - Q.T * y
-                # #  R * w - Q.T * y
-                # #  R * w = Q.T * y
-                # p = (J[:, 1:]).shape[1]
-                #  r1 pxp
-                r1 = r[:p, :]  # only first p rows
-                qt = q.T
-                q1 = qt[:p, :]  # only first p rows
+                # r1 = r[:p, :]  # only first p rows
+                # theta, r1 = self.update_theta_qr(q, r, J)
 
-                # # Solve the equation x w = c for x, assuming a is a triangular matrix
-                theta = linalg.solve_triangular(r1, q1 * J[:, [0]])  # p x substitution -- works as expected
-                # inversion = (x.T * x).I
-                # theta = inversion * x.T * y  # OLS
+                theta, rss, r1M = self.update_theta_fii(rM)
+
+                # theta2, _, _, _, rss2 = self.calculate_theta_fii(J)
+
+                # if not np.allclose(theta, theta2):
+                #     print(theta)
+                #     print(theta2)
+                #     print('********')
+                #     exit(1)
+                #
+                # if not math.isclose(rss[0, 0], rss2, rel_tol=1e-09):
+                #     print(rss)
+                #     print(rss2)
+                #     exit(1)
+
+
 
                 # moved into qr all pairs
-                residuals_J = J[:, [0]] - J[:, 1:] * theta
-                residuals_M = (M[:, [0]]) - (M[:, 1:]) * theta
+                residuals_J, residuals_M = self.calculate_residuals_y_first(J, M, theta)
 
                 steps += 1
 
-        return self.Result(theta, idx_initial, rss[0,0], steps)
+        # rss = rss[0,0] - not when M 2
+        return self.Result(theta, idx_initial, rss, steps)
 
     def all_pairs_fsa_oe_qr(self, J, M, R, rss, residuals_J, residuals_M):
         delta = 1
@@ -427,7 +497,7 @@ class FSRegressor(AbstractRegression):
         #print('rss')
         #rss = rss[0,0]
         #print('rss---')
-        rss = rss[0,0]
+        #rss = rss[0,0] - not when M
 
         # this equation is by the paper .. indexes i and j are swapped compared to us
         nom = (1 + i_m_i + 1/rss * ei*ei) * (1 - j_m_j - 1/rss * ej*ej) + (i_m_j + 1/rss * ei*ej) * (i_m_j + 1/rss * ei*ej)
@@ -488,6 +558,7 @@ class FSRegressor(AbstractRegression):
                 qnew[i, j] = temp  # X
 
         return qnew[p_del:, p_del:], rnew[p_del:, :]
+
 
     def qr_insert(self, q, r, row, idx): # O(p * n)
         # idx .. row before which new row will be inserted
