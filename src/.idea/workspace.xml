@@ -8,6 +8,7 @@
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/runall.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/runall.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen/scripts/eigen_monitor_perf.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen/scripts/eigen_monitor_perf.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lts/feasibleoe/feasible_solution_oe.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lts/feasibleoe/feasible_solution_oe.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,7 +18,7 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/src$feasible_solution_test_dev.coverage" NAME="feasible_solution_test_dev Coverage Results" MODIFIED="1552391023132" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/package-lts/ltsregression/feasiblesolution" />
-    <SUITE FILE_PATH="coverage/src$main.coverage" NAME="main Coverage Results" MODIFIED="1553982975417" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/package-lts" />
+    <SUITE FILE_PATH="coverage/src$main.coverage" NAME="main Coverage Results" MODIFIED="1554025602239" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/package-lts" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
@@ -48,18 +49,13 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/package-lts/lts/feasibleoe/feasible_solution_oe.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2202">
-              <caret line="139" column="11" lean-forward="true" selection-start-line="139" selection-start-column="11" selection-end-line="139" selection-end-column="11" />
-              <caret line="140" column="11" lean-forward="true" selection-start-line="140" selection-start-column="11" selection-end-line="140" selection-end-column="11" />
-              <caret line="141" column="11" lean-forward="true" selection-start-line="141" selection-start-column="11" selection-end-line="141" selection-end-column="11" />
-              <caret line="142" column="11" lean-forward="true" selection-start-line="142" selection-start-column="11" selection-end-line="142" selection-end-column="11" />
-              <caret line="143" column="11" lean-forward="true" selection-start-line="143" selection-start-column="11" selection-end-line="143" selection-end-column="11" />
+            <state relative-caret-position="1771">
+              <caret line="367" column="9" selection-start-line="367" selection-start-column="9" selection-end-line="367" selection-end-column="9" />
               <folding>
                 <element signature="e#0#51#0" expanded="true" />
                 <element signature="e#473#516#0" />
+                <element signature="e#9187#10968#0" />
                 <element signature="e#10477#10938#0" />
-                <element signature="e#15133#16053#0" />
-                <element signature="e#23389#24873#0" />
                 <element signature="e#13863#15805#0" />
                 <element signature="e#15867#18148#0" />
                 <element signature="e#18220#18603#0" />
@@ -83,8 +79,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/package-lts/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-21">
-              <caret line="15" column="41" selection-start-line="15" selection-start-column="41" selection-end-line="15" selection-end-column="41" />
+            <state relative-caret-position="390">
+              <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
               <folding>
                 <element signature="e#32#84#0" expanded="true" />
               </folding>
@@ -124,7 +120,6 @@
       <find>2.23</find>
       <find>returnuji</find>
       <find>all_pairs_fsa</find>
-      <find>all_pairs_fsa_oe_qr</find>
       <find>refinement_process_fsa_oe_qr</find>
       <find>refinement_process_fsa</find>
       <find>isc</find>
@@ -133,6 +128,7 @@
       <find>linalg.qr(</find>
       <find>q</find>
       <find>close</find>
+      <find>all_pairs_fsa_oe_qr</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -400,23 +396,23 @@
       <workItem from="1552467882208" duration="2246000" />
       <workItem from="1553181289729" duration="3645000" />
       <workItem from="1553451435403" duration="665000" />
-      <workItem from="1553780801852" duration="56061000" />
+      <workItem from="1553780801852" duration="58870000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="121045000" />
+    <option name="totallyTimeSpent" value="123854000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="3" width="642" height="1078" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.60169494" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.5472528" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.31530613" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32359082" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.34968686" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -727,16 +723,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-21">
-          <caret line="15" column="41" selection-start-line="15" selection-start-column="41" selection-end-line="15" selection-end-column="41" />
-          <folding>
-            <element signature="e#32#84#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/fit/bi-bap/src/package-lts/tests/feasibleoe/test_dev.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="167">
@@ -744,20 +730,25 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/package-lts/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
+          <folding>
+            <element signature="e#32#84#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/package-lts/lts/feasibleoe/feasible_solution_oe.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2202">
-          <caret line="139" column="11" lean-forward="true" selection-start-line="139" selection-start-column="11" selection-end-line="139" selection-end-column="11" />
-          <caret line="140" column="11" lean-forward="true" selection-start-line="140" selection-start-column="11" selection-end-line="140" selection-end-column="11" />
-          <caret line="141" column="11" lean-forward="true" selection-start-line="141" selection-start-column="11" selection-end-line="141" selection-end-column="11" />
-          <caret line="142" column="11" lean-forward="true" selection-start-line="142" selection-start-column="11" selection-end-line="142" selection-end-column="11" />
-          <caret line="143" column="11" lean-forward="true" selection-start-line="143" selection-start-column="11" selection-end-line="143" selection-end-column="11" />
+        <state relative-caret-position="1771">
+          <caret line="367" column="9" selection-start-line="367" selection-start-column="9" selection-end-line="367" selection-end-column="9" />
           <folding>
             <element signature="e#0#51#0" expanded="true" />
             <element signature="e#473#516#0" />
+            <element signature="e#9187#10968#0" />
             <element signature="e#10477#10938#0" />
-            <element signature="e#15133#16053#0" />
-            <element signature="e#23389#24873#0" />
             <element signature="e#13863#15805#0" />
             <element signature="e#15867#18148#0" />
             <element signature="e#18220#18603#0" />

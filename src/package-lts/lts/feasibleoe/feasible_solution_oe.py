@@ -16,7 +16,6 @@ cppimport
     inside python module: my_import =  cppimport.imp("xxx")
 """
 
-
 # class FSRegressorCPP(AbstractRegression):
 #     def __init__(self):
 #         super().__init__()
@@ -214,34 +213,12 @@ class FSRegressor(AbstractRegression):
         delta = 0
         i_to_swap = None
         j_to_swap = None
-        #delta_2 = 1
-
-        # rs_shit = float('inf')
 
         # go through all combinations
         for i in range(J.shape[0]):
             for j in range(M.shape[0]):
                 # . calculate deltaRSS
                 tmp_delta = self.calculate_delta_rss(J, M, inversion, residuals_J, residuals_M, i, j)
-                # J, M, R1, rss, residuals_J, residuals_M, i, j
-                #tmp_delta_2 = self.calculate_delta_rss_oe_qr(J, M, R, rss, residuals_J, residuals_M, i, j)
-
-                #rss1 = rss[0, 0] + tmp_delta
-                #rss2 = (rss[0, 0] * tmp_delta_2)
-
-
-                #if not (math.isclose(rss1, rss2, rel_tol=1e-5)):
-               # print('rss1, {}  [= {} + {}]'.format(rss[0, 0] + tmp_delta,   rss[0, 0], tmp_delta))
-                #print('rss2, {}  [= {} * {}]'.format(rss[0, 0] * tmp_delta_2, rss[0, 0], tmp_delta_2))
-                #print('delta {}'.format(tmp_delta))
-                 #   exit(1)
-                #
-                # if tmp_delta_2 < 0:
-                #     print('fuck')
-                #     exit(1)
-
-                #print('-----')
-                # todo POROVNEJ DELTY !
 
                 # if delta rss < bestDeltaRss
                 if tmp_delta < delta:
@@ -255,10 +232,6 @@ class FSRegressor(AbstractRegression):
                     i_to_swap = i
                     j_to_swap = j
 
-                #if tmp_delta_2 < delta_2:
-                 #   delta_2 = tmp_delta_2
-
-        #print('returnuji {}'.format(delta))
         return i_to_swap, j_to_swap, delta
 
     def calculate_delta_rss(self, J, M, inversion,
@@ -334,9 +307,9 @@ class FSRegressor(AbstractRegression):
                 idx_initial[i_to_swap2], idx_rest[j_to_swap2] = idx_rest[j_to_swap2], idx_initial[i_to_swap2]
 
                 # Update QR
-                # q, r = linalg.qr_insert(q, r, row_to_add, i_to_swap2+1, 'row')  # todo - seems ok
+                # q, r = linalg.qr_insert(q, r, row_to_add, i_to_swap2+1, 'row', overwrite_qru=True)  # todo - seems ok
                 q, r = self.qr_insert(q, r, row_to_add, i_to_swap2 + 1)
-                # q, r = linalg.qr_delete(q, r, i_to_swap2, 1, 'row')
+                # q, r = linalg.qr_delete(q, r, i_to_swap2, 1, 'row', overwrite_qr=True)
                 q, r = self.qr_delete(q, r, i_to_swap2)
 
                 # q, r = q3, r3
@@ -377,28 +350,35 @@ class FSRegressor(AbstractRegression):
                 # inversion = (x.T * x).I
                 # theta = inversion * x.T * y  # OLS
 
+                # moved into qr all pairs
                 residuals_J = J[:, [0]] - J[:, 1:] * theta
                 residuals_M = (M[:, [0]]) - (M[:, 1:]) * theta
 
                 steps += 1
 
-
-        return self.Result(theta, idx_initial, rss, steps)
+        return self.Result(theta, idx_initial, rss[0,0], steps)
 
     def all_pairs_fsa_oe_qr(self, J, M, R, rss, residuals_J, residuals_M):
         delta = 1
         i_to_swap = None
         j_to_swap = None
 
+        # so far moved here
+        #residuals_J = J[:, [0]] - J[:, 1:] * theta
+        #residuals_M = (M[:, [0]]) - (M[:, 1:]) * theta
 
         # go through all combinations
         for i in range(J.shape[0]):
 
+            # ej = J[i, [0]] - J[i, 1:] * theta # this always only once !!
 
-            for j in range(M.shape[0]):
+            for j in range(M.shape[0]): # this runs often, have prepared residuals_M
+
+                ei = residuals_M[j, 0]  # ano, opravdu opacne
+                ej = residuals_J[i, 0]
 
                 # . calculate deltaRSS
-                tmp_delta = self.calculate_delta_rss_oe_qr(J, M, R, rss, residuals_J, residuals_M, i, j)
+                tmp_delta = self.calculate_delta_rss_oe_qr(J, M, R, rss, ei, ej, i, j)
 
                 # if delta rss < bestDeltaRss
                 if tmp_delta < delta: # vetsi nez nula musi byt vzdy, ne ?
@@ -408,8 +388,7 @@ class FSRegressor(AbstractRegression):
 
         return i_to_swap, j_to_swap, delta
 
-
-    def calculate_delta_rss_oe_qr(self, J, M, R1, rss, residuals_J, residuals_M, i, j):
+    def calculate_delta_rss_oe_qr(self, J, M, R1, rss, ei, ej, i, j):
         # x * (R.T * R ) ^-1 * x = v.T v
         # where
         # R.T * v.T = xi.T
@@ -434,8 +413,6 @@ class FSRegressor(AbstractRegression):
         i_m_j = np.dot(xj, u)  # xj * u  # check if not xi
         i_m_j = i_m_j[0, 0]
 
-        ei = residuals_M[j, 0] # ano, opravdu opacne
-        ej = residuals_J[i, 0]
 
         # print('************')
         # print('IMI')
@@ -451,6 +428,8 @@ class FSRegressor(AbstractRegression):
         #rss = rss[0,0]
         #print('rss---')
         rss = rss[0,0]
+
+        # this equation is by the paper .. indexes i and j are swapped compared to us
         nom = (1 + i_m_i + 1/rss * ei*ei) * (1 - j_m_j - 1/rss * ej*ej) + (i_m_j + 1/rss * ei*ej) * (i_m_j + 1/rss * ei*ej)
         denom = (1 + i_m_i - j_m_j + i_m_j * i_m_j - i_m_i * j_m_j)
         ro = nom / denom
@@ -593,7 +572,6 @@ class FSRegressor(AbstractRegression):
             r = -r
 
         return cos, sin, r
-
 
     # ###########################################################################
     # ############### INITIAL H1 ################################################

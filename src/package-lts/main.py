@@ -8,13 +8,15 @@ from tests.fastlts import test_dev as fast_lts_test
 from experiments import speed_fast_lts as lts_speed
 
 
-def test_feasible_solution():
-    feasible_test.test_cpp()
+# Feasible solution
+def test_feasible_solution_numpy():
+    feasible_test.test_numpy(n=50, p=3)
 
+# Feasible solution OE QR
+def test_feasible_OE_solution_numpy():
+    feasible_oe_test.test_numpy(n=50, p=3)
 
-def test_feasible_OE_solution():
-    feasible_oe_test.test_numpy(n=30, p=3)
-
+# Fast LTS
 def test_fast_lts():
     fast_lts_test.test_cpp(n=10000, p=5)
 
@@ -28,6 +30,8 @@ if __name__ == '__main__':
     # test_fast_lts()
     # experiment_fast_lts_speed()
     # lts_speed.fast_lts_cpp_only()
-    test_feasible_OE_solution()
+    test_feasible_OE_solution_numpy()
+
+    test_feasible_solution_numpy()
     #lts_speed.fast_lts_cpp_big()
 
