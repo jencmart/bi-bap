@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5818e2d1-7629-47ec-a2bd-d6037228392b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/jencmart.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/jencmart.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/run.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/runall.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/runall.sh" afterDir="false" />
@@ -17,7 +17,7 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/src$feasible_solution_test_dev.coverage" NAME="feasible_solution_test_dev Coverage Results" MODIFIED="1552391023132" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/package-lts/ltsregression/feasiblesolution" />
-    <SUITE FILE_PATH="coverage/src$main.coverage" NAME="main Coverage Results" MODIFIED="1554040816260" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/package-lts" />
+    <SUITE FILE_PATH="coverage/src$main.coverage" NAME="main Coverage Results" MODIFIED="1554063411367" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/package-lts" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
@@ -48,13 +48,18 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/package-lts/lts/feasibleoe/feasible_solution_oe.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="451">
-              <caret line="384" column="6" lean-forward="true" selection-start-line="384" selection-start-column="6" selection-end-line="384" selection-end-column="6" />
+            <state relative-caret-position="461">
+              <caret line="459" column="26" selection-start-line="459" selection-start-column="26" selection-end-line="459" selection-end-column="26" />
               <folding>
                 <element signature="e#0#51#0" expanded="true" />
-                <element signature="e#473#516#0" />
                 <element signature="e#9187#10968#0" />
                 <element signature="e#10477#10938#0" />
+                <element signature="e#9089#9487#0" />
+                <element signature="e#10027#10619#0" />
+                <element signature="e#10502#10691#0" />
+                <element signature="e#10819#10956#0" />
+                <element signature="e#11098#11104#0" />
+                <element signature="e#13863#15805#0" />
                 <element signature="e#18220#18603#0" />
               </folding>
             </state>
@@ -73,11 +78,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$USER_HOME$/fit/bi-bap/src/package-lts/lts/feasibleoe/feasible_solution_oe.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="151">
-              <caret line="556" column="23" selection-start-line="556" selection-start-column="8" selection-end-line="556" selection-end-column="23" />
-              <folding>
-                <element signature="e#9495#9931#0" />
-              </folding>
+            <state relative-caret-position="205">
+              <caret line="130" column="35" selection-start-line="130" selection-end-line="131" />
             </state>
           </provider>
         </entry>
@@ -126,13 +128,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>refinement_process</find>
-      <find>delta_oe</find>
-      <find>jjejerjerjwrjwerjewrjwq</find>
-      <find>type</find>
-      <find>SUKA</find>
-      <find>aaaaa</find>
-      <find>steps</find>
       <find>np.dot</find>
       <find>calculate_delta_rss_oe_qr</find>
       <find>0.745</find>
@@ -151,11 +146,18 @@
       <find>update_theta_fii</find>
       <find>qr_insert</find>
       <find>insert_</find>
-      <find>q</find>
       <find>sloupek</find>
       <find>J = np.cop</find>
       <find>close</find>
       <find>rss_oe_qr</find>
+      <find>q</find>
+      <find>refinement_process_fsa_MMEA_qr</find>
+      <find>[0]]</find>
+      <find>exit</find>
+      <find>zje</find>
+      <find>all_pairs_fsa_oe_inversion</find>
+      <find>math.isc</find>
+      <find>calculate_theta_inversion</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -217,10 +219,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-2" />
-    <option name="y" value="-18" />
-    <option name="width" value="1924" />
-    <option name="height" value="1100" />
+    <option name="x" value="-1" />
+    <option name="y" value="3" />
+    <option name="width" value="962" />
+    <option name="height" value="1078" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -325,7 +327,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/package-lts/main.py" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.selected.configurable" value="Errors" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -423,23 +425,23 @@
       <workItem from="1552467882208" duration="2246000" />
       <workItem from="1553181289729" duration="3645000" />
       <workItem from="1553451435403" duration="665000" />
-      <workItem from="1553780801852" duration="74089000" />
+      <workItem from="1553780801852" duration="90210000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="139073000" />
+    <option name="totallyTimeSpent" value="155194000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-2" y="-18" width="1924" height="1100" extended-state="0" />
+    <frame x="-1" y="3" width="962" height="1078" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16684492" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.43296704" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.31530613" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.40292275" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.31428573" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.34029227" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -715,16 +717,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/fit/bi-bap/src/package-lts/lts/feasibleoe/feasible_solution_oe.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="151">
-          <caret line="556" column="23" selection-start-line="556" selection-start-column="8" selection-end-line="556" selection-end-column="23" />
-          <folding>
-            <element signature="e#9495#9931#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/package-lts/tests/feasible/test_dev.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
@@ -762,15 +754,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/fit/bi-bap/src/package-lts/lts/feasibleoe/feasible_solution_oe.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="205">
+          <caret line="130" column="35" selection-start-line="130" selection-end-line="131" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/package-lts/lts/feasibleoe/feasible_solution_oe.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="451">
-          <caret line="384" column="6" lean-forward="true" selection-start-line="384" selection-start-column="6" selection-end-line="384" selection-end-column="6" />
+        <state relative-caret-position="461">
+          <caret line="459" column="26" selection-start-line="459" selection-start-column="26" selection-end-line="459" selection-end-column="26" />
           <folding>
             <element signature="e#0#51#0" expanded="true" />
-            <element signature="e#473#516#0" />
             <element signature="e#9187#10968#0" />
             <element signature="e#10477#10938#0" />
+            <element signature="e#9089#9487#0" />
+            <element signature="e#10027#10619#0" />
+            <element signature="e#10502#10691#0" />
+            <element signature="e#10819#10956#0" />
+            <element signature="e#11098#11104#0" />
+            <element signature="e#13863#15805#0" />
             <element signature="e#18220#18603#0" />
           </folding>
         </state>

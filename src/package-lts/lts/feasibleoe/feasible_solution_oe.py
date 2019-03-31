@@ -7,6 +7,7 @@ import time
 # import lts.feasibleoe.cpp.feasible_solution as cpp_solution
 
 from scipy import linalg
+
 """
 # lts = cppimport.imp("feasible/cpp/feasible_solution")
 cppimport
@@ -15,6 +16,7 @@ cppimport
         inside: PYBIND11_MODULE(xxx, m)
     inside python module: my_import =  cppimport.imp("xxx")
 """
+
 
 # class FSRegressorCPP(AbstractRegression):
 #     def __init__(self):
@@ -114,34 +116,35 @@ class FSRegressor(AbstractRegression):
         for i in range(num_starts):
             # generate random subset J, |J| = h and its complement M
             idx_initial, idx_rest = self.select_initial_h1()
-            # save splitted data
+            # save split data
             J = np.matrix(self._data[idx_initial], copy=True)
             M = np.matrix(self._data[idx_rest], copy=True)
 
-            #J2 = np.copy(J)
-            #M2 = np.copy(M)
-            #idx_initial2 = np.copy(idx_initial)
-            #idx_rest2 = np.copy(idx_rest)
+            # J2 = np.copy(J)
+            # M2 = np.copy(M)
+            # idx_initial2 = np.copy(idx_initial)
+            # idx_rest2 = np.copy(idx_rest)
 
-            #J2 = np.asmatrix(J2)
-            #M2 = np.asmatrix(M2)
+            # J2 = np.asmatrix(J2)
+            # M2 = np.asmatrix(M2)
             # do the refinement process
 
-            res = self.refinement_process_fsa_oe_qr(J, M, idx_initial, idx_rest)
+            res = self.refinement_process_fs_moe_inversion(J, M, idx_initial, idx_rest)
+            # res = self.refinement_process_fsa_MMEA_qr(J, M, idx_initial, idx_rest)
             # res2 = self.refinement_process_fsa(J2, M2, idx_initial2, idx_rest2)
 
             # todo - porovnani results
 
-            #print('**** RESULT *******')
+            # print('**** RESULT *******')
             # print('theta ')
             # print(res.theta_hat)
             # print('theta 2')
             # print(res2.theta_hat)
-           # if not (math.isclose(res.rss, res2.rss)):
-           #     print('rss [{}], [{}]'.format(res.rss, res2.rss))
-           #     print('steps [{}], [{}]'.format(res.steps, res2.steps))
-           #     exit(1)
-           # print('OK')
+            # if not (math.isclose(res.rss, res2.rss)):
+            #     print('rss [{}], [{}]'.format(res.rss, res2.rss))
+            #     print('steps [{}], [{}]'.format(res.steps, res2.steps))
+            #     exit(1)
+            # print('OK')
 
             results.append(res)
 
@@ -177,40 +180,32 @@ class FSRegressor(AbstractRegression):
     def refinement_process_fsa(self, J, M, idx_initial, idx_rest):
         steps = 0
         while True:
-            # data for delata eqation
-            y = J[:, [0]]
-            x = J[:, 1:]
 
-            inversion = (x.T * x).I
-            theta = inversion * x.T * y  # OLS
+            # Calculate theta and store inversion
+            theta, inversion = self.calculate_theta_inversion(J)
 
-            residuals_J = y - x * theta
-            residuals_M = (M[:, [0]]) - (M[:, 1:]) * theta
-            # rss todo
-            rss = residuals_J.T * residuals_J
+            # Calculate residuals
+            residuals_J, residuals_M = self.calculate_residuals_y_first(J, M, theta)
 
-            i_to_swap, j_to_swap, delta1 = self.all_pairs_fsa(J, M, inversion, residuals_J, residuals_M)
+            # Iterate all swap combinations
+            i_to_swap, j_to_swap, delta = self.all_pairs_fsa(J, M, inversion, residuals_J, residuals_M)
 
-            if delta1 >= 0:
+            if delta >= 0:
                 break
 
-            else:  # swap i and j [TOGHETHER WITH INDEXES] ; je to ok - SWAPUJEME SPRAVNE
-                tmp = np.copy(J[i_to_swap])
-                J[i_to_swap] = np.copy(M[j_to_swap])
-                M[j_to_swap] = np.copy(tmp)
-                idx_initial[i_to_swap], idx_rest[j_to_swap] = idx_rest[j_to_swap], idx_initial[i_to_swap]
+            else:  # swap i and j (together with indexes)
+                self.swap_row_J_M(J, M, idx_initial, idx_rest, i_to_swap, j_to_swap)
                 steps += 1
 
         # Save converged result
-        # 1. calculate rs
         y_fin = J[:, [0]]
         x_fin = J[:, 1:]
         rss = (y_fin - x_fin * theta).T * (y_fin - x_fin * theta)
         rss = rss[0, 0]
-        # 2. return in
+
         return self.Result(theta, idx_initial, rss, steps)
 
-    def all_pairs_fsa(self, J, M, inversion, residuals_J, residuals_M): # todo - odmazat delta 2
+    def all_pairs_fsa(self, J, M, inversion, residuals_J, residuals_M):  # todo - odmazat delta 2
         delta = 0
         i_to_swap = None
         j_to_swap = None
@@ -255,23 +250,30 @@ class FSRegressor(AbstractRegression):
     # ############### FSA-OE-QR VERSION  ########################################
     # ###########################################################################
 
-
+    # Calculate theta using normal equation: R1 theta = Q1y
     def calculate_theta_qr(self, J):
-        y = J[:, [0]]
-        x = J[:, 1:]
-        q, r = linalg.qr(x)  # X = QR ; x.T x = R.T R ; (pozor: cholesky je L * L.T kde l = R.T)
-
         # # Q ... n x n
         # # R ... n x p
+        q, r = linalg.qr(J[:, 1:])  # X = QR ; x.T x = R.T R ;
+        # ( connection to Cholesky: L * L.T  where l = R.T)
+
         # #  Q.T *  ( x * w - y ) ^ 2
         # #  Q.T * Q * R * w - Q.T * y
         # #  R * w - Q.T * y
         # #  R * w = Q.T * y
+        theta, r1 = self.update_theta_qr(q, r, J)
 
-        theta, r1 =  self.update_theta_qr(q,r,J)
+        return theta, q, r, r1
 
-        return  theta, q, r, r1
+    def calculate_theta_inversion(self, J):
+        y = J[:, [0]]
+        x = J[:, 1:]
 
+        inversion = (x.T * x).I
+        theta = inversion * x.T * y  # OLS
+        return theta, inversion
+
+    # Update theta using normal equation: R1 theta = Q1y
     def update_theta_qr(self, q, r, J):
         y = J[:, [0]]
         p = r.shape[1]
@@ -281,36 +283,27 @@ class FSRegressor(AbstractRegression):
         q1 = qt[:p, :]  # only first p rows
 
         # # Solve the equation x w = c for x, assuming a is a triangular matrix
-        theta = linalg.solve_triangular(r1, q1 * y)  # p x substitution -- works as expected
-        # inversion = (x.T * x).I
-        # theta = inversion * x.T * y  # OLS
+        theta = linalg.solve_triangular(r1, q1 * y)  # p x substitution
         return theta, r1
 
-
+    # Calculate theta directly from ~M without c = Q1y
     def calculate_theta_fii(self, Ja):
         J = np.copy(Ja)
         J = np.asmatrix(J)
 
-        # dej m na konec
-        first_sloupek = J[:, [0]]
+        # move first col (y) to last col so we'll have (X|y)
+        first_col = J[:, [0]]
         J[:, : -1] = J[:, 1:]
-        J[:, [-1] ] = first_sloupek
+        J[:, [-1]] = first_col
 
         qM, rM = linalg.qr(J)
-
         theta, rss, r1 = self.update_theta_fii(rM)
-
-        # p = rM.shape[1] - 1  # vlastne stejne, proad chceme R
-        # r1 = rM[:p, : -1 ]
-        # fii = rM[:p, [-1]]
-        # theta = linalg.solve_triangular(r1, fii)
-        # rss = rM[p, p ] ** 2
 
         return theta, qM, rM, r1, rss
 
+    # Update theta directly from ~M without c = Q1y
     def update_theta_fii(self, rM):
         p = rM.shape[1] - 1
-
         r1 = rM[:p, : -1]
         fii = rM[:p, [-1]]
         theta = linalg.solve_triangular(r1, fii)
@@ -318,175 +311,310 @@ class FSRegressor(AbstractRegression):
 
         return theta, rss, r1
 
+    # calculate residuals from all used and unused observations
     def calculate_residuals_y_first(self, J, M, theta):
         residuals_J = J[:, [0]] - J[:, 1:] * theta
         residuals_M = (M[:, [0]]) - (M[:, 1:]) * theta
+
         return residuals_J, residuals_M
 
-    def refinement_process_fsa_oe_qr(self, J, M, idx_initial, idx_rest):
+    def swap_row_J_M(self, J, M, idx_initial, idx_rest, i_to_swap, j_to_swap):
+        tmp = np.copy(J[i_to_swap])
+        J[i_to_swap] = np.copy(M[j_to_swap])
+        M[j_to_swap] = np.copy(tmp)
+        idx_initial[i_to_swap], idx_rest[j_to_swap] = idx_rest[j_to_swap], idx_initial[i_to_swap]
+
+    def test_qr_decomp(self, q, r, X):
+
+        #
+        # if not np.allclose(np.dot(qM.T, qM), np.eye(what_we_want.shape[0])):
+        #     print('not orthogonal Q')
+        #     exit(1)
+
+        # # if not np.allclose(np.dot(q3.T, q3), np.eye(what_we_want.shape[0])):
+        # #     print('not orthogonal Q3')
+        # #     exit(1)
+        #
+        # if not np.allclose(np.dot(qM, rM), what_we_want):
+        #     print('not similar Q R ')
+        #     exit(1)
+
+        # if not np.allclose(np.dot(q3, r3), what_we_want):
+        #     print('not similar Q3 R3 ')
+        #     exit(1)
+
+        # r1 = r[:p, :]  # only first p rows
+        # theta, r1 = self.update_theta_qr(q, r, J)
+
+        # if not np.allclose(theta, theta2):
+        #     print(theta)
+        #     print(theta2)
+        #     print('********')
+        #     exit(1)
+        #
+        # if not math.isclose(rss[0, 0], rss2, rel_tol=1e-09):
+        #     print(rss)
+        #     print(rss2)
+        #     exit(1)
+
+        return
+
+    def refinement_process_fs_moe_qr(self, J, M, idx_initial, idx_rest):
         steps = 0
 
-        #theta, q, r, r1 = self.calculate_theta_qr(J)
+        # Calculate QR decompositon
+        theta, q, r, r1 = self.calculate_theta_qr(J)
 
+        # Calculate residuals e
+        residuals_J, residuals_M = self.calculate_residuals_y_first(J, M, theta)
 
-
-        # rss todo
-        #rss = residuals_J.T * residuals_J
-
-        # todo - new version
-        theta, qM, rM, r1M, rss = self.calculate_theta_fii(J)
-
-        residuals_J, residuals_M = self.calculate_residuals_y_first(J, M , theta)
-
+        # Calculate RSS
+        rss = residuals_J.T * residuals_J
+        rss = rss[0, 0]
         while True:
+            i_to_swap, j_to_swap, delta = self.all_pairs_fsa_oe_qr(J, M, r1, rss, residuals_J, residuals_M)
 
-            i_to_swap2, j_to_swap2, delta2 = self.all_pairs_fsa_oe_qr(J, M, r1M, rss, residuals_J, residuals_M)
-
-            if delta2 >= 1:
+            if delta >= 1:
                 break
 
-            else:  # swap i and j [TOGHETHER WITH INDEXES] ; je to ok - SWAPUJEME SPRAVNE
+            else:
+                # Save row to swap in QR
+                row_to_add = np.copy(M[j_to_swap, 1:])
+
+                # Update J and M arrays and also idx array by means of swapped rows
+                self.swap_row_J_M(J, M, idx_initial, idx_rest, i_to_swap, j_to_swap)
 
                 # Update RSS
-                # rss = rss * delta2 - now updating in M
-
-                # Save row to swap in QR
-                #row_to_add = np.copy(M[j_to_swap2, 1:])
-                row_to_addM = np.copy(M[j_to_swap2, :])
-
-                # change a fucking sloupek M
-                first_sloupek = row_to_addM[:, [0]]
-                row_to_addM[:, : -1] = row_to_addM[:, 1:]
-                row_to_addM[:, [-1]] = first_sloupek
-
-
-                # Update indexes
-                tmp = np.copy(J[i_to_swap2])
-                # print(row_to_add.shape)
-                J[i_to_swap2] = np.copy(M[j_to_swap2])
-                M[j_to_swap2] = np.copy(tmp)
-                idx_initial[i_to_swap2], idx_rest[j_to_swap2] = idx_rest[j_to_swap2], idx_initial[i_to_swap2]
+                rss = rss * delta
 
                 # Update QR
-                # q, r = linalg.qr_insert(q, r, row_to_add, i_to_swap2+1, 'row', overwrite_qru=True)  # todo - seems ok
-                #q, r = self.qr_insert(q, r, row_to_add, i_to_swap2 + 1)
-                # q, r = linalg.qr_delete(q, r, i_to_swap2, 1, 'row', overwrite_qr=True)
-                #q, r = self.qr_delete(q, r, i_to_swap2)
+                q, r = self.qr_insert(q, r, row_to_add, i_to_swap + 1)
+                q, r = self.qr_delete(q, r, i_to_swap)
 
-                # todo - M version
-                #qM, rM = linalg.qr_insert(qM, rM, row_to_addM, i_to_swap2 + 1,  overwrite_qru=True)
-                #qM, rM = linalg.qr_delete(qM, rM, i_to_swap2, overwrite_qr=True)
-                qM, rM = self.qr_insert(qM, rM, row_to_addM, i_to_swap2 + 1)
-                qM, rM = self.qr_delete(qM, rM, i_to_swap2)
+                # Update Theta, R1
+                theta, r1 = self.update_theta_qr(q, r, J)
 
-                # q, r = q3, r3
-                # q, r = linalg.qr(J[:, 1:])  # X = QR ; x.T x = R.T R ; (pozor: cholesky je L * L.T kde l = R.T)
-
-                # what_we_want = J[:, 1:]
-                # what_we_want = J
-
-                #
-                # if not np.allclose(np.dot(qM.T, qM), np.eye(what_we_want.shape[0])):
-                #     print('not orthogonal Q')
-                #     exit(1)
-
-                # # if not np.allclose(np.dot(q3.T, q3), np.eye(what_we_want.shape[0])):
-                # #     print('not orthogonal Q3')
-                # #     exit(1)
-                #
-                # if not np.allclose(np.dot(qM, rM), what_we_want):
-                #     print('not similar Q R ')
-                #     exit(1)
-
-                # if not np.allclose(np.dot(q3, r3), what_we_want):
-                #     print('not similar Q3 R3 ')
-                #     exit(1)
-
-                # r1 = r[:p, :]  # only first p rows
-                # theta, r1 = self.update_theta_qr(q, r, J)
-
-                theta, rss, r1M = self.update_theta_fii(rM)
-
-                # theta2, _, _, _, rss2 = self.calculate_theta_fii(J)
-
-                # if not np.allclose(theta, theta2):
-                #     print(theta)
-                #     print(theta2)
-                #     print('********')
-                #     exit(1)
-                #
-                # if not math.isclose(rss[0, 0], rss2, rel_tol=1e-09):
-                #     print(rss)
-                #     print(rss2)
-                #     exit(1)
-
-
-
-                # moved into qr all pairs
+                # calculate residuals M and J
                 residuals_J, residuals_M = self.calculate_residuals_y_first(J, M, theta)
 
                 steps += 1
 
-        # rss = rss[0,0] - not when M 2
         return self.Result(theta, idx_initial, rss, steps)
 
+    def refinement_process_fs_moe_inversion(self, J, M, idx_initial, idx_rest):
+        steps = 0
+
+        # Calculate theta and store inversion
+        theta, inversion = self.calculate_theta_inversion(J)
+
+        # Calculate residuals
+        residuals_J, residuals_M = self.calculate_residuals_y_first(J, M, theta)
+
+        # Calculate RSS
+        rss = (residuals_J.T * residuals_J)[0, 0]
+
+        while True:
+            i_to_swap, j_to_swap, delta, i_m_i, j_m_j = self.all_pairs_fsa_oe_inversion(J, M, inversion, rss, residuals_J, residuals_M)
+
+            if delta >= 1:
+                break
+            else:
+
+                # Update RSS
+                rss = rss * delta
+
+                # Update Theta and Inversion ********************************************************************
+
+                #
+                # Theta plus
+                xi = M[j_to_swap, 1:]  # 1 x p
+                yi = M[j_to_swap, [0]]  # 1 x 1
+                w = -1 / (1 + i_m_i)  # 1x1
+                u = np.dot(inversion, xi.T)  # p x 1
+                theta_plus = theta + (-1 * (yi - np.dot(xi, theta))[0, 0] * (w * u))#  todo OK !!!! (changed [* -1] )
+
+                #
+                # Inversion plus
+                inversion_plus = inversion + w * np.dot(u, u.T)  # todo OK
+
+                #
+                # Theta plus minus
+                xj = J[i_to_swap, 1:]
+                yj = J[i_to_swap, [0]]
+                wj = -1 / (1 - j_m_j)
+                uj = np.dot(inversion_plus, xj.T)
+                theta_plus_minus = theta_plus + ( (yj - np.dot(xj, theta_plus))[0, 0] * (wj * uj) )  #todo  nepresen e-5
+
+                #
+                # Inversion plus minus
+                inversion_plus_minus = inversion_plus - wj * np.dot(uj, uj.T)  # sloupek * radek = matice todo - nepresne e-9
+                theta = theta_plus_minus
+                inversion = inversion_plus_minus
+
+                #
+                # Update J and M arrays and also idx array by means of swapped rows
+                self.swap_row_J_M(J, M, idx_initial, idx_rest, i_to_swap, j_to_swap)
+
+                residuals_J, residuals_M = self.calculate_residuals_y_first(J, M, theta)
+
+                steps += 1
+        return self.Result(theta, idx_initial, rss, steps)
+
+    def refinement_process_fs_moe_qr_extended(self, J, M, idx_initial, idx_rest):
+        steps = 0
+
+        # Calculate QR decompositon along with theta and RSS directly from (X|y)
+        theta, qM, rM, r1, rss = self.calculate_theta_fii(J)
+
+        # Calculate residuals e
+        residuals_J, residuals_M = self.calculate_residuals_y_first(J, M, theta)
+
+        while True:
+            i_to_swap, j_to_swap, delta = self.all_pairs_fsa_oe_qr(J, M, r1, rss, residuals_J, residuals_M)
+
+            if delta >= 1:
+                break
+
+            else:
+                # Save row to swap in QR
+                row_to_addM = np.copy(M[j_to_swap, :])
+                # move first elem (y) to last col
+                first_col = row_to_addM[:, [0]]
+                row_to_addM[:, : -1] = row_to_addM[:, 1:]
+                row_to_addM[:, [-1]] = first_col
+
+                # Update J and M arrays and also idx array by means of swapped rows
+                self.swap_row_J_M(J, M, idx_initial, idx_rest, i_to_swap, j_to_swap)
+
+                # Update QR
+                qM, rM = self.qr_insert(qM, rM, row_to_addM, i_to_swap + 1)
+                qM, rM = self.qr_delete(qM, rM, i_to_swap)
+
+                # Update theta, R1, RSS
+                theta, rss, r1 = self.update_theta_fii(rM)
+
+                # calculate residuals M and J
+                residuals_J, residuals_M = self.calculate_residuals_y_first(J, M, theta)
+
+                steps += 1
+
+        return self.Result(theta, idx_initial, rss, steps)
+
+    def all_pairs_fsa_oe_inversion(self, J, M, inversion, rss, residuals_J, residuals_M):
+        delta = 1
+        i_to_swap = None
+        j_to_swap = None
+        im = None
+        jm = None
+
+        # Because of MOEA speedup
+        ro_min = 1
+
+        # Calculate all insertions i_m_i in advance e.g. all added rows
+        arr_i_m_i = []
+        for j in range(M.shape[0]):
+            xi = M[j, 1:]
+            i_m_i = np.dot(np.dot(xi, inversion), xi.T)
+            i_m_i = i_m_i[0, 0]
+            arr_i_m_i.append(i_m_i)
+
+        # go through all Combinations
+        for i in range(J.shape[0]):
+            # Calculate j_m_j e.g. removed row
+            xj = J[i, 1:]
+            j_m_j = np.dot(np.dot(xj, inversion), xj.T)
+            j_m_j = j_m_j[0, 0]
+
+            for j in range(M.shape[0]):  # this runs often, have prepared residuals_M
+                # Retrieve e_i and e_j (Pre-calculated)
+                ei = residuals_M[j, 0]
+                ej = residuals_J[i, 0]
+
+                # Calculate ro_b (because of MOEA speedup)
+                ro_b = ((1 + arr_i_m_i[j] + rss / (ei ** 2)) * (1 - j_m_j - rss / (ej ** 2))) / (
+                        1 + arr_i_m_i[j] - j_m_j)
+                if ro_b > ro_min:
+                    continue
+
+                # Calculate true ro_rss
+                i_m_j = np.dot(np.dot(M[j, 1:], inversion), xj.T)
+                i_m_j = i_m_j[0, 0]
+                tmp_delta = self.ro_equation(rss, ei, ej, arr_i_m_i[j], j_m_j, i_m_j)
+
+                # Update ro_min if necessary (MOEA)
+                if tmp_delta < ro_min:
+                    ro_min = tmp_delta
+
+                # Save smallest delta along with i j positions
+                if tmp_delta < delta:
+                    delta = tmp_delta
+                    i_to_swap = i
+                    j_to_swap = j
+                    im = arr_i_m_i[j]
+                    jm = j_m_j
+
+        return i_to_swap, j_to_swap, delta, im, jm
+
+    def ro_equation(self, rss, ei, ej, i_m_i, j_m_j, i_m_j):
+        # Now just calculate the fraction
+        nom = (1 + i_m_i + 1 / rss * ei ** 2) * (1 - j_m_j - 1 / rss * ej ** 2) + (i_m_j + 1 / rss * ei * ej) * (
+                i_m_j + 1 / rss * ei * ej)
+        denom = (1 + i_m_i - j_m_j + i_m_j ** 2 - i_m_i * j_m_j)
+        ro = nom / denom
+
+        return ro
+
+    # Go through all combinations (all pairs of Ji and Mj) and calculate delta RSS
     def all_pairs_fsa_oe_qr(self, J, M, R, rss, residuals_J, residuals_M):
         delta = 1
         i_to_swap = None
         j_to_swap = None
+        # Because of MOEA speedup
+        ro_min = 1
 
-        # so far moved here
-        #residuals_J = J[:, [0]] - J[:, 1:] * theta
-        #residuals_M = (M[:, [0]]) - (M[:, 1:]) * theta
-
-        # x * (R.T * R ) ^-1 * x = v.T v
-        # where
-        # R.T * v.T = xi.T
-        # pridani
-
+        # Calculate all insertions i_m_i in advance e.g. all added rows
+        # Along with all v_i
         arr_vi = []
         arr_i_m_i = []
         for j in range(M.shape[0]):
             xi = M[j, 1:]
             vi = linalg.solve_triangular(R.T, xi.T, lower=True)
-            # print('vi')
-            # print(vi.shape)
-            # print(type(vi.T))
-            i_m_i = np.dot(vi.T, vi)  # vi.T * vi # dot product PRIDANI !!!
+            i_m_i = np.dot(vi.T, vi)  # vi.T * vi
             i_m_i = i_m_i[0, 0]
             arr_vi.append(vi)
             arr_i_m_i.append(i_m_i)
 
-        ro_min = 1
-
-        # go through all combinations
+        # go through all Combinations
         for i in range(J.shape[0]):
 
-            # ej = J[i, [0]] - J[i, 1:] * theta # this always only once !!
+            # Calculate j_m_j e.g. removed row
             xj = J[i, 1:]
             vj = linalg.solve_triangular(R.T, xj.T, lower=True)
             j_m_j = np.dot(vj.T, vj)
             j_m_j = j_m_j[0, 0]
 
+            for j in range(M.shape[0]):  # this runs often, have prepared residuals_M
 
-            for j in range(M.shape[0]): # this runs often, have prepared residuals_M
-
-                ei = residuals_M[j, 0]  # ano, opravdu opacne
+                # Retrieve e_i and e_j (Pre-calculated)
+                ei = residuals_M[j, 0]
                 ej = residuals_J[i, 0]
 
-                # Calculate ro_b
-                ro_b = ( (1 + arr_i_m_i[j] + rss/(ei**2)) * (1 - j_m_j - rss/(ej**2)) ) / (1 + arr_i_m_i[j] - j_m_j)
+                # Calculate ro_b (because of MOEA speedup)
+                ro_b = ((1 + arr_i_m_i[j] + rss / (ei ** 2)) * (1 - j_m_j - rss / (ej ** 2))) / (
+                            1 + arr_i_m_i[j] - j_m_j)
                 if ro_b > ro_min:
                     continue
 
-                # . calculate deltaRSS
-                tmp_delta = self.calculate_delta_rss_oe_qr(J, M, R, rss, ei, ej, i, j, arr_vi[j], arr_i_m_i[j], j_m_j, xj)
+                # Calculate true ro_rss
+                tmp_delta = self.calculate_delta_rss_oe_qr(J, M, R, rss, ei, ej, i, j, arr_vi[j], arr_i_m_i[j], j_m_j,
+                                                           xj)
 
+                # Update ro_min if necessary (MOEA)
                 if tmp_delta < ro_min:
                     ro_min = tmp_delta
 
-                # if delta rss < bestDeltaRss
-                if tmp_delta < delta: # vetsi nez nula musi byt vzdy, ne ?
+                # Save smallest delta along with i j positions
+                if tmp_delta < delta:
                     delta = tmp_delta
                     i_to_swap = i
                     j_to_swap = j
@@ -494,53 +622,27 @@ class FSRegressor(AbstractRegression):
         return i_to_swap, j_to_swap, delta
 
     def calculate_delta_rss_oe_qr(self, J, M, R1, rss, ei, ej, i, j, vi, i_m_i, j_m_j, xj):
-
-
-
-        # odebrani
-        #xj = J[i, 1:]
-        # vj = linalg.solve_triangular(R1.T, xj.T, lower=True)
-        # j_m_j = np.dot(vj.T, vj)
-        # j_m_j = j_m_j[0, 0]
-
-        # oboje (odebrani rtr pridani)
+        # Calculate i_m_j e.g. in-out
         # xj * (R.T * R ) ^-1 * xi = xj * u.T
-        #  R * u.T = v kde v je resenim R.T * v.T = xi.T (teda vi ??? )
+        #  R * u.T = vi ;
+        #  where vi solves  R.T * vi.T = xi.T
         u = linalg.solve_triangular(R1, vi)
-        i_m_j = np.dot(xj, u)  # xj * u  # check if not xi
+        i_m_j = np.dot(xj, u)
         i_m_j = i_m_j[0, 0]
 
-
-        # print('************')
-        # print('IMI')
-        # print(i_m_i)
-        # print('JMJ')
-        # print(j_m_j)
-        # print('IMJ')
-        # print(i_m_j)
-        # print(ei)
-        # print(ej)
-        # print('************')
-        #print('rss')
-        #rss = rss[0,0]
-        #print('rss---')
-        #rss = rss[0,0] - not when M
-
-        nom = (1 + i_m_i + 1/rss * ei*ei) * (1 - j_m_j - 1/rss * ej*ej) + (i_m_j + 1/rss * ei*ej) * (i_m_j + 1/rss * ei*ej)
-        denom = (1 + i_m_i - j_m_j + i_m_j * i_m_j - i_m_i * j_m_j)
-        ro = nom / denom
-        #print(ro)
+        # Now just calculate the fraction
+        ro = self.ro_equation(rss, ei, ej, i_m_i, j_m_j, i_m_j)
         return ro
 
     # ############### QR OPERATIONS #############################################
-    def qr_delete(self, q, r, idx): # for j in (0, 1 ... n) * for i in (1, 2, ... n) ----> i guess O(n^2) == HODNE
+    def qr_delete(self, q, r, idx):  # for j in (0, 1 ... n) * for i in (1, 2, ... n) ----> i guess O(n^2) == HODNE
         qnew = np.copy(q)
         rnew = np.copy(r)
         p_del = 1
 
-        if idx != 0: # swap it to the first line
-            for j in range(idx, 0, -1): # jdx ... 3, 2, 1
-                qnew[[j, j-1]] = qnew[[j-1, j]]
+        if idx != 0:  # swap it to the first line
+            for j in range(idx, 0, -1):  # jdx ... 3, 2, 1
+                qnew[[j, j - 1]] = qnew[[j - 1, j]]
                 # swap(qnew[j,:], qnew[j-1, : ]) j jde od posledniho (od vlozeneho) a posouva ho na spravny index
 
         # for i in range p_del
@@ -548,11 +650,11 @@ class FSRegressor(AbstractRegression):
         n = q.shape[0]
         p = r.shape[1]
 
-        for j in range(n - 2, i -1, -1): # n-2 protoze vzdy o jeden vic (tj. do idx n-1)
+        for j in range(n - 2, i - 1, -1):  # n-2 protoze vzdy o jeden vic (tj. do idx n-1)
 
-            cos, sin, R = self.calculate_cos_sin(qnew[0, j], qnew[0, j+1]) # i, i = 0
+            cos, sin, R = self.calculate_cos_sin(qnew[0, j], qnew[0, j + 1])  # i, i = 0
             qnew[0, j] = R
-            qnew[0, j+1] = 0 # myslim ze pro nas nyni zbytecne ?
+            qnew[0, j + 1] = 0  # myslim ze pro nas nyni zbytecne ?
 
             # update rows to del - no need
             # if i + 1 < p_del: #  1 < 1
@@ -560,7 +662,7 @@ class FSRegressor(AbstractRegression):
             #         index2(W, ws, i + 1, j + 1), ws[0], c, s)
 
             # Rotare R if nonzero row
-            if j < p: # m x n # j - i
+            if j < p:  # m x n # j - i
 
                 # todo rot( [ p-j-1 ]  [--, j+1 ] [--, j+1]
                 # to znamena naky radky...
@@ -577,22 +679,21 @@ class FSRegressor(AbstractRegression):
 
             # Rotate Q - pozor - fucking TRICK qs[0]
             qcolX = qnew[:, j]
-            qcolY = qnew[:, j+1]
-            for i in range(p_del, n): # radky 1, 2, ... n-1 #
-                temp = cos * qcolX[i] + sin * qcolY[i] # todo chyba
-                qnew[i, j+1] = cos * qcolY[i] - sin * qcolX[i]  # Y
+            qcolY = qnew[:, j + 1]
+            for i in range(p_del, n):  # radky 1, 2, ... n-1 #
+                temp = cos * qcolX[i] + sin * qcolY[i]  # todo chyba
+                qnew[i, j + 1] = cos * qcolY[i] - sin * qcolX[i]  # Y
                 qnew[i, j] = temp  # X
 
         return qnew[p_del:, p_del:], rnew[p_del:, :]
 
-
-    def qr_insert(self, q, r, row, idx): # O(p * n)
+    def qr_insert(self, q, r, row, idx):  # O(p * n)
         # idx .. row before which new row will be inserted
         n = q.shape[0]  # rows
         p = r.shape[1]  # cols
         cnt_rows = 1
 
-        shape = [n + cnt_rows,  n + cnt_rows]
+        shape = [n + cnt_rows, n + cnt_rows]
 
         # create new matrix
         qnew = np.zeros(shape, dtype=float)
@@ -605,36 +706,36 @@ class FSRegressor(AbstractRegression):
 
         # fill matrix q
         qnew[:-cnt_rows, :-cnt_rows] = q
-        for j in range(n, n + cnt_rows): # again, neni treba loop; jen posledni radek
+        for j in range(n, n + cnt_rows):  # again, neni treba loop; jen posledni radek
             qnew[j, j] = 1
 
         n = n + 1
         # rotate last row and update both matrix
-        limit = min(n - 1, p) # opet, autimaticky je to p ;  n-1 kvuli poslednimu sloupku q ?
+        limit = min(n - 1, p)  # opet, autimaticky je to p ;  n-1 kvuli poslednimu sloupku q ?
 
         # we are basically removing just from Q
         for j in range(limit):  # pro kazdy element posledniho radku (p)
-            cos, sin, R = self.calculate_cos_sin(rnew[j,j], rnew[n-1,j]) # edge of triangle , last row
-            rnew[j, j] = R # some hack as they have
+            cos, sin, R = self.calculate_cos_sin(rnew[j, j], rnew[n - 1, j])  # edge of triangle , last row
+            rnew[j, j] = R  # some hack as they have
             rnew[n - 1, j] = 0
 
             # rotate rnew
-            rowX = rnew[j,:]
-            rowY = rnew[n-1,:]
+            rowX = rnew[j, :]
+            rowY = rnew[n - 1, :]
             # blas srot
-            for i in range(j+1, p): # vzdy od j do konce (udelej rotaci celeho radku)
+            for i in range(j + 1, p):  # vzdy od j do konce (udelej rotaci celeho radku)
                 temp = cos * rowX[i] + sin * rowY[i]
-                rnew[n-1, i] = cos * rowY[i] - sin * rowX[i] # Y
-                rnew[j, i] = temp # X
+                rnew[n - 1, i] = cos * rowY[i] - sin * rowX[i]  # Y
+                rnew[j, i] = temp  # X
 
             # rotate qnew
-            qrowX = qnew[:, j] # j ty slouepk
-            qrowY = qnew[:, n-1] # posledni slopek
+            qrowX = qnew[:, j]  # j ty slouepk
+            qrowY = qnew[:, n - 1]  # posledni slopek
 
             # blas srot
-            for i in range(n): # vzdy od j do konce
+            for i in range(n):  # vzdy od j do konce
                 temp = cos * qrowX[i] + sin * qrowY[i]
-                qnew[i, n-1] = cos * qrowY[i] - sin * qrowX[i]  # Y
+                qnew[i, n - 1] = cos * qrowY[i] - sin * qrowX[i]  # Y
                 qnew[i, j] = temp  # X
 
         # move last (inserted) row to correct position
@@ -642,7 +743,7 @@ class FSRegressor(AbstractRegression):
         # chci ho hodit za ten co potom odstranim (teda idx bude prvdepodobne idxj+1)
         for j in range(n - 1, idx, -1):
             # this is bad - it is copy swap !!!
-            qnew[[j-1, j]] = qnew[[j, j-1]]
+            qnew[[j - 1, j]] = qnew[[j, j - 1]]
             # swap(qnew[j,:], qnew[j-1, : ]) j jde od posledniho (od vlozeneho) a posouva ho na spravny index
 
         return qnew, rnew
@@ -659,7 +760,7 @@ class FSRegressor(AbstractRegression):
             sin = 1
             r = g
         else:
-            r = math.sqrt( f**2 + g**2)
+            r = math.sqrt(f ** 2 + g ** 2)
             cos = f / r
             sin = g / r
 
