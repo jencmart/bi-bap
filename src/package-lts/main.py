@@ -14,7 +14,7 @@ def test_feasible_solution_numpy():
 
 # Feasible solution OE QR
 def test_feasible_OE_solution_numpy():
-    feasible_oe_test.test_numpy(n=50, p=3)
+    feasible_oe_test.test_numpy(n=300, p=3) # 150 44s 300 335sec
 
 # Fast LTS
 def test_fast_lts():
