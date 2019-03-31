@@ -374,6 +374,8 @@ class FSRegressor(AbstractRegression):
                 #q, r = self.qr_delete(q, r, i_to_swap2)
 
                 # todo - M version
+                #qM, rM = linalg.qr_insert(qM, rM, row_to_addM, i_to_swap2 + 1,  overwrite_qru=True)
+                #qM, rM = linalg.qr_delete(qM, rM, i_to_swap2, overwrite_qr=True)
                 qM, rM = self.qr_insert(qM, rM, row_to_addM, i_to_swap2 + 1)
                 qM, rM = self.qr_delete(qM, rM, i_to_swap2)
 
@@ -437,18 +439,51 @@ class FSRegressor(AbstractRegression):
         #residuals_J = J[:, [0]] - J[:, 1:] * theta
         #residuals_M = (M[:, [0]]) - (M[:, 1:]) * theta
 
+        # x * (R.T * R ) ^-1 * x = v.T v
+        # where
+        # R.T * v.T = xi.T
+        # pridani
+
+        arr_vi = []
+        arr_i_m_i = []
+        for j in range(M.shape[0]):
+            xi = M[j, 1:]
+            vi = linalg.solve_triangular(R.T, xi.T, lower=True)
+            # print('vi')
+            # print(vi.shape)
+            # print(type(vi.T))
+            i_m_i = np.dot(vi.T, vi)  # vi.T * vi # dot product PRIDANI !!!
+            i_m_i = i_m_i[0, 0]
+            arr_vi.append(vi)
+            arr_i_m_i.append(i_m_i)
+
+        ro_min = 1
+
         # go through all combinations
         for i in range(J.shape[0]):
 
             # ej = J[i, [0]] - J[i, 1:] * theta # this always only once !!
+            xj = J[i, 1:]
+            vj = linalg.solve_triangular(R.T, xj.T, lower=True)
+            j_m_j = np.dot(vj.T, vj)
+            j_m_j = j_m_j[0, 0]
+
 
             for j in range(M.shape[0]): # this runs often, have prepared residuals_M
 
                 ei = residuals_M[j, 0]  # ano, opravdu opacne
                 ej = residuals_J[i, 0]
 
+                # Calculate ro_b
+                ro_b = ( (1 + arr_i_m_i[j] + rss/(ei**2)) * (1 - j_m_j - rss/(ej**2)) ) / (1 + arr_i_m_i[j] - j_m_j)
+                if ro_b > ro_min:
+                    continue
+
                 # . calculate deltaRSS
-                tmp_delta = self.calculate_delta_rss_oe_qr(J, M, R, rss, ei, ej, i, j)
+                tmp_delta = self.calculate_delta_rss_oe_qr(J, M, R, rss, ei, ej, i, j, arr_vi[j], arr_i_m_i[j], j_m_j, xj)
+
+                if tmp_delta < ro_min:
+                    ro_min = tmp_delta
 
                 # if delta rss < bestDeltaRss
                 if tmp_delta < delta: # vetsi nez nula musi byt vzdy, ne ?
@@ -458,23 +493,15 @@ class FSRegressor(AbstractRegression):
 
         return i_to_swap, j_to_swap, delta
 
-    def calculate_delta_rss_oe_qr(self, J, M, R1, rss, ei, ej, i, j):
-        # x * (R.T * R ) ^-1 * x = v.T v
-        # where
-        # R.T * v.T = xi.T
-            # pridani
-        xi = M[j, 1:]
-        vi = linalg.solve_triangular(R1.T, xi.T, lower=True)
-        #print('vi')
-        #print(vi.shape)
-        #print(type(vi.T))
-        i_m_i = np.dot(vi.T, vi)  #vi.T * vi # dot product PRIDANI !!!
-        i_m_i = i_m_i[0, 0]
-            # odebrani
-        xj = J[i, 1:]
-        vj = linalg.solve_triangular(R1.T, xj.T, lower=True)
-        j_m_j = np.dot(vj.T, vj)
-        j_m_j = j_m_j[0, 0]
+    def calculate_delta_rss_oe_qr(self, J, M, R1, rss, ei, ej, i, j, vi, i_m_i, j_m_j, xj):
+
+
+
+        # odebrani
+        #xj = J[i, 1:]
+        # vj = linalg.solve_triangular(R1.T, xj.T, lower=True)
+        # j_m_j = np.dot(vj.T, vj)
+        # j_m_j = j_m_j[0, 0]
 
         # oboje (odebrani rtr pridani)
         # xj * (R.T * R ) ^-1 * xi = xj * u.T
@@ -499,7 +526,6 @@ class FSRegressor(AbstractRegression):
         #print('rss---')
         #rss = rss[0,0] - not when M
 
-        # this equation is by the paper .. indexes i and j are swapped compared to us
         nom = (1 + i_m_i + 1/rss * ei*ei) * (1 - j_m_j - 1/rss * ej*ej) + (i_m_j + 1/rss * ei*ej) * (i_m_j + 1/rss * ei*ej)
         denom = (1 + i_m_i - j_m_j + i_m_j * i_m_j - i_m_i * j_m_j)
         ro = nom / denom
