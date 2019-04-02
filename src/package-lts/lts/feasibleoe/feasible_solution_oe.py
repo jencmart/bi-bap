@@ -17,7 +17,6 @@ cppimport
     inside python module: my_import =  cppimport.imp("xxx")
 """
 
-
 # class FSRegressorCPP(AbstractRegression):
 #     def __init__(self):
 #         super().__init__()
@@ -83,6 +82,44 @@ class FSRegressor(AbstractRegression):
     # ###########################################################################
     # ############### FIT #######################################################
     # ###########################################################################
+
+    def fit_bab(self, X, y, h_size: 'default := (n + p + 1) / 2' = 'default', use_intercept=True):
+        # concatenate to matrix
+        if type(X) is not np.matrix:
+            X = np.asmatrix(X)
+        if type(y) is not np.matrix:
+            y = np.asmatrix(y)
+        self._data = np.asmatrix(np.concatenate([y, X], axis=1))
+
+        self._p = self._data.shape[1] - 1
+        self._N = self._data.shape[0]
+        
+        if h_size == 'default':
+            self._h_size = math.ceil((self._N + self._p + 1) / 2)  # todo with or without intercept?
+        else:
+            self._h_size = h_size
+            
+        J = np.matrix(self._data, copy=True)
+
+        best_result = self.bab_lts(J, h_size)
+
+        # ... Store results
+        theta_final = best_result.theta_hat
+
+        if use_intercept:
+            self.intercept_ = theta_final[-1, 0]  # last row last col
+            self.coef_ = theta_final[:-1, 0]  # for all but last row,  only first col
+        else:
+            self.intercept_ = 0.0
+            self.coef_ = theta_final[:, 0]  # all rows, only first col
+
+        self.h_subset_ = best_result.h_index
+        self.rss_ = best_result.rss
+        self.n_iter_ = best_result.steps
+
+        self.coef_ = np.ravel(self.coef_)  # RAVELED
+
+
     def fit(self, X, y,
             num_starts: 'number of initial starts (H1)' = 10,
             h_size: 'default := (n + p + 1) / 2' = 'default',
@@ -114,6 +151,7 @@ class FSRegressor(AbstractRegression):
         time1 = time.process_time()
         # for all initial starts
         for i in range(num_starts):
+
             # generate random subset J, |J| = h and its complement M
             idx_initial, idx_rest = self.select_initial_h1()
             # save split data
@@ -124,12 +162,17 @@ class FSRegressor(AbstractRegression):
             # M2 = np.copy(M)
             # idx_initial2 = np.copy(idx_initial)
             # idx_rest2 = np.copy(idx_rest)
-
             # J2 = np.asmatrix(J2)
             # M2 = np.asmatrix(M2)
             # do the refinement process
-
-            res = self.refinement_process_fs_moe_inversion(J, M, idx_initial, idx_rest)
+            res = self.refinement_process_fs_mmea_inversion(J, M, idx_initial, idx_rest)
+            # print(res.rss)
+            #
+            # res = self.refinement_process_fsa(J, M, idx_initial, idx_rest)
+            # print(res.steps)
+            # print(res.rss)
+            # exit(1)
+            # create new J and M so that it represents h_index
             # res = self.refinement_process_fsa_MMEA_qr(J, M, idx_initial, idx_rest)
             # res2 = self.refinement_process_fsa(J2, M2, idx_initial2, idx_rest2)
 
@@ -157,6 +200,24 @@ class FSRegressor(AbstractRegression):
         for res in results:
             if res.rss < best_result.rss:
                 best_result = res
+
+
+        # # todo - just some experiment
+        #
+        # print('prvni alg hotvo. dalsich steps {} ; rss {}'.format(best_result.steps, best_result.rss))
+        # print('jdu na druhy alg.')
+        # idx_initial = best_result.h_index
+        #
+        # mask = np.ones([self._data.shape[0]], np.bool)
+        # mask[idx_initial] = 0
+        # idx_rest = mask
+        #
+        # J = np.matrix(self._data[idx_initial], copy=True)
+        # M = np.matrix(self._data[idx_rest], copy=True)
+        #
+        # best_result = self.refinement_process_fs_moe_inversion(J, M, idx_initial, idx_rest)
+        # print('hotovo. dalsich steps {} ; rss {}'.format(best_result.steps, best_result.rss))
+        # # todo - just some experiment
 
         # ... Store results
         theta_final = best_result.theta_hat
@@ -401,6 +462,121 @@ class FSRegressor(AbstractRegression):
 
         return self.Result(theta, idx_initial, rss, steps)
 
+    def greatest_remove_mmea_inversion(self, J, theta, inversion):
+        gama_remove_max = float('-inf')
+        j_m_j_min = 0
+        yj_xj_theta_min = 0
+        idx_j = 0
+
+        for i in range(J.shape[0]):
+            xj = J[i, 1:]
+            yj = J[i, [0]]  # 1 x 1
+            j_m_j = np.dot(np.dot(xj, inversion), xj.T)
+            j_m_j = j_m_j[0, 0]
+            yj_xj_theta = (yj - np.dot(xj, theta))[0, 0]
+            gama_remove = (yj_xj_theta **2) / (1 - j_m_j)
+
+            if gama_remove > gama_remove_max:
+                gama_remove_max = gama_remove
+                j_m_j_min = j_m_j
+                yj_xj_theta_min = yj_xj_theta
+                idx_j = i
+
+        return idx_j, j_m_j_min, yj_xj_theta_min, gama_remove_max
+
+    def smallest_insert_mmea_inversion(self, M, theta, inversion):
+        gama_insert_min = float('inf')
+        i_m_i_min = 0
+        yi_xi_theta_min = 0
+        idx_i = 0
+
+        for j in range(M.shape[0]):
+            # Calculate gama plus
+            xi = M[j, 1:]
+            yi = M[j, [0]]  # 1 x 1
+            i_m_i = np.dot(np.dot(xi, inversion), xi.T)
+            i_m_i = i_m_i[0, 0]
+            yi_xi_theta = (yi - np.dot(xi, theta))[0, 0]
+            gama_insert = (yi_xi_theta ** 2 ) / (1 + i_m_i)
+
+            # save is smallest
+            if gama_insert < gama_insert_min:
+                gama_insert_min = gama_insert
+                i_m_i_min = i_m_i
+                yi_xi_theta_min = yi_xi_theta
+                idx_i = j
+
+        return idx_i, i_m_i_min, yi_xi_theta_min, gama_insert_min
+
+    def refinement_process_fs_mmea_inversion(self, J, M, idx_initial, idx_rest):
+        steps = 0
+
+        # Calculate theta and store inversion
+        theta, inversion = self.calculate_theta_inversion(J)
+
+        # Calculate residuals
+        residuals_J, residuals_M = self.calculate_residuals_y_first(J, M, theta)
+
+        # Calculate RSS
+        rss = (residuals_J.T * residuals_J)[0, 0]
+
+        # OLS shortcut
+        if M.shape[0] == 0:
+            return self.Result(theta, idx_initial, rss, steps)
+
+        while True:
+
+            # find the insert
+            # todo check correct
+            idx_insert, i_m_i, yi_xi_theta, gamma_plus = self.smallest_insert_mmea_inversion(M, theta, inversion)
+
+            #
+            # Theta plus
+            xi = M[idx_insert, 1:]  # 1 x p
+            w = -1 / (1 + i_m_i)  # 1x1
+            u = np.dot(inversion, xi.T)  # p x 1
+            theta_plus = theta + (-1 * yi_xi_theta * w * u)  # todo OK !!!! (changed [* -1] )
+
+            #
+            # Inversion plus
+            inversion_plus = inversion + w * np.dot(u, u.T)  # todo OK
+
+            #
+            # find the remove
+            # no need to update J - no need for removing the same.. then gama_plus == gama_minus
+            idx_remove, j_m_j, yj_xj_theta_min, gamma_minus = self.greatest_remove_mmea_inversion(J, theta_plus, inversion_plus)
+
+            #
+            # edit J, M, inversion, rss, residualsJ residualsM
+            if not (gamma_plus < gamma_minus):
+                break
+
+            #
+            # Update RSS
+            rss = rss + gamma_plus - gamma_minus
+
+            #
+            # Theta plus minus
+            xj = J[idx_remove, 1:]
+            wj = -1 / (1 - j_m_j)
+            uj = np.dot(inversion_plus, xj.T)
+            theta_plus_minus = theta_plus + (yj_xj_theta_min * (wj * uj))  # todo  nepresen e-5
+
+            #
+            # Inversion plus minus
+            inversion_plus_minus = inversion_plus - wj * np.dot(uj,
+                                                                uj.T)  # sloupek * radek = matice todo - nepresne e-9
+            theta = theta_plus_minus
+            inversion = inversion_plus_minus
+
+            #
+            # Update J and M arrays and also idx array by means of swapped rows
+            self.swap_row_J_M(J, M, idx_initial, idx_rest, idx_remove, idx_insert)
+
+            steps += 1
+
+        return self.Result(theta, idx_initial, rss, steps)
+
     def refinement_process_fs_moe_inversion(self, J, M, idx_initial, idx_rest):
         steps = 0
 
@@ -431,7 +607,21 @@ class FSRegressor(AbstractRegression):
                 yi = M[j_to_swap, [0]]  # 1 x 1
                 w = -1 / (1 + i_m_i)  # 1x1
                 u = np.dot(inversion, xi.T)  # p x 1
-                theta_plus = theta + (-1 * (yi - np.dot(xi, theta))[0, 0] * (w * u))#  todo OK !!!! (changed [* -1] )
+                theta_plus = theta + (-1* (yi - np.dot(xi, theta))[0, 0] * (w * u))#  todo OK !!!! (changed [* -1] )
+
+                # xx = J[:, 1:]  # 1 x p
+                # yy = J[:, [0]]  # 1 x 1
+                # theta_plus = ( inversion + w * np.dot(u, u.T) )  * ( xx.T * yy + np.dot( yi[0,0], xi.T ) )
+                # Jplus = np.append(J,  M[j_to_swap,:], axis=0)
+                # theta_test, inversion_test = self.calculate_theta_inversion(Jplus)
+                #
+                # if not np.allclose(theta_test, theta_plus):
+                #     print('not similar theta plus ')
+                #     print(np.abs(theta) - np.abs(theta_test))
+                #     print('----')
+                #     print(np.abs(theta) - np.abs(theta_plus))
+                #     exit(1)
+                # exit(1)
 
                 #
                 # Inversion plus
@@ -783,3 +973,58 @@ class FSRegressor(AbstractRegression):
         idx_rest = idx_all[self._h_size:]
 
         return idx_initial, idx_rest
+
+    def bab_lts(self, J, h_size):
+        a = []
+        b = [1, 2, 3, 4]
+        depth = 0
+        max_depth = 2
+
+        ro_min = float('inf')
+
+        def traverse_recursive(a, b, depth, max_depth):
+
+            # leaf
+            if depth == max_depth:
+                print('\t leaf {} ; l={}'.format(a, depth))
+                return
+
+            if len(b) == 0:
+                print('\t leaf {} ; l={}'.format(a, depth))
+                return
+
+            if len(a) == 0:
+                print('root {} ; l={}'.format(a, depth))
+                # not calculate here - root - no need
+
+            else:
+                print('a {} ; l={}'.format(a, depth))
+                # calculate here
+                # rss =
+                # theta =
+                # inversion =
+
+            aa = a.copy()
+            bb = b.copy()
+
+            # not leaf
+            while len(bb) > 0:
+                # pridej do A
+                aa.append(bb[0])
+                # odeber ho z B
+                del bb[0]
+
+                # go down
+                traverse_recursive(aa, bb, depth + 1, max_depth)
+
+                # odeber z konce A
+                del aa[-1]
+
+            # odkroj
+            # del b[0]
+
+            return
+
+        pass
+
+
