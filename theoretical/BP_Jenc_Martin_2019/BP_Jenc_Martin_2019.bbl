@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 \providecommand{\biburl}[1]{\url{#1}}
 \providecommand{\urlprefix}{Available from: }
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -41,5 +41,20 @@ Rousseeuw, P.~J.; Driessen, K.~V. An Algorithm for Positive-Breakdown
 Hawkins, D.~M. The feasible solution algorithm for least trimmed squares
   regression. \emph{Computational statistics \& data analysis}, volume~17,
   no.~2, 1994: pp. 185--196.
+
+\bibitem{atkinson1991simulated}
+Atkinson, A.~C.; Weisberg, S. Simulated annealing for the detection of multiple
+  outliers using least squares and least median of squares fitting.
+  \emph{Institute for Mathematics and Its Applications}, volume~33, 1991: p.~7.
+
+\bibitem{agullo2001new}
+Agull{\'o}, J. New algorithms for computing the least trimmed squares
+  regression estimator. \emph{Computational Statistics \& Data Analysis},
+  volume~36, no.~4, 2001: pp. 425--439.
+
+\bibitem{bartlett1951inverse}
+Bartlett, M.~S. An inverse matrix adjustment arising in discriminant analysis.
+  \emph{The Annals of Mathematical Statistics}, volume~22, no.~1, 1951: pp.
+  107--111.
 
 \end{thebibliography}

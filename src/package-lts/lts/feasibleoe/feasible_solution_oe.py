@@ -6,6 +6,8 @@ import time
 # import cppimport.import_hook
 # import lts.feasibleoe.cpp.feasible_solution as cpp_solution
 
+from sklearn.linear_model import LinearRegression
+
 from scipy import linalg
 
 """
@@ -101,7 +103,7 @@ class FSRegressor(AbstractRegression):
             
         J = np.matrix(self._data, copy=True)
 
-        best_result = self.bab_lts(J, h_size)
+        best_result = self.bab_lts(J, self._h_size)
 
         # ... Store results
         theta_final = best_result.theta_hat
@@ -124,6 +126,16 @@ class FSRegressor(AbstractRegression):
             num_starts: 'number of initial starts (H1)' = 10,
             h_size: 'default := (n + p + 1) / 2' = 'default',
             use_intercept=True):
+
+        # TODO - bab lts
+        time1 = time.process_time()
+        self.fit_bab(X, y)
+        # save the time
+        self.time1_ = time.process_time() - time1
+        self.time_total_ = self.time1_
+        return
+
+        # todo bab lts
 
         # Init some properties
         X, y = validate(X, y, h_size, use_intercept)
@@ -975,56 +987,188 @@ class FSRegressor(AbstractRegression):
         return idx_initial, idx_rest
 
     def bab_lts(self, J, h_size):
+        if h_size == 0 or h_size == 1 :
+            print('h_size must be at least 2')
+            exit(1)
+
+        self.bab_rss_min = float('inf')
+        self.bab_indexes = None
+        self.bab_theta = None
         a = []
-        b = [1, 2, 3, 4]
-        depth = 0
-        max_depth = 2
+        b = list(range(J.shape[0]))
+        self.J = J
+        self._h_size = h_size
+        self.traverse_recursive(a, b, 0, None, None, None)
 
-        ro_min = float('inf')
+        steps = 0
+        return self.Result(self.bab_theta, self.bab_indexes, self.bab_rss_min, steps)
 
-        def traverse_recursive(a, b, depth, max_depth):
+    def calculate_gama_insert(self, idx, inversion, theta):
+        xi = self.J[idx, 1:]
+        yi = self.J[idx, [0]]  # 1 x 1
+        i_m_i = np.dot(np.dot(xi, inversion), xi.T)
+        i_m_i = i_m_i[0, 0]
+        yi_xi_theta = (yi - np.dot(xi, theta))[0, 0]
+        gama_insert = (yi_xi_theta ** 2) / (1 + i_m_i)
 
-            # leaf
-            if depth == max_depth:
-                print('\t leaf {} ; l={}'.format(a, depth))
-                return
+        return gama_insert, i_m_i, yi_xi_theta
 
-            if len(b) == 0:
-                print('\t leaf {} ; l={}'.format(a, depth))
-                return
+    def calculate_theta_inversion_with_rss(self, J):
+        y = J[:, [0]]
+        x = J[:, 1:] # n x p
 
-            if len(a) == 0:
-                print('root {} ; l={}'.format(a, depth))
-                # not calculate here - root - no need
+        inversion = (x.T * x).I # p x p
+        theta = inversion * x.T * y  # OLS p x p * p  x n == p x p * (1xp) tak sme pekne v pici
 
-            else:
-                print('a {} ; l={}'.format(a, depth))
-                # calculate here
-                # rss =
-                # theta =
-                # inversion =
+        y = J[:, 0]
+        x = J[:, 1:]
 
-            aa = a.copy()
-            bb = b.copy()
+        nasob = x * theta
+        residuals = J[:, 0] - nasob
+        rss = (residuals.T * residuals)[0, 0]
 
-            # not leaf
-            while len(bb) > 0:
-                # pridej do A
-                aa.append(bb[0])
-                # odeber ho z B
-                del bb[0]
+        return theta, inversion, rss
 
-                # go down
-                traverse_recursive(aa, bb, depth + 1, max_depth)
 
-                # odeber z konce A
-                del aa[-1]
+    def calculate_theta_inversion_qr_with_rss(self, J):
+        y = J[:, [0]]
+        x = J[:, 1:] # n x p
 
-            # odkroj
-            # del b[0]
+        inversion = (x.T * x).I # p x p
+        theta = inversion * x.T * y  # OLS p x p * p  x n == p x p * (1xp) tak sme pekne v pici
+
+        y = J[:, 0]
+        x = J[:, 1:]
+
+        nasob = x * theta
+        residuals = J[:, 0] - nasob
+        rss = (residuals.T * residuals)[0, 0]
+
+        return theta, inversion, rss
+
+    def traverse_recursive(self, a, b, depth, rss, theta, inversion):
+
+        # LEAF - RETURN
+        if depth == self._h_size:
+            #print('\t leaf {} ; l={}'.format(a, depth))
+
+            # Calculate gama plus and new RSS
+            gama_insert, i_m_i, yi_xi_theta = self.calculate_gama_insert(a[-1], inversion, theta)
+            rss_here = rss + gama_insert
+
+            # Possibly update result
+            if rss_here < self.bab_rss_min:
+                self.bab_rss_min = rss_here
+                self.bab_indexes = np.copy(a)
+
+                # todo - update theta and save it also - DONE
+                xi = self.J[a[-1], 1:]
+                w = -1 / (1 + i_m_i)
+                u = np.dot(inversion, xi.T)
+                theta_here = theta + (-1 * yi_xi_theta * w * u)  # todo OK !!!! (changed [* -1] )
+
+                self.bab_theta = theta_here
+
+            #print('---------------------------------------')
+            #print('updated rss {}'.format(rss_here))
+            #print('indexes here')
+            #print(a)
+
+
+
+
+            # todo - only testing
+            # y = self.J[a, 0]
+            # X = self.J[a, 1:]
+            #
+            # reg = LinearRegression(fit_intercept=False).fit(X, y)
+            #
+            # print('scikit rss {}'.format(reg.score(X, y)))
+            # # reg.coef_
+            # # reg.intercept_
+            #
+            # theta, _, _, _ = self.calculate_theta_qr(self.J[a])
+            #
+            # y = self.J[a, 0]
+            # x = self.J[a, 1:]
+            #
+            # nasob = x * theta
+            # residuals = y - nasob
+            # rss = (residuals.T * residuals)[0, 0]
+            #
+            # #_, _, rss = self.calculate_theta_inversion_with_rss(self.J[a])
+            # print('manual rss: {}'.format(rss))
+            #
+            # theta= (reg.coef_).T
+            # nasob = x * theta
+            # residuals = y - nasob
+            # rss = (residuals.T * residuals)[0, 0]
+            # print('manual scikit rss: {}'.format(rss))
+            #
+            # exit(1)
+
+            # todo - only testig
 
             return
 
-        pass
+        # LEAF - FAKE - EXIT
+        if len(b) == 0:
+            exit(3)
 
+        # ROOT - NOTHING
+        if len(a) < self.J.shape[1]:  # nothing in root
+            # print('root {} ; l={}'.format(a, depth))
+            # not calculate here - root - no need
+            rss_here = rss
+            theta_here = theta
+            inversion_here = inversion
+            pass
 
+        # FIRST EDGE - CALCULATE FIRST TINE
+        elif len(a) == self.J.shape[1]:  # first calculation at depth 1
+
+            theta_here, inversion_here, rss_here = self.calculate_theta_inversion_with_rss(self.J[a])
+            #print(rss_here)
+
+        # EDGE - UPDATE
+        else:
+            # print('a {} ; l={}'.format(a, depth))
+            # Update RSS
+            gama_insert, i_m_i, yi_xi_theta = self.calculate_gama_insert(a[-1], inversion, theta)
+            xi = self.J[a[-1], 1:]
+            #gama_insert = (yi_xi_theta ** 2) / (1 + i_m_i)
+            rss_here = rss + gama_insert
+
+            if rss_here >= self.bab_rss_min: # todo - just like that ???
+                #print('cutting fucking branch ')
+                return
+
+            # Theta plus
+            w = -1 / (1 + i_m_i)
+            u = np.dot(inversion, xi.T)
+            theta_here = theta + (-1 * yi_xi_theta * w * u)  # todo OK !!!! (changed [* -1] )
+
+            # Inversion plus
+            inversion_here = inversion + w * np.dot(u, u.T)
+
+            # todo - cutting criterion
+
+        # we go here either in roots , first edges , or regular edges
+        aa = a.copy()
+        bb = b.copy()
+        while len(bb) > 0:
+            if len(aa) + len(bb) < self._h_size:  # not enough to produce h subset in ancestor
+                break
+
+            # add from B to A
+            aa.append(bb[0])
+            # .. remove from B
+            del bb[0]
+
+            # Go down
+            self.traverse_recursive(aa, bb, depth + 1, rss_here, theta_here, inversion_here)
+
+            # remove from A
+            del aa[-1]
+
+        return
