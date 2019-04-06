@@ -535,7 +535,7 @@ Answer to this question will be presented by the following theorem.
 One run of this iteration process will lead to some local optima i.e. set satisfying strong necessary condition. In \cite{hawkins:1994} they refer to to this set as to \defterm{feasible set}.
 This because it is not global optima the algorithm needs to be run multiple times say $N$ times. As a final solution is taken such $h$  subset with the smallest residual sum of squares. 
 
-We didn't yet mention how to create initial $h$ subset respectively initial $\vec{m}$. We already had this discussion when describing FAST-LTS algorithm. The \cite{hawkins:1994} describes only random starting $h$ subsets, but using $p$ subsets instead may lead to improvement \todo{experiment with this and reffer here}. More importantly as we already suggested $h$ subset satisfying weak necessary condition don't need to satisfy strong necessary condition so passing such a $h$ subset as input to this algorithm is another option and we'll discuss it in detail later. For that reasons we'll now describe feasible algorithm with pseudocode and we'll assume that we already have some function that generates for us $h$ subsets e.g. random one. 
+We didn't yet mention how to create initial $h$ subset respectively initial $\vec{m}$. We already had this discussion when describing FAST-LTS algorithm. The \cite{hawkins:1994} describes only random starting $h$ subsets, but using $p$ subsets instead may lead to improvement \todo{experiment with this and refer here}. More importantly as we already suggested $h$ subset satisfying weak necessary condition don't need to satisfy strong necessary condition so passing such a $h$ subset as input to this algorithm is another option and we'll discuss it in detail later. For that reasons we'll now describe feasible algorithm with pseudocode and we'll assume that we already have some function that generates for us $h$ subsets e.g. random one. 
 
 \newcommand\mycommfont[1]{\footnotesize\ttfamily\textcolor{blue}{#1}}
 \SetCommentSty{mycommfont}
@@ -693,7 +693,7 @@ and
 	\vec{u} = \vec{Z}^{-1}\vec{x_i^T},  	\vec{u} \in \mathbb{R}^{p \times 1},
 \end{equation}
 so that \ref{shermanmorris} can be written as
-\begin{equation}
+\begin{equation} \label{inversionplus}
 	(\vec{Z} + \vec{x_i^T}\vec{x_i})^{-1} = \vec{Z}^{-1} + b\vec{u}\vec{u^T}.
 \end{equation}
 Given that last piece that we're missing to express updated $\vec{\hat{w}}$ is appended $\vec{X}^T\vec{y}$ by one row, which can be simply expressed by same idea as \ref{addedrow} so that updated $\vec{\hat{w}}$ which we'll denote as $\vec{\overline{\hat{w}}}$ is 
@@ -702,7 +702,7 @@ Given that last piece that we're missing to express updated $\vec{\hat{w}}$ is a
 \end{equation}
 This can be simplified so that we get
 \todo{mistake in original paper where is w + (y - xw)bu}
-\begin{equation}
+\begin{equation} \label{thetaplus}
 	\vec{\overline{\hat{w}}} = \vec{\hat{w}} - (y_i - \vec{x_i}\vec{\hat{w}})b\vec{u}.
 \end{equation}
 Last but not least we want to express updated $RSS$ which we denote as $\overline{RSS}$. This can be done easily from \ref{rssdeterminant} and \ref{udpateddeterminant} as 
@@ -746,10 +746,9 @@ so that we can write
 \end{equation}
 Using same approach as before we can denote express downdated estimate which we denote as $\vec{\overline{\overline{\hat{w}}}}$
 
-\begin{equation}
+\begin{equation} \label{thetaminus}
 	\vec{\overline{\overline{\hat{w}}}} =  +\vec{\overline{\hat{w}}} (y_j - \vec{x_j}\vec{\overline{\hat{w}}}) \overline{b} \vec{\overline{u}}.
 \end{equation}
-
 
 Finally lets also express updated $\overline{RSS}$ which we denote as $\overline{\overline{RSS}}$. This can be done easily from \ref{rssdeterminant} and \ref{udpateddeterminant} and \ref{updatedinversion2} as 
 
@@ -783,19 +782,226 @@ Lets now express equation for including and removing observation at once. First 
 
 Finally we can express $\overline{\overline{RSS}} $ as
 
-\begin{equation}
+\begin{equation} \label{updaterss}
 	\overline{\overline{RSS}}  = RSS\rho(z_i, z_j),
 \end{equation}
 where
-\begin{equation}
+\begin{equation} \label{agullo:rovnice}
 	\rho(z_i, z_j) =
 	 \dfrac
 	 {(1+\vec{x_i}\vec{Z}^{-1}\vec{x_i^T} + \dfrac{e_j^2}{RSS})
 		(1 - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T} - \dfrac{e_i^2}{RSS} )+
-		({x_i}\vec{Z}^{-1}\vec{x_j^T} + \dfrac{e_i e_j}{RSS} )^2}
+		(\vec{x_i}\vec{Z}^{-1}\vec{x_j^T} + \dfrac{e_i e_j}{RSS} )^2}
 	{1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}  - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T}  + ( \vec{x_i}\vec{Z}^{-1}\vec{x_j^T})^2 -   \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}\vec{x_j}\vec{Z}^{-1}\vec{x_j^T} },
 \end{equation}
 where $e_i = y_i - x_i\vec{\hat{w}}$ and $e_j = y_j - x_j\vec{\hat{w}}$.
+
+We can see that this formula is similar to the one \ref{hawkins:rovnice} but here the $\rho(z_i, z_j)$ represents multiplicative increment. Moreover $0 < \rho(z_i, z_j) $ and if $0 < \rho(z_i, z_j)< 1 $ then the swap leads to improvement in terms of feasible solution.
+
+With all this we are now able to change FSA so that we don't need to recompute $\vec{hat{w}}$ and inversion $(\vec{X}^T \vec{X})^{-1}$ but we can update it. That means after we find $z_i, z_j$ that improve the current RSS the most (that means we find smallest $\rho(z_i, z_j)$ by \ref{agullo:rovnice}). We can then update $RSS$ by \ref{updaterss}, update $(\vec{X}^T \vec{X})^{-1}$ by \ref{inversionplus} and \ref{updatedinversion2} and finally update $\vec{\hat{w}}$ by \ref{thetaplus} and \ref{thetaminus}.
+
+Note that right now it doesn't matter if we use \ref{hawkins:rovnice} with stopping criterion $	\Delta S^{(\vec{m})}_{i,j} \geq 0$  or \ref{agullo:rovnice} and use $\rho(z_i, z_j) \geq 1 $ stopping criterion. With both results we can update $RSS$. But the advantage of \ref{agullo:rovnice} is that we can use following bounding condition to improve performance.
+
+$\rho(z_i, z_j)$ is expressed as ratio. We can see that in numerator we have
+
+\begin{equation}
+	(1+\vec{x_i}\vec{Z}^{-1}\vec{x_i^T} + \dfrac{e_j^2}{RSS})
+		(1 - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T} - \dfrac{e_i^2}{RSS} )+
+		(\vec{x_i}\vec{Z}^{-1}\vec{x_j^T} + \dfrac{e_i e_j}{RSS} )^2
+\end{equation}
+
+and because $ \dfrac{e_i e_j}{RSS} )^2 \geq 0$ then whole numerator is greater or equal to
+
+\begin{equation}
+	(1+\vec{x_i}\vec{Z}^{-1}\vec{x_i^T} + \dfrac{e_j^2}{RSS})
+(1 - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T} - \dfrac{e_i^2}{RSS} ).
+\end{equation}
+
+On the other hand we can see that denominator is
+
+\begin{equation}
+	1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}  - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T}  + (\vec{x_i}\vec{Z}^{-1}\vec{x_j^T})^2 -   \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}\vec{x_j}\vec{Z}^{-1}\vec{x_j^T} 
+\end{equation}
+
+and because $(\vec{x_i}\vec{Z}^{-1}\vec{x_j^T})^2$ and $\vec{x_i}\vec{Z}^{-1}\vec{x_i^T}\vec{x_j}\vec{Z}^{-1}\vec{x_j^T} $ are actually inner products of $x_i$ and $x_j$  ($\vec{Z}^{-1}$ is positive definite) so 
+\begin{equation}
+	(\vec{x_i}\vec{Z}^{-1}\vec{x_j^T})^2 \leq \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}\vec{x_j}
+\end{equation}
+using Cauchy-Schwarz inequality. That means that denominator is less or equal to
+\begin{equation}
+	1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}  - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T}.
+\end{equation}
+Given that we can denote $\rho_b(z_i, z_j)$ so that
+
+
+\begin{equation} \label{boundingcondition}
+	\rho_b(z_i, z_j) = \dfrac{(1+\vec{x_i}\vec{Z}^{-1}\vec{x_i^T} + \dfrac{e_j^2}{RSS})
+	(1 - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T} - \dfrac{e_i^2}{RSS} )}{1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}  - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T}} \quad \leq \rho(z_i, z_j)
+\end{equation}
+
+So the actual speed improvement is given by we don't need to compute $\vec{x_i}\vec{Z}^{-1}\vec{x_j^T}$ in each of $h(n-h)$ pairs swap comparison. Every time that algorithm starts to compare all pairs we set $\rho_{min} :=1$. Then every time we only compute $\rho_b(z_i, z_j)$ and if it is greater of equal to $\rho_{min}$ we can continue to next pair without computing $\rho(z_i, z_j)$. On the other hand if $\rho_b(z_i, z_j)$ is less that  $\rho_{min}$ we compute $\rho(z_i, z_j)$ and set $\rho_{min} := \rho(z_i, z_j)$ This of course won't improve $\mathcal{n^2}$ time required to compare all $z_i, z_j$ pairs.
+Finally lets note that \cite{agullo2001new} call FSA  which compute $\rho(z_i, z_j)$  \ref{agullo:rovnice} as \defterm{Optimal exchange algorithm (OEA)} and OEA using bounding condition \ref{boundingcondition} as  \defterm{Modified optimal exchange algorithm (MOEA)}.
+
+\subsubsection{Different method of computing Improved FSA}
+We've described way how to modify FSA so that we can update $\vec{hat{w}}$ and inversion $(\vec{X}^T \vec{X})^{-1}$. This requires to compute inversion at the start of the algorithm (this is also the case for the FSA). In practice, however, this is not the way how OLS estimate $\vec{hat{w}}$ is computed. That is primarily due to the fact that computing inversion of large matrix is computationally exhaustive and first of all not numerically stable. In practice we usually use Cholesky factorization. In this subsection we'll describe it and also show that we can perform all above computations using such decomposition. Moreover we'll show close connection between Cholesky factorization and QR decomposition.
+
+\begin{definition}
+	Let $\vec{A} \in \mathbb{R}^{n \times n}$ be an symmetric positive definite matrix. Then it is possible to find lower triangular matrix $L$ so that 
+
+	\begin{equation}
+		\vec{A} = \vec{L}\vec{L^T}
+	\end{equation}
+	We call this decomposition as \defterm{Cholesky factorization} (sometimes also  \defterm{Cholesky decomposition})
+\end{definition}
+	
+If we look at our problem of finding solution to 
+\begin{equation}
+	\vec{X}^T\vec{X}\vec{w} = \vec{X}^T\vec{y}
+\end{equation}
+We can easily rewrite it as 
+\begin{equation}
+	\vec{Z}\vec{w} = \vec{b}
+\end{equation}
+where $\vec{Z} = \vec{X}^T\vec{X}$ is symmetric positive definite matrix and $\vec{b} = \vec{X}^T\vec{y} $. Because $\vec{Z}$ can be factorized as $\vec{L}\vec{L^T}$ the solution can be found easily by substitution
+
+\begin{align}
+	\vec{L}\vec{d} = \vec{b} \\
+	\vec{L}^T\vec{w} = \vec{d}.
+\end{align}
+where $\vec{d}$ is solved by forward substitution and $\vec{w}$ is then solved by backward substitution which is our $\vec{\hat{w}}$ estimate.
+
+So the algorithm for solving OLS using Cholesky factorization goes as follows:
+\begin{enumerate}
+  \item Calculate $\vec{X}^T\vec{X}$ and   $\vec{X}^T\vec{y}$ 
+  \item Calculate Cholesky factorization $\vec{Z} = \vec{L}\vec{L}^T$ where $\vec{Z} = \vec{X}^T\vec{X}$
+  \item Solve lower triangular system $\vec{L}\vec{d} = \vec{b}$  where $ \vec{b} = \vec{X}^T\vec{y}$  for $\vec{d}$ using forward substitution.
+  \item Solve upper triangular system $	\vec{L}^T\vec{w} = \vec{d}$ for $\vec{w}$
+\end{enumerate}
+
+\begin{observation}
+	Time complexity of solving OLS using Cholesky factorization is $\mathcal{O}(np^2)$
+\end{observation}
+\begin{proof}
+	First step requires two matrix multiplication $\vec{X}^T\vec{X}$ which is $\mathcal{O}(np^2)$ and  $\vec{X}^T\vec{y}$ which is $\mathcal{O}(np)$.
+	
+	Second steps is calculating Cholesky factorization. This can be done in $\mathcal{O}(\frac{1}{3}p^3)$ \cite{krishnamoorthy2013matrix}
+
+	In the third and fourth step we are solving triangular systems both of them require
+	 $\mathcal{O}(\frac{1}{2}p^2)$, so together $\mathcal{O}(p^2)$
+
+	Putting all steps together we get  
+	\begin{equation} \label{timecholeskywhole}
+		\mathcal{O}(np^2 + np + \frac{1}{3}p^3 + p^2)
+	\end{equation}
+	and because we assume $n \geq p$ and most usually  $n \gg p$ then multiplication $\vec{X}^T\vec{X}$ asymptotically dominates so whole time complexity is $\mathcal{O}(np^2)$
+\end{proof}
+\begin{note}
+	In case we have $\vec{X}^T\vec{X}$ and  $\vec{X}^T\vec{y}$ computed in advance, then it is asymptotically dominated by Cholesky factorization 
+	\begin{equation} \label{timecholesky}
+		\mathcal{O}(\frac{1}{3}p^3) \sim \mathcal{O}(p^3)
+	\end{equation}
+\end{note}
+
+Let's now look on different method of computing OLS which don't require multiplying $\vec{X}^T\vec{X}$.
+
+\begin{definition}
+	Let $\vec{A} \in \mathbb{R}^{n \times n}$ be any square matrix. Then it is possible to find matrices $\vec{Q}$ and $\vec{R}$ so that 
+
+	\begin{equation}
+		\vec{A} = \vec{Q}\vec{R}
+	\end{equation}
+	Where $\vec{Q} \in \mathbb{R}^{n \times n}$ is orthogonal matrix and $\vec{R} \in \mathbb{R}^{n \times n}$ is upper triangular matrix. 
+	We call this decomposition as \defterm{QR decomposition}.
+\end{definition}
+If matrix $\vec{A} \in \mathbb{R}^{m \times n}$ thus is not square, then decomposition can also be found as
+
+	\begin{equation}
+		\vec{A} = \vec{Q}\vec{R} = \vec{Q} \begin{bmatrix}
+			\vec{R_1} \\
+			\vec{0}
+		\end{bmatrix}
+		=  \begin{bmatrix}
+			\vec{Q_1} & \vec{Q_2}
+		\end{bmatrix}  \begin{bmatrix}
+			\vec{R_1} \\
+			\vec{0}
+		\end{bmatrix} 
+		= \vec{Q_1} \vec{R_1}
+	\end{equation}
+	Where $\vec{Q} \in \mathbb{R}^{m \times m}$ is orthogonal matrix, $\vec{R_1} \in \mathbb{R}^{n \times n} $ is upper triangular matrix, $\vec{0} \in \mathbb{R}^{ (m-n) \times n} $  is zero matrix,  Where $\vec{Q_1} \in \mathbb{R}^{n \times n}$ is matrix with orthogonal columns and  $\vec{Q_2} \in \mathbb{R}^{(m-n) \times n}$ is also matrix with orthogonal columns.
+	
+So that means that $\vec{X}$ can be factorized so that 
+\begin{equation}
+	\vec{X} = \vec{Q}\vec{R}.
+\end{equation}
+Then
+\begin{equation}
+	\vec{X}^T\vec{X} = (\vec{Q}\vec{R})^T \vec{Q}\vec{R} = \vec{R}^T\vec{Q}^T\vec{Q}\vec{R}
+\end{equation}
+and because $\vec{Q}$ is orthogonal, then $\vec{Q}^T\vec{Q} = \vec{I}$ so that
+\begin{equation}
+	\vec{X}^T\vec{X} = \vec{R}^T\vec{R}.
+\end{equation}
+Because $\vec{X} \in  \mathbb{R}^{n \times p}$ is not square matrix then as we shown $\vec{R} = \begin{bmatrix}
+	\vec{R_1} \\
+	\vec{0}
+\end{bmatrix}$
+so that 
+\begin{equation}
+	\vec{X}^T\vec{X} = \vec{R_1}^T\vec{R_1}.
+\end{equation}
+ Where $\vec{R_1^T}$ is lower triangular matrix. 
+%  More importantly 
+%  \begin{equation}
+% 	\vec{R_1^T}<C = \vec{L}
+% \end{equation}
+Solution to
+\begin{equation}
+	\vec{X}^T\vec{X}\vec{w} = \vec{X}^T\vec{y}
+\end{equation}
+is then given by 
+\begin{equation}
+	\vec{R_1}^T\vec{R_1}\vec{w} = \vec{R_1}^T\vec{Q_1}^T \vec{y}
+\end{equation}
+and because we assume $\vec{X}$ have full column rank, thus is invertible, we can simplify it to
+\begin{equation}
+	\vec{R_1}\vec{w} = \vec{b_1}
+\end{equation}
+where $ \vec{b_1} = \vec{Q_1}^T \vec{y}$. Because $\vec{R_1}$ is upper triangular matrix, solution of $\vec{w}$ is trivial using backward substitution. 
+
+\begin{note}
+		We can see that Cholesky factorization  $\vec{X}^T\vec{X} = \vec{L}\vec{L}^T$ is closely connected to the QR decomposition $\vec{X} = \vec{Q_1}\vec{R_1}$ so that  
+		\begin{equation}
+				\vec{R_1^T} = \vec{L}
+			\end{equation}
+\end{note}
+
+
+So the algorithm for solving OLS using QR decomposition can goes as follows:
+\begin{enumerate}
+  \item Calculate QR decomposition $\vec{X} = \vec{Q}\vec{R}^T = \vec{Q_1}\vec{R_1}^T$ 
+  \item Calculate $\vec{Q_1}^T \vec{y}$ which we denote as $\vec{b_1}$ 
+  \item Solve upper triangular system $	\vec{R}\vec{w} = \vec{b_1}$ for $\vec{w}$
+\end{enumerate}
+
+\begin{observation}
+	Time complexity of solving OLS using QR decomposition is $\mathcal{O}(2np^2 - \frac{2}{3}p^3)$
+\end{observation}
+\begin{proof}
+	First step requires two matrix multiplication $\vec{X}^T\vec{X}$ which is $\mathcal{O}(np^2)$ and  $\vec{X}^T\vec{y}$ which is $\mathcal{O}(np)$.
+	
+	Second steps is calculating Cholesky factorization. This can be done in $\mathcal{O}(\frac{1}{3}p^3)$ \cite{krishnamoorthy2013matrix}
+
+	In the third and fourth step we are solving triangular systems both of them require
+	 $\mathcal{O}(\frac{1}{2}p^2)$, so together $\mathcal{O}(p^2)$
+
+	Putting all steps together we get  
+	\begin{equation} \label{timecholeskywhole}
+		\mathcal{O}(np^2 + np + \frac{1}{3}p^3 + p^2)
+	\end{equation}
+	and because we assume $n \geq p$ and most usually  $n \gg p$ then multiplication $\vec{X}^T\vec{X}$ asymptotically dominates so whole time complexity is $\mathcal{O}(np^2)$
+\end{proof}
+
 % \begin{equation}
 % 	\det(\vec{Z} + )
 % 	\vec{z_j} \vec{\tilde{Z}}^{-1} \vec{z^T} = \dfrac{ ( y_j - \vec{x_j}\vec{\hat{w}} ) ( y_i - \vec{x_i}\vec{\hat{w}} ) }{RSS}  + \vec{x_j}\vec{Z}^{-1}\vec{x_j^T}
@@ -817,3 +1023,17 @@ where $e_i = y_i - x_i\vec{\hat{w}}$ and $e_j = y_j - x_j\vec{\hat{w}}$.
 \section{Branch and bound aka. BAB}  % Also from Agulló, 2000
 \section{Adding row algorithm} % Hoffmann, Kontoghiorghes, 2010 (Matrix strategies SUR)
 \section{Klouda algorithm}
+
+
+Time complexity matrix multiplication
+
+School  $\mathcal{O}(n^{3})$
+Although faster algorithm exists like
+Strassen algorithm $\mathcal{O}(n^{2.8074})$ or even
+Coppersmith–Winograd $\mathcal {O}(n^{2.375477})$.
+In practice, however, none of those two algorithm is used not only high constant factors but also due to lower numerical stability. Others factors include worse cash optimization.
+Moreover current implementations of the linear algebra libraries such as LAPACK and more importantly BLAS level 3 routines implementing  matrix-matrix multiplication which are used in such linear algebra software implement $\mathcal{O}(n^{3})$ matrix-matrix multiplication. 
+... In every way it's sort of accurate in this paper to say that matrix multiplication is $\mathcal{O}(n^{3})$
+blas dgemm
+
+$ \vec{A} \in \mathbb{R}^{m \times n}, \vec{B} \in \mathbb{R}^{n\times p}$ then $ \mathcal{O}(n^{3})$

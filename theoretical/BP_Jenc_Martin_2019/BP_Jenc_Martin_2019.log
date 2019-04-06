@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2019.3.5)  4 APR 2019 21:33
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2019.3.5)  6 APR 2019 16:47
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -893,7 +893,11 @@ subscribe by emailing sympa@lirmm.fr with 'subscribe <list> <firstname name>'
 \c@defi=\count267
 \c@cvi=\count268
 \c@cvi*=\count269
-) (./BP_Jenc_Martin_2019.aux (./chapters/00_introduction.aux) (./chapters/01_linear_regression.aux) (./chapters/03_algorithms.aux) (./chapters/04_experiments.aux) (./chapters/99_conclusion.aux))
+) (./BP_Jenc_Martin_2019.aux (./chapters/00_introduction.aux) (./chapters/01_linear_regression.aux) (./chapters/03_algorithms.aux
+
+LaTeX Warning: Label `timecholeskywhole' multiply defined.
+
+) (./chapters/04_experiments.aux) (./chapters/99_conclusion.aux))
 \openout1 = `BP_Jenc_Martin_2019.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 89.
@@ -1140,38 +1144,43 @@ Overfull \hbox (1.92656pt too wide) detected at line 678
  []
 
 [28] [29]
-Overfull \hbox (22.68878pt too wide) detected at line 797
+Overfull \hbox (23.9913pt too wide) detected at line 796
 \OML/lmm/m/it/10.95 ^^Z\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 z[]; z[]\OT1/lmr/m/n/10.95 ) = []\OML/lmm/m/it/10.95 ;
  []
 
-[30] [31] [32
+[30]
+Overfull \hbox (7.86209pt too wide) in paragraph at lines 799--800
+\OT1/lmr/m/n/10.95 rep-re-sents mul-ti-plica-tive in-cre-ment. More-over $0 \OML/lmm/m/it/10.95 < ^^Z\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 z[]; z[]\OT1/lmr/m/n/10.95 )$ and if $0 \OML/lmm/m/it/10.95 < ^^Z\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 z[]; z[]\OT1/lmr/m/n/10.95 ) \OML/lmm/m/it/10.95 <
+ []
 
-]) [33]
+[31] [32] [33] [34] [35] [36
+
+]) [37]
 \openout2 = `chapters/04_experiments.aux'.
 
- (./chapters/04_experiments.tex [34
+ (./chapters/04_experiments.tex [38
 
 
 
-]) [35]
+]) [39]
 \openout2 = `chapters/99_conclusion.aux'.
 
 
 No file chapters/99_conclusion.tex.
-[36
+[40
 
 
 
 
-] (./BP_Jenc_Martin_2019.bbl [37] [38
+] (./BP_Jenc_Martin_2019.bbl [41] [42
 
 ]
 bibitemlist
-[39]) [40] [41
+[43]) [44] [45
 
-] [42
+] [46
 
-] [43]
+] [47]
 \tf@toc=\write6
 \openout6 = `BP_Jenc_Martin_2019.toc'.
 
@@ -1189,21 +1198,24 @@ Package rerunfilecheck Info: File `BP_Jenc_Martin_2019.out' has not changed.
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
+
+LaTeX Warning: There were multiply-defined labels.
+
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 165.
  ) 
 Here is how much of TeX's memory you used:
- 25913 strings out of 494945
- 439200 string characters out of 6181033
- 579188 words of memory out of 5000000
- 28450 multiletter control sequences out of 15000+600000
+ 25965 strings out of 494945
+ 439871 string characters out of 6181033
+ 579655 words of memory out of 5000000
+ 28459 multiletter control sequences out of 15000+600000
  89417 words of font info for 83 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  68i,25n,78p,1159b,888s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-rmtt.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rmsc.enc}</usr/share/texmf/fonts/type1/public/lm/lmbsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx6.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx8.pfb></usr/share/texmf/fonts/type1/public/lm/lmbxi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmcsc10.pfb></usr/share/texmf/fonts/type1/public/lm/lmex10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi12.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi6.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi8.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi9.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr6.pfb></usr/share/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy9.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on BP_Jenc_Martin_2019.pdf (57 pages, 527564 bytes).
+Output written on BP_Jenc_Martin_2019.pdf (61 pages, 546687 bytes).
 PDF statistics:
- 837 PDF objects out of 1000 (max. 8388607)
- 742 compressed objects within 8 object streams
- 313 named destinations out of 1000 (max. 500000)
+ 917 PDF objects out of 1000 (max. 8388607)
+ 817 compressed objects within 9 object streams
+ 356 named destinations out of 1000 (max. 500000)
  226 words of extra memory for PDF output out of 10000 (max. 10000000)
 

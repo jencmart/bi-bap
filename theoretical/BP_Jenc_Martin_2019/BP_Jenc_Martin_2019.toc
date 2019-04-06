@@ -27,17 +27,18 @@
 \contentsline {section}{\numberline {2.4}Feasible solution}{23}{section.2.4}
 \contentsline {section}{\numberline {2.5}Combined algorithm}{27}{section.2.5}
 \contentsline {section}{\numberline {2.6}Improved FSA}{27}{section.2.6}
-\contentsline {subsection}{\numberline {2.6.1}Bounding-FSA aka. Modified Optimum exchange (MOEA)}{31}{subsection.2.6.1}
-\contentsline {subsection}{\numberline {2.6.2}Min-Max-FSA aka. Min Max exchange (MMEA)}{31}{subsection.2.6.2}
-\contentsline {chapter}{\chapternumberline {3}Exact algorithms}{33}{chapter.3}
-\contentsline {section}{\numberline {3.1}Branch and bound aka. BAB}{33}{section.3.1}
-\contentsline {section}{\numberline {3.2}Adding row algorithm}{33}{section.3.2}
-\contentsline {section}{\numberline {3.3}Klouda algorithm}{33}{section.3.3}
-\contentsline {chapter}{\chapternumberline {4}Experiments}{35}{chapter.4}
-\contentsline {section}{\numberline {4.1}Data}{35}{section.4.1}
-\contentsline {section}{\numberline {4.2}Results}{35}{section.4.2}
-\contentsline {section}{\numberline {4.3}Outlier detection}{35}{section.4.3}
-\contentsline {chapter}{Conclusion}{37}{chapter*.29}
-\contentsline {chapter}{Bibliography}{39}{section*.31}
-\contentsline {appendix}{\chapternumberline {A}Datasets}{41}{appendix.A}
-\contentsline {appendix}{\chapternumberline {B}Contents of enclosed CD}{43}{appendix.B}
+\contentsline {subsubsection}{\numberline {2.6.0.1}Different method of computing Improved FSA}{32}{subsubsection.2.6.0.1}
+\contentsline {subsection}{\numberline {2.6.1}Bounding-FSA aka. Modified Optimum exchange (MOEA)}{35}{subsection.2.6.1}
+\contentsline {subsection}{\numberline {2.6.2}Min-Max-FSA aka. Min Max exchange (MMEA)}{35}{subsection.2.6.2}
+\contentsline {chapter}{\chapternumberline {3}Exact algorithms}{37}{chapter.3}
+\contentsline {section}{\numberline {3.1}Branch and bound aka. BAB}{37}{section.3.1}
+\contentsline {section}{\numberline {3.2}Adding row algorithm}{37}{section.3.2}
+\contentsline {section}{\numberline {3.3}Klouda algorithm}{37}{section.3.3}
+\contentsline {chapter}{\chapternumberline {4}Experiments}{39}{chapter.4}
+\contentsline {section}{\numberline {4.1}Data}{39}{section.4.1}
+\contentsline {section}{\numberline {4.2}Results}{39}{section.4.2}
+\contentsline {section}{\numberline {4.3}Outlier detection}{39}{section.4.3}
+\contentsline {chapter}{Conclusion}{41}{chapter*.29}
+\contentsline {chapter}{Bibliography}{43}{section*.31}
+\contentsline {appendix}{\chapternumberline {A}Datasets}{45}{appendix.A}
+\contentsline {appendix}{\chapternumberline {B}Contents of enclosed CD}{47}{appendix.B}

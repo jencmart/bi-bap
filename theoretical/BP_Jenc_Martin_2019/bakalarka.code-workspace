@@ -22,7 +22,8 @@
 			"mathbb",
 			"moea",
 			"pseudocode",
-			"resampling"
+			"resampling",
+			"schwarz"
 		]
 	}
 }
