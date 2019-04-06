@@ -689,7 +689,7 @@ For following equations it'll be convenient for us to mark
 	b = \dfrac{-1}{(1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T})},  b \in \mathbb{R},
 \end{equation}
 and 
-\begin{equation}
+\begin{equation} \label{agullo_u}
 	\vec{u} = \vec{Z}^{-1}\vec{x_i^T},  	\vec{u} \in \mathbb{R}^{p \times 1},
 \end{equation}
 so that \ref{shermanmorris} can be written as
@@ -767,7 +767,7 @@ so that
 
 Lets now express equation for including and removing observation at once. First let's notice that from \ref{updatedinversion2} we can express 
 
-\begin{equation}
+\begin{equation} \label{xjoverlinez}
 	\vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T}) =  \vec{x_j}\vec{Z}^{-1}\vec{x_j^T}) - 
 	\dfrac{( \vec{x_i}\vec{Z}^{-1}\vec{x_j^T})^2}{1 +  \vec{x_i}\vec{Z}^{-1}\vec{x_i^T})},
 \end{equation}
@@ -976,7 +976,6 @@ where $ \vec{b_1} = \vec{Q_1}^T \vec{y}$. Because $\vec{R_1}$ is upper triangula
 			\end{equation}
 \end{note}
 
-
 So the algorithm for solving OLS using QR decomposition can goes as follows:
 \begin{enumerate}
   \item Calculate QR decomposition $\vec{X} = \vec{Q}\vec{R}^T = \vec{Q_1}\vec{R_1}^T$ 
@@ -984,30 +983,70 @@ So the algorithm for solving OLS using QR decomposition can goes as follows:
   \item Solve upper triangular system $	\vec{R}\vec{w} = \vec{b_1}$ for $\vec{w}$
 \end{enumerate}
 
+Today there are two popular methods of computing QR decomposition these are Householder transformations and Givens rotations. We'll describe Givens rotation in detail later. 
 \begin{observation}
 	Time complexity of solving OLS using QR decomposition is $\mathcal{O}(2np^2 - \frac{2}{3}p^3)$
 \end{observation}
 \begin{proof}
-	First step requires two matrix multiplication $\vec{X}^T\vec{X}$ which is $\mathcal{O}(np^2)$ and  $\vec{X}^T\vec{y}$ which is $\mathcal{O}(np)$.
 	
-	Second steps is calculating Cholesky factorization. This can be done in $\mathcal{O}(\frac{1}{3}p^3)$ \cite{krishnamoorthy2013matrix}
-
-	In the third and fourth step we are solving triangular systems both of them require
-	 $\mathcal{O}(\frac{1}{2}p^2)$, so together $\mathcal{O}(p^2)$
+	In the first step we calculate QR decomposition. Householder rotations can be done in $\mathcal{O}(2np^2 - \frac{2}{3}p^3)$  \todo{nevim kde citovat} which is slightly faster than Givens rotation $\mathcal{O}(3np^2 - p^3)$ \todo{nevim kde citovat, ale asi mozna spocitam}
+	Second step consist of matrix multiplication $\vec{Q_1}^T \vec{y}$ which is $\mathcal{O}(np)$
+	In the last step we are solving upper triangular systems which is
+	 $\mathcal{O}(\frac{1}{2}p^2)$.
 
 	Putting all steps together we get  
-	\begin{equation} \label{timecholeskywhole}
-		\mathcal{O}(np^2 + np + \frac{1}{3}p^3 + p^2)
+	\begin{equation} \label{timewholeQR}
+		\mathcal{O}(2np^2 - \frac{2}{3}p^3 + np + \frac{1}{2}p^2)
 	\end{equation}
-	and because we assume $n \geq p$ and most usually  $n \gg p$ then multiplication $\vec{X}^T\vec{X}$ asymptotically dominates so whole time complexity is $\mathcal{O}(np^2)$
+	We can see that again $\mathcal{O}(2np^2)$ asymptotically dominates.
 \end{proof}
 
 % \begin{equation}
 % 	\det(\vec{Z} + )
 % 	\vec{z_j} \vec{\tilde{Z}}^{-1} \vec{z^T} = \dfrac{ ( y_j - \vec{x_j}\vec{\hat{w}} ) ( y_i - \vec{x_i}\vec{\hat{w}} ) }{RSS}  + \vec{x_j}\vec{Z}^{-1}\vec{x_j^T}
 % \end{equation}
+\todo{cele toto presunout nekam do prvni kapitoly}
+\todo{rozdelit kapitoly nejak inteligentne. tohle je spatny...}
 
+\subsubsection{Calculation of imporved FSA using QR}
+So let's focus on our problem. As we said using decomposition is better than calculating inversion primarily due to higher numerical stability. \todo{nevim jestli zminovat ze muzu delat i SVD dekompozici ktera je nejstabilnejsi ze vsech...}
+We'll show that both FSA as well as improved FSA can be calculated using QR decomposition.
 
+Let's start with \ref{agullo:rovnice}. Here inversion is need to calculate 
+$\vec{x_i}\vec{Z}^{-1}\vec{x_i^T}$, $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$ and $\vec{x_i}\vec{Z}^{-1}\vec{x_j^T}$. This can also be done without inversion, only using the decomposition. We can write this equation
+\begin{equation} \label{solveimi}
+	\vec{x_i}\vec{Z}^{-1}\vec{x_i^T} = \vec{v}^T\vec{v} 	\iff \vec{x_i}(\vec{R}^T\vec{R})^{-1}\vec{x_i^T} = \vec{v}^T\vec{v}
+\end{equation} 
+where $\vec{v}$ can be obtained by solving lower triangular system
+\begin{equation} \label{vsolution}
+	\vec{R}^T\vec{v} = \vec{x_i}^T.
+\end{equation} 
+The same can be done with  $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$. Last but not least we need to solve 
+$\vec{x_i}\vec{Z}^{-1}\vec{x_j^T}$. We can write this 
+\begin{equation}
+	\vec{x_i}\vec{Z}^{-1}\vec{x_j^T} = \vec{x_j}\vec{u} 	\iff \vec{x_i}(\vec{R}^T\vec{R})^{-1}\vec{x_j^T} = \vec{x_j}^T\vec{u}
+\end{equation} 
+Where column vector $\vec{u}$ is defined by \ref{agullo_u}. We can see that 
+
+\begin{equation}
+	\vec{u} = \vec{Z}^{-1}\vec{x_i^T} 	\iff (\vec{R}^T\vec{R})^{-1}\vec{x_i^T} = \vec{u}
+\end{equation}
+so that $\vec{u}$ can be obtained ba solving upper triangular system 
+
+\begin{equation} \label{solve_u_qr}
+	\vec{R}\vec{u} = \vec{v}
+\end{equation}
+where $\vec{v}$ is solution of \ref{vsolution}. Other quantities of \ref{agullo:rovnice} does not require $\vec{Z}^{-1}$.
+
+When optimal exchange $\vec{z_i}, \vec{z_j}$ is found then we need to update $RSS$ which can be done same way by \ref{updaterss}. Updating $\vec{\hat{w}}$ to  $\vec{\overline{\hat{w}}}$ by \ref{thetaplus} requires
+$\vec{u}$  which in this case we calculate by \ref{solve_u_qr} and $b$ which requires  $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$ but that we've also already covered by idea \ref{solveimi}. Analogous operations can be used to update $\vec{\overline{\hat{w}}}$ to $\vec{\overline{\overline{\hat{w}}}}$  by means of \ref{thetaminus}. Only thing wee need to realize that we can express \ref{xjoverlinez} as $\vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T} = \vec{x_i}\vec{{{Z}}}^{-1}\vec{x_i^T} + b(\vec{u}\vec{x_j}^2)$.
+
+We can't use updating inversion because we don't have one so we need to somehow update our QR decomposition. This can be done by both Householder rotation as well as by Givens rotation, but because our $\vec{R}$ is already sparse matrix, Givens rotations are ideal tool for this.
+
+\subsubsection{Updating QR decomposition using Givens rotations}
+First of all we need to introduce idea of Givens rotations and how it can be used to calculate QR decomposition. Then it won't be hard to describe how updating for both including and excluding row are done.
+
+% i_m_i i_m_j j_m_j 
 
 
 
