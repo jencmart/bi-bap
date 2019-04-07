@@ -798,7 +798,7 @@ where $e_i = y_i - x_i\vec{\hat{w}}$ and $e_j = y_j - x_j\vec{\hat{w}}$.
 
 We can see that this formula is similar to the one \ref{hawkins:rovnice} but here the $\rho(z_i, z_j)$ represents multiplicative increment. Moreover $0 < \rho(z_i, z_j) $ and if $0 < \rho(z_i, z_j)< 1 $ then the swap leads to improvement in terms of feasible solution.
 
-With all this we are now able to change FSA so that we don't need to recompute $\vec{hat{w}}$ and inversion $(\vec{X}^T \vec{X})^{-1}$ but we can update it. That means after we find $z_i, z_j$ that improve the current RSS the most (that means we find smallest $\rho(z_i, z_j)$ by \ref{agullo:rovnice}). We can then update $RSS$ by \ref{updaterss}, update $(\vec{X}^T \vec{X})^{-1}$ by \ref{inversionplus} and \ref{updatedinversion2} and finally update $\vec{\hat{w}}$ by \ref{thetaplus} and \ref{thetaminus}.
+With all this we are now able to change FSA so that we don't need to recompute $\vec{\hat{w}}$ and inversion $(\vec{X}^T \vec{X})^{-1}$ but we can update it. That means after we find $z_i, z_j$ that improve the current RSS the most (that means we find smallest $\rho(z_i, z_j)$ by \ref{agullo:rovnice}). We can then update $RSS$ by \ref{updaterss}, update $(\vec{X}^T \vec{X})^{-1}$ by \ref{inversionplus} and \ref{updatedinversion2} and finally update $\vec{\hat{w}}$ by \ref{thetaplus} and \ref{thetaminus}.
 
 Note that right now it doesn't matter if we use \ref{hawkins:rovnice} with stopping criterion $	\Delta S^{(\vec{m})}_{i,j} \geq 0$  or \ref{agullo:rovnice} and use $\rho(z_i, z_j) \geq 1 $ stopping criterion. With both results we can update $RSS$. But the advantage of \ref{agullo:rovnice} is that we can use following bounding condition to improve performance.
 
@@ -843,7 +843,7 @@ So the actual speed improvement is given by we don't need to compute $\vec{x_i}\
 Finally lets note that \cite{agullo2001new} call FSA  which compute $\rho(z_i, z_j)$  \ref{agullo:rovnice} as \defterm{Optimal exchange algorithm (OEA)} and OEA using bounding condition \ref{boundingcondition} as  \defterm{Modified optimal exchange algorithm (MOEA)}.
 
 \subsubsection{Different method of computing Improved FSA}
-We've described way how to modify FSA so that we can update $\vec{hat{w}}$ and inversion $(\vec{X}^T \vec{X})^{-1}$. This requires to compute inversion at the start of the algorithm (this is also the case for the FSA). In practice, however, this is not the way how OLS estimate $\vec{hat{w}}$ is computed. That is primarily due to the fact that computing inversion of large matrix is computationally exhaustive and first of all not numerically stable. In practice we usually use Cholesky factorization. In this subsection we'll describe it and also show that we can perform all above computations using such decomposition. Moreover we'll show close connection between Cholesky factorization and QR decomposition.
+We've described way how to modify FSA so that we can update $\vec{hat{w}}$ and inversion $(\vec{X}^T \vec{X})^{-1}$. This requires to compute inversion at the start of the algorithm (this is also the case for the FSA). In practice, however, this is not the way how OLS estimate $\vec{\hat{w}}$ is computed. That is primarily due to the fact that computing inversion of large matrix is computationally exhaustive and first of all not numerically stable. In practice we usually use Cholesky factorization. In this subsection we'll describe it and also show that we can perform all above computations using such decomposition. Moreover we'll show close connection between Cholesky factorization and QR decomposition.
 
 \begin{definition}
 	Let $\vec{A} \in \mathbb{R}^{n \times n}$ be an symmetric positive definite matrix. Then it is possible to find lower triangular matrix $L$ so that 
@@ -1045,6 +1045,110 @@ We can't use updating inversion because we don't have one so we need to somehow 
 
 \subsubsection{Updating QR decomposition using Givens rotations}
 First of all we need to introduce idea of Givens rotations and how it can be used to calculate QR decomposition. Then it won't be hard to describe how updating for both including and excluding row are done.
+
+Computing QR Factorization.
+We compute the QR factorization of $\vec{A} \in \mathbb{R}^{m \times n}$ which has full column rank so that we apply orthogonal transformation by matrix $\vec{Q}^T$ so that \cite{hammarling2008updatingqr}
+
+\begin{equation}
+	\vec{Q}^T\vec{A} = \vec{R}
+\end{equation}
+ 
+where $\vec{Q}$ is product of orthogonal matrices. One such example of orthogonal matrix can be:
+
+\begin{equation} \label{givensmatrix}
+\vec{Q} = 
+\begin{bmatrix} 
+\cos(\varphi) & \sin(\varphi) \\
+- \sin(\varphi) & \cos(\varphi)
+\end{bmatrix}
+\end{equation}
+This matrix is indeed orthogonal since 
+\begin{align*} 
+\vec{Q}\vec{Q}^T = \vec{Q}^T\vec{Q}    
+\end{align*}
+ \begin{equation*}
+	= \begin{bmatrix} 
+		\cos(\varphi)^2 + \sin(\varphi)^2  & \sin(\varphi)\cos(\varphi) - \cos(\varphi)\sin(\varphi) \\
+		\cos(\varphi)\sin(\varphi) - \sin(\varphi)\cos(\varphi) & \cos(\varphi)^2 + \sin(\varphi)^2
+	\end{bmatrix} \\ = \vec{I}
+	\numberthis
+\end{equation*}
+Moreover if we multiply this orthogonal with some column vector $\vec{x} \in \mathbb{R}^{2 \times 1}$ thus $\vec{Q}\vec{x}$ as a result we'll get vector of same length but is rotated clockwise by  $\varphi$ radians. When we say that vector will have same length we mean than L-2 norm of such vector will be the same.This is important property of all orthogonal matrices. We can simply verify correctness of this claim. Let's have any orthogonal matrix $\vec{Q} \in \mathbb{R}^{m \times m}$ and any column vector $\vec{x} \in  \mathbb{R}^{m \times 1}$ then
+
+\begin{equation}
+	\norm{\vec{Q}\vec{x}}^2 = (\vec{Q}\vec{x})^T (\vec{Q}\vec{x}) = \vec{x}^T\vec{Q}^T\vec{Q}\vec{x} = 
+	\vec{x}^T\vec{I}\vec{x} = \vec{x}^T\vec{x} = \norm{\vec{x}}^2
+\end{equation}
+
+So we would like to create series of orthogonal matrices which will gradually rotate column vectors of $\vec{A}$ so there will be zeros under diagonal. One such method - \defterm{Givens rotation} uses \defterm{Givens matricies} that will zero one element under diagonal at a time.
+The example of \ref{givensmatrix} was not random. Let's look at this orthogonal matrix one more time and lets multiply this matrix with some vector.
+
+\begin{equation}
+	\begin{bmatrix} 
+		\cos(\varphi) & \sin(\varphi) \\
+		- \sin(\varphi) & \cos(\varphi)
+		\end{bmatrix}
+		\begin{bmatrix} 
+			a \\
+			b
+			\end{bmatrix} = 
+			\begin{bmatrix} 
+				r \\
+				z
+				\end{bmatrix}
+\end{equation}
+
+To introduce this zeroing effect we need to rotate this vector so that it will be parallel to $
+\begin{bmatrix} 
+	1 \\
+	0
+\end{bmatrix}
+$. Now it's only up to find  $\cos(\varphi) a + \sin(\varphi) = r $.
+As we know rotation with $\vec{Q}$ preserve L-2 norm. That means is we want to $z = 0$  then $r$ must be equal to L-2 norm of vector  
+$
+\begin{bmatrix} 
+	a \\
+	b
+\end{bmatrix}
+$  thus $r = \sqrt{a^2 + b^2}$. 
+Then the solution seems trivial. We don't even need to calculate $\varphi$ because if we put
+$\cos(\varphi) = \frac{a}{\sqrt{a^2 + b^2}} $ and  $\sin(\varphi) = \frac{b}{\sqrt{a^2 + b^2}} $ then 
+\begin{equation}
+	r = \frac{a^2}{\sqrt{a^2 + b^2}} + \frac{b^2}{\sqrt{a^2 + b^2}} = \sqrt{a^2 + b^2} \\
+	z = \frac{-ab}{\sqrt{a^2 + b^2}} +  \frac{ab}{\sqrt{a^2 + b^2}} = 0
+\end{equation}
+
+Practically used algorithm of computing $\cos{\varphi}$ and  $\sin{\varphi}$ is slightly different because we want to prevent overflow. Real algorithm is described by following pseudocode:
+
+
+\begin{algorithm}[H]
+	\label{alg:Cstep}
+    % \SetKwInOut{Input}{input}
+    % \SetKwInOut{Output}{output}
+    \KwIn{$a, b}$
+    \KwOut{$cos, sin$ }
+	\caption{Rotate}
+	
+	$cos \gets \emptyset$\;
+	$sin \gets \emptyset$\;
+
+	\uIf{$b == 0$}{
+		$sin \gets 0$\;
+		$cos \gets 1$\;
+	}
+	\uElseIf{$abs(b) \geq abs(a)$}{
+		$cotg \gets \frac{a}{b}$
+		$sin \gets \frac{1}{\sqrt{1 + (cotg)^2}}$\;
+		$cos \gets sin\ cotg$\;
+	}
+	\Else{
+		$tan \gets \frac{b}{b} $
+		$cos \gets \frac{1}{\sqrt{1 + (tan)^2}}$\;
+		$sin \gets cos\ tan$\;
+	}
+	\Return{ $cos$\,, $sin$ }\;
+\end{algorithm}
+
 
 % i_m_i i_m_j j_m_j 
 
