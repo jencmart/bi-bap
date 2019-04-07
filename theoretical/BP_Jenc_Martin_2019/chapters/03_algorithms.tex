@@ -1112,11 +1112,18 @@ $
 \end{bmatrix}
 $  thus $r = \sqrt{a^2 + b^2}$. 
 Then the solution seems trivial. We don't even need to calculate $\varphi$ because if we put
-$\cos(\varphi) = \frac{a}{\sqrt{a^2 + b^2}} $ and  $\sin(\varphi) = \frac{b}{\sqrt{a^2 + b^2}} $ then 
-\begin{equation}
-	r = \frac{a^2}{\sqrt{a^2 + b^2}} + \frac{b^2}{\sqrt{a^2 + b^2}} = \sqrt{a^2 + b^2} \\
-	z = \frac{-ab}{\sqrt{a^2 + b^2}} +  \frac{ab}{\sqrt{a^2 + b^2}} = 0
+\begin{equation} \label{givens_cos}
+	\cos(\varphi) = \frac{a}{\sqrt{a^2 + b^2}} 
 \end{equation}
+and   
+\begin{equation} \label{givens_sin}
+	\sin(\varphi) = \frac{b}{\sqrt{a^2 + b^2}} 
+\end{equation}
+then 
+\begin{align}
+	r &= \frac{a^2}{\sqrt{a^2 + b^2}} + \frac{b^2}{\sqrt{a^2 + b^2}} = \sqrt{a^2 + b^2} \\
+	z &= \frac{-ab}{\sqrt{a^2 + b^2}} +  \frac{ab}{\sqrt{a^2 + b^2}} = 0.
+\end{align}
 
 Practically used algorithm of computing $\cos{\varphi}$ and  $\sin{\varphi}$ is slightly different because we want to prevent overflow. Real algorithm is described by following pseudocode:
 
@@ -1125,41 +1132,116 @@ Practically used algorithm of computing $\cos{\varphi}$ and  $\sin{\varphi}$ is 
 	\label{alg:Cstep}
     % \SetKwInOut{Input}{input}
     % \SetKwInOut{Output}{output}
-    \KwIn{$a, b}$
+    \KwIn{$a, b$}
     \KwOut{$cos, sin$ }
 	\caption{Rotate}
-	
-	$cos \gets \emptyset$\;
 	$sin \gets \emptyset$\;
-
+	$cos \gets \emptyset$\;
 	\uIf{$b == 0$}{
 		$sin \gets 0$\;
 		$cos \gets 1$\;
 	}
 	\uElseIf{$abs(b) \geq abs(a)$}{
-		$cotg \gets \frac{a}{b}$
+		$cotg \gets \frac{a}{b}$\;
 		$sin \gets \frac{1}{\sqrt{1 + (cotg)^2}}$\;
 		$cos \gets sin\ cotg$\;
 	}
 	\Else{
-		$tan \gets \frac{b}{b} $
+		$tan \gets \frac{b}{b} $\;
 		$cos \gets \frac{1}{\sqrt{1 + (tan)^2}}$\;
 		$sin \gets cos\ tan$\;
 	}
 	\Return{ $cos$\,, $sin$ }\;
 \end{algorithm}
 
+We can scale this same idea to higher dimensions. Let's denote matrix $\vec{Q}(i, j) \in \mathbb{R}^{m \times m}$ defined as 
+\renewcommand{\kbldelim}{[}% Left delimiter
+\renewcommand{\kbrdelim}{]}% Right delimiter
+\[
+  \vec{Q}(i, j) = \kbordermatrix{
+    &   &       & i &       & j &      &  \\
+    & 1 & \dots & 0 & \dots & 0 &\dots & 0 \\
+    & \vdots & \ddots & \vdots & & \vdots & & \vdots \\
+   i  & 0 & \dots & c & \dots & s & \dots & 0 \\
+	 & \vdots &  & \vdots & \ddots & \vdots & & \vdots \\
+	 j  & 0 & \dots & -s & \dots & c & \dots & 0 \\
+	 & \vdots &  & \vdots &  & \vdots & \ddots & \vdots \\
+	 & 0 & \dots & 0 & \dots & 0 &\dots & 1 \\
+  }
+\]
 
-% i_m_i i_m_j j_m_j 
+where $c = 	\cos(\varphi) $ and $ s = \sin(\varphi)$ for some $\varphi$. That means this matrix is orthogonal. Now if we have some column vector $\vec{x} \in \mathbb{R}^{m \times 1}$ and calculate $c$ and $s$ by means of \ref{givens_cos} and \ref{givens_sin} for $a := x_i $ and $b := x_j$. 
+Finally if we multiply $\vec{Q}(i, j) \vec{x} = \vec{p}$ we can see that $\vec{p}$ is same as vector $\vec{x}$ except $p_i$ and $p_j$ so that:
 
+\[
+	\vec{Q}(i, j) \vec{x} = \vec{Q}(i,j) 
+	\kbordermatrix{
+    &   \\
+    & x_1 \\
+    & \vdots \\
+   i  & x_i  \\
+	 & \vdots \\
+	 j  & x_j  \\
+	 & \vdots \\
+	 & x_m \\
+  }
+	=  \vec{p} = \kbordermatrix{
+    &   \\
+    & x_1 \\
+    & \vdots \\
+   i  & r  \\
+	 & \vdots \\
+	 j  & 0  \\
+	 & \vdots \\
+	 & x_m \\
+  }
+\]
 
+where $r = \sqrt{x_i^2 + x_j^2}$. If we have matrix $\vec{A} \in \mathbb{R}^{n \times p}$ instead of only one column $\vec{x}$ it works the same way. So if we have such matrix we need to create matrix $	\vec{Q}(i, j)$ for each $a_{ij}$ under the diagonal in order to create upper triangular matrix. Usually we are zeroing columns so that we start with $a_{12}$ then $a_{13} \ldots a_{1_n}$.
+Then we start with second column $a_{23}$ and so on. That means we need to create in total exactly
+$e = \frac{p^2 - p}{2} + np - p^2$ matrices $\vec{Q}(i, j)$. We can denote this sequence of matrices as $\vec{Q_1},  \vec{Q_2}, \ldots \vec{Q_e}$.
+The QR decomposition then looks like
 
+\begin{equation}
+	\vec{Q_e}\ldots\vec{Q_2}\vec{Q_1}\vec{A} = \vec{R}
+\end{equation}
+where $\vec{Q_e}\ldots\vec{Q_2}\vec{Q_1}$ is actually $\vec{Q}^T$. So $\vec{Q}$ is obtained by 
+
+\begin{equation}
+ \vec{Q} = \vec{Q_1^T}\vec{Q_2^T}\ldots\vec{Q_e^T}.
+\end{equation}
+
+\todo{move all this about rotations somewhere else}
+
+So we are now in situation when we have QR decomposition of $\vec{X}$ and we need to exchange $i$th row for $j$th row. We can simulate this by first adding $j$th row and consequently removing $i$th row.
+
+First let's discuss how to update QR decomposition when row is added. This is indeed very simple. 
+If we add row to $\vec{A}$ our decomposition looks like
+\begin{equation}
+	\vec{R^{+}} = \vec{Q_e}\ldots\vec{Q_2}\vec{Q_1}\vec{A_{new}}  = 
+	\begin{bmatrix}
+		\times & \cdots & \cdots & \cdots & \times \\
+		0 &\times & \cdots & \cdots & \times \\
+		\vdots& 0&\ddots & \cdots & \vdots \\
+		\vdots& \vdots&0 & \ddots &  \vdots \\
+		\vdots& \vdots& \vdots& 0& \times \\
+		\vdots& \vdots& \vdots& \vdots& 0  \\
+		\vdots& \vdots& \vdots& \vdots& \vdots \\
+		\times & \cdots & \cdots & \cdots & \times \\
+	\end{bmatrix}
+\end{equation}
+
+So all we need to do is create matrices $\vec{Q_{e+1}}\ldots\vec{Q_{e+p}}$ to zero newly added row.
+So the $R$ then will be equal to $\vec{R_{new}} = \vec{R}\vec{Q_{e+1}}\vec{Q_e}\ldots\vec{Q_2}\vec{Q_1}\vec{A}$. \todo{blbe znaceni ale nevim jak lepe}
+$\vec{Q}$ will be updated in the same way thus $\vec{Q_{new}} = \vec{Q}\vec{Q_e^T}\vec{Q_{e+1}^T}\ldots\vec{Q_{e+p}^T}$.
+
+When we want to remove the row we need to.
 \subsection{Bounding-FSA aka. Modified Optimum exchange (MOEA)}
 \subsection{Min-Max-FSA aka. Min Max exchange (MMEA)}
 
 
 \todo{make CHAPTER approximate ALGORITHMS AND chapter EXACT ALGORITHMS?}
-
+dsafsdsa
 
 \chapter{Exact algorithms} %
 
