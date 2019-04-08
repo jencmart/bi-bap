@@ -11,7 +11,6 @@
       <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.out" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.out" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.pdf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.synctex.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.synctex.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.synctex.gz(busy)" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.toc" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.toc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/03_algorithms.aux" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/03_algorithms.aux" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/03_algorithms.tex" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/03_algorithms.tex" afterDir="false" />
@@ -54,8 +53,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/package-lts/lts/feasibleoe/feasible_solution_oe.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="925" column="24" selection-start-line="925" selection-start-column="24" selection-end-line="925" selection-end-column="24" />
+            <state relative-caret-position="166">
+              <caret line="856" column="53" selection-start-line="856" selection-start-column="49" selection-end-line="856" selection-end-column="53" />
               <folding>
                 <element signature="e#0#51#0" expanded="true" />
               </folding>
@@ -239,7 +238,7 @@
   <component name="ProjectFrameBounds">
     <option name="x" value="-1" />
     <option name="y" value="3" />
-    <option name="width" value="962" />
+    <option name="width" value="1922" />
     <option name="height" value="1078" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -446,18 +445,18 @@
       <workItem from="1553780801852" duration="136872000" />
       <workItem from="1554385498409" duration="676000" />
       <workItem from="1554571197391" duration="577000" />
-      <workItem from="1554649402456" duration="836000" />
+      <workItem from="1554649402456" duration="2404000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="203945000" />
+    <option name="totallyTimeSpent" value="205513000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-2" y="-18" width="1924" height="1100" extended-state="0" />
+    <frame x="-1" y="3" width="1922" height="1078" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.44505495" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21634616" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -824,8 +823,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/package-lts/lts/feasibleoe/feasible_solution_oe.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="925" column="24" selection-start-line="925" selection-start-column="24" selection-end-line="925" selection-end-column="24" />
+        <state relative-caret-position="166">
+          <caret line="856" column="53" selection-start-line="856" selection-start-column="49" selection-end-line="856" selection-end-column="53" />
           <folding>
             <element signature="e#0#51#0" expanded="true" />
           </folding>

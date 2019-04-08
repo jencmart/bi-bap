@@ -608,7 +608,7 @@ We've introduced additive formula \ref{hawkins:rovnice}. Let's now try to obtain
 
 Let $\vec{A} = (\vec{X}, \vec{y})$ be a matrix $\vec{X}$ expended by one column of corresponding dependent variables and $\vec{Z} = \vec{X}^T\vec{X}$ and $\vec{\tilde{Z}} = \vec{A}^T\vec{A}$. Then
 
-\[ 
+\[  \numberthis \label{matrixZ}
 	\vec{\tilde{Z}} = \begin{bmatrix}
 		\vec{Z} & \vec{X}^T\vec{y} \\
     \vec{y}^T\vec{X} & \vec{y}^T\vec{y}
@@ -971,7 +971,7 @@ where $ \vec{b_1} = \vec{Q_1}^T \vec{y}$. Because $\vec{R_1}$ is upper triangula
 
 \begin{note}
 		We can see that Cholesky factorization  $\vec{X}^T\vec{X} = \vec{L}\vec{L}^T$ is closely connected to the QR decomposition $\vec{X} = \vec{Q_1}\vec{R_1}$ so that  
-		\begin{equation}
+		\begin{equation} \label{qrcholesky}
 				\vec{R_1^T} = \vec{L}
 			\end{equation}
 \end{note}
@@ -1042,7 +1042,89 @@ When optimal exchange $\vec{z_i}, \vec{z_j}$ is found then we need to update $RS
 $\vec{u}$  which in this case we calculate by \ref{solve_u_qr} and $b$ which requires  $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$ but that we've also already covered by idea \ref{solveimi}. Analogous operations can be used to update $\vec{\overline{\hat{w}}}$ to $\vec{\overline{\overline{\hat{w}}}}$  by means of \ref{thetaminus}. Only thing wee need to realize that we can express \ref{xjoverlinez} as $\vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T} = \vec{x_i}\vec{{{Z}}}^{-1}\vec{x_i^T} + b(\vec{u}\vec{x_j}^2)$.
 
 We can't use updating inversion because we don't have one so we need to somehow update our QR decomposition. This can be done by both Householder rotation as well as by Givens rotation, but because our $\vec{R}$ is already sparse matrix, Givens rotations are ideal tool for this.
+We can use first \ref{addingrowqr} to add row $\vec{x_i}$ to the decomposition and consequently \ref{removingrow} to remove $\vec{x_j}$  from the decomposition. We can see that this is slower  than updating inversion directly. On the other hand this solution is numerically stable and requires less time than computing factorization again from scratch. 
+% After such update we need also to recalculate $\vec{Q}\vec{y}$ which is 
 
+Finally let's talk about matrix $\vec{\tilde{Z}}$ which we used \ref{matrixZ} for derivation of our equations. If we use \ref{qrcholesky} observation then we realize that if we make QR factorization of $\vec{A} = (\vec{X}, \vec{y})$ then
+
+\begin{equation}
+	\vec{\tilde{Z}} = 
+	\begin{bmatrix}
+		\vec{Z} & \vec{X}^T\vec{y} \\
+    \vec{y}^T\vec{X} & \vec{y}^T\vec{y}
+	\end{bmatrix} 
+	= 
+	\begin{bmatrix}
+		\vec{R^T} & 0 \\
+    \vec{\phi^T} & r
+	\end{bmatrix} 
+	\begin{bmatrix}
+		\vec{R} & \vec{\phi} \\
+     0 & r
+	\end{bmatrix} 
+\end{equation}
+
+where 
+
+\begin{equation}
+	\vec{\tilde{R}} = 
+	\begin{bmatrix}
+		\vec{R} & \vec{\phi} \\
+     0 & r
+	\end{bmatrix} 
+	= \vec{\tilde{Q^T}}\vec{A}
+\end{equation}
+
+is matrix from QR factorization of $\vec{A}$. 
+Next we can realize that $\vec{R} \in \mathbb{R}^{p \times p}$ is actually matrix $\vec{R}$ which we can obtain by QR factorization of $\vec{X}$. 
+Moreover $\vec{\phi} \in \mathbb{R}^{p \times 1}$ is column vector which is actually equal to
+\begin{equation}
+	\vec{\phi} =  \vec{Q^T}\vec{y}
+\end{equation}
+where $\vec{Q}$ is matrix $\vec{Q}$ from QR factorization of $\vec{R}$.
+Due to this fact $\vec{\hat{w}}$ is solution of upper triangular system 
+\begin{equation}
+	\vec{R}\vec{\hat{w}} = \vec{\phi}
+\end{equation}
+
+Finally $r \in \mathbb{R}$ is scalar such that 
+
+\begin{equation}
+	r^2 = \vec{y}^T\vec{y} - \vec{y}^T\vec{X}\vec{\hat{w}} = RSS
+\end{equation}
+
+\begin{remark} \label{qnotrequiredspeedupremark}
+	We can see that all quantities we use in the algorithm can be obtained from matrix $\vec{\tilde{R}}$ moreover if we didn't need to remove rows from $\vec{X}$ then matrix $\vec{\tilde{Q}}$ would not be need \ref{qnotrequired}, thus speedup while inserting and rows would be possible. 
+\end{remark}
+
+Now we've described all properties of improved FSA algorithm. We can see that two different methods of computation are possible. One, using inversion $\vec{Z}^{-1}$ is faster, but numerically less stable, second using QR decomposition is slower due to updating matrix $\vec{R}$ and matrix $\vec{Q}$. We've also shown that using matrix $\vec{\tilde{R}}$ is useful because it contains all necessary quantities for the improved FSA algorithm, although it won't improve the speed of the algorithm. Later we'll introduce different algorithm where we won't need to remove rows from $\vec{X}$ so then we'll be able to use this observation in our favor.
+
+\todo{time complexity inverze}
+\todo{time complexity QR}
+\todo{time complexity tildeZQR is the same as QR}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\todo{tento text prepoklada ze jsme givens uz popsali. pritom je ale pospany az v dalsi sekci!}
 \subsubsection{Updating QR decomposition using Givens rotations}
 First of all we need to introduce idea of Givens rotations and how it can be used to calculate QR decomposition. Then it won't be hard to describe how updating for both including and excluding row are done.
 
@@ -1211,6 +1293,11 @@ where $\vec{Q_e}\ldots\vec{Q_2}\vec{Q_1}$ is actually $\vec{Q}^T$. So $\vec{Q}$ 
  \vec{Q} = \vec{Q_1^T}\vec{Q_2^T}\ldots\vec{Q_e^T}.
 \end{equation}
 
+We can see that for each row of matrix we need one additional matrix $\vec{Q_i}$ and with such matrix we are actually multiplying only two rows. Moreover the rows are getting shorter after each finished column. So time we see that time complexity is equal to
+\todo{zapsat algoritmus?}
+\begin{equation}
+	\sum\limits_{i=1}^n  \sum\limits_{j=i+1}^p 6(n-i+1) \approx 6np^2 - 3np^2 - 3p^3 + 2p^3 = 3np^2 - p^3
+\end{equation}
 \todo{move all this about rotations somewhere else}
 
 So we are now in situation when we have QR decomposition of $\vec{X}$ and we need to exchange $i$th row for $j$th row. We can simulate this by first adding $j$th row and consequently removing $i$th row.
@@ -1235,7 +1322,97 @@ So all we need to do is create matrices $\vec{Q_{e+1}}\ldots\vec{Q_{e+p}}$ to ze
 So the $R$ then will be equal to $\vec{R_{new}} = \vec{R}\vec{Q_{e+1}}\vec{Q_e}\ldots\vec{Q_2}\vec{Q_1}\vec{A}$. \todo{blbe znaceni ale nevim jak lepe}
 $\vec{Q}$ will be updated in the same way thus $\vec{Q_{new}} = \vec{Q}\vec{Q_e^T}\vec{Q_{e+1}^T}\ldots\vec{Q_{e+p}^T}$.
 
-When we want to remove the row we need to.
+
+\todo{napsat pseudokod}
+\begin{algorithm}[H]
+	\label{addingrowqr}
+    % \SetKwInOut{Input}{input}
+    % \SetKwInOut{Output}{output}
+    \KwIn{$\vec{Q}, \vec{R}, \vec{x_i}$}
+		\KwOut{$\vec{Q^{+}}, \vec{R^{+}}$ }
+	  \caption{QR insert}
+
+	\Return{ $\vec{Q^{+}}$\,, $\vec{R^{+}}$ }\;
+\end{algorithm}
+Computing $\vec{R^{+}}$ is $\mathcal{O}(p^2)$ and computing $\vec{Q^{+}}$ is $\mathcal{O}(np)$.
+
+\begin{note} \label{qnotrequired}
+	For adding rows matrix $\vec{Q}$ is actually not needed so that we can update $\vec{R}$ to $\vec{R^{+}}$. Later we'll show that this is actually useful. 
+\end{note}
+
+When we are deleting the row $\vec{x_i}$ from matrix $\vec{A}$ we can use following trick 
+\cite{hammarling2008updatingqr}. First we move such row as a first row of matrix $\vec{A}$ so ve create permutation matrix $\vec{P}$ so that 
+\begin{equation}
+	\vec{P}\vec{A} = \begin{bmatrix}
+		\vec{x_i} \\
+		\vec{A(1:i-1 , 1:p)} \\
+		\vec{A(1:i+1 , 1:p)} 
+	\end{bmatrix}
+	= 
+	\begin{bmatrix}
+		\vec{x_i} \\
+		\vec{A^{-}}
+	\end{bmatrix}
+	= \vec{P}\vec{Q}\vec{R}
+\end{equation} 
+where $\vec{A(a:b , 1:p)} $ means rows of matrix $\vec{A}$ from $a$ to $b$.
+No we can se that we only need to zero first row $\vec{q_1}$ of matrix $\vec{Q}$. We can do this by $n-1$ matrixes matrixes $\vec{Q}(i,j) \in \mathbb{R}^{n \times n}$ so that
+
+\begin{equation}
+	\vec{Q}(n-1,n) \ldots \vec{Q}(1,2)\vec{q_1^T} = 	\begin{bmatrix}
+		1 \\
+		0\\
+		\vdots \\
+	\end{bmatrix}
+\end{equation}
+
+To propagate the change into $\vec{R}$ we then consequently need to update $\vec{R}$ so that
+
+
+\begin{equation}
+	\vec{Q}(n-1,n) \ldots \vec{Q}(1,2)\vec{q_1^T} \vec{R} = 	\begin{bmatrix}
+		\times \\
+		\vec{R^{-}}\\
+		\vdots \\
+	\end{bmatrix}.
+\end{equation}
+
+Thus result is
+
+\begin{equation}
+	\vec{P}\vec{A} = (\vec{P}\vec{Q}  \vec{Q^T}(1,2) \ldots   \vec{Q^T}(n-1,n)) (\vec{Q}(n-1,n) \ldots \vec{Q}(1,2)\vec{q_1^T} \vec{R} ) \\
+	= 
+	\begin{bmatrix}
+		1 & 0 \\
+		0 & \vec{Q^{-}}
+	\end{bmatrix}
+	\begin{bmatrix}
+		\times \\
+		\vec{R^{-}}
+	\end{bmatrix},
+\end{equation}
+so that 
+\begin{equation}
+	\vec{A^{-}} = \vec{Q^{-}}\vec{R^{-}}
+\end{equation}
+
+\todo{napsat pseudokod}
+\begin{algorithm}[H]
+	\label{removingrow}
+    % \SetKwInOut{Input}{input}
+    % \SetKwInOut{Output}{output}
+    \KwIn{$\vec{Q}, \vec{R}, i$}
+		\KwOut{$\vec{Q^{-}}, \vec{R^{-}}$ }
+	  \caption{QR delete}
+
+	\Return{ $\vec{Q^{-}}$\,, $\vec{R^{-}}$ }\;
+\end{algorithm}
+
+Computing $\vec{R^{-}}$ is $\mathcal{O}(p^2)$ and computing $\vec{Q^{-}}$ is $\mathcal{O}(np)$.
+\todo{presunout i toto pridavani / odebirani radku spolu s Givens nekam jinam. }
+
+
+
 \subsection{Bounding-FSA aka. Modified Optimum exchange (MOEA)}
 \subsection{Min-Max-FSA aka. Min Max exchange (MMEA)}
 
