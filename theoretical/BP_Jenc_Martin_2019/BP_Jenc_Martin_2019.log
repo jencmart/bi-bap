@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2019.3.5)  8 APR 2019 19:28
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2019.3.5)  9 APR 2019 19:24
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -973,7 +973,7 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2
 
-] <img/cvut-logo-bw-en.pdf, id=121, 591.64943pt x 193.23091pt>
+] <img/cvut-logo-bw-en.pdf, id=113, 591.64943pt x 193.23091pt>
 File: img/cvut-logo-bw-en.pdf Graphic file (type pdf)
  <use img/cvut-logo-bw-en.pdf>
 Package pdftex.def Info: img/cvut-logo-bw-en.pdf used on input line 93.
@@ -1042,10 +1042,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 LaTeX Font Info:    Try loading font information for U+rsfs on input line 4.
  (/usr/share/texlive/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
-)
-Underfull \vbox (badness 1281) has occurred while \output is active []
-
- [9]) [10] (./BP_Jenc_Martin_2019.lof) [11
+)) [9] [10] (./BP_Jenc_Martin_2019.lof) [11
 
 ] [12
 
@@ -1124,103 +1121,134 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [22] [23]
 
-LaTeX Warning: Marginpar on page 24 moved by 30.18637pt.
+LaTeX Warning: Marginpar on page 24 moved by 61.38638pt.
 
-
-LaTeX Warning: Marginpar on page 24 moved by 44.18193pt.
-
-[24]
-LaTeX Font Info:    Try loading font information for OT1+lmtt on input line 582.
- (/usr/share/texmf/tex/latex/lm/ot1lmtt.fd
+LaTeX Font Info:    Try loading font information for OT1+lmtt on input line 583.
+(/usr/share/texmf/tex/latex/lm/ot1lmtt.fd
 File: ot1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <9> on input line 582.
+(Font)              <9> on input line 583.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 582.
+(Font)              <5> on input line 583.
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 6825) has occurred while \output is active []
 
- [25]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [26] [27]
-Overfull \hbox (1.92656pt too wide) detected at line 678
+ [24] [25] [26]
+Overfull \hbox (1.92656pt too wide) detected at line 681
 [] [] \OT1/lmr/m/n/10.95 = [][][] + [][] = [] + [][]\OML/lmm/m/it/10.95 ;
  []
 
-[28] [29]
-Overfull \hbox (23.9913pt too wide) detected at line 796
+[27] [28]
+Overfull \hbox (23.9913pt too wide) detected at line 799
 \OML/lmm/m/it/10.95 ^^Z\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 z[]; z[]\OT1/lmr/m/n/10.95 ) = []\OML/lmm/m/it/10.95 ;
  []
 
-[30]
-Overfull \hbox (7.86209pt too wide) in paragraph at lines 799--800
+[29]
+Overfull \hbox (7.86209pt too wide) in paragraph at lines 802--803
 \OT1/lmr/m/n/10.95 rep-re-sents mul-ti-plica-tive in-cre-ment. More-over $0 \OML/lmm/m/it/10.95 < ^^Z\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 z[]; z[]\OT1/lmr/m/n/10.95 )$ and if $0 \OML/lmm/m/it/10.95 < ^^Z\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 z[]; z[]\OT1/lmr/m/n/10.95 ) \OML/lmm/m/it/10.95 <
  []
 
-[31] [32] [33] [34]
+[30] [31] [32] [33] [34] [35] [36]
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-LaTeX Warning: Marginpar on page 35 moved by 6.98636pt.
+ [37]
+Underfull \vbox (badness 3623) has occurred while \output is active []
+
+ [38]
+Overfull \hbox (17.0pt too wide) in paragraph at lines 1274--1284
+[][][]$[]$ 
+ []
+
+[39]
+Overfull \hbox (32.6747pt too wide) detected at line 1345
+[][] \OT1/lmr/m/n/10.95 = ([][][](1\OML/lmm/m/it/10.95 ; \OT1/lmr/m/n/10.95 2) [] [](\OML/lmm/m/it/10.95 n \OMS/lmsy/m/n/10.95 ^^@ \OT1/lmr/m/n/10.95 1\OML/lmm/m/it/10.95 ; n\OT1/lmr/m/n/10.95 ))([](\OML/lmm/m/it/10.95 n \OMS/lmsy/m/n/10.95 ^^@ \OT1/lmr/m/n/10.95 1\OML/lmm/m/it/10.95 ; n\OT1/lmr/m/n/10.95 ) [] [](1\OML/lmm/m/it/10.95 ; \OT1/lmr/m/n/10.95 2)[][])[]  = [] [] \OML/lmm/m/it/10.95 ;
+ []
 
 
-LaTeX Warning: Marginpar on page 35 moved by 49.91553pt.
+Overfull \hbox (17.0pt too wide) in paragraph at lines 1351--1361
+[][][]$[]$ 
+ []
 
 
-LaTeX Warning: Marginpar on page 35 moved by 36.63684pt.
-
-
-Overfull \hbox (7.6629pt too wide) in paragraph at lines 1015--1017
+Overfull \hbox (7.6629pt too wide) in paragraph at lines 1374--1376
 []\OT1/lmr/m/n/10.95 Let's start with []2.38[]. Here in-ver-sion is need to cal-cu-late $[][][][]$, $[][][][]$
  []
 
-[35])
-Runaway argument?
-{\phi \\ 0 & r \end {bmatrix} = \vec {\tilde {Q^T}}\vec {A} \end {equ\ETC.
-/home/jencmart/fit/bi-bap/theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.tex:110: File ended while scanning use of \boldsymbol .
-<inserted text> 
-                \par 
-l.110 \include{chapters/03_algorithms}
-                                      
-I suspect you have forgotten a `}', causing me
-to read past where you wanted me to stop.
-I'll try to recover; but if the error is serious,
-you'd better type `E' or `X' now and fix your file.
+[40] [41]
 
-/home/jencmart/fit/bi-bap/theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.tex:110: Missing $ inserted.
-<inserted text> 
-                $
-l.110 \include{chapters/03_algorithms}
-                                      
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
+LaTeX Warning: Marginpar on page 42 moved by 36.31552pt.
 
-/home/jencmart/fit/bi-bap/theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.tex:110: Missing } inserted.
-<inserted text> 
-                }
-l.110 \include{chapters/03_algorithms}
-                                      
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
 
-/home/jencmart/fit/bi-bap/theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.tex:110: Missing \cr inserted.
-<inserted text> 
-                \cr 
-l.110 \include{chapters/03_algorithms}
-                                      
-I'm guessing that you meant to end an alignment here.
+LaTeX Warning: Marginpar on page 42 moved by 35.73685pt.
 
-/home/jencmart/fit/bi-bap/theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.tex:110: Missing $ inserted.
-<inserted text> 
-                $
-l.110 \include{chapters/03_algorithms}
-                                      
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
 
+LaTeX Warning: Marginpar on page 42 moved by 10.9787pt.
+
+
+LaTeX Warning: Marginpar on page 42 moved by 9.0862pt.
+
+) [42]
 \openout2 = `chapters/04_experiments.aux'.
 
-(./chapters/04_
+ (./chapters/04_experiments.tex) [43
+
+
+
+]
+\openout2 = `chapters/99_conclusion.aux'.
+
+
+No file chapters/99_conclusion.tex.
+[44
+
+
+
+
+] (./BP_Jenc_Martin_2019.bbl [45] [46
+
+]
+bibitemlist
+[47]) [48] [49
+
+] [50
+
+] [51]
+\tf@toc=\write6
+\openout6 = `BP_Jenc_Martin_2019.toc'.
+
+\tf@lof=\write7
+\openout7 = `BP_Jenc_Martin_2019.lof'.
+
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 169.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 169.
+ (./BP_Jenc_Martin_2019.aux (./chapters/00_introduction.aux) (./chapters/01_linear_regression.aux) (./chapters/03_algorithms.aux) (./chapters/04_experiments.aux) (./chapters/99_conclusion.aux))
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 169.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 169.
+Package rerunfilecheck Info: File `BP_Jenc_Martin_2019.out' has not changed.
+(rerunfilecheck)             Checksum: EA3193A7BFCBC2AA0D4FFEB88BA98A5E;3059.
+
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+
+LaTeX Warning: There were multiply-defined labels.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 169.
+ ) 
+Here is how much of TeX's memory you used:
+ 26202 strings out of 494945
+ 444329 string characters out of 6181033
+ 589851 words of memory out of 5000000
+ 28616 multiletter control sequences out of 15000+600000
+ 89417 words of font info for 83 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 68i,25n,78p,1159b,888s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf/fonts/enc/dvips/lm/lm-rmtt.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rmsc.enc}</usr/share/texmf/fonts/type1/public/lm/lmbsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx6.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx8.pfb></usr/share/texmf/fonts/type1/public/lm/lmbxi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmcsc10.pfb></usr/share/texmf/fonts/type1/public/lm/lmex10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi12.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi6.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi8.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi9.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr6.pfb></usr/share/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy9.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on BP_Jenc_Martin_2019.pdf (65 pages, 575679 bytes).
+PDF statistics:
+ 1041 PDF objects out of 1200 (max. 8388607)
+ 936 compressed objects within 10 object streams
+ 433 named destinations out of 1000 (max. 500000)
+ 210 words of extra memory for PDF output out of 10000 (max. 10000000)
+

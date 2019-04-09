@@ -490,44 +490,45 @@ Number of iterations needed till algorithm stops is usually quite low, but for p
 
 
 \todo{put sem part of the pseudocode describing core iteration?}
-\begin{observation} 
-	Time complexity of algorithm C-step \ref{alg:Cstep} is the same as time complexity as OLS. Thus $O(p^2n)$
-	\todo{create better proof. And take into account both versions - directly vs. using decomposition}
-\end{observation} 
+\todo{and its time compleixty}
+% \begin{observation} 
+% 	Time complexity of algorithm feasible solution \ref{alg:Cstep} is the same as time complexity as OLS. Thus $O(p^2n)$
+% 	\todo{create better proof. And take into account both versions - directly vs. using decomposition}
+% \end{observation} 
 
 
-\begin{proof}
-	In C-step we must compute $n$ absolute residuals. Computation of one absolute residual consists of
-	matrix multiplication of shapes $1 \times p$ and $p \times 1$ that gives us $\mathcal{O}(p)$. Rest is in constant time.
-	So time of computation $n$ residuals is $\mathcal{O}(np)$.
-	Next we must select set of $h$ smallest residuals which can be done in $\mathcal{O}(n)$ using modification of algorithm QuickSelect. \todo{reference or define quick select} 
-	Finally we must compute $\hat{w}$ OLS estimate on $h$ subset of data.
-	Because $h$ is linearly dependent on $n$, we can say that it is $\mathcal{O}(p^2n + p^3)$ which 
-	is asymptotically dominant against previous steps which are $\mathcal{O}(np + n)$.
-\end{proof}
+% \begin{proof}
+% 	In C-step we must compute $n$ absolute residuals. Computation of one absolute residual consists of
+% 	matrix multiplication of shapes $1 \times p$ and $p \times 1$ that gives us $\mathcal{O}(p)$. Rest is in constant time.
+% 	So time of computation $n$ residuals is $\mathcal{O}(np)$.
+% 	Next we must select set of $h$ smallest residuals which can be done in $\mathcal{O}(n)$ using modification of algorithm QuickSelect. \todo{reference or define quick select} 
+% 	Finally we must compute $\hat{w}$ OLS estimate on $h$ subset of data.
+% 	Because $h$ is linearly dependent on $n$, we can say that it is $\mathcal{O}(p^2n + p^3)$ which 
+% 	is asymptotically dominant against previous steps which are $\mathcal{O}(np + n)$.
+% \end{proof}
 
-As we stated above, repeating algorithm C-step will lead to sequence of $\what{1}, \what{2} \ldots$ 
-on subsets $H_1, H_2 \ldots$ with corresponding residual sum of squares
-$RSS(\what{{1}}) \geq RSS(\what{{2}}) \geq \ldots$. One could ask if this sequence will converge, so that
-$RSS(\what{{i}}) == RSS(\what{{i+1}})$. 
-Answer to this question will be presented by the following theorem.
-
-
-%******************************** C-STEP alg. will converge ***********************%
-\begin{theorem}
-	Sequence of C-step will converge to $\what{{m}}$ after maximum of $m = {n \choose h}$
-	so that $RSS(\what{{m}}) == RSS(\what{{n}})\,, \forall n\geq m$ where $n$ is number of data samples 
-	and $h$ is size of subset $H_i$.
-\end{theorem}
-
-\begin{proof}
-	Since  $RSS(\what{{i}})$ is non-negative and $RSS(\what{{i}}) \leq RSS(\what{{i+i}})$ the 
-	sequence will converge. $\what{{i}}$  is computed out of subset 
-	$H_i \subset \{{1,2,\ldots,n\}}$. When there is finite number of subsets of size $h$ out of $n$ samples, namely ${n \choose h}$, the sequence will converge at the latest after this number of steps.
-\end{proof}
+% As we stated above, repeating algorithm C-step will lead to sequence of $\what{1}, \what{2} \ldots$ 
+% on subsets $H_1, H_2 \ldots$ with corresponding residual sum of squares
+% $RSS(\what{{1}}) \geq RSS(\what{{2}}) \geq \ldots$. One could ask if this sequence will converge, so that
+% $RSS(\what{{i}}) == RSS(\what{{i+1}})$. 
+% Answer to this question will be presented by the following theorem.
 
 
-\todo{REWRITE UP FROM THIS TO MATCH FEASIBLE SOLUTION}
+% %******************************** C-STEP alg. will converge ***********************%
+% \begin{theorem}
+% 	Sequence of C-step will converge to $\what{{m}}$ after maximum of $m = {n \choose h}$
+% 	so that $RSS(\what{{m}}) == RSS(\what{{n}})\,, \forall n\geq m$ where $n$ is number of data samples 
+% 	and $h$ is size of subset $H_i$.
+% \end{theorem}
+
+% \begin{proof}
+% 	Since  $RSS(\what{{i}})$ is non-negative and $RSS(\what{{i}}) \leq RSS(\what{{i+i}})$ the 
+% 	sequence will converge. $\what{{i}}$  is computed out of subset 
+% 	$H_i \subset \{{1,2,\ldots,n\}}$. When there is finite number of subsets of size $h$ out of $n$ samples, namely ${n \choose h}$, the sequence will converge at the latest after this number of steps.
+% \end{proof}
+
+
+% \todo{REWRITE UP FROM THIS TO MATCH FEASIBLE SOLUTION qwerty}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -583,9 +584,10 @@ We didn't yet mention how to create initial $h$ subset respectively initial $\ve
 	\Return{ $\what{{final}}$\,, $H_{final}$ }\;
 \end{algorithm}
 
+\todo{time complexity}
 
-\todo{move some other place, and finish}
 \section{Combined algorithm}
+\todo{ todo this section and move it somewhere else qwerty}
 Here we'll describe what we've indicated above and that is combination of both previous algorithms.
 Two options. 
 z
@@ -597,9 +599,10 @@ z
 Second option would be faster ? Let's think about it.. etc etc..
 
 
-% **********************************************************************************
-% ************************* EXACT POLYNOMIAL ALGORITHM *****************************
-% **********************************************************************************
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%% IMPROVED FSA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Improved FSA} % two exchanging algorithms from Agulló, 2000
 So far as we've described FSA algorithm we assumed that after each cycle of the algorithm (after each best swap) wee need to recalculate inversion $(\vec{X}^T\vec{X})$ together with $\vec{\hat{w}}$. In this section we'll introduce different approaches described in \cite{agullo2001new} which will improve it so that we'll be able to update it instead of recalculate. Moreover these ideas will lead us to bounding condition of FSA which will improve the speed and we'll also be able to construct another algorithms based on this idea. 
 
@@ -800,8 +803,35 @@ We can see that this formula is similar to the one \ref{hawkins:rovnice} but her
 
 With all this we are now able to change FSA so that we don't need to recompute $\vec{\hat{w}}$ and inversion $(\vec{X}^T \vec{X})^{-1}$ but we can update it. That means after we find $z_i, z_j$ that improve the current RSS the most (that means we find smallest $\rho(z_i, z_j)$ by \ref{agullo:rovnice}). We can then update $RSS$ by \ref{updaterss}, update $(\vec{X}^T \vec{X})^{-1}$ by \ref{inversionplus} and \ref{updatedinversion2} and finally update $\vec{\hat{w}}$ by \ref{thetaplus} and \ref{thetaminus}.
 
+\todo{pseudokod}
+
+
+Let's now talk about time complexity of such solution. We can clearly see that core iteration takes the most time. So let's first describe time complexity of finding optimal swap and updating result with such pair. 
+We need to go through all pairs between $z_i, z_j$ where $z_i$ is from $h$-subset and $z_j$ is from $g$-subset. That is 
+\begin{equation}
+	h(n-h) \approx (\frac{n^2 - p^2}{4})^2 \sim \mathcal{O}(n^2 - p^2)
+\end{equation}
+For each of this pair we need to calculate \ref{hawkins:rovnice}. Note that $e_i$ and $e_j$ can be calculated before this loop. The same goes for $\vec{x_i}\vec{Z}^{-1}\vec{x_i^T}$ and $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T} $. So inside the loop there is only one vector-matrix-vector multiplication that is $\vec{x_i}\vec{Z}^{-1}\vec{x_j^T}$ which is $\mathcal{p^2}$. Rest are scalars. The whole loop is then 
+\begin{equation}
+	\mathcal{O}( (n^2 - p^2) p^2) 
+\end{equation}
+Before we'll move to the updating we must not to forget for quantities which we said we can calculate in advance. That is $\\mathcal{O}(2np^2)$ for all $\vec{x_i}\vec{Z}^{-1}\vec{x_i^T}$ and $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$ and $\mathcal{O}(2np)$ for all $e_j$ and $e_j$.
+
+Finally we need to update $RSS$ which is trivial. Next inversion by \ref{inversionplus} which is $\mathcal{O}(4p^2)$ and \ref{updatedinversion2} which is also $\mathcal{O}(4p^2)$. Finally we need to update $\vec{\hat{w}}$ by \ref{thetaplus} and \ref{thetaminus} which are both $\mathcal{O}(p^2 +p)$. Putting everything together we get
+
+\begin{equation}
+	\mathcal{O}( (n^2 - p^2) p^2 + 2np^2 + 2np + 8p^2 + 2p^2 + p) \sim \mathcal{O}(n^2p^2 - p^4) 
+\end{equation}
+
+\todo{nejak zminit kolikrat ten loop vetsinou projede atd.. }
+
 Note that right now it doesn't matter if we use \ref{hawkins:rovnice} with stopping criterion $	\Delta S^{(\vec{m})}_{i,j} \geq 0$  or \ref{agullo:rovnice} and use $\rho(z_i, z_j) \geq 1 $ stopping criterion. With both results we can update $RSS$. But the advantage of \ref{agullo:rovnice} is that we can use following bounding condition to improve performance.
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%% BOUNDING CONDITION SPEEDUP %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Bounding condition improvement}
 $\rho(z_i, z_j)$ is expressed as ratio. We can see that in numerator we have
 
 \begin{equation}
@@ -842,9 +872,20 @@ Given that we can denote $\rho_b(z_i, z_j)$ so that
 So the actual speed improvement is given by we don't need to compute $\vec{x_i}\vec{Z}^{-1}\vec{x_j^T}$ in each of $h(n-h)$ pairs swap comparison. Every time that algorithm starts to compare all pairs we set $\rho_{min} :=1$. Then every time we only compute $\rho_b(z_i, z_j)$ and if it is greater of equal to $\rho_{min}$ we can continue to next pair without computing $\rho(z_i, z_j)$. On the other hand if $\rho_b(z_i, z_j)$ is less that  $\rho_{min}$ we compute $\rho(z_i, z_j)$ and set $\rho_{min} := \rho(z_i, z_j)$ This of course won't improve $\mathcal{n^2}$ time required to compare all $z_i, z_j$ pairs.
 Finally lets note that \cite{agullo2001new} call FSA  which compute $\rho(z_i, z_j)$  \ref{agullo:rovnice} as \defterm{Optimal exchange algorithm (OEA)} and OEA using bounding condition \ref{boundingcondition} as  \defterm{Modified optimal exchange algorithm (MOEA)}.
 
+
+\todo{pseudokod - tak moc nechci :-D}
+
+
 \subsubsection{Different method of computing Improved FSA}
+\todo{zmenit to oznaceni Improved FSA na neco jineho. myslim ze to pouzivam nekonzistentne}
+
 We've described way how to modify FSA so that we can update $\vec{hat{w}}$ and inversion $(\vec{X}^T \vec{X})^{-1}$. This requires to compute inversion at the start of the algorithm (this is also the case for the FSA). In practice, however, this is not the way how OLS estimate $\vec{\hat{w}}$ is computed. That is primarily due to the fact that computing inversion of large matrix is computationally exhaustive and first of all not numerically stable. In practice we usually use Cholesky factorization. In this subsection we'll describe it and also show that we can perform all above computations using such decomposition. Moreover we'll show close connection between Cholesky factorization and QR decomposition.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% CHOLESKY FACTORIZATION  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Let's start with Cholesky factorization.
+\todo{presunout cholesky popis do 1. kapitoly}
 \begin{definition}
 	Let $\vec{A} \in \mathbb{R}^{n \times n}$ be an symmetric positive definite matrix. Then it is possible to find lower triangular matrix $L$ so that 
 
@@ -870,6 +911,9 @@ where $\vec{Z} = \vec{X}^T\vec{X}$ is symmetric positive definite matrix and $\v
 \end{align}
 where $\vec{d}$ is solved by forward substitution and $\vec{w}$ is then solved by backward substitution which is our $\vec{\hat{w}}$ estimate.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%% CHOLESKY - OLS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 So the algorithm for solving OLS using Cholesky factorization goes as follows:
 \begin{enumerate}
   \item Calculate $\vec{X}^T\vec{X}$ and   $\vec{X}^T\vec{y}$ 
@@ -902,7 +946,10 @@ So the algorithm for solving OLS using Cholesky factorization goes as follows:
 	\end{equation}
 \end{note}
 
-Let's now look on different method of computing OLS which don't require multiplying $\vec{X}^T\vec{X}$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%% QR DECOMPOSITION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Let's now look on similar method of computing OLS which don't require multiplying $\vec{X}^T\vec{X}$. This can be done using QR decomposition.
 
 \begin{definition}
 	Let $\vec{A} \in \mathbb{R}^{n \times n}$ be any square matrix. Then it is possible to find matrices $\vec{Q}$ and $\vec{R}$ so that 
@@ -976,6 +1023,10 @@ where $ \vec{b_1} = \vec{Q_1}^T \vec{y}$. Because $\vec{R_1}$ is upper triangula
 			\end{equation}
 \end{note}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% QR DECOMPOSITION - OLS  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 So the algorithm for solving OLS using QR decomposition can goes as follows:
 \begin{enumerate}
   \item Calculate QR decomposition $\vec{X} = \vec{Q}\vec{R}^T = \vec{Q_1}\vec{R_1}^T$ 
@@ -983,13 +1034,28 @@ So the algorithm for solving OLS using QR decomposition can goes as follows:
   \item Solve upper triangular system $	\vec{R}\vec{w} = \vec{b_1}$ for $\vec{w}$
 \end{enumerate}
 
-Today there are two popular methods of computing QR decomposition these are Householder transformations and Givens rotations. We'll describe Givens rotation in detail later. 
+QR factorization can be calculated multiple ways. Most basic method is applying Gram–Schmidt process
+to columns of matrix $\vec{X}$. This approach is not numerically stable so in practice is not used as much as two other methods. Those are Householder transformations and Givens rotations.
+Time complexity of both algorithms is similar. QR decomposition of matrix $\vec{X} \in \mathbb{R}^{n \times p}$ is 
+
+\begin{equation}
+	\mathcal{O}(2np^2 - \frac{2}{3}p^3).
+\end{equation}
+\todo{nevim kde citovat}
+
+On the other hand using Givens rotation for QR decomposition of same matrix is 
+
+\begin{equation} \label{givenstimenoproof}
+	\mathcal{O}(3np^2 - p^3)
+\end{equation}
+so Householder transformations  are about $50\%$ faster but Givens rotations are more numerically stable and are suitable for sparse matrices. That will be suitable for our problem. That's why we'll describe Givens rotation in detail in \ref{givensrotation}. We'll also make a proof of \ref{givenstimenoproof} time complexity there.
+
+For now let's look at time complexity of solving OLS using Householder transformations. 
 \begin{observation}
-	Time complexity of solving OLS using QR decomposition is $\mathcal{O}(2np^2 - \frac{2}{3}p^3)$
+	Time complexity of solving OLS using QR decomposition using Householder transformations is $\mathcal{O}(2np^2 - \frac{2}{3}p^3)$
 \end{observation}
 \begin{proof}
-	
-	In the first step we calculate QR decomposition. Householder rotations can be done in $\mathcal{O}(2np^2 - \frac{2}{3}p^3)$  \todo{nevim kde citovat} which is slightly faster than Givens rotation $\mathcal{O}(3np^2 - p^3)$ \todo{nevim kde citovat, ale asi mozna spocitam}
+	In the first step we calculate QR decomposition. Householder transformations can be done in $\mathcal{O}(2np^2 - \frac{2}{3}p^3)$   which is slightly faster than Givens rotation $\mathcal{O}(3np^2 - p^3)$.
 	Second step consist of matrix multiplication $\vec{Q_1}^T \vec{y}$ which is $\mathcal{O}(np)$
 	In the last step we are solving upper triangular systems which is
 	 $\mathcal{O}(\frac{1}{2}p^2)$.
@@ -1001,134 +1067,13 @@ Today there are two popular methods of computing QR decomposition these are Hous
 	We can see that again $\mathcal{O}(2np^2)$ asymptotically dominates.
 \end{proof}
 
-% \begin{equation}
-% 	\det(\vec{Z} + )
-% 	\vec{z_j} \vec{\tilde{Z}}^{-1} \vec{z^T} = \dfrac{ ( y_j - \vec{x_j}\vec{\hat{w}} ) ( y_i - \vec{x_i}\vec{\hat{w}} ) }{RSS}  + \vec{x_j}\vec{Z}^{-1}\vec{x_j^T}
-% \end{equation}
-\todo{cele toto presunout nekam do prvni kapitoly}
-\todo{rozdelit kapitoly nejak inteligentne. tohle je spatny...}
 
-\subsubsection{Calculation of imporved FSA using QR}
-So let's focus on our problem. As we said using decomposition is better than calculating inversion primarily due to higher numerical stability. \todo{nevim jestli zminovat ze muzu delat i SVD dekompozici ktera je nejstabilnejsi ze vsech...}
-We'll show that both FSA as well as improved FSA can be calculated using QR decomposition.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%% QR DECOMPOSITION - GIVENS ROTATION   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Givens Rotation} \label{givensrotation}% NOT NUMBERED DUE TO *
+In this section we'll describe Givens rotations in detail. Moreover we'll also show how to update QR decomposition in terms of including and excluding row from factorized matrix $\vec{X}$ which will help us in our algorithm.
 
-Let's start with \ref{agullo:rovnice}. Here inversion is need to calculate 
-$\vec{x_i}\vec{Z}^{-1}\vec{x_i^T}$, $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$ and $\vec{x_i}\vec{Z}^{-1}\vec{x_j^T}$. This can also be done without inversion, only using the decomposition. We can write this equation
-\begin{equation} \label{solveimi}
-	\vec{x_i}\vec{Z}^{-1}\vec{x_i^T} = \vec{v}^T\vec{v} 	\iff \vec{x_i}(\vec{R}^T\vec{R})^{-1}\vec{x_i^T} = \vec{v}^T\vec{v}
-\end{equation} 
-where $\vec{v}$ can be obtained by solving lower triangular system
-\begin{equation} \label{vsolution}
-	\vec{R}^T\vec{v} = \vec{x_i}^T.
-\end{equation} 
-The same can be done with  $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$. Last but not least we need to solve 
-$\vec{x_i}\vec{Z}^{-1}\vec{x_j^T}$. We can write this 
-\begin{equation}
-	\vec{x_i}\vec{Z}^{-1}\vec{x_j^T} = \vec{x_j}\vec{u} 	\iff \vec{x_i}(\vec{R}^T\vec{R})^{-1}\vec{x_j^T} = \vec{x_j}^T\vec{u}
-\end{equation} 
-Where column vector $\vec{u}$ is defined by \ref{agullo_u}. We can see that 
-
-\begin{equation}
-	\vec{u} = \vec{Z}^{-1}\vec{x_i^T} 	\iff (\vec{R}^T\vec{R})^{-1}\vec{x_i^T} = \vec{u}
-\end{equation}
-so that $\vec{u}$ can be obtained ba solving upper triangular system 
-
-\begin{equation} \label{solve_u_qr}
-	\vec{R}\vec{u} = \vec{v}
-\end{equation}
-where $\vec{v}$ is solution of \ref{vsolution}. Other quantities of \ref{agullo:rovnice} does not require $\vec{Z}^{-1}$.
-
-When optimal exchange $\vec{z_i}, \vec{z_j}$ is found then we need to update $RSS$ which can be done same way by \ref{updaterss}. Updating $\vec{\hat{w}}$ to  $\vec{\overline{\hat{w}}}$ by \ref{thetaplus} requires
-$\vec{u}$  which in this case we calculate by \ref{solve_u_qr} and $b$ which requires  $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$ but that we've also already covered by idea \ref{solveimi}. Analogous operations can be used to update $\vec{\overline{\hat{w}}}$ to $\vec{\overline{\overline{\hat{w}}}}$  by means of \ref{thetaminus}. Only thing wee need to realize that we can express \ref{xjoverlinez} as $\vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T} = \vec{x_i}\vec{{{Z}}}^{-1}\vec{x_i^T} + b(\vec{u}\vec{x_j}^2)$.
-
-We can't use updating inversion because we don't have one so we need to somehow update our QR decomposition. This can be done by both Householder rotation as well as by Givens rotation, but because our $\vec{R}$ is already sparse matrix, Givens rotations are ideal tool for this.
-We can use first \ref{addingrowqr} to add row $\vec{x_i}$ to the decomposition and consequently \ref{removingrow} to remove $\vec{x_j}$  from the decomposition. We can see that this is slower  than updating inversion directly. On the other hand this solution is numerically stable and requires less time than computing factorization again from scratch. 
-% After such update we need also to recalculate $\vec{Q}\vec{y}$ which is 
-
-Finally let's talk about matrix $\vec{\tilde{Z}}$ which we used \ref{matrixZ} for derivation of our equations. If we use \ref{qrcholesky} observation then we realize that if we make QR factorization of $\vec{A} = (\vec{X}, \vec{y})$ then
-
-\begin{equation}
-	\vec{\tilde{Z}} = 
-	\begin{bmatrix}
-		\vec{Z} & \vec{X}^T\vec{y} \\
-    \vec{y}^T\vec{X} & \vec{y}^T\vec{y}
-	\end{bmatrix} 
-	= 
-	\begin{bmatrix}
-		\vec{R^T} & 0 \\
-    \vec{\phi^T} & r
-	\end{bmatrix} 
-	\begin{bmatrix}
-		\vec{R} & \vec{\phi} \\
-     0 & r
-	\end{bmatrix} 
-\end{equation}
-
-where 
-
-\begin{equation}
-	\vec{\tilde{R}} = 
-	\begin{bmatrix}
-		\vec{R} & \vec{\phi} \\
-     0 & r
-	\end{bmatrix} 
-	= \vec{\tilde{Q^T}}\vec{A}
-\end{equation}
-
-is matrix from QR factorization of $\vec{A}$. 
-Next we can realize that $\vec{R} \in \mathbb{R}^{p \times p}$ is actually matrix $\vec{R}$ which we can obtain by QR factorization of $\vec{X}$. 
-Moreover $\vec{\phi} \in \mathbb{R}^{p \times 1}$ is column vector which is actually equal to
-\begin{equation}
-	\vec{\phi} =  \vec{Q^T}\vec{y}
-\end{equation}
-where $\vec{Q}$ is matrix $\vec{Q}$ from QR factorization of $\vec{R}$.
-Due to this fact $\vec{\hat{w}}$ is solution of upper triangular system 
-\begin{equation}
-	\vec{R}\vec{\hat{w}} = \vec{\phi}
-\end{equation}
-
-Finally $r \in \mathbb{R}$ is scalar such that 
-
-\begin{equation}
-	r^2 = \vec{y}^T\vec{y} - \vec{y}^T\vec{X}\vec{\hat{w}} = RSS
-\end{equation}
-
-\begin{remark} \label{qnotrequiredspeedupremark}
-	We can see that all quantities we use in the algorithm can be obtained from matrix $\vec{\tilde{R}}$ moreover if we didn't need to remove rows from $\vec{X}$ then matrix $\vec{\tilde{Q}}$ would not be need \ref{qnotrequired}, thus speedup while inserting and rows would be possible. 
-\end{remark}
-
-Now we've described all properties of improved FSA algorithm. We can see that two different methods of computation are possible. One, using inversion $\vec{Z}^{-1}$ is faster, but numerically less stable, second using QR decomposition is slower due to updating matrix $\vec{R}$ and matrix $\vec{Q}$. We've also shown that using matrix $\vec{\tilde{R}}$ is useful because it contains all necessary quantities for the improved FSA algorithm, although it won't improve the speed of the algorithm. Later we'll introduce different algorithm where we won't need to remove rows from $\vec{X}$ so then we'll be able to use this observation in our favor.
-
-\todo{time complexity inverze}
-\todo{time complexity QR}
-\todo{time complexity tildeZQR is the same as QR}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\todo{tento text prepoklada ze jsme givens uz popsali. pritom je ale pospany az v dalsi sekci!}
-\subsubsection{Updating QR decomposition using Givens rotations}
-First of all we need to introduce idea of Givens rotations and how it can be used to calculate QR decomposition. Then it won't be hard to describe how updating for both including and excluding row are done.
-
-Computing QR Factorization.
 We compute the QR factorization of $\vec{A} \in \mathbb{R}^{m \times n}$ which has full column rank so that we apply orthogonal transformation by matrix $\vec{Q}^T$ so that \cite{hammarling2008updatingqr}
 
 \begin{equation}
@@ -1294,7 +1239,7 @@ where $\vec{Q_e}\ldots\vec{Q_2}\vec{Q_1}$ is actually $\vec{Q}^T$. So $\vec{Q}$ 
 \end{equation}
 
 We can see that for each row of matrix we need one additional matrix $\vec{Q_i}$ and with such matrix we are actually multiplying only two rows. Moreover the rows are getting shorter after each finished column. So time we see that time complexity is equal to
-\todo{zapsat algoritmus?}
+\todo{todo pseudokod? moc se mi nechce :-D}
 \begin{equation}
 	\sum\limits_{i=1}^n  \sum\limits_{j=i+1}^p 6(n-i+1) \approx 6np^2 - 3np^2 - 3p^3 + 2p^3 = 3np^2 - p^3
 \end{equation}
@@ -1302,6 +1247,10 @@ We can see that for each row of matrix we need one additional matrix $\vec{Q_i}$
 
 So we are now in situation when we have QR decomposition of $\vec{X}$ and we need to exchange $i$th row for $j$th row. We can simulate this by first adding $j$th row and consequently removing $i$th row.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%% QR INSERT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Updating QR decomposition}
 First let's discuss how to update QR decomposition when row is added. This is indeed very simple. 
 If we add row to $\vec{A}$ our decomposition looks like
 \begin{equation}
@@ -1322,8 +1271,7 @@ So all we need to do is create matrices $\vec{Q_{e+1}}\ldots\vec{Q_{e+p}}$ to ze
 So the $R$ then will be equal to $\vec{R_{new}} = \vec{R}\vec{Q_{e+1}}\vec{Q_e}\ldots\vec{Q_2}\vec{Q_1}\vec{A}$. \todo{blbe znaceni ale nevim jak lepe}
 $\vec{Q}$ will be updated in the same way thus $\vec{Q_{new}} = \vec{Q}\vec{Q_e^T}\vec{Q_{e+1}^T}\ldots\vec{Q_{e+p}^T}$.
 
-
-\todo{napsat pseudokod}
+\todo{todo pseudokod? moc se mi nechce :-D}
 \begin{algorithm}[H]
 	\label{addingrowqr}
     % \SetKwInOut{Input}{input}
@@ -1334,11 +1282,16 @@ $\vec{Q}$ will be updated in the same way thus $\vec{Q_{new}} = \vec{Q}\vec{Q_e^
 
 	\Return{ $\vec{Q^{+}}$\,, $\vec{R^{+}}$ }\;
 \end{algorithm}
+
 Computing $\vec{R^{+}}$ is $\mathcal{O}(p^2)$ and computing $\vec{Q^{+}}$ is $\mathcal{O}(np)$.
 
 \begin{note} \label{qnotrequired}
 	For adding rows matrix $\vec{Q}$ is actually not needed so that we can update $\vec{R}$ to $\vec{R^{+}}$. Later we'll show that this is actually useful. 
 \end{note}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%% QR DELETE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 When we are deleting the row $\vec{x_i}$ from matrix $\vec{A}$ we can use following trick 
 \cite{hammarling2008updatingqr}. First we move such row as a first row of matrix $\vec{A}$ so ve create permutation matrix $\vec{P}$ so that 
@@ -1368,7 +1321,6 @@ No we can se that we only need to zero first row $\vec{q_1}$ of matrix $\vec{Q}$
 
 To propagate the change into $\vec{R}$ we then consequently need to update $\vec{R}$ so that
 
-
 \begin{equation}
 	\vec{Q}(n-1,n) \ldots \vec{Q}(1,2)\vec{q_1^T} \vec{R} = 	\begin{bmatrix}
 		\times \\
@@ -1396,7 +1348,7 @@ so that
 	\vec{A^{-}} = \vec{Q^{-}}\vec{R^{-}}
 \end{equation}
 
-\todo{napsat pseudokod}
+\todo{napsat pseudokod. opet se mi moc necche :-D }
 \begin{algorithm}[H]
 	\label{removingrow}
     % \SetKwInOut{Input}{input}
@@ -1409,33 +1361,124 @@ so that
 \end{algorithm}
 
 Computing $\vec{R^{-}}$ is $\mathcal{O}(p^2)$ and computing $\vec{Q^{-}}$ is $\mathcal{O}(np)$.
-\todo{presunout i toto pridavani / odebirani radku spolu s Givens nekam jinam. }
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%% IMPROVED FSA - QR DECOMPOSITION  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Bounding-FSA aka. Modified Optimum exchange (MOEA)}
+\subsubsection{Calculation of imporved FSA using QR}
+So let's focus on our problem. As we said using decomposition is better than calculating inversion primarily due to higher numerical stability. \todo{nevim jestli zminovat ze muzu delat i SVD dekompozici ktera je nejstabilnejsi ze vsech...}
+We'll show that both FSA as well as improved FSA can be calculated using QR decomposition.
+
+Let's start with \ref{agullo:rovnice}. Here inversion is need to calculate 
+$\vec{x_i}\vec{Z}^{-1}\vec{x_i^T}$, $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$ and $\vec{x_i}\vec{Z}^{-1}\vec{x_j^T}$. This can also be done without inversion, only using the decomposition. We can write this equation
+\begin{equation} \label{solveimi}
+	\vec{x_i}\vec{Z}^{-1}\vec{x_i^T} = \vec{v}^T\vec{v} 	\iff \vec{x_i}(\vec{R}^T\vec{R})^{-1}\vec{x_i^T} = \vec{v}^T\vec{v}
+\end{equation} 
+where $\vec{v}$ can be obtained by solving lower triangular system
+\begin{equation} \label{vsolution}
+	\vec{R}^T\vec{v} = \vec{x_i}^T.
+\end{equation} 
+The same can be done with  $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$. Last but not least we need to solve 
+$\vec{x_i}\vec{Z}^{-1}\vec{x_j^T}$. We can write this 
+\begin{equation}
+	\vec{x_i}\vec{Z}^{-1}\vec{x_j^T} = \vec{x_j}\vec{u} 	\iff \vec{x_i}(\vec{R}^T\vec{R})^{-1}\vec{x_j^T} = \vec{x_j}^T\vec{u}
+\end{equation} 
+Where column vector $\vec{u}$ is defined by \ref{agullo_u}. We can see that 
+
+\begin{equation}
+	\vec{u} = \vec{Z}^{-1}\vec{x_i^T} 	\iff (\vec{R}^T\vec{R})^{-1}\vec{x_i^T} = \vec{u}
+\end{equation}
+so that $\vec{u}$ can be obtained ba solving upper triangular system 
+
+\begin{equation} \label{solve_u_qr}
+	\vec{R}\vec{u} = \vec{v}
+\end{equation}
+where $\vec{v}$ is solution of \ref{vsolution}. Other quantities of \ref{agullo:rovnice} does not require $\vec{Z}^{-1}$.
+
+When optimal exchange $\vec{z_i}, \vec{z_j}$ is found then we need to update $RSS$ which can be done same way by \ref{updaterss}. Updating $\vec{\hat{w}}$ to  $\vec{\overline{\hat{w}}}$ by \ref{thetaplus} requires
+$\vec{u}$  which in this case we calculate by \ref{solve_u_qr} and $b$ which requires  $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$ but that we've also already covered by idea \ref{solveimi}. Analogous operations can be used to update $\vec{\overline{\hat{w}}}$ to $\vec{\overline{\overline{\hat{w}}}}$  by means of \ref{thetaminus}. Only thing wee need to realize that we can express \ref{xjoverlinez} as $\vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T} = \vec{x_i}\vec{{{Z}}}^{-1}\vec{x_i^T} + b(\vec{u}\vec{x_j}^2)$.
+
+We can't use updating inversion because we don't have one so we need to somehow update our QR decomposition. This can be done by both Householder rotation as well as by Givens rotation, but because our $\vec{R}$ is already sparse matrix, Givens rotations are ideal tool for this. We've already described how this can be done. First we can use \ref{addingrowqr} to add row $\vec{x_i}$ to the decomposition and consequently \ref{removingrow} to remove $\vec{x_j}$  from the decomposition. We can see that this is slower than updating inversion directly. On the other hand this solution is numerically stable and requires less time than computing factorization again from scratch. 
+
+Finally let's talk about matrix $\vec{\tilde{Z}}$ which we used \ref{matrixZ} for derivation of our equations. If we use \ref{qrcholesky} observation then we realize that if we make QR factorization of $\vec{A} = (\vec{X}, \vec{y})$ then
+
+\begin{equation}
+	\vec{\tilde{Z}} = 
+	\begin{bmatrix}
+		\vec{Z} & \vec{X}^T\vec{y} \\
+    \vec{y}^T\vec{X} & \vec{y}^T\vec{y}
+	\end{bmatrix} 
+	= 
+	\begin{bmatrix}
+		\vec{R^T} & 0 \\
+    \vec{\phi^T} & r
+	\end{bmatrix} 
+	\begin{bmatrix}
+		\vec{R} & \vec{\phi} \\
+     0 & r
+	\end{bmatrix} 
+\end{equation}
+
+where 
+
+\begin{equation}
+	\vec{\tilde{R}} = 
+	\begin{bmatrix}
+		\vec{R} & \vec{\phi} \\
+     0 & r
+	\end{bmatrix} 
+	= \vec{\tilde{Q^T}}\vec{A}
+\end{equation}
+
+is matrix from QR factorization of $\vec{A}$. 
+Next we can realize that $\vec{R} \in \mathbb{R}^{p \times p}$ is actually matrix $\vec{R}$ which we can obtain by QR factorization of $\vec{X}$. 
+Moreover $\vec{\phi} \in \mathbb{R}^{p \times 1}$ is column vector which is actually equal to
+\begin{equation}
+	\vec{\phi} =  \vec{Q^T}\vec{y}
+\end{equation}
+where $\vec{Q}$ is matrix $\vec{Q}$ from QR factorization of $\vec{R}$.
+Due to this fact $\vec{\hat{w}}$ is solution of upper triangular system 
+\begin{equation}
+	\vec{R}\vec{\hat{w}} = \vec{\phi}
+\end{equation}
+
+Finally $r \in \mathbb{R}$ is scalar such that 
+
+\begin{equation}
+	r^2 = \vec{y}^T\vec{y} - \vec{y}^T\vec{X}\vec{\hat{w}} = RSS
+\end{equation}
+
+\begin{remark} \label{qnotrequiredspeedupremark}
+	We can see that all quantities we use in the algorithm can be obtained from matrix $\vec{\tilde{R}}$ moreover if we didn't need to remove rows from $\vec{X}$ then matrix $\vec{\tilde{Q}}$ would not be need \ref{qnotrequired}, thus speedup while inserting and rows would be possible. 
+\end{remark}
+
+Now we've described all properties of improved FSA algorithm. We can see that two different methods of computation are possible. One, using inversion $\vec{Z}^{-1}$ is faster, but numerically less stable, second using QR decomposition is slower due to updating matrix $\vec{R}$ and matrix $\vec{Q}$. We've also shown that using matrix $\vec{\tilde{R}}$ is useful because it contains all necessary quantities for the improved FSA algorithm, although it won't improve the speed of the algorithm. Later we'll introduce different algorithm where we won't need to remove rows from $\vec{X}$ so then we'll be able to use this observation in our favor.
+
+\todo{time complexity QR qwerty}
+\todo{time complexity tildeZQR is the same as QR}
+
+
 \subsection{Min-Max-FSA aka. Min Max exchange (MMEA)}
-
-
-\todo{make CHAPTER approximate ALGORITHMS AND chapter EXACT ALGORITHMS?}
-dsafsdsa
-
-\chapter{Exact algorithms} %
+\todo{no taak. to je na stranku. to das}
 
 \section{Branch and bound aka. BAB}  % Also from Agulló, 2000
-\section{Adding row algorithm} % Hoffmann, Kontoghiorghes, 2010 (Matrix strategies SUR)
-\section{Klouda algorithm}
+\todo{zminit podobnost s: Hoffmann, Kontoghiorghes, 2010 (Matrix strategies SUR)}
+\section{Klouda's algorithm}
 
 
+\subsubsection{Matrix multiplication}
+\todo{move to first chapter}
 Time complexity matrix multiplication
 
 School  $\mathcal{O}(n^{3})$
 Although faster algorithm exists like
 Strassen algorithm $\mathcal{O}(n^{2.8074})$ or even
-Coppersmith–Winograd $\mathcal {O}(n^{2.375477})$.
+Coppersmith-Winograd $\mathcal {O}(n^{2.375477})$.
 In practice, however, none of those two algorithm is used not only high constant factors but also due to lower numerical stability. Others factors include worse cash optimization.
 Moreover current implementations of the linear algebra libraries such as LAPACK and more importantly BLAS level 3 routines implementing  matrix-matrix multiplication which are used in such linear algebra software implement $\mathcal{O}(n^{3})$ matrix-matrix multiplication. 
 ... In every way it's sort of accurate in this paper to say that matrix multiplication is $\mathcal{O}(n^{3})$
-blas dgemm
+BLAS routine for matrix multiplication is implemented by \defterm{dgemm}
 
-$ \vec{A} \in \mathbb{R}^{m \times n}, \vec{B} \in \mathbb{R}^{n\times p}$ then $ \mathcal{O}(n^{3})$
+$ \vec{A} \in \mathbb{R}^{m \times n}, \vec{B} \in \mathbb{R}^{n\times p}$ then $ \mathcal{O}(mn^{2}p)$
