@@ -1451,10 +1451,10 @@ Finally $r \in \mathbb{R}$ is scalar such that
 \end{equation}
 
 \begin{remark} \label{qnotrequiredspeedupremark}
-	We can see that all quantities we use in the algorithm can be obtained from matrix $\vec{\tilde{R}}$ moreover if we didn't need to remove rows from $\vec{X}$ then matrix $\vec{\tilde{Q}}$ would not be need \ref{qnotrequired}, thus speedup while inserting and rows would be possible. 
+	We can see that all quantities we use in the algorithm can be obtained from matrix $\vec{\tilde{R}}$ moreover if we didn't need to remove rows from $\vec{X}$ then matrix $\vec{\tilde{Q}}$ would notneed \ref{qnotrequired}, thus speedup while inserting and rows would be possible. 
 \end{remark}
 
-Now we've described all properties of improved FSA algorithm. We can see that two different methods of computation are possible. One, using inversion $\vec{Z}^{-1}$ is faster, but numerically less stable, second using QR decomposition is slower due to updating matrix $\vec{R}$ and matrix $\vec{Q}$. We've also shown that using matrix $\vec{\tilde{R}}$ is useful because it contains all necessary quantities for the improved FSA algorithm, although it won't improve the speed of the algorithm. Later we'll introduce different algorithm where we won't need to remove rows from $\vec{X}$ so then we'll be able to use this observation in our favor.
+Now we've described all properties of improved FSA algorithm. We can see that two different methods of computation are possible. One, using inversion $\vec{Z}^{-1}$ is faster, but numerically less stable, second using QR decomposition is slower due to updating matrix $\vec{R}$ and matrix $\vec{Q}$. We've also shown that using matrix $\vec{\tilde{R}}$ is useful because it contains all necessary quantities for the improved FSA algorithm, although it won't improve the speed of the algorithm. Later we'll introduce different algorithm where we won't need to remove rows from $\vec{X}$ so then we'll be ab1`A																		`e to use this observation in our favor.
 
 \todo{time complexity QR qwerty}
 \todo{time complexity tildeZQR is the same as QR}

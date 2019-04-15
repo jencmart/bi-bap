@@ -85,6 +85,64 @@ class FSRegressor(AbstractRegression):
     # ############### FIT #######################################################
     # ###########################################################################
 
+    def fit_klouda_bsa(self, X, y,  h_size: 'default := (n + p + 1) / 2' = 'default', use_intercept=False):
+        # concatenate to matrix
+        if type(X) is not np.matrix:
+            X = np.asmatrix(X)
+        if type(y) is not np.matrix:
+            y = np.asmatrix(y)
+        self._data = np.asmatrix(np.concatenate([y, X], axis=1))
+
+        self._p = self._data.shape[1] - 1
+        self._N = self._data.shape[0]
+
+        if h_size == 'default':
+            self._h_size = math.ceil((self._N + self._p + 1) / 2)  # todo with or without intercept?
+        else:
+            self._h_size = h_size
+
+        J = np.matrix(self._data, copy=True)
+
+        # ****** Calculate klouda bsa lts *************
+        best_result = self.klouda_bsa_lts(J, self._h_size)
+
+        # ***** save the results *****
+        # ... Store results
+        theta_final = best_result.theta_hat
+
+        if use_intercept:
+            self.intercept_ = theta_final[-1, 0]  # last row last col
+            self.coef_ = theta_final[:-1, 0]  # for all but last row,  only first col
+        else:
+            self.intercept_ = 0.0
+            self.coef_ = theta_final[:, 0]  # all rows, only first col
+
+        self.h_subset_ = best_result.h_index
+        self.rss_ = best_result.rss
+        self.n_iter_ = best_result.steps
+
+        self.coef_ = np.ravel(self.coef_)  # RAVELED
+
+    def klouda_bsa_lts(self, J, h_size):
+        # OLS_min = np.inf
+
+        # for all p+1 subsets from J ( n nad p+1)
+
+            # for all kombinace znamenek  (2^p) - binarni vektor !
+
+                # if soustava regularni -> ma solution to b0
+                    # vyres soustavu pro b0
+                    # udelej a serad rezidua
+                    # if hte == h+1
+                        # zavolej algoritmus 1 ktery vrati vsechny h podmnoziny
+                        # pokud plati naka bab-bsa podminka
+                            # pro kazdou h podmnozinu spocitej OLS
+                            # pokud mensi nez socasne min - vymen
+                        # else continue
+                # else continue
+
+        return
+
     def fit_bab(self, X, y, h_size: 'default := (n + p + 1) / 2' = 'default', use_intercept=True):
         # concatenate to matrix
         if type(X) is not np.matrix:
@@ -133,7 +191,7 @@ class FSRegressor(AbstractRegression):
         # save the time
         self.time1_ = time.process_time() - time1
         self.time_total_ = self.time1_
-        return
+        return # todo - toto jen pro to aby fungovaly dobre testy - bab se musi presunout do vlastni package, pak toto zmizi !
 
         # todo bab lts
 
@@ -1139,7 +1197,7 @@ class FSRegressor(AbstractRegression):
             #gama_insert = (yi_xi_theta ** 2) / (1 + i_m_i)
             rss_here = rss + gama_insert
 
-            if rss_here >= self.bab_rss_min: # todo - just like that ???
+            if rss_here >= self.bab_rss_min:  # todo - just like that ???
                 #print('cutting fucking branch ')
                 return
 
@@ -1151,7 +1209,7 @@ class FSRegressor(AbstractRegression):
             # Inversion plus
             inversion_here = inversion + w * np.dot(u, u.T)
 
-            # todo - cutting criterion
+            # todo - cutting criterion - done aboce
 
         # we go here either in roots , first edges , or regular edges
         aa = a.copy()
