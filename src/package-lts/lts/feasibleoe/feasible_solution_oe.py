@@ -123,25 +123,141 @@ class FSRegressor(AbstractRegression):
 
         self.coef_ = np.ravel(self.coef_)  # RAVELED
 
+    def klouda_bsa_lts_find_all_h_subsets(self, theta, sorted_res, J, h_size):  # todo
+        # todo predelat na sorted_res[ args [h_size-1] ]
+        res_h = sorted_res[h_size-1]
+
+        # jdi od pozice h smerem na zacetek a urci nejmensi index i pro kteri res_i = res_h
+        idx_i = h_size-1
+        for i in reversed(range(h_size-1)):
+            # todo opet predelat na na sorted_res[ args [i] ]
+            if math.isclose(sorted_res[i], res_h , rel_tol=1e-9):  # e-9 is default btw..
+                idx_i = i
+            else:
+                break
+
+        # jdi od pozice h smerem na konec a urci nejvetsi index j pro ktery res_j = res_h
+        idx_j = h_size
+        # todo - check sorted_res shape - chceme 1 x p
+        print(sorted_res.shape)
+        exit(11)
+        for j in range(h_size, sorted_res.shape[1]):
+            # todo opet predelat na na sorted_res[ args [j] ]
+            if math.isclose(sorted_res[j], res_h, rel_tol=1e-9):  # e-9 is default btw..
+                idx_j = j
+            else:
+                break
+
+
+        # vezmi indexy od i do j jako list
+        idx_list = list(range(idx_i, idx_j+1))
+        # combinations z techto indexu, velikost #pocet stejnych od i do h vcetne (h-i+1)
+        # // napr pouze vetsi --> h-h+1 == 1 tedy vzdy jeden z mnoziny indexu
+        from itertools import combinations
+
+        comb = combinations(idx_list, h_size-1 -idx_i +1) # hsize - 1 == pozice hteho ;-  idx_i + 1 = pocet pred h vcethe h
+
+        list_of_subsets = []
+        # vezmi vzdy indexy 0 ... i-1 ; + pridej k nim kazdou combination
+        # todo predelat na argumenty ... asi ... begin = args[:idx_i] # opravdicke indexy do h subsetu
+        begin = list ( range(idx_i))
+        for appendinx in list(comb):
+            appendinx = list(appendinx)
+            # todo - apendixem musime opet .. asi ... zaindexovat args[appendix]
+            concatenated_list = begin + appendinx
+            list_of_subsets.append(concatenated_list)
+        # uloz tyto listy do listu a cele to vrat
+        return list_of_subsets
+
     def klouda_bsa_lts(self, J, h_size):
-        # OLS_min = np.inf
 
-        # for all p+1 subsets from J ( n nad p+1)
+        from itertools import combinations
+        from itertools import product
 
-            # for all kombinace znamenek  (2^p) - binarni vektor !
+        rss_min = float('inf')
+        theta_min = None
+        h_subset_min = None
 
-                # if soustava regularni -> ma solution to b0
-                    # vyres soustavu pro b0
-                    # udelej a serad rezidua
-                    # if hte == h+1
-                        # zavolej algoritmus 1 ktery vrati vsechny h podmnoziny
-                        # pokud plati naka bab-bsa podminka
-                            # pro kazdou h podmnozinu spocitej OLS
-                            # pokud mensi nez socasne min - vymen
-                        # else continue
-                # else continue
+        p = J.shape[1] - 1
+        # n = J.shape[0]
 
-        return
+        all_idx = list(range(J.shape[0]))
+        comb = combinations(all_idx, p+1)
+
+        for subset_tuple in list(comb):  # for all p+1 subsets from J ( n nad p+1)
+            idx_list = list(subset_tuple)  # p+1 indexes
+
+            first = idx_list[0]
+            del idx_list[0]
+
+            x1 = J[first, 1:]  # todo check shape ( cci asi 1xp )
+            y1 = J[first, [0]]  # todo check shape (cchci asi 1x1 ? )
+            print(x1.shape)
+            print(y1.shape)
+            exit(10)
+            x_rest = np.copy( J[idx_list, 1:] )
+            y_rest = np.copy( J[idx_list, [0]] )
+
+            # for 2^p kombinaci znamenek
+            all_mark_perm_lst = list(map(list, product([0, 1], repeat=p)))  # (000)(001)(010)(011)(100)(101)(110)(111)
+            for lst_marks in all_mark_perm_lst:
+
+                # create equations
+                for i in range(p):
+                    if lst_marks[i] == 1:
+                        x_rest[i] = x1 - x_rest[i]
+                        y_rest[i] = y1 - y_rest[i]
+                    else:
+                        x_rest[i] = x1 + x_rest[i]
+                        y_rest[i] = y1 + y_rest[i]
+
+                # check if rank P
+                q, r = linalg.qr(x_rest)
+                # rank < p
+                if np.count_nonzero(r[-1, :]) == 0:
+                    continue
+
+                # now we know that system is regular -> we have solution to b0
+                # solve theta - aka. b0
+                theta = linalg.solve_triangular(r, q * y_rest)  # p x substitution
+
+                #  calculate residuas
+                all_residuals = J[:, [0]] - J[:, 1:] * theta
+                # and square them
+                all_residuals = np.square(all_residuals)
+
+                # and sort them - todo - udelej misto toho arg sort
+                all_residuals = np.sort(all_residuals, axis=None) # axis none nemusi byt asi
+
+                # calculate xi1 resuduum
+                x1_res = y1 - x1 * theta
+                # and square it
+                x1_res = np.square(x1_res)
+
+                # if x1 = hte == h+1
+                # todo np is close ?
+                # todo - s argsortem budeme dotazovat all_residuals[ args [h_size - 1] ]
+                if x1_res == all_residuals[h_size - 1] and all_residuals[h_size - 1] == all_residuals[h_size]:
+                    # zavolej [algoritmus 1] ktery vrati vsechny h podmnoziny - bude jich (p nad l+1) .. max (p nad p/2)
+                    all_h_subsets = self.klouda_bsa_lts_find_all_h_subsets(theta,all_residuals, J, h_size) # todo - posli argumenty argsort a nesortovane pole
+
+                    # pokud plati naka bab-bsa podminka - todo vrat i bab podminku
+                    # else continue
+
+                    # pro kazdou h podmnozinu spocitej OLS
+                    for h_subset in all_h_subsets:
+                        # calculate ols na h subsetu
+                        theta_fin, rss_fin = self.calculate_theta_and_rss(J[h_subset, :])
+
+                        # pokud mensi nez socasne min - vymen a uloz
+                        if rss_fin < rss_min:
+                            rss_min = rss_fin
+                            theta_min = theta_fin
+                            h_subset_min = h_subset
+
+        # last but not least
+        steps = 0
+        return self.Result(theta_min, h_subset_min, rss_min, steps)
 
     def fit_bab(self, X, y, h_size: 'default := (n + p + 1) / 2' = 'default', use_intercept=True):
         # concatenate to matrix
@@ -395,6 +511,17 @@ class FSRegressor(AbstractRegression):
         theta, r1 = self.update_theta_qr(q, r, J)
 
         return theta, q, r, r1
+
+    def calculate_theta_and_rss(self, J):
+        q, r = linalg.qr(J[:, 1:])  # X = QR ; x.T x = R.T R ;
+        theta, r1 = self.update_theta_qr(q, r, J)
+
+        y_fin = J[:, [0]]
+        x_fin = J[:, 1:]
+        rss = (y_fin - x_fin * theta).T * (y_fin - x_fin * theta)
+        rss = rss[0, 0]
+
+        return theta, rss
 
     def calculate_theta_inversion(self, J):
         y = J[:, [0]]
