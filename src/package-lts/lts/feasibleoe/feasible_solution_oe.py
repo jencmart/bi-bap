@@ -123,27 +123,30 @@ class FSRegressor(AbstractRegression):
 
         self.coef_ = np.ravel(self.coef_)  # RAVELED
 
-    def klouda_bsa_lts_find_all_h_subsets(self, theta, sorted_res, J, h_size):  # todo
-        # todo predelat na sorted_res[ args [h_size-1] ]
-        res_h = sorted_res[h_size-1]
+    def klouda_bsa_lts_find_all_h_subsets(self, theta, residuals, sort_args, J, h_size):  # todo
+        # todo predelat na sorted_res[ args [h_size-1] ] - DONE
+        #res_h = residuals[h_size - 1]
+        res_h = residuals[ sort_args[h_size - 1] ]
 
         # jdi od pozice h smerem na zacetek a urci nejmensi index i pro kteri res_i = res_h
         idx_i = h_size-1
         for i in reversed(range(h_size-1)):
-            # todo opet predelat na na sorted_res[ args [i] ]
-            if math.isclose(sorted_res[i], res_h , rel_tol=1e-9):  # e-9 is default btw..
+            # todo opet predelat na na sorted_res[ args [i] ] - DONE
+            if math.isclose(residuals[ sort_args[i] ], res_h , rel_tol=1e-9):  # e-9 is default btw..
                 idx_i = i
             else:
                 break
 
         # jdi od pozice h smerem na konec a urci nejvetsi index j pro ktery res_j = res_h
         idx_j = h_size
-        # todo - check sorted_res shape - chceme 1 x p
-        print(sorted_res.shape)
-        exit(11)
-        for j in range(h_size, sorted_res.shape[1]):
-            # todo opet predelat na na sorted_res[ args [j] ]
-            if math.isclose(sorted_res[j], res_h, rel_tol=1e-9):  # e-9 is default btw..
+        # todo - check sorted_res shape - chceme 1 x p - DONE
+        #print(sorted_res.shape)
+        #exit(11)
+        #print(sorted_res.shape[0])
+        #exit(11)
+        for j in range(h_size, residuals.shape[0]):
+            # todo opet predelat na na sorted_res[ args [j] ] - DONE
+            if math.isclose(residuals[sort_args[j]], res_h, rel_tol=1e-6):  # e-9 is default btw..
                 idx_j = j
             else:
                 break
@@ -159,12 +162,21 @@ class FSRegressor(AbstractRegression):
 
         list_of_subsets = []
         # vezmi vzdy indexy 0 ... i-1 ; + pridej k nim kazdou combination
-        # todo predelat na argumenty ... asi ... begin = args[:idx_i] # opravdicke indexy do h subsetu
-        begin = list ( range(idx_i))
+        # todo predelat na argumenty ... asi ... begin = args[:idx_i] # opravdicke indexy do h subsetu - DONE
+        #begin = list ( range(idx_i))
+        begin = sort_args[:idx_i]
+
         for appendinx in list(comb):
-            appendinx = list(appendinx)
-            # todo - apendixem musime opet .. asi ... zaindexovat args[appendix]
-            concatenated_list = begin + appendinx
+            # todo - apendixem musime opet .. asi ... zaindexovat args[appendix] - DONE
+            appendinx = sort_args[list(appendinx)]
+            #print(appendinx.shape)
+            #print(begin.shape)
+
+
+            #concatenated_list = begin + appendinx
+            concatenated_list = np.concatenate((begin, appendinx), axis=0)
+            #print(concatenated_list.shape)
+            #exit(33)
             list_of_subsets.append(concatenated_list)
         # uloz tyto listy do listu a cele to vrat
         return list_of_subsets
@@ -190,14 +202,12 @@ class FSRegressor(AbstractRegression):
             first = idx_list[0]
             del idx_list[0]
 
-            x1 = J[first, 1:]  # todo check shape ( cci asi 1xp )
-            y1 = J[first, [0]]  # todo check shape (cchci asi 1x1 ? )
-            print(x1.shape)
-            print(y1.shape)
-            exit(10)
-            x_rest = np.copy( J[idx_list, 1:] )
-            y_rest = np.copy( J[idx_list, [0]] )
+            x1 = J[first, 1:]  # shape   1 x p
+            y1 = J[first, [0]]  # shape  1 x 1
 
+            x_rest = np.copy(J[idx_list, 1:])  # 3 x 3
+            y_rest = np.copy(J[idx_list, 0])  # 3 x 1
+            
             # for 2^p kombinaci znamenek
             all_mark_perm_lst = list(map(list, product([0, 1], repeat=p)))  # (000)(001)(010)(011)(100)(101)(110)(111)
             for lst_marks in all_mark_perm_lst:
@@ -215,11 +225,12 @@ class FSRegressor(AbstractRegression):
                 q, r = linalg.qr(x_rest)
                 # rank < p
                 if np.count_nonzero(r[-1, :]) == 0:
+                    print('continue')
                     continue
 
                 # now we know that system is regular -> we have solution to b0
                 # solve theta - aka. b0
-                theta = linalg.solve_triangular(r, q * y_rest)  # p x substitution
+                theta = linalg.solve_triangular(r, np.dot( q , y_rest) )  # p x substitution
 
                 #  calculate residuas
                 all_residuals = J[:, [0]] - J[:, 1:] * theta
@@ -227,34 +238,57 @@ class FSRegressor(AbstractRegression):
                 all_residuals = np.square(all_residuals)
 
                 # and sort them - todo - udelej misto toho arg sort
-                all_residuals = np.sort(all_residuals, axis=None) # axis none nemusi byt asi
+                all_residuals = np.ravel(all_residuals)
+                #all_residuals = np.sort(all_residuals, axis=None)  # axis none nemusi byt asi
+                sort_args = np.argsort(all_residuals)
+                #all_residuals = np.ravel(all_residuals)
 
                 # calculate xi1 resuduum
-                x1_res = y1 - x1 * theta
+                x1_res = y1 - np.dot(x1, theta)
+                # print(x1.shape)
+                # print(theta.shape)
+                # print(x1_res.shape)
+                #print(x1_res.shape)
                 # and square it
                 x1_res = np.square(x1_res)
-
+                #print(x1_res.shape)
+                # exit(10)
                 # if x1 = hte == h+1
                 # todo np is close ?
                 # todo - s argsortem budeme dotazovat all_residuals[ args [h_size - 1] ]
-                if x1_res == all_residuals[h_size - 1] and all_residuals[h_size - 1] == all_residuals[h_size]:
-                    # zavolej [algoritmus 1] ktery vrati vsechny h podmnoziny - bude jich (p nad l+1) .. max (p nad p/2)
-                    all_h_subsets = self.klouda_bsa_lts_find_all_h_subsets(theta,all_residuals, J, h_size) # todo - posli argumenty argsort a nesortovane pole
 
+
+                res_h = all_residuals[ sort_args[h_size - 1]  ]
+                res_h_1 = all_residuals[ sort_args[h_size ]  ]
+
+                # todo - myslim ze problem je tady :-|||||
+                if math.isclose(x1_res, res_h, rel_tol=1e-4) :
+                    # and \
+                    #
+                    # print('yes')
+                    # zavolej [algoritmus 1] ktery vrati vsechny h podmnoziny - bude jich (p nad l+1) .. max (p nad p/2)
+                    if (math.isclose(res_h, res_h_1, rel_tol=1e-4)):
+                        all_h_subsets = self.klouda_bsa_lts_find_all_h_subsets(theta,all_residuals, sort_args, J, h_size) # todo - posli argumenty argsort a nesortovane pole
+                    else:
+                        all_h_subsets = [sort_args[:h_size]]
                     # pokud plati naka bab-bsa podminka - todo vrat i bab podminku
                     # else continue
 
                     # pro kazdou h podmnozinu spocitej OLS
                     for h_subset in all_h_subsets:
+                        #print('double ues')
                         # calculate ols na h subsetu
                         theta_fin, rss_fin = self.calculate_theta_and_rss(J[h_subset, :])
 
                         # pokud mensi nez socasne min - vymen a uloz
+                        #print(rss_fin)
                         if rss_fin < rss_min:
+                            #print('uiuiuiui')
                             rss_min = rss_fin
                             theta_min = theta_fin
                             h_subset_min = h_subset
-
+                ###else:
+                   # print('no')
         # last but not least
         steps = 0
         return self.Result(theta_min, h_subset_min, rss_min, steps)
@@ -296,6 +330,135 @@ class FSRegressor(AbstractRegression):
         self.coef_ = np.ravel(self.coef_)  # RAVELED
 
 
+    def fit_bab_tree(self, X, y,
+            num_starts: 'number of initial starts (H1)' = 10,
+            h_size: 'default := (n + p + 1) / 2' = 'default',
+            use_intercept=True):
+
+
+        # TODO - bab lts
+        time1 = time.process_time()
+        self.fit_bab(X, y)
+
+        # self.fit_klouda_bsa(X, y)
+
+        # save the time
+        self.time1_ = time.process_time() - time1
+        self.time_total_ = self.time1_
+        return # todo - toto jen pro to aby fungovaly dobre testy - bab se musi presunout do vlastni package, pak toto zmizi !
+
+        # todo bab lts
+
+        # Init some properties
+        X, y = validate(X, y, h_size, use_intercept)
+
+        # concatenate to matrix
+        if type(X) is not np.matrix:
+            X = np.asmatrix(X)
+        if type(y) is not np.matrix:
+            y = np.asmatrix(y)
+        self._data = np.asmatrix(np.concatenate([y, X], axis=1))
+
+        self._p = self._data.shape[1] - 1
+        self._N = self._data.shape[0]
+
+        if h_size == 'default':
+            self._h_size = math.ceil((self._N + self._p + 1) / 2)  # todo with or without intercept?
+        else:
+            self._h_size = h_size
+
+        self.x_all = self._data[:, 1:]
+        self.y_all = self._data[:, [0]]
+
+        results = []
+
+        time1 = time.process_time()
+        # for all initial starts
+        for i in range(num_starts):
+
+            # generate random subset J, |J| = h and its complement M
+            idx_initial, idx_rest = self.select_initial_h1()
+            # save split data
+            J = np.matrix(self._data[idx_initial], copy=True)
+            M = np.matrix(self._data[idx_rest], copy=True)
+
+            # J2 = np.copy(J)
+            # M2 = np.copy(M)
+            # idx_initial2 = np.copy(idx_initial)
+            # idx_rest2 = np.copy(idx_rest)
+            # J2 = np.asmatrix(J2)
+            # M2 = np.asmatrix(M2)
+            # do the refinement process
+            res = self.refinement_process_fs_mmea_inversion(J, M, idx_initial, idx_rest)
+            # print(res.rss)
+            #
+            # res = self.refinement_process_fsa(J, M, idx_initial, idx_rest)
+            # print(res.steps)
+            # print(res.rss)
+            # exit(1)
+            # create new J and M so that it represents h_index
+            # res = self.refinement_process_fsa_MMEA_qr(J, M, idx_initial, idx_rest)
+            # res2 = self.refinement_process_fsa(J2, M2, idx_initial2, idx_rest2)
+
+            # todo - porovnani results
+
+            # print('**** RESULT *******')
+            # print('theta ')
+            # print(res.theta_hat)
+            # print('theta 2')
+            # print(res2.theta_hat)
+            # if not (math.isclose(res.rss, res2.rss)):
+            #     print('rss [{}], [{}]'.format(res.rss, res2.rss))
+            #     print('steps [{}], [{}]'.format(res.steps, res2.steps))
+            #     exit(1)
+            # print('OK')
+
+            results.append(res)
+
+        # save the time
+        self.time1_ = time.process_time() - time1
+        self.time_total_ = self.time1_
+
+        # select best results
+        best_result = results[0]
+        for res in results:
+            if res.rss < best_result.rss:
+                best_result = res
+
+
+        # # todo - just some experiment
+        #
+        # print('prvni alg hotvo. dalsich steps {} ; rss {}'.format(best_result.steps, best_result.rss))
+        # print('jdu na druhy alg.')
+        # idx_initial = best_result.h_index
+        #
+        # mask = np.ones([self._data.shape[0]], np.bool)
+        # mask[idx_initial] = 0
+        # idx_rest = mask
+        #
+        # J = np.matrix(self._data[idx_initial], copy=True)
+        # M = np.matrix(self._data[idx_rest], copy=True)
+        #
+        # best_result = self.refinement_process_fs_moe_inversion(J, M, idx_initial, idx_rest)
+        # print('hotovo. dalsich steps {} ; rss {}'.format(best_result.steps, best_result.rss))
+        # # todo - just some experiment
+
+        # ... Store results
+        theta_final = best_result.theta_hat
+
+        if use_intercept:
+            self.intercept_ = theta_final[-1, 0]  # last row last col
+            self.coef_ = theta_final[:-1, 0]  # for all but last row,  only first col
+        else:
+            self.intercept_ = 0.0
+            self.coef_ = theta_final[:, 0]  # all rows, only first col
+
+        self.h_subset_ = best_result.h_index
+        self.rss_ = best_result.rss
+        self.n_iter_ = best_result.steps
+
+        self.coef_ = np.ravel(self.coef_)  # RAVELED
+
     def fit(self, X, y,
             num_starts: 'number of initial starts (H1)' = 10,
             h_size: 'default := (n + p + 1) / 2' = 'default',
@@ -303,7 +466,9 @@ class FSRegressor(AbstractRegression):
 
         # TODO - bab lts
         time1 = time.process_time()
-        self.fit_bab(X, y)
+        #self.fit_bab(X, y)
+
+        self.fit_klouda_bsa(X, y)
         # save the time
         self.time1_ = time.process_time() - time1
         self.time_total_ = self.time1_

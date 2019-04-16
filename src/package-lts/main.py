@@ -14,7 +14,7 @@ def test_feasible_solution_numpy():
 
 # Feasible solution OE QR
 def test_feasible_OE_solution_numpy():
-    feasible_oe_test.test_numpy(n=40, p=3)  # 150 44s 300 335sec # mmea 1000 3 70sec ; 1000 10 70sec ; MMEA - indepent of p !!!!! (mostly...)
+    feasible_oe_test.test_numpy(n=30, p=3)  # 150 44s 300 335sec # mmea 1000 3 70sec ; 1000 10 70sec ; MMEA - indepent of p !!!!! (mostly...)
     # MMEA 10 000 ... still fast !          # bablts basic - x3 160sec
 # Fast LTS
 def test_fast_lts():
