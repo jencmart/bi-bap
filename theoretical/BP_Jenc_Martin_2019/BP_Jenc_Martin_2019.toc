@@ -31,13 +31,13 @@
 \contentsline {subsubsection}{\numberline {2.6.0.2}Calculation of imporved FSA using QR}{40}{subsubsection.2.6.0.2}
 \contentsline {subsection}{\numberline {2.6.1}Min-Max-FSA aka. Min Max exchange (MMEA)}{42}{subsection.2.6.1}
 \contentsline {section}{\numberline {2.7}Branch and bound aka. BAB}{42}{section.2.7}
-\contentsline {section}{\numberline {2.8}Klouda's algorithm}{42}{section.2.8}
-\contentsline {subsubsection}{\numberline {2.8.0.1}Matrix multiplication}{42}{subsubsection.2.8.0.1}
-\contentsline {chapter}{\chapternumberline {3}Experiments}{43}{chapter.3}
-\contentsline {section}{\numberline {3.1}Data}{43}{section.3.1}
-\contentsline {section}{\numberline {3.2}Results}{43}{section.3.2}
-\contentsline {section}{\numberline {3.3}Outlier detection}{43}{section.3.3}
-\contentsline {chapter}{Conclusion}{45}{chapter*.47}
-\contentsline {chapter}{Bibliography}{47}{section*.49}
+\contentsline {section}{\numberline {2.8}BSA algorithm}{42}{section.2.8}
+\contentsline {subsubsection}{\numberline {2.8.0.1}Domain of $\oflts $}{42}{subsubsection.2.8.0.1}
+\contentsline {subsubsection}{\numberline {2.8.0.2}Matrix multiplication}{44}{subsubsection.2.8.0.2}
+\contentsline {chapter}{\chapternumberline {3}Experiments}{45}{chapter.3}
+\contentsline {section}{\numberline {3.1}Data}{45}{section.3.1}
+\contentsline {section}{\numberline {3.2}Results}{45}{section.3.2}
+\contentsline {section}{\numberline {3.3}Outlier detection}{45}{section.3.3}
+\contentsline {chapter}{Conclusion}{47}{chapter*.47}
 \contentsline {appendix}{\chapternumberline {A}Datasets}{49}{appendix.A}
 \contentsline {appendix}{\chapternumberline {B}Contents of enclosed CD}{51}{appendix.B}

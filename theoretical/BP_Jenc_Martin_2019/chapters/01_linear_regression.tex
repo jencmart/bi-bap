@@ -1,5 +1,13 @@
 % \listoftodos
 
+
+% \usepackage[style=numeric]{biblatex}
+% \addbibresource{BP_ja_bibliography.bib}
+% ...
+% \printbibliography
+% pdftex BP_ja.tex -> biber BP_ja -> pdftex PB_ja.tex
+% Hide or report this
+
 \chapter{Least trimmed squares}
 In this chapter will be introduced one of the most common regression analysis models which is linear regression model. This model tries to model relationship between one variable which is considered to be dependent and one or more variables which are considered to be explanatory. Relationship is based on model function with parameters which are not known in advance and are estimated from data. We will also introduce one of the most commons methods of finding those parameters in this model, namely ordinary least squares.
 \section{Linear regression model}
@@ -185,7 +193,7 @@ thus $\vec{\hat{w}}^{(OLS,n)}$ in \eqref{wols} is strict global minimum.
 
 We've shown that $\vec{\hat{w}}^{(OLS,n)}$ can be computed directly by multiplying $\vec{A} = \vec{X}^T\vec{X}$ and $\vec{B} = \vec{X}\vec{y}$ and then by finding inversion of $\vec{A}$  and finally multiplying $\vec{A}^{-1}\vec{B}$. This is certainly possible but not the best solution because this method is not numerically stable. We'll describe this in detail in section \ref{ols:computing}
 
-\section{Robust statistics}
+\section{Robust statistics} \label{section:roboust}
 To work properly standard statistic methods expects some assumptions and fail if those assumptions are not met. Robust statistic are statistics that produce acceptable results even if data are from some unconventional distributions or if data contains errors which are not normally distributed. We should be highly motivated to use such methods because in the real world we are often forced to work with such data. Classical statistics methods provide poor results with such data. 
 
 Ordinary least squares method has such assumptions about data. This method expects that
@@ -309,10 +317,10 @@ Finally we can minimize inner part by substituting $\vec{w}$ with \ref{ltshat}. 
 
 We can easily see, that we've got objective function with argument $\vec{m} \in Q^{(n,h)}$. This objective function we'll mark as 
 
-\begin{equation} 
+\begin{equation} \label{oflts_discrete}
     \oflts(\vec{m}) =  \norm{ \vec{M}\vec{y} -  \vec{M}\vec{X}(\vec{X}^T\vec{M}\vec{X})^{-1}\vec{X}^T\vec{M}\vec{y}  }^2.
 \end{equation}
-We can also clearly see that solution to minimizing this OF could by done straightforwardly by iterating over the  $Q^{(n,h)}$ set.
+We can also clearly see that solution to minimizing this OF could by done straightforwardly by iterating over the $Q^{(n,h)}$ set. That means we've transformed the objective function to discrete space of $Q^{(n,h)}$.
 
 Unfortunately this set is very big namely $\binom{n}{h}$ so this approach will fail if the $n$ will be greater that $30$ or $40$. To overcome this problem multiple algorithms was proposed. Majority of them are probabilistic algorithms but beside that some exact algorithms were proposed. 
 

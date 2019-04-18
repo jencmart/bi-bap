@@ -1465,12 +1465,96 @@ Now we've described all properties of improved FSA algorithm. We can see that tw
 
 \section{Branch and bound aka. BAB}  % Also from Agulló, 2000
 \todo{zminit podobnost s: Hoffmann, Kontoghiorghes, 2010 (Matrix strategies SUR)}
-\section{Klouda's algorithm}
+\section{BSA algorithm}
+In this section we'll introduce another exact algorithm. It have a little different approach than previous algorithms. First of all we'll built a theoretical basis for this algorithm.
 
+\subsubsection{Domain of $\oflts$}
+We've already showed that we can derivate LTS objective function so it's domain is on discrete set  $Q^{(n,h)}$ see \ref{oflts_discrete}. We'll now show that we can transform this objective function to the non-discrete form so that $\oflts (\vec{w}) \vec{w} \in \mathbb{R}^p$ \cite{klouda2015exact}.
+We'll do this by relation $Z \subset \mathbb{R}^p \times Q^{(n,h)}$ so that $(\vec{w}, \vec{m}) \in Z$ only and if only
+\begin{equation}
+	\sum\limits_{i=1}^h r^{2}_{(i:n)}(\vec{w})  =  \sum\limits_{i=1}^n m_{i}r^{2}_{i}(\vec{w}).
+\end{equation}
+$Z$ is not a mapping. To show this we can take simple example so that $r^{2}_{h} = r^{2}_{h+1}$. Then we have for given $\vec{w}$ two different vectors $\vec{m}$ that are in relation with it.
 
+If we want to find domain where $Z$ is mapping, we simply define $\mathcal{U} \subset \mathbb{R}^{p}$ as a maximal set where $Z$ is a mapping. Next we define 
+$\mathcal{H} = \mathbb{R}^{p}  \setminus   \mathcal{U}$
+as a complement of $\mathcal{U}$.
+
+Let's now describe some properties based on which $\vec{w}$ is in $\mathcal{U}$ or $\mathcal{H}$ set.
+
+\begin{theorem} \label{klouda1}
+	$\vec{w} \in \mathcal{U}, \vec{w} \in \mathbb{R}^{p}$ if and only if 
+	$r^{2}_{(h:n)}(\vec{w}) < r^{2}_{(h+1:n)}(\vec{w})$
+\end{theorem}
+\begin{proof}
+	As shown in example above. If $r^{2}_{i}(\vec{w}) = r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w}) = r^{2}_{j}(\vec{w}), i,j \in   \{{1,2,\ldots , n\}} $ then $(\vec{w}, \vec{m_1}) \in Z$ and also $(\vec{w}, \vec{m_2}) \in Z$ where $\vec{m_1}$ has ones at indexes of $h$ smallest residuals and $\vec{m_2}$ has ones at the same indexes except swap $i$th one with $j$th zero.
+\end{proof}
+
+\begin{corollary}
+	Complement of vectors $\vec{w}$ from theorem \ref{klouda1} are vectors such that 
+	\begin{equation}
+		r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w})
+	\end{equation}
+	thus
+	\begin{equation}
+		\mathcal{H} = \{{ \vec{w} \in \mathbb{R}^{p} | r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w}) \}}.
+	\end{equation}
+	That means that for each $\vec{w} \in \mathcal{H}$ there are two different $(\vec{x_i}, y_i)$ and  $(\vec{x_j}, y_j)$ so that
+	\begin{equation}
+		(y_i - \vec{x_i} \vec{w})^2 = r^{2}_i(\vec{w}) =  r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w}) =  r^{2}_j(\vec{w}) = (y_j - \vec{x_j} \vec{w})^2.
+	\end{equation}
+
+	We can see that 
+	\begin{equation}
+		(y_i - \vec{x_i} \vec{w})^2 =  (y_j - \vec{x_j} \vec{w})^2 \iff	  y_i \pm y_j + (\vec{x_i} \pm \vec{x_j})  \vec{w} = 0
+	\end{equation}
+\end{corollary}
+
+Moreover if we assume that for all $i,j, \in \{{1,2 \ldots, n \}}$  if $ i \neq j$ then $\vec{x_i} \neq \pm \vec{x_j}$ and $\norm{\vec{x_i}} \neq 0$ then $ y_i \pm y_j + (\vec{x_i} \pm \vec{x_j})  \vec{w} = 0$ represents a hyperplane. 
+
+It's easy to show that set $\mathcal{U}$ is open and 	lebesgue measure of $\mathcal{H}$  is $0$ \cite{klouda2015exact}. Moreover $\mathcal{H}$ splits $\mathbb{R}^{p}$ into finite number of $m$ open disjoint subsets of $\mathcal{U}$. 
+
+\begin{definition}
+	Let's define set of $m \in \mathbb{N}$ sets $\mathcal{U}^{(set)} = \{{ U_i\}}_{i=1}^{m}$ so that
+	all $U_i$ are open and connected sets, $U_i$ $U_j$ are disjoined thus $U_i \cap  U_j = \emptyset$, $\cup_{i=1}^{m}	U_i = \mathcal{U}$ and $\cup_{i=1}^{m}	\partial U_i =  \mathcal{H}$.
+
+	We define neighbor sets $U_i, U_j, i \neq j$ so that $ U_i \cap U_j \neq \emptyset$. 
+
+	We also define $M^{(min)}$ set of $m$ vectors $\vec{m} \in Q^{(n,h)}$ so that 
+	\begin{equation*}
+		M^{(min)} = \{{ \vec{m_1}, \ldots, \vec{m_m} | \vec{m_i} = Z(\vec{w}) \vec{w} \in U_i  \}}.
+	\end{equation*}
+	where $Z(\vec{w})$ represent unique vector $\vec{m_i}$. That means $Z(\vec{w}) = Z(\vec{w^{\prime}})$ for all $w, w^{\prime} \in U_i$.
+\end{definition}
+
+For a better understanding definition above see \missingfigure{p=1 n=5 h=3. visualise all $U_i$ and elements of $\mathcal{H}$}
+
+\begin{theorem}
+	If the matrix $\vec{X}$ have $h$-full rank then for every local minima at point satisfying weak-necessary condition $\vec{w_{0}}$ of the lts objective function, then there exists a vector $\vec{m} \in Q^{(n,h)}$ such that $(\vec{w_{0}}, \vec{m}) \in Z$.
+\end{theorem}
+
+Proof can be found in \cite{klouda2015exact}. 
+
+Given that we can see that 
+
+\begin{equation}
+	\minim_{\vec{m} \in Q^{(n,h)}} \of^{(OLS, \vec{M}\vec{X}, \vec{M}\vec{Y})} (\vec{w}) =
+	\minim_{m \in M^{(min)}} \of^{(OLS, \vec{m^i}\vec{X}, \vec{m^i}\vec{Y})} (\vec{w})
+\end{equation}
+
+where $\vec{M} = diag(\vec{m})$, $\vec{m^i} = diag(m)$. We can see that set $M^{(min)}$ is very useful because we can minimize only on this set and not on whole $Q^{(n,h)$.
+
+Then minimizing objective function $\oflts(\vec{m})$ from \ref{oflts_discrete} can be reformulated as 
+\begin{equation}
+	\minim_{\vec{m} \in Q^{(n,h)}}  \oflts(\vec{m}) = \minim_{m \in M^{(min)}} \oflts(m)
+\end{equation}
+
+We now have all the theory necessary for describing two dimensional version of the algorithm. We'll now describe this algorithm and next we'll provide some more theory necessary to extend this algorithm to higher dimensions.
+
+First we'll show how to find fde
 \subsubsection{Matrix multiplication}
 \todo{move to first chapter}
-Time complexity matrix multiplication
+Time complexity matrix multiplication.
 
 School  $\mathcal{O}(n^{3})$
 Although faster algorithm exists like
