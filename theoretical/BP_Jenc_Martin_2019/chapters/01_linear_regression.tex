@@ -7,7 +7,7 @@
 % \printbibliography
 % Hide or report this
 \chapter{Least trimmed squares}
-In this chapter, we introduce one of the most common regression analysis models which is known as the linear regression model. It aims to model the relationship between one variable which is called \defterm{dependent} and one or more variables which are called \defterm{explanatory}. The relationship is based on a model function with parameters which are not known in advance and are to be estimated from data. We will also describe one of the most common methods for finding those parameters in this model, namely the ordinary least squares method. It is important to note that it is usual to consider vectors as column vectors. On the other hand, we denote a row vector as a transposed vector.
+In this chapter, we introduce one of the most common regression analysis models which is known as the linear regression model. It aims to model the relationship between one variable which is called \defterm{dependent} and one or more variables which are called \defterm{explanatory}. The relationship is based on a model function with parameters which are not known in advance and are to be estimated from data. We also describe one of the most common methods for finding those parameters in this model, namely the ordinary least squares method. It is important to note that it is usual to consider vectors as column vectors. On the other hand, we denote a row vector as a transposed vector.
 
 
 
@@ -73,7 +73,7 @@ That means that we can think of rows of matrix $\vec{X}$ as columns vectors $x_i
 
 Usually we assume that errors are independent and identically distributed so that $\vec{\varepsilon} \sim \mathcal{N}(0,\,\sigma^{2})$.
 \end{definition}
-It this work we will talk about the multiple linear regression model, but for simplicity, we will call him merely the linear regression model.
+It this work we talk about the multiple linear regression model, but for simplicity, we call it merely the linear regression model.
 
 %%%% OK TO HERE
 \subsection{Prediction with the linear regression model}
@@ -122,7 +122,7 @@ $L : \mathbb{R}^2 \rightarrow  \mathbb{R}$,
 which in case of ordinary least squares (OLS) is quadratic loss function $L(y, \hat{y}) := (y - \hat{y})^2$. 
 So the basic idea is to find $\vec{\hat{w}}$ so that it minimizes the sum of squared \defterm{residuals}
 \begin{equation}
-	r_i(\vec{w}) =y_i - \hat{y_i} = y_i - \vec{x_i}^T\vec{w} ,\ i = 1,2,\ldots ,n.
+    r_i(\vec{w}) =y_i - \hat{y_i} = y_i - \vec{x_i}^T\vec{w} ,\ i = 1,2,\ldots ,n.
 \end{equation}
 This is commonly know as residual sum of squares $RSS$
 \begin{equation}
@@ -156,7 +156,7 @@ that can be rewritten in matrix form as
     \vec{X}^T\vec{y} - \vec{X}^T\vec{X}\vec{w} = 0.
 \end{equation}
 
-Let's now construct the hessian matrix using second-order partial derivatives:
+Let us now construct the hessian matrix using second-order partial derivatives:
 \begin{equation}
     \frac{\partial^2{\of^{(OLS,\vec{X}, \vec{y})}} }{\partial w_h\partial w_j} = \sum\limits_{i=1}^n 2(- x_{ik})(-x_{ij}) \\, \ \ h \in \{{1,2,\ldots,p\}}. 
 \end{equation}
@@ -172,7 +172,7 @@ We can see that hessian $\vec{H_{\of^{(OLS,\vec{X}, \vec{y})}}}$ is always posit
 \end{equation}
 
 \todo{proof it is a local minimum}
-It's easy to prove that twice differentiable function is convex if and only if the hessian of such function is positive semi-definite. Moreover any local minimum of the convex function of also the global one. Give that the solution of \ref{equation:zerogradient} gives us the global minimum. 
+It is easy to prove that twice differentiable function is convex if and only if the hessian of such function is positive semi-definite. Moreover any local minimum of the convex function of also the global one. Give that the solution of \ref{equation:zerogradient} gives us the global minimum. 
 
 Assuming that $\vec{X}^T\vec{X}$ is a regular matrix, then its inverse exists, and solution can be explicitly written as
 
@@ -208,7 +208,7 @@ There are also other theorems which describe properties of OLS under specific co
 In this section, we describe a few of many methods that can be used to obtain  $\vec{\hat{w}}^{(OLS,n)}$. 
 
 \subsubsection*{Matrix inversion}
-We've shown that $\vec{\hat{w}}^{(OLS,n)}$ can be computed directly by multiplying $\vec{A} = \vec{X}^T\vec{X}$ and $\vec{B} = \vec{X}\vec{y}$ and then by finding inversion of $\vec{A}$  and finally multiplying $\vec{A}^{-1}\vec{B}$.
+The $\vec{\hat{w}}^{(OLS,n)}$ can be computed directly by multiplying $\vec{A} = \vec{X}^T\vec{X}$ and $\vec{B} = \vec{X}\vec{y}$ and then by finding inversion of $\vec{A}$  and finally multiplying $\vec{A}^{-1}\vec{B}$.
 
 
 
@@ -222,7 +222,7 @@ Standard statistic methods expect some assumptions to work properly and fail if 
 Such assumptions about OLS method are described in \ref{ols:assumptions}. Before we explain what happens if those conditions are not met or met only partially let us describe one of the most common reasons why assumptions are false.
 
 \subsection{Outliers}
-We stated a lot of assumptions that are required for ordinary least squares to give a good estimate of $\vec{\hat{w}}$. Unfortunately, in real conditions, these assumptions are often false so that ordinary least squares do not produce acceptable results. One of the most common reasons for false assumptions are abnormal observations called outliers.
+We stated many assumptions that are required for ordinary least squares to give a good estimate of $\vec{\hat{w}}$. Unfortunately, in real conditions, these assumptions are often false so that ordinary least squares do not produce acceptable results. One of the most common reasons for false assumptions are abnormal observations called outliers.
 
 Outliers are very common, and they are for instance erroneous measurements such as transmission errors or noise. Another common reason is that nowadays we are mostly given data which were automatically processed by computers. Sometimes we are also presented data which are heterogeneous in the sense that they contain data from multiple regression models. In some sense outliers are inevitable. One would say that we should be able to eliminate them by precise examination, repair or removal of such data. That is possible in some cases, but most of the data we are dealing with are too big to check, and even more often we do not know how such should look. 
 
@@ -246,7 +246,7 @@ where
 \end{equation}
 \end{definition}
 
-This definition is very general but let us specify it to our linear regression problem. It says that breakdown point is the function of the minimal number of observations needed to be changed for some others so then the estimator will give incorrect results. More robust estimators have higher breakdown point. 
+This definition is very general but let us specify it to our linear regression problem. It says that breakdown point is the function of the minimal number of observations needed to be changed for some others so then the estimator gives incorrect results. More robust estimators have higher breakdown point. 
 
 It is intuitive that reasonable breakdown point should not be higher than $0.5$ \cite{rouss:1986} because if more than $50\%$ of the data is exchanged, then the model of exchanged data overrides the model of the original data. 
 
@@ -282,7 +282,7 @@ Even though that objective function of LTS seems similar to the OLS objective fu
 \subsection{Discrete objective function}
 The LTS objective function \ref{definition:of:lts:real} is non-differentiable and non-convex, so we are unable to use the same approach as with OLS objective function. Let us transform this objective function to a discrete version which can appropriately be used by algorithms to minimize it.
 
-Let's assume for now that we know the $\vec{\hat{w}^{(LTS, h, n)}}$ vector of estimated regression coefficients. $(LTS, h, n)$ denotes that coefficients are estimated using LTS on the $h$ subset of $n$ data samples. 
+Let us assume for now that we know the $\vec{\hat{w}^{(LTS, h, n)}}$ vector of estimated regression coefficients. $(LTS, h, n)$ denotes that coefficients are estimated using LTS on the $h$ subset of $n$ data samples. 
 With this in mind, let $\pi$ be the permutation of $\hat{n} = \{{1,2,\ldots, n\}}$ such that 
 
 \begin{equation}
@@ -326,17 +326,17 @@ Thus if we denote $\vec{X_{M}} = \vec{M}\vec{X} $ and $\vec{y_{M}} = \vec{M}\vec
 
 \begin{align*} 
 \minim_{\vec{w} \in \mathbb{R}^p} 
-	\of^{(LTS,\vec{X}, \vec{y})}(\vec{w})  
+    \of^{(LTS,\vec{X}, \vec{y})}(\vec{w})  
 &=\minim_{\vec{w} \in \mathbb{R}^p} 
-	\sum\limits_{i=1}^h r_{i:n}^2(\vec{w})  \\
+    \sum\limits_{i=1}^h r_{i:n}^2(\vec{w})  \\
 &= \minim_{\vec{w} \in \mathbb{R}^p,\vec{m} \in Q^{(n,h)}} 
-		\sum\limits_{i=1}^n m_i r_{i}^2(\vec{w})\\
+        \sum\limits_{i=1}^n m_i r_{i}^2(\vec{w})\\
 &= \minim_{\vec{m} \in Q^{(n,h)}} 
-    		\Big( \minim_{\vec{w} \in\mathbb{R}^p} 
-			\of^{(OLS,\vec{M}\vec{X},  \vec{M}\vec{y} )} (\vec{w}) \Big)\\
+            \Big( \minim_{\vec{w} \in\mathbb{R}^p} 
+            \of^{(OLS,\vec{M}\vec{X},  \vec{M}\vec{y} )} (\vec{w}) \Big)\\
 &= \minim_{\vec{m} \in Q^{(n,h)}} 
-    		\Big(\minim_{\vec{w} \in\mathbb{R}^p}  
-			\norm{ \vec{M}\vec{y} -   \vec{M}\vec{X}\vec{w}  }^2 \Big).
+            \Big(\minim_{\vec{w} \in\mathbb{R}^p}  
+            \norm{ \vec{M}\vec{y} -   \vec{M}\vec{X}\vec{w}  }^2 \Big).
 \end{align*}
 
 Substituting $\vec{w}$ with \ref{ltshat} we get
@@ -349,13 +349,13 @@ Substituting $\vec{w}$ with \ref{ltshat} we get
     \Big( \norm{ \vec{M}\vec{y} -  \vec{M}\vec{X}(\vec{X}^T\vec{M}\vec{X})^{-1}\vec{X}^T\vec{M}\vec{y}  }^2 \Big)
 \end{align*}
 
-We can easily see, that have the objective function with argument $\vec{m} \in Q^{(n,h)}$. This objective function we'll mark as
+We can easily see, that have the objective function with argument $\vec{m} \in Q^{(n,h)}$. This objective function we mark as
 
 \begin{equation} \label{oflts_discrete}
     \oflts(\vec{m}) =  \norm{ \vec{M}\vec{y} -  \vec{M}\vec{X}(\vec{X}^T\vec{M}\vec{X})^{-1}\vec{X}^T\vec{M}\vec{y}  }^2.
 \end{equation}
 
-We can also clearly see that the minimizing this OF could by done straightforwardly by iterating over the $Q^{(n,h)}$ set. That means we've transformed the objective function to discrete space of $Q^{(n,h)}$.
+We can also clearly see that the minimizing this OF could by done straightforwardly by iterating over the $Q^{(n,h)}$ set. That means we transformed the objective function to the discrete space of $Q^{(n,h)}$.
 
 Unfortunately, this set is vast, namely $\binom{n}{h}$, so this approach is infeasible on more massive data sets. Multiple algorithms were proposed to overcome this problem. Majority of them are probabilistic algorithms, but besides those, some exact algorithms were proposed. 
 
