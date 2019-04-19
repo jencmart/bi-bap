@@ -1,0 +1,54 @@
+This is BibTeX, Version 0.99d (TeX Live 2016/Debian)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: BP_Jenc_Martin_2019.aux
+A level-1 auxiliary file: chapters/00_introduction.aux
+A level-1 auxiliary file: chapters/01_linear_regression.aux
+A level-1 auxiliary file: chapters/03_algorithms.aux
+A level-1 auxiliary file: chapters/04_experiments.aux
+A level-1 auxiliary file: chapters/99_conclusion.aux
+The style file: bib/iso690.bst
+Database file #1: bib/mybibliographyfile.bib
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Warning--empty journal in hammarling2008updatingqr
+You've used 14 entries,
+            3146 wiz_defined-function locations,
+            751 strings with 7904 characters,
+and the built_in function-call counts, 7285 in all, are:
+= -- 583
+> -- 167
+< -- 26
++ -- 85
+- -- 48
+* -- 396
+:= -- 807
+add.period$ -- 42
+call.type$ -- 14
+change.case$ -- 56
+chr.to.int$ -- 0
+cite$ -- 15
+duplicate$ -- 703
+empty$ -- 649
+format.name$ -- 56
+if$ -- 1603
+int.to.chr$ -- 0
+int.to.str$ -- 14
+missing$ -- 161
+newline$ -- 51
+num.names$ -- 29
+pop$ -- 317
+preamble$ -- 1
+purify$ -- 51
+quote$ -- 0
+skip$ -- 300
+stack$ -- 0
+substring$ -- 382
+swap$ -- 438
+text.length$ -- 26
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 54
+warning$ -- 1
+while$ -- 60
+width$ -- 16
+write$ -- 134
+(There was 1 warning)

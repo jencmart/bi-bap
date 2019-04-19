@@ -1,6 +1,3 @@
-% arara: xelatex
-% arara: xelatex
-% arara: xelatex
 
 % options:
 % thesis=B bachelor's thesis
@@ -16,7 +13,7 @@
 % *************************   PACKAGES   ***************************
 % ******************************************************************
 
-\usepackage{todonotes}
+\usepackage{todonotes} % causing Marginpar on page x moved
 \usepackage{xcolor}
 
 \newcommand\TODO[1]{\textcolor{red}{#1}}
@@ -31,12 +28,12 @@
 % \usepackage{amsmath} %advanced maths
 % \usepackage{amssymb} %additional math symbols
 
-\usepackage{dirtree} %directory tree visualisation
+\usepackage{dirtree} %directory tree visualization
 
-% ostatní
+% other packages
 \usepackage{enumerate}
 
-% matematické balíčky - ty cou pouziva Ing. Kalvoda, Ph.D.
+% Mathematic Packages
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}
@@ -48,13 +45,11 @@
 
 % **** PSEUDOCODE ****
 \usepackage{amsfonts}
-% \usepackage{algorithm,algpseudocode} % tento balicek se bije s tim co je o radek dal
-% title numbered && ruled ; lines numbered
 \usepackage[titlenumbered, ruled, linesnumbered]{algorithm2e}
 
 % ***& MY MACROS ****
 % mymacros.sty
-% soubor s mymy makry
+% file with my macros
 \usepackage{mymacros}
 
 % % list of acronyms
@@ -117,7 +112,7 @@
 
 
 % ******************************************************************
-% ***********************  BILIOGRAPHY  ****************************
+% ***********************  BIBLIOGRAPHY  ****************************
 % ******************************************************************
 % “book – A single-volume book with one or more authors where the authors share credit for the work as a whole.”
 
@@ -143,7 +138,7 @@
 \setsecnumdepth{all}
 \appendix
 
-\chapter{Datasets}
+\chapter{Data sets}
 % \printglossaries
 \begin{description}
 	\item[GUI] Graphical user interface
