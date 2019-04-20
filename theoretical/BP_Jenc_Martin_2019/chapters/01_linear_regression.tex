@@ -1,11 +1,5 @@
 % \listoftodos
 
-
-% \usepackage[style=numeric]{biblatex}
-% \addbibresource{BP_ja_bibliography.bib}
-% ...
-% \printbibliography
-% Hide or report this
 \chapter{Least trimmed squares}
 In this chapter, we introduce one of the most common regression analysis models which is known as the linear regression model. It aims to model the relationship between one variable which is called \defterm{dependent} and one or more variables which are called \defterm{explanatory}. The relationship is based on a model function with parameters which are not known in advance and are to be estimated from data. We also describe one of the most common methods for finding those parameters in this model, namely the ordinary least squares method. It is important to note that it is usual to consider vectors as column vectors. On the other hand, we denote a row vector as a transposed vector.
 
@@ -101,14 +95,14 @@ In real world situations it is not usual that $\mathbb{E}(\varepsilon) = 0$. Con
 Let us consider that $y$ represents price of the room and $x \in \mathbb{N}$ represents the number of the windows in such a room. If this room does not have windows thus $x = 0$ and $\mathbb{E}(\varepsilon) = 0$ then $ y = \vec{w}^T\vec{x} + \varepsilon$ equals zero. But it is very unlikely that room without windows is free. 
 \end{example}
 
-Because of that, it is very common to include one constant regressor $x_0 = 1$ then the corresponding coefficient $w_0$ of $\vec{w}$ is called \defterm{intercept}. We refer this model as a \defterm{model with an intercept}. Intercept then corresponds to expected value of $y$ when all regressors are zero and prevent the problem from example \ref{example:intercept}. Given that $y$ is a random variable due to the $\varepsilon$, intercept actually corresponds to $\mathbb{E}(\varepsilon) = \mu$. With regards to this fact we can still assume that in the model with intercept $\vec{\varepsilon} \sim \mathcal{N}(0,\,\sigma^{2})$.
+Because of that, it is very common to include one constant regressor $x_0 = 1$ then the corresponding coefficient $w_0$ of $\vec{w}$ is called \defterm{intercept}. We refer this model as a \defterm{model with an intercept}. Intercept then corresponds to expected value of $y$ when all regressors are zero and prevent the problem from example~\ref{example:intercept}. Given that $y$ is a random variable due to the $\varepsilon$, intercept actually corresponds to $\mathbb{E}(\varepsilon) = \mu$. With regards to this fact we can still assume that in the model with intercept $\vec{\varepsilon} \sim \mathcal{N}(0,\,\sigma^{2})$.
 In this work, we consider the model with the intercept unless otherwise specified. This means that we consider $\vec{x} = (x_1, x_2 \ldots x_p)$ where constant $x_1 = 1$ represents intercept.  
 \begin{note}
 Sometimes in model with intercept, the explanatory variable $\vec{x}$  is marked as $\vec{x} \in \mathbb{R}^{p+1}, \vec{x} = (x_0, x_1 \ldots x_p)$ 
 which means that actual observation $\vec{x} \in \mathbb{R}^p$ and the intercept $x_0 = 1$ is explicitly marked.
 \end{note} 
 
-Some other assumptions about  $\vec{\varepsilon}$ are in practice invalid, and we describe this in \ref{section:roboust}.
+Some other assumptions about  $\vec{\varepsilon}$ are in practice invalid, and we describe this in section~\ref{section:roboust}.
 
 
 
@@ -171,8 +165,7 @@ We can see that hessian $\vec{H_{\of^{(OLS,\vec{X}, \vec{y})}}}$ is always posit
     \vec{s}^T(2\vec{X}^T\vec{X})\vec{s} = 2(\vec{X}\vec{s})^T(\vec{X}\vec{s}) =  2 \norm{\vec{X}\vec{s}}
 \end{equation}
 
-\todo{proof it is a local minimum}
-It is easy to prove that twice differentiable function is convex if and only if the hessian of such function is positive semi-definite. Moreover any local minimum of the convex function of also the global one. Give that the solution of \ref{equation:zerogradient} gives us the global minimum. 
+It is easy to prove that twice differentiable function is convex if and only if the hessian of such function is positive semi-definite. Moreover any local minimum of the convex function of also the global one. Give that the solution of \eqref{equation:zerogradient} gives us the global minimum. 
 
 Assuming that $\vec{X}^T\vec{X}$ is a regular matrix, then its inverse exists, and solution can be explicitly written as
 
@@ -199,7 +192,7 @@ $\varepsilon_i, \ i = 1,2, \ldots , n$ are uncorrelated.
 \end{itemize}
 
 \begin{note}
- As described in \ref{example:intercept} the first assumption is usually fulfilled if we use the model with intercept. Rest of the conditions, on the other hand, are rarely met.
+ As described in example~\ref{example:intercept} the first assumption is usually fulfilled if we use the model with intercept. Rest of the conditions, on the other hand, are rarely met.
 \end{note}
 
 There are also other theorems which describe properties of OLS under specific conditions, but they are out if the scope of this work.
@@ -219,7 +212,7 @@ The $\vec{\hat{w}}^{(OLS,n)}$ can be computed directly by multiplying $\vec{A} =
 \section{Robust statistics} \label{section:roboust}
 Standard statistic methods expect some assumptions to work properly and fail if those assumptions are not met. A robust statistic is statistics that produce acceptable results even when data are from some unconventional distributions or if data contains errors which are not normally distributed. We should be highly motivated to use such methods because in practice we are often forced to work with such data on which classical statistics methods provide poor results.
 
-Such assumptions about OLS method are described in \ref{ols:assumptions}. Before we explain what happens if those conditions are not met or met only partially let us describe one of the most common reasons why assumptions are false.
+Such assumptions about OLS method are described in section~\ref{ols:assumptions}. Before we explain what happens if those conditions are not met or met only partially let us describe one of the most common reasons why assumptions are false.
 
 \subsection{Outliers}
 We stated many assumptions that are required for ordinary least squares to give a good estimate of $\vec{\hat{w}}$. Unfortunately, in real conditions, these assumptions are often false so that ordinary least squares do not produce acceptable results. One of the most common reasons for false assumptions are abnormal observations called outliers.
@@ -250,7 +243,7 @@ This definition is very general but let us specify it to our linear regression p
 
 It is intuitive that reasonable breakdown point should not be higher than $0.5$ \cite{rouss:1986} because if more than $50\%$ of the data is exchanged, then the model of exchanged data overrides the model of the original data. 
 
-In the context of OLS estimator one outlier is enough to increase the value of $T$ to any desired value \cite{rousseeuw1984least} thus 
+In the context of OLS estimator one outlier is enough to increase the value of $T$ to any desired value \cite{agullo2001new} thus 
 \begin{equation}
     \bdpoint(OLS,\vec{x_n} ) = \frac{1}{n}.
 \end{equation}
@@ -280,7 +273,7 @@ where $r_{i:n}^2$ denotes $i$th smallest squared residuum out of $n$ thus $r_{1:
 Even though that objective function of LTS seems similar to the OLS objective function, finding minimum is far more complex because the order of the least squared residuals is dependent on $\vec{w}$. Moreover  $r_{i:n}^2(\vec{w})$ residuum is not uniquely determined if more squared residuals have same value as $r_{i:n}^2(\vec{w})$. This makes from finding LTS estimate non-convex optimization problem and finding global minimum is NP-hard \cite{bernholt2006robust}. 
 
 \subsection{Discrete objective function}
-The LTS objective function \ref{definition:of:lts:real} is non-differentiable and non-convex, so we are unable to use the same approach as with OLS objective function. Let us transform this objective function to a discrete version which can appropriately be used by algorithms to minimize it.
+The LTS objective function from definition~\ref{definition:of:lts:real} is non-differentiable and non-convex, so we are unable to use the same approach as with OLS objective function. Let us transform this objective function to a discrete version which can appropriately be used by algorithms to minimize it.
 
 Let us assume for now that we know the $\vec{\hat{w}^{(LTS, h, n)}}$ vector of estimated regression coefficients. $(LTS, h, n)$ denotes that coefficients are estimated using LTS on the $h$ subset of $n$ data samples. 
 With this in mind, let $\pi$ be the permutation of $\hat{n} = \{{1,2,\ldots, n\}}$ such that 
@@ -305,23 +298,14 @@ This means that if we know the vector $\vec{m}_{LTS}$ than we can compute the LT
 \begin{equation}  \label{lts:discrete:objective}
     \vec{\hat{w}^{(LTS, h, n)}} = (\vec{X}^T\vec{M}_{LTS}\vec{X})^{-1}\vec{X}^T\vec{M}_{LTS}\vec{y}.
 \end{equation}
-In other words, finding the minimum of the LTS objective function can be done by finding the OLS estimate \ref{lts:discrete:objective} for all vectors 
+In other words, finding the minimum of the LTS objective function can be done by finding the OLS estimate \eqref{lts:discrete:objective} for all vectors 
 $\vec{m} \in Q^{(n,h)}$. 
-Thus if we denote $\vec{X_{M}} = \vec{M}\vec{X} $ and $\vec{y_{M}} = \vec{M}\vec{y}$ which corresponds to $h$ subsets  of $\vec{X}$ and $\vec{Y}$, then
+Thus if we denote $\vec{X_{M}} = \vec{M}\vec{X} $ and $\vec{y_{M}} = \vec{M}\vec{y}$ which corresponds to $h$ subsets  of $\vec{X}$ and $\vec{Y}$, then \cite{kloudaVyzkumnyUkol}
 
 
 % \of^{(LTS,\vec{X_{M}}, \vec{y_{M}} }(\vec{m})
 \todo{cite klouda}
 
-% @mastersthesis{kloudaVyzkumnyUkol,
-%   type={Bachelor's Thesis},
-%   title={Studium senzitivity odhadu metodou nejmensich usekanych cvtercu
-%   author={Klouda, Karel},
-%   school       = {Technical University of Prague, Faculty of Nuclear Sciences and Physical Engineering, Department of Mathematics},
-%   year         = 2006,
-%   address      = {Brehova 78/7, 115 19 Stare Mesto},
-%   month        = 9
-% }
 
 
 \begin{align*} 
@@ -339,7 +323,7 @@ Thus if we denote $\vec{X_{M}} = \vec{M}\vec{X} $ and $\vec{y_{M}} = \vec{M}\vec
             \norm{ \vec{M}\vec{y} -   \vec{M}\vec{X}\vec{w}  }^2 \Big).
 \end{align*}
 
-Substituting $\vec{w}$ with \ref{ltshat} we get
+Substituting $\vec{w}$ with \eqref{ltshat} we get
 %% TODO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{align*}
 \vec{\hat{w}^{(LTS, h, n)}}
@@ -360,6 +344,5 @@ We can also clearly see that the minimizing this OF could by done straightforwar
 Unfortunately, this set is vast, namely $\binom{n}{h}$, so this approach is infeasible on more massive data sets. Multiple algorithms were proposed to overcome this problem. Majority of them are probabilistic algorithms, but besides those, some exact algorithms were proposed. 
 
 Finally, let us point out some fact about the number $h$ of non-trimmed residuals and how it makes least trimmed squares robust.
-The LTS reaches maximum breakdown point $0.5$ at $h = [(n/2] + [(p+1)/2]$ (where $[.]$ denotes largest integer function). 
-\todo{citace}
+The LTS reaches maximum breakdown point $0.5$ at $h = [(n/2] + [(p+1)/2]$ \cite{agullo2001new}(where $[.]$ denotes largest integer function).
 That means that up to $50\%$ of the data can be outliers. In practice, the portion of outliers is usually lower; if an upper bound on the percentage of outliers is known,  $h$ should be set to match this percentage.

@@ -40,7 +40,7 @@
 \contentsline {section}{\numberline {3.1}Data}{45}{section.3.1}
 \contentsline {section}{\numberline {3.2}Results}{45}{section.3.2}
 \contentsline {section}{\numberline {3.3}Outlier detection}{45}{section.3.3}
-\contentsline {chapter}{Conclusion}{47}{chapter*.46}
-\contentsline {chapter}{Bibliography}{49}{section*.48}
+\contentsline {chapter}{Conclusion}{47}{chapter*.44}
+\contentsline {chapter}{Bibliography}{49}{section*.46}
 \contentsline {appendix}{\chapternumberline {A}Data sets}{51}{appendix.A}
 \contentsline {appendix}{\chapternumberline {B}Contents of enclosed CD}{53}{appendix.B}

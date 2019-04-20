@@ -18,14 +18,20 @@ Massart, D.~L.; Kaufman, L.; et al. Least median of squares: a robust method
   for outlier and model error detection in regression and calibration.
   \emph{Analytica Chimica Acta}, volume 187, 1986: pp. 171--179.
 
-\bibitem{rousseeuw1984least}
-Rousseeuw, P.~J. Least median of squares regression. \emph{Journal of the
-  American statistical association}, volume~79, no. 388, 1984: pp. 871--880.
+\bibitem{agullo2001new}
+Agull{\'o}, J. New algorithms for computing the least trimmed squares
+  regression estimator. \emph{Computational Statistics \& Data Analysis},
+  volume~36, no.~4, 2001: pp. 425--439.
 
 \bibitem{bernholt2006robust}
 Bernholt, T. Robust estimators are hard to compute. Technical report, Technical
-  Report/Universit{\"a}t Dortmund, SFB 475 Komplexit{\"a}tsreduktion in~…,
-  2006.
+  Report/Universit{\"a}t Dortmund, SFB 475 Komplexit{\"a}tsreduktion, 2006.
+
+\bibitem{kloudaVyzkumnyUkol}
+Klouda, K. \emph{Studium senzitivity odhadu metodou nejmen{\v s}{\'i}ch
+  usekan{\'y}ch {\v c}vterc{\r u}}. Bachelor's thesis, Technical University of
+  Prague, Faculty of Nuclear Sciences and Physical Engineering, Department of
+  Mathematics, 2006.
 
 \bibitem{bai2003random}
 Bai, E.-W. A random least-trimmed-squares identification algorithm.
@@ -55,11 +61,6 @@ Hawkins, D.~M. The feasible solution algorithm for least trimmed squares
 Atkinson, A.~C.; Weisberg, S. Simulated annealing for the detection of multiple
   outliers using least squares and least median of squares fitting.
   \emph{Institute for Mathematics and Its Applications}, volume~33, 1991: p.~7.
-
-\bibitem{agullo2001new}
-Agull{\'o}, J. New algorithms for computing the least trimmed squares
-  regression estimator. \emph{Computational Statistics \& Data Analysis},
-  volume~36, no.~4, 2001: pp. 425--439.
 
 \bibitem{bartlett1951inverse}
 Bartlett, M.~S. An inverse matrix adjustment arising in discriminant analysis.
