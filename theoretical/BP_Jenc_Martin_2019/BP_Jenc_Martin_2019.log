@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2019.3.5)  20 APR 2019 15:11
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2019.3.5)  20 APR 2019 15:25
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1067,8 +1067,11 @@ l.104 \chapter
 
 
 ] [5] [6] [7] [8] [9] [10]
-Package hyperref Info: bookmark level for unknown todo defaults to 0 on input line 252.
- [11] [12]) [13]
+Package hyperref Info: bookmark level for unknown todo defaults to 0 on input line 245.
+ [11]
+Underfull \vbox (badness 6001) has occurred while \output is active []
+
+ [12]) [13]
 \openout2 = `chapters/03_algorithms.aux'.
 
  (./chapters/03_algorithms.tex [14
@@ -1080,32 +1083,32 @@ Overfull \hbox (0.31552pt too wide) in paragraph at lines 49--50
 []\OT1/lmr/m/n/10.95 Very in-ter-est-ing con-se-quence which we'll use later gives us fol-low-ing lemma. 
  []
 
-[16]
+[16] [17]
 
-LaTeX Warning: Marginpar on page 17 moved by 66.26643pt.
+LaTeX Warning: Marginpar on page 18 moved by 0.39275pt.
 
-[17] [18]
+
+LaTeX Warning: Marginpar on page 18 moved by 66.65918pt.
+
+[18]
 
 LaTeX Warning: Marginpar on page 19 moved by 13.99556pt.
 
 
 Package amsmath Warning: Foreign command \atopwithdelims;
 (amsmath)                \frac or \genfrac should be used instead
-(amsmath)                 on input line 222.
+(amsmath)                 on input line 234.
 
 [19]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 271.
-
-Underfull \vbox (badness 2042) has occurred while \output is active []
-
+(Font)              <12> on input line 283.
  [20]
-Overfull \hbox (6.96513pt too wide) in paragraph at lines 295--295
+Overfull \hbox (6.96513pt too wide) in paragraph at lines 307--307
 [] 
  []
 
 [21] [22]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 2735) has occurred while \output is active []
 
  [23]
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -1114,29 +1117,29 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 LaTeX Warning: Marginpar on page 26 moved by 61.38638pt.
 
-LaTeX Font Info:    Try loading font information for OT1+lmtt on input line 583.
+LaTeX Font Info:    Try loading font information for OT1+lmtt on input line 595.
 (/usr/share/texmf/tex/latex/lm/ot1lmtt.fd
 File: ot1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <9> on input line 583.
+(Font)              <9> on input line 595.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 583.
+(Font)              <5> on input line 595.
 
 Underfull \vbox (badness 6825) has occurred while \output is active []
 
  [26] [27] [28]
-Overfull \hbox (1.92656pt too wide) detected at line 681
+Overfull \hbox (1.92656pt too wide) detected at line 693
 [] [] \OT1/lmr/m/n/10.95 = [][][] + [][] = [] + [][]\OML/lmm/m/it/10.95 ;
  []
 
 [29] [30]
-Overfull \hbox (23.9913pt too wide) detected at line 799
+Overfull \hbox (23.9913pt too wide) detected at line 811
 \OML/lmm/m/it/10.95 ^^Z\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 z[]; z[]\OT1/lmr/m/n/10.95 ) = []\OML/lmm/m/it/10.95 ;
  []
 
 [31]
-Overfull \hbox (7.86209pt too wide) in paragraph at lines 802--803
+Overfull \hbox (7.86209pt too wide) in paragraph at lines 814--815
 \OT1/lmr/m/n/10.95 rep-re-sents mul-ti-plica-tive in-cre-ment. More-over $0 \OML/lmm/m/it/10.95 < ^^Z\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 z[]; z[]\OT1/lmr/m/n/10.95 )$ and if $0 \OML/lmm/m/it/10.95 < ^^Z\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 z[]; z[]\OT1/lmr/m/n/10.95 ) \OML/lmm/m/it/10.95 <
  []
 
@@ -1147,22 +1150,22 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 3623) has occurred while \output is active []
 
  [40]
-Overfull \hbox (17.0pt too wide) in paragraph at lines 1274--1284
+Overfull \hbox (17.0pt too wide) in paragraph at lines 1286--1296
 [][][]$[]$ 
  []
 
 [41]
-Overfull \hbox (32.6747pt too wide) detected at line 1345
+Overfull \hbox (32.6747pt too wide) detected at line 1357
 [][] \OT1/lmr/m/n/10.95 = ([][][](1\OML/lmm/m/it/10.95 ; \OT1/lmr/m/n/10.95 2) [] [](\OML/lmm/m/it/10.95 n \OMS/lmsy/m/n/10.95 ^^@ \OT1/lmr/m/n/10.95 1\OML/lmm/m/it/10.95 ; n\OT1/lmr/m/n/10.95 ))([](\OML/lmm/m/it/10.95 n \OMS/lmsy/m/n/10.95 ^^@ \OT1/lmr/m/n/10.95 1\OML/lmm/m/it/10.95 ; n\OT1/lmr/m/n/10.95 ) [] [](1\OML/lmm/m/it/10.95 ; \OT1/lmr/m/n/10.95 2)[][])[]  = [] [] \OML/lmm/m/it/10.95 ;
  []
 
 
-Overfull \hbox (17.0pt too wide) in paragraph at lines 1351--1361
+Overfull \hbox (17.0pt too wide) in paragraph at lines 1363--1373
 [][][]$[]$ 
  []
 
 
-Overfull \hbox (7.6629pt too wide) in paragraph at lines 1374--1376
+Overfull \hbox (7.6629pt too wide) in paragraph at lines 1386--1388
 []\OT1/lmr/m/n/10.95 Let's start with []2.38[]. Here in-ver-sion is need to cal-cu-late $[][][][]$, $[][][][]$
  []
 
@@ -1223,14 +1226,14 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 165.
  ) 
 Here is how much of TeX's memory you used:
  26210 strings out of 494945
- 444333 string characters out of 6181033
- 589882 words of memory out of 5000000
+ 444331 string characters out of 6181033
+ 584387 words of memory out of 5000000
  28618 multiletter control sequences out of 15000+600000
  89417 words of font info for 83 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  68i,25n,78p,1159b,885s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-rmtt.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rmsc.enc}</usr/share/texmf/fonts/type1/public/lm/lmbsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx6.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx8.pfb></usr/share/texmf/fonts/type1/public/lm/lmbxi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmcsc10.pfb></usr/share/texmf/fonts/type1/public/lm/lmex10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi12.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi6.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi8.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi9.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr6.pfb></usr/share/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy9.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on BP_Jenc_Martin_2019.pdf (67 pages, 584816 bytes).
+Output written on BP_Jenc_Martin_2019.pdf (67 pages, 585223 bytes).
 PDF statistics:
  1063 PDF objects out of 1200 (max. 8388607)
  956 compressed objects within 10 object streams

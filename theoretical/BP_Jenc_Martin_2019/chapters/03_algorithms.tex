@@ -70,6 +70,18 @@ When we'll discuss algorithms based on this conditions we'll show that algorithm
 
 Now we've covered all necessary theoretical background and it's time to introduce currently popular algorithms of computing LTS estimate.
 
+
+
+
+
+\subsection{Computing OLS}
+In this section, we describe a few of many methods that can be used to obtain  $\vec{\hat{w}}^{(OLS,n)}$. 
+
+\subsubsection*{Matrix inversion}
+The $\vec{\hat{w}}^{(OLS,n)}$ can be computed directly by multiplying $\vec{A} = \vec{X}^T\vec{X}$ and $\vec{B} = \vec{X}\vec{y}$ and then by finding inversion of $\vec{A}$  and finally multiplying $\vec{A}^{-1}\vec{B}$.
+
+
+
 \section{Computing OLS}  \label{ols:computing}
 In this section we'll describe what algorithms of computing OLS exists. We'll see that beside computing OLS directly from the objective function there are better ways. Let's now start with this straightforward  approach.
 

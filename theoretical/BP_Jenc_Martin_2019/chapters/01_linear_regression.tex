@@ -165,7 +165,7 @@ We can see that hessian $\vec{H_{\of^{(OLS,\vec{X}, \vec{y})}}}$ is always posit
     \vec{s}^T(2\vec{X}^T\vec{X})\vec{s} = 2(\vec{X}\vec{s})^T(\vec{X}\vec{s}) =  2 \norm{\vec{X}\vec{s}}
 \end{equation}
 
-It is easy to prove that twice differentiable function is convex if and only if the hessian of such function is positive semi-definite. Moreover any local minimum of the convex function of also the global one. Give that the solution of \eqref{equation:zerogradient} gives us the global minimum. 
+It is easy to prove that twice differentiable function is convex if and only if the hessian of such function is positive semi-definite. Moreover, any local minimum of the convex function is also the global one. Give that the solution of \eqref{equation:zerogradient} gives us the global minimum. 
 
 Assuming that $\vec{X}^T\vec{X}$ is a regular matrix, then its inverse exists, and solution can be explicitly written as
 
@@ -196,13 +196,6 @@ $\varepsilon_i, \ i = 1,2, \ldots , n$ are uncorrelated.
 \end{note}
 
 There are also other theorems which describe properties of OLS under specific conditions, but they are out if the scope of this work.
-
-\subsection{Computing OLS}
-In this section, we describe a few of many methods that can be used to obtain  $\vec{\hat{w}}^{(OLS,n)}$. 
-
-\subsubsection*{Matrix inversion}
-The $\vec{\hat{w}}^{(OLS,n)}$ can be computed directly by multiplying $\vec{A} = \vec{X}^T\vec{X}$ and $\vec{B} = \vec{X}\vec{y}$ and then by finding inversion of $\vec{A}$  and finally multiplying $\vec{A}^{-1}\vec{B}$.
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
