@@ -10,45 +10,45 @@ The style file: bib/iso690.bst
 Database file #1: bib/mybibliographyfile.bib
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 Warning--empty journal in hammarling2008updatingqr
-You've used 14 entries,
+You've used 18 entries,
             3146 wiz_defined-function locations,
-            748 strings with 8009 characters,
-and the built_in function-call counts, 7040 in all, are:
-= -- 560
-> -- 167
-< -- 23
-+ -- 85
-- -- 48
-* -- 378
-:= -- 791
-add.period$ -- 42
-call.type$ -- 14
-change.case$ -- 57
-chr.to.int$ -- 0
-cite$ -- 15
-duplicate$ -- 681
-empty$ -- 626
-format.name$ -- 56
-if$ -- 1542
+            773 strings with 8785 characters,
+and the built_in function-call counts, 9171 in all, are:
+= -- 731
+> -- 237
+< -- 30
++ -- 121
+- -- 68
+* -- 496
+:= -- 1034
+add.period$ -- 54
+call.type$ -- 18
+change.case$ -- 76
+chr.to.int$ -- 3
+cite$ -- 19
+duplicate$ -- 879
+empty$ -- 806
+format.name$ -- 79
+if$ -- 2010
 int.to.chr$ -- 0
-int.to.str$ -- 14
-missing$ -- 158
-newline$ -- 51
-num.names$ -- 29
-pop$ -- 315
+int.to.str$ -- 18
+missing$ -- 206
+newline$ -- 63
+num.names$ -- 37
+pop$ -- 409
 preamble$ -- 1
-purify$ -- 51
+purify$ -- 68
 quote$ -- 0
-skip$ -- 284
+skip$ -- 376
 stack$ -- 0
-substring$ -- 350
-swap$ -- 417
-text.length$ -- 23
+substring$ -- 436
+swap$ -- 536
+text.length$ -- 29
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 54
+type$ -- 68
 warning$ -- 1
-while$ -- 57
-width$ -- 16
-write$ -- 134
+while$ -- 72
+width$ -- 20
+write$ -- 170
 (There was 1 warning)

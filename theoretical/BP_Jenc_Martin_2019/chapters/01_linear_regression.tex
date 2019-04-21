@@ -69,6 +69,10 @@ Usually we assume that errors are independent and identically distributed so tha
 \end{definition}
 It this work we talk about the multiple linear regression model, but for simplicity, we call it merely the linear regression model.
 
+\begin{note}
+    It is usual refer to given $\vec{X}$ and $y$ as to \textbf{\textit{data set}} and to $y_i$ with corresponding $\vec{x_i}$ as to \textbf{\textit{data sample}} or \textbf{\textit{observation}}. Sometimes it's also useful to refer to multiple observations as to subset of observations.
+\end{note}
+
 %%%% OK TO HERE
 \subsection{Prediction with the linear regression model}
 The linear regression model contains the vector of actual regression coefficients which are unknown and which we need to estimate in order to be able to use the model for predictions. Let us assume that we already have estimated regression coefficients as $\vec{\hat{w}}$. Then the predicted values of $y$ are given by
@@ -259,14 +263,14 @@ The least trimmed squares (LTS) estimator is a more robust version of the OLS. I
 Let us have $\vec{X} \in \mathbb{R}^{n,p}$, $\vec{y} \in \mathbb{R}^{n,1}$, 
     $\vec{w} \in \mathbb{R}^p$ and $h$, $ n/2 \leq h \leq n$. The objective function of LTS is then denoted as 
     \begin{equation}  
-        \of^{(LTS,\vec{X}, \vec{y})}(\vec{w}) =  \sum\limits_{i=1}^h r_{i:n}^2(\vec{w})  
+        \of^{(LTS,h, n)}(\vec{w}) =  \sum\limits_{i=1}^h r_{i:n}^2(\vec{w})  
     \end{equation}
 \end{definition}
 where $r_{i:n}^2$ denotes $i$th smallest squared residuum out of $n$ thus $r_{1:n}^2 \leq r_{2:n}^2 \ldots r_{n:n}^2$
 Even though that objective function of LTS seems similar to the OLS objective function, finding minimum is far more complex because the order of the least squared residuals is dependent on $\vec{w}$. Moreover  $r_{i:n}^2(\vec{w})$ residuum is not uniquely determined if more squared residuals have same value as $r_{i:n}^2(\vec{w})$. This makes from finding LTS estimate non-convex optimization problem and finding global minimum is NP-hard \cite{bernholt2006robust}. 
 
 \subsection{Discrete objective function}
-The LTS objective function from definition~\ref{definition:of:lts:real} is non-differentiable and non-convex, so we are unable to use the same approach as with OLS objective function. Let us transform this objective function to a discrete version which can appropriately be used by algorithms to minimize it.
+The LTS objective function from definition~\ref{definition:of:lts:real} is not differentiable and not convex, so we are unable to use the same approach as with OLS objective function. Let us transform this objective function to a discrete version which can appropriately be used by algorithms to minimize it.
 
 Let us assume for now that we know the $\vec{\hat{w}^{(LTS, h, n)}}$ vector of estimated regression coefficients. $(LTS, h, n)$ denotes that coefficients are estimated using LTS on the $h$ subset of $n$ data samples. 
 With this in mind, let $\pi$ be the permutation of $\hat{n} = \{{1,2,\ldots, n\}}$ such that 
@@ -303,7 +307,7 @@ Thus if we denote $\vec{X_{M}} = \vec{M}\vec{X} $ and $\vec{y_{M}} = \vec{M}\vec
 
 \begin{align*} 
 \minim_{\vec{w} \in \mathbb{R}^p} 
-    \of^{(LTS,\vec{X}, \vec{y})}(\vec{w})  
+    \of^{(LTS, h, n)}(\vec{w})  
 &=\minim_{\vec{w} \in \mathbb{R}^p} 
     \sum\limits_{i=1}^h r_{i:n}^2(\vec{w})  \\
 &= \minim_{\vec{w} \in \mathbb{R}^p,\vec{m} \in Q^{(n,h)}} 

@@ -33,6 +33,11 @@ Klouda, K. \emph{Studium senzitivity odhadu metodou nejmen{\v s}{\'i}ch
   Prague, Faculty of Nuclear Sciences and Physical Engineering, Department of
   Mathematics, 2006.
 
+\bibitem{hawkins:1994}
+Hawkins, D.~M. The feasible solution algorithm for least trimmed squares
+  regression. \emph{Computational statistics \& data analysis}, volume~17,
+  no.~2, 1994: pp. 185--196.
+
 \bibitem{bai2003random}
 Bai, E.-W. A random least-trimmed-squares identification algorithm.
   \emph{Automatica}, volume~39, no.~9, 2003: pp. 1651--1659.
@@ -46,16 +51,34 @@ Hawkins, D.~M.; Olive, D.~J. Improved feasible solution algorithms for high
   breakdown estimation. \emph{Computational statistics \& data analysis},
   volume~30, no.~1, 1999: pp. 1--11.
 
+\bibitem{strassen1969gaussian}
+Strassen, V. Gaussian elimination is not optimal. \emph{Numerische mathematik},
+  volume~13, no.~4, 1969: pp. 354--356.
+
+\bibitem{coppersmith1990matrix}
+Coppersmith, D.; Winograd, S. Matrix multiplication via arithmetic
+  progressions. \emph{Journal of symbolic computation}, volume~9, no.~3, 1990:
+  pp. 251--280.
+
+\bibitem{ballard2015improving}
+Ballard, G.; Benson, A.~R.; et al. Improving the numerical stability of fast
+  matrix multiplication. \emph{arXiv preprint arXiv:1507.00687}, 2015.
+
+\bibitem{laug}
+Anderson, E.; Bai, Z.; et al. \emph{{LAPACK} Users' Guide}. Philadelphia, PA:
+  Society for Industrial and Applied Mathematics, third edition, 1999, ISBN
+  0-89871-447-8 (paperback).
+
+\bibitem{krishnamoorthy2013matrix}
+Krishnamoorthy, A.; Menon, D. Matrix inversion using Cholesky decomposition. In
+  \emph{2013 Signal Processing: Algorithms, Architectures, Arrangements, and
+  Applications (SPA)}, IEEE, 2013, pp. 70--72.
+
 \bibitem{rouss:2000}
 Rousseeuw, P.~J.; Driessen, K.~V. An Algorithm for Positive-Breakdown
   Regression Based on Concentration Steps. In \emph{Data Analysis: Scientific
   Modeling and Practical Application}, edited by M.~S. W.~Gaul, O.~Opitz,
   Springer-Verlag Berlin Heidelberg, 2000, pp. 335--346.
-
-\bibitem{hawkins:1994}
-Hawkins, D.~M. The feasible solution algorithm for least trimmed squares
-  regression. \emph{Computational statistics \& data analysis}, volume~17,
-  no.~2, 1994: pp. 185--196.
 
 \bibitem{atkinson1991simulated}
 Atkinson, A.~C.; Weisberg, S. Simulated annealing for the detection of multiple
@@ -66,11 +89,6 @@ Atkinson, A.~C.; Weisberg, S. Simulated annealing for the detection of multiple
 Bartlett, M.~S. An inverse matrix adjustment arising in discriminant analysis.
   \emph{The Annals of Mathematical Statistics}, volume~22, no.~1, 1951: pp.
   107--111.
-
-\bibitem{krishnamoorthy2013matrix}
-Krishnamoorthy, A.; Menon, D. Matrix inversion using Cholesky decomposition. In
-  \emph{2013 Signal Processing: Algorithms, Architectures, Arrangements, and
-  Applications (SPA)}, IEEE, 2013, pp. 70--72.
 
 \bibitem{hammarling2008updatingqr}
 Hammarling, S.; Lucas, C. Updating the QR factorization and the least squares
