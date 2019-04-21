@@ -80,6 +80,10 @@ Rousseeuw, P.~J.; Driessen, K.~V. An Algorithm for Positive-Breakdown
   Modeling and Practical Application}, edited by M.~S. W.~Gaul, O.~Opitz,
   Springer-Verlag Berlin Heidelberg, 2000, pp. 335--346.
 
+\bibitem{hoare1961algorithm}
+Hoare, C.~A. Algorithm 65: find. \emph{Communications of the ACM}, volume~4,
+  no.~7, 1961: pp. 321--322.
+
 \bibitem{atkinson1991simulated}
 Atkinson, A.~C.; Weisberg, S. Simulated annealing for the detection of multiple
   outliers using least squares and least median of squares fitting.
