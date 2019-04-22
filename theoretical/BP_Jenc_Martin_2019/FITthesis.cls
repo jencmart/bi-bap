@@ -117,6 +117,8 @@
 	\@abstractcsdefinedtrue
 }
 
+
+
 \newif\if@abstractendefined
 \DeclareRobustCommand{\abstractEN}[1]{
 	\def\theabstracten{#1}
@@ -489,6 +491,9 @@ sp\^ osobom, ktor\'y nezni\v zuje hodnotu Diela (vr\'atane komer\v cn\'eho vyu\v
 
 	\vfil
 
+	% abstract two pages
+	\clearpage
+
 	\if@abstractendefined
 		\chapterstyletitle{Abstract}\theabstracten
 	\else
@@ -504,7 +509,7 @@ sp\^ osobom, ktor\'y nezni\v zuje hodnotu Diela (vr\'atane komer\v cn\'eho vyu\v
 
 \AfterEndPreamble{
 	\thispagestyle{empty}
-	\if\@lang1{Sem vlo{\v z}te zad{\' a}n{\' i} Va{\v s}{\' i} pr{\' a}ce.}\else\if\@lang2{Sem vlo{\v z}te zadanie Va{\v s}ej pr{\' a}ce.}\else{Insert here your thesis' task.}\fi\fi
+	\if\@lang1{Sem vlo{\v z}te zad{\' a}n{\' i} Va{\v s}{\' i} pr{\' a}ce.}\else\if\@lang2{Sem vlo{\v z}te zadanie Va{\v s}ej pr{\' a}ce.}\else{Probabilistic algorithms for computing the LTS estimate.}\fi\fi
 
 	\frontmatter
 	\pagestyle{plain}

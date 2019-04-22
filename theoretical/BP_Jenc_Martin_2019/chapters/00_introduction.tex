@@ -1,14 +1,14 @@
 \chapter{Introduction}
-Goal of this thesis is to research currently used algorithms for calculation Least trimmed squares. Least trimmed squares was first introduced in 1984 and since that time couple of researchers came up couple of solutions. Beside that we'll propose extension of current algorithms which was never used before. We'll show that this updated algorithm is fast enough and also gives same or better results than currently used algorithms. We'll also compare speed  and performance of this algorithms on various data sets both from literature and also using our custom data generator which provides very flexible way of generating data with outliers. 
-We'll extend all those algorithms and implement all of them both in C++ an python. 
-We'll implement python library with C++ bac end which will provide all of the currently used algorithms.
+Least trimmed squares (LTS) is one of many modifications very well known method ordinary least squares (OLS). Both of these methods are tools of regression analysis, which is a group of processes used to estimate the dependence of variables. Specifically in the case when we try to estimate dependence one variable on one or multiple others. The regression analysis uses the regression models, and in the case of OLS and LTS methods, that model is the linear regression model.
 
-In first chapter we'll introduce linear regression and ordinary least squares method and it's downfalls. We'll introduce robust statistic and methods of evaluating robust models.
-In second chapters we'll analyze all of the algorithms together with is time complexity etc
+To OLS estimate produces reliable results, many strong assumptions about the data have to be fulfilled. It is assumed that data is generated specific way as well as that the data does not contain measurement errors called outliers. Those assumptions are in practice hardly fulfilled, because outliers in the data are very common. The OLS estimate is in such cases unreliable.
 
-%% psat v pritomnem case; ale muzeme psat v kapitole se budeme zabyvat % ale i kapitola 5 se zabyva
+Problems of classical statistic methods try to solve robust statistic. Its methods are usually emulations of classical statistic methods but try to provide good performance even if data contains a large number of outliers. That means such methods does not rely so much on assumptions which are difficult to achieve in practice. Because the OLS method is one of the essential tools of linear regression analysis, multiple its alternatives have been designed to fulfill the assumptions of a robust estimator.
 
-\subsection{Conclusion}
-There is still lot of future works on least trimmed squares. Proof of couple of thoughts is still about to come. 
+One of the methods is LTS. Its idea is simple, but unlike the OLS method, the exact formula for calculation is not known, so that only to date known exact algorithms for computing the LTS estimate are combinatorial. For this reason beside exact algorithms, several probabilistic algorithms have been proposed.
 
-% je lepsi citovat od "zdroje" tedy k clanku kde to bylo prvne zadefinovane
+This work is divided into three chapters. In the first chapter, we introduce theory required to understand linear regression model, OLS and LTS. We mention properties of both methods and also describe filed of its usage.
+
+In the second chapter, we cover algorithms for calculating the OLS estimate. It is necessary because most of the algorithm used to compute the LTS estimate relies on those algorithms. Next, we describe all currently used algorithms for calculating LTS estimate. They consist of several probabilistic and also few exact ones. In this chapter, we also show that those algorithms can be easily combined to obtain higher speed and performance.
+
+In the last chapter, we describe our experimental results. At first, we cover data generator which is used for our experiments and which can provide data affected by various types of outliers. Next, we provide information about our implementation of all algorithms for chapter two. Finally, we present our results for specific data.

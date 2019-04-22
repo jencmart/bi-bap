@@ -1112,7 +1112,7 @@ Finally lets note that \cite{agullo2001new} call FSA  which compute $\rho(z_i, z
 \todo{write the pseudocode}
 
 
-\subsubsection{Different method of computing Improved FSA}
+\subsubsection*{Different method of computing Improved FSA}
 \todo{zmenit to oznaceni Improved FSA na neco jineho. myslim ze to pouzivam nekonzistentne}
 
 We've described way how to modify FSA so that we can update $\vec{hat{w}}$ and inversion $(\vec{X}^T \vec{X})^{-1}$. This requires to compute inversion at the start of the algorithm (this is also the case for the FSA). In practice, however, this is not usually the way how OLS estimate $\vec{\hat{w}}$ is compute. That is primarily due to low numerical stability. In practice we usually use QR decomposition. In this subsection we describe how we can modify FSA to use QR decomposition. Let us start by describing Givens rotations algorithm in detail, because it is critical part of the modified algorithm. 
@@ -1435,7 +1435,7 @@ Computing $\vec{R^{-}}$ is $\mathcal{O}(p^2)$ and computing $\vec{Q^{-}}$ is $\m
 %%%%%%%%%%%%%%%%%%%%%%%% IMPROVED FSA - QR DECOMPOSITION  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsubsection{Calculation of imporved FSA using QR}
+\subsubsection*{Calculation of imporved FSA using QR}
 So let's focus on our problem. As we said using decomposition is better than calculating inversion primarily due to higher numerical stability. \todo{nevim jestli zminovat ze muzu delat i SVD dekompozici ktera je nejstabilnejsi ze vsech...}
 We'll show that both FSA as well as improved FSA can be calculated using QR decomposition.
 

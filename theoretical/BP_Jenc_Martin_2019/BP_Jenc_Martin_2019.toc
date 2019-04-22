@@ -2,44 +2,39 @@
 \select@language {english}
 \contentsline {subsection}{Citation of this thesis}{vi}{section*.1}
 \contentsline {chapter}{Introduction}{1}{chapter*.5}
-\contentsline {subsection}{Conclusion}{1}{section*.6}
-\contentsline {chapter}{Introduction}{3}{chapter*.7}
-\contentsline {chapter}{\chapternumberline {1}Least trimmed squares}{5}{chapter.1}
-\contentsline {section}{\numberline {1.1}Linear regression model}{5}{section.1.1}
-\contentsline {subsection}{\numberline {1.1.1}Prediction with the linear regression model}{6}{subsection.1.1.1}
-\contentsline {subsubsection}{\numberline {1.1.1.1}Intercept}{6}{subsubsection.1.1.1.1}
-\contentsline {section}{\numberline {1.2}Ordinary least squares}{7}{section.1.2}
-\contentsline {subsection}{\numberline {1.2.1}Properties of OLS estimation}{9}{subsection.1.2.1}
-\contentsline {section}{\numberline {1.3}Robust statistics}{9}{section.1.3}
-\contentsline {subsection}{\numberline {1.3.1}Outliers}{9}{subsection.1.3.1}
-\contentsline {subsection}{\numberline {1.3.2}Measuring robustness}{10}{subsection.1.3.2}
-\contentsline {section}{\numberline {1.4}Least trimmed squares}{11}{section.1.4}
-\contentsline {subsection}{\numberline {1.4.1}Discrete objective function}{12}{subsection.1.4.1}
-\contentsline {chapter}{\chapternumberline {2}Algorithms}{15}{chapter.2}
-\contentsline {subsection}{\numberline {2.0.1}First attempts}{15}{subsection.2.0.1}
-\contentsline {subsection}{\numberline {2.0.2}Strong and weak necessary conditions}{16}{subsection.2.0.2}
-\contentsline {section}{\numberline {2.1}Computing OLS}{17}{section.2.1}
-\contentsline {subsection}{\numberline {2.1.1}Computation using a matrix inversion}{17}{subsection.2.1.1}
-\contentsline {subsection}{\numberline {2.1.2}Computation using the Cholesky decomposition}{18}{subsection.2.1.2}
-\contentsline {subsection}{\numberline {2.1.3}Computation using the QR decomposition}{19}{subsection.2.1.3}
-\contentsline {section}{\numberline {2.2}FAST-LTS}{21}{section.2.2}
-\contentsline {subsection}{\numberline {2.2.1}C-step}{22}{subsection.2.2.1}
-\contentsline {subsection}{\numberline {2.2.2}Choosing initial $\boldsymbol {m_1}$subset}{25}{subsection.2.2.2}
-\contentsline {subsection}{\numberline {2.2.3}Speed-up of the algorithm}{26}{subsection.2.2.3}
-\contentsline {subsection}{\numberline {2.2.4}Putting all together}{27}{subsection.2.2.4}
-\contentsline {section}{\numberline {2.3}Feasible solution}{29}{section.2.3}
-\contentsline {section}{\numberline {2.4}Combined algorithm}{31}{section.2.4}
-\contentsline {section}{\numberline {2.5}Improved FSA}{32}{section.2.5}
-\contentsline {subsubsection}{\numberline {2.5.0.1}Different method of computing Improved FSA}{38}{subsubsection.2.5.0.1}
-\contentsline {subsubsection}{\numberline {2.5.0.2}Calculation of imporved FSA using QR}{43}{subsubsection.2.5.0.2}
-\contentsline {subsection}{\numberline {2.5.1}Min-Max-FSA aka. Min Max exchange (MMEA)}{45}{subsection.2.5.1}
-\contentsline {section}{\numberline {2.6}Branch and bound aka. BAB}{45}{section.2.6}
-\contentsline {section}{\numberline {2.7}BSA algorithm}{45}{section.2.7}
-\contentsline {chapter}{\chapternumberline {3}Experiments}{47}{chapter.3}
-\contentsline {section}{\numberline {3.1}Data}{47}{section.3.1}
-\contentsline {section}{\numberline {3.2}Results}{47}{section.3.2}
-\contentsline {section}{\numberline {3.3}Outlier detection}{47}{section.3.3}
-\contentsline {chapter}{Conclusion}{49}{chapter*.40}
-\contentsline {chapter}{Bibliography}{51}{section*.42}
-\contentsline {appendix}{\chapternumberline {A}Data sets}{53}{appendix.A}
-\contentsline {appendix}{\chapternumberline {B}Contents of enclosed CD}{55}{appendix.B}
+\contentsline {chapter}{\chapternumberline {1}Least trimmed squares}{3}{chapter.1}
+\contentsline {section}{\numberline {1.1}Linear regression model}{3}{section.1.1}
+\contentsline {subsection}{\numberline {1.1.1}Prediction with the linear regression model}{4}{subsection.1.1.1}
+\contentsline {section}{\numberline {1.2}Ordinary least squares}{5}{section.1.2}
+\contentsline {subsection}{\numberline {1.2.1}Properties of OLS estimation}{7}{subsection.1.2.1}
+\contentsline {section}{\numberline {1.3}Robust statistics}{7}{section.1.3}
+\contentsline {subsection}{\numberline {1.3.1}Outliers}{7}{subsection.1.3.1}
+\contentsline {subsection}{\numberline {1.3.2}Measuring robustness}{8}{subsection.1.3.2}
+\contentsline {section}{\numberline {1.4}Least trimmed squares}{9}{section.1.4}
+\contentsline {subsection}{\numberline {1.4.1}Discrete objective function}{10}{subsection.1.4.1}
+\contentsline {chapter}{\chapternumberline {2}Algorithms}{13}{chapter.2}
+\contentsline {subsection}{\numberline {2.0.1}First attempts}{13}{subsection.2.0.1}
+\contentsline {subsection}{\numberline {2.0.2}Strong and weak necessary conditions}{14}{subsection.2.0.2}
+\contentsline {section}{\numberline {2.1}Computing OLS}{15}{section.2.1}
+\contentsline {subsection}{\numberline {2.1.1}Computation using a matrix inversion}{15}{subsection.2.1.1}
+\contentsline {subsection}{\numberline {2.1.2}Computation using the Cholesky decomposition}{16}{subsection.2.1.2}
+\contentsline {subsection}{\numberline {2.1.3}Computation using the QR decomposition}{17}{subsection.2.1.3}
+\contentsline {section}{\numberline {2.2}FAST-LTS}{19}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}C-step}{20}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2.2}Choosing initial $\boldsymbol {m_1}$subset}{23}{subsection.2.2.2}
+\contentsline {subsection}{\numberline {2.2.3}Speed-up of the algorithm}{24}{subsection.2.2.3}
+\contentsline {subsection}{\numberline {2.2.4}Putting all together}{25}{subsection.2.2.4}
+\contentsline {section}{\numberline {2.3}Feasible solution}{27}{section.2.3}
+\contentsline {section}{\numberline {2.4}Combined algorithm}{29}{section.2.4}
+\contentsline {section}{\numberline {2.5}Improved FSA}{30}{section.2.5}
+\contentsline {subsection}{\numberline {2.5.1}Min-Max-FSA aka. Min Max exchange (MMEA)}{43}{subsection.2.5.1}
+\contentsline {section}{\numberline {2.6}Branch and bound aka. BAB}{43}{section.2.6}
+\contentsline {section}{\numberline {2.7}BSA algorithm}{43}{section.2.7}
+\contentsline {chapter}{\chapternumberline {3}Experiments}{45}{chapter.3}
+\contentsline {section}{\numberline {3.1}Data}{45}{section.3.1}
+\contentsline {section}{\numberline {3.2}Results}{45}{section.3.2}
+\contentsline {section}{\numberline {3.3}Outlier detection}{45}{section.3.3}
+\contentsline {chapter}{Conclusion}{47}{chapter*.41}
+\contentsline {chapter}{Bibliography}{49}{section*.43}
+\contentsline {appendix}{\chapternumberline {A}Data sets}{51}{appendix.A}
+\contentsline {appendix}{\chapternumberline {B}Contents of enclosed CD}{53}{appendix.B}

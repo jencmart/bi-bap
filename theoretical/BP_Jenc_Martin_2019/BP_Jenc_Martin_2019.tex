@@ -91,11 +91,16 @@
 \authorWithDegrees{Martin Jen{\v c}} %author's name with academic degrees
 \supervisor{Ing. Karel Klouda, Ph.D.}
 \acknowledgements{THANKS to everybody}
-\abstractEN{The least trimmed squares (LTS) method is a robust version of the classical method of least squares used to find an estimate of coefficients in the linear regression model. Computing the LTS estimate is known to be NP-hard, and hence suboptimal probabilistic algorithms are used in practice.}
-\abstractCS{V n{\v e}kolika v{\v e}t{\' a}ch shr{\v n}te obsah a p{\v r}{\' i}nos t{\' e}to pr{\' a}ce v {\v c}esk{\' e}m jazyce.}
+
+\abstractEN{The least trimmed squares method is a robust version of the method of least squares which is an essential tool of regression analysis used to find an estimate of coefficients in the linear regression model. Computing the least trimmed squared estimate is known to be NP-hard, and hence only suboptimal probabilistic algorithms are usually used in practice. Besides describing those algorithms, we propose a few ways of combining those algorithms to obtain better performance.}
+
+%%
+
+
+\abstractCS{Metoda nejmen{\v s}{\'i}ch usekan{\'y}ch {\v c}vterc{\r u} je robustn{\'i} verz{\'i} zn{\'a}m{\'e} metdoy nejmen{\v s}{\'i}ch {\v c}vterc{\r u}, jednou ze z{\'a}kladn{\'i}ch metod regresn{\'i} anal{\'y}zy, pou{\v z}{\'i}van{\'e} k odhadov{\'a}n{\'i} koeficient{\r u} line{\'a}rn{\'i}ho regresn{\'i}ho modelu. V{\'y}po{\v c}et odhadadu pomoc{\'i} metody nejmen{\v s}{\'i}ch usekan{\'y}ch {\v c}tverc{\r u} je zn{\'a}m jako NP-te{\v z}k{\'y} a proto jsou v praxi nej{\v c}at{\v e}ji pou{\v z}{\'i}v{\'a}ny pouze subotimaln{\'i} pravd{\v e}podobnostn{\'i} algoritmy. Mimo popisu t{\v e}chto algoritm{\r u} navhrneme n{\v e}kolik zp{\r u}sob{\r u} jak je zkobinovat za {\'u}{\v c}elem dosa{\v z}en{\'i} lep{\v s}{\'i}ch v{\'y}slekd{\r u}.}
 \placeForDeclarationOfAuthenticity{Prague}
-\keywordsCS{LTS odhad, lineární regrese, optimalizace, nejmenší usekané čtvrece, metoda nejmenších čtverců, outliers}
-\keywordsEN{LTS, linear regressin, robust estimator, least trimmed squares, ordinary least squares, outliers, outliers detection}
+\keywordsCS{nejmen{\v s}{\'i} usekan{\'e} {\v c}tverce, LTS odhad, linearn{\'i} regrese, robustn{\'i} statistika, nejmen{\v s}{\'i} {\v c}vterce, chybn{\'a} pozorovan{\'i}}
+\keywordsEN{least trimmed squares, LTS estimate , linear regression, robust statistics, ordinary least squares, outliers}
 \declarationOfAuthenticityOption{1} %select according to the desired license (integer 1-6)
 % \website{http://site.example/thesis} %optional thesis URL
 
@@ -104,6 +109,10 @@
 % ******************************************************************
 % ***********************   MAIN DOCUMENT   ************************
 % ******************************************************************
+
+
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
 
 \begin{document}
 % \newacronym{CVUT}{{\v C}VUT}{{\v C}esk{\' e} vysok{\' e} u{\v c}en{\' i} technick{\' e} v Praze}
@@ -117,7 +126,7 @@
 
 \setsecnumdepth{part}
 \include{chapters/00_introduction}
-\chapter{Introduction}
+
 
 \setsecnumdepth{all}
 \include{chapters/01_linear_regression}
@@ -126,7 +135,7 @@
 
 \setsecnumdepth{part}
 \include{chapters/99_conclusion}
-\chapter{Conclusion}
+
 
 
 % ******************************************************************
