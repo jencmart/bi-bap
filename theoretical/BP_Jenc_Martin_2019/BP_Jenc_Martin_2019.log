@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2019.3.5)  23 APR 2019 22:00
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2019.3.5)  23 APR 2019 22:07
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1397,12 +1397,12 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [30] [31]
-Overfull \hbox (1.92656pt too wide) detected at line 903
+Overfull \hbox (1.92656pt too wide) detected at line 912
 [] [] \OT1/lmr/m/n/10.95 = [][][] + [][] = [] + [][]\OML/lmm/m/it/10.95 ;
  []
 
 [32] [33]
-Overfull \hbox (23.9913pt too wide) detected at line 1021
+Overfull \hbox (23.9913pt too wide) detected at line 1030
 \OML/lmm/m/it/10.95 ^^Z\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 z[]; z[]\OT1/lmr/m/n/10.95 ) = []\OML/lmm/m/it/10.95 ;
  []
 
@@ -1410,22 +1410,22 @@ Overfull \hbox (23.9913pt too wide) detected at line 1021
 Underfull \vbox (badness 2529) has occurred while \output is active []
 
  [38] [39]
-Overfull \hbox (17.0pt too wide) in paragraph at lines 1321--1331
+Overfull \hbox (17.0pt too wide) in paragraph at lines 1350--1360
 [][][]$[]$ 
  []
 
 [40]
-Overfull \hbox (32.6747pt too wide) detected at line 1391
+Overfull \hbox (32.6747pt too wide) detected at line 1420
 [][] \OT1/lmr/m/n/10.95 = ([][][](1\OML/lmm/m/it/10.95 ; \OT1/lmr/m/n/10.95 2) [] [](\OML/lmm/m/it/10.95 n \OMS/lmsy/m/n/10.95 ^^@ \OT1/lmr/m/n/10.95 1\OML/lmm/m/it/10.95 ; n\OT1/lmr/m/n/10.95 ))([](\OML/lmm/m/it/10.95 n \OMS/lmsy/m/n/10.95 ^^@ \OT1/lmr/m/n/10.95 1\OML/lmm/m/it/10.95 ; n\OT1/lmr/m/n/10.95 ) [] [](1\OML/lmm/m/it/10.95 ; \OT1/lmr/m/n/10.95 2)[][])[]  = [] [] \OML/lmm/m/it/10.95 ;
  []
 
 
-Overfull \hbox (17.0pt too wide) in paragraph at lines 1397--1407
+Overfull \hbox (17.0pt too wide) in paragraph at lines 1426--1436
 [][][]$[]$ 
  []
 
 
-Overfull \hbox (7.6629pt too wide) in paragraph at lines 1428--1430
+Overfull \hbox (7.6629pt too wide) in paragraph at lines 1457--1459
 []\OT1/lmr/m/n/10.95 Let's start with []2.58[]. Here in-ver-sion is need to cal-cu-late $[][][][]$, $[][][][]$
  []
 
@@ -1488,7 +1488,7 @@ Here is how much of TeX's memory you used:
  14 hyphenation exceptions out of 8191
  68i,25n,78p,1159b,884s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-rmtt.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rmsc.enc}</usr/share/texmf/fonts/type1/public/lm/lmbsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx6.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx8.pfb></usr/share/texmf/fonts/type1/public/lm/lmbxi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmcsc10.pfb></usr/share/texmf/fonts/type1/public/lm/lmex10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi6.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi8.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi9.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr6.pfb></usr/share/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy9.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on BP_Jenc_Martin_2019.pdf (67 pages, 586975 bytes).
+Output written on BP_Jenc_Martin_2019.pdf (67 pages, 586950 bytes).
 PDF statistics:
  1140 PDF objects out of 1200 (max. 8388607)
  1033 compressed objects within 11 object streams
