@@ -645,190 +645,176 @@ $\oflts(\what{{i}}) = \oflts(\what{{i+1}})$ . When we put all together, we get \
 % ****************************************************************************************************
 % ************************* FEASIBLE SOLUTION ******************************************************
 % **************************************************************************************************
+
+% 645 - 800
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%        FEASIBLE SOLUTION        %%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Feasible solution} \label{section_feasible_solution}
-In this section we'll introduce feasible solution algorithm from \cite{hawkins:1994}.
-It is based on strong necessary condition we've described at \ref{strong_condition}. 
+In this section we introduce feasible solution algorithm from \cite{hawkins:1994}.
+It is based on the strong necessary condition described at definition \ref{strong_condition}. 
 The basic idea can be described as follows.
 
-Let's consider that we have some $\vec{m} \in Q^{(n,h)}$. It'll be convenient when we'll mark in the following text $O_m = \{{i \in  \set{ 1,2,\ldots , n } ;w_i = 1\}}$ and $Z_m = \{{j \in  \set{ 1,2,\ldots , n } ;w_j = 0\}}$ thus sets of indexes of positions where is $0$ respectively $1$ in vector $\vec{m}$. We can think about it as indexes of observations in $h$ set and $g$ set respectively. Then we can mark $\vec{m}^{(i,j)}$ as a vector which is constructed by swap of its ith and jth element where $i \in O$ and $j \in Z$. Such vector correspond to vector $\vec{m_{swap}}$ which we marked at \ref{strong_condition}.
+Let us consider that we have some $\vec{m} \in Q^{(n,h)}$ and denote $O_m = \{{i \in  \set{ 1,2,\ldots , n } ;w_i = 1\}}$ and $Z_m = \{{j \in  \set{ 1,2,\ldots , n } ;w_j = 0\}}$ thus sets of indexes of positions where is $0$ respectively $1$ in vector $\vec{m}$. We can think about it as indexes of observations in $h$ set and $g$ set respectively. Then we can mark $\vec{m}^{(i,j)}$ as a vector which is constructed by swap of its ith and jth element where $i \in O$ and $j \in Z$. Such vector corresponds to vector $\vec{m_{swap}}$ which we marked at definition \ref{strong_condition}.
 
-With this in mind we can mark let's mark 
+With this in mind, let us mark 
 \begin{equation}
-	\Delta S^{(\vec{m})}_{i,j} = \oflts(\vec{m}^{(i,j)}) - \oflts(\vec{m})
+    \Delta S^{(\vec{m})}_{i,j} = \oflts(\vec{m}^{(i,j)}) - \oflts(\vec{m})
 \end{equation}
-thus change of the LTS objective function by swapping one observation from $h$ subset with another from $g$ subset. To calculate this we can obviously first calculate  $\oflts(\vec{m})$ and $ \oflts(\vec{m}^{(i,j)})$ and finally subtract both results. Although it is a option, it it computationally hard. So the question is if there is easier way of calculating $\Delta S^{(\vec{m})}_{i,j}$ and the answer is positive. 
+thus a change of the LTS objective function by swapping one observation from not trimmed subset with another from trimmed subset. To calculate this we can obviously first calculate the  $\oflts(\vec{m})$ and  the $ \oflts(\vec{m}^{(i,j)})$ and finally subtract both results. Although it is a option, it it computationally exhaustive. So the question is if there is easier way of calculating $\Delta S^{(\vec{m})}_{i,j}$. The answer is positive and we describe it now.
 
-Let's mark  
-$M = diag(\vec{m}$ and 
-$M^(i,j) = diag(\vec{m}^{(i,j)})$ and also
+Let us mark  
+$M = diag(\vec{m})$ and 
+$M^{(i,j)} = diag(\vec{m}^{(i,j)})$ and also
 $\vec{H} = (\vec{X}^T\vec{M}^T\vec{X})$
-For now let's assume that we already calculated
-$\vec{H}^{-1}$ and also $\vec{\hat{w}} = \vec{H}^{-1}\vec{X}^T\vec{M}\vec{y}$
-we now want to calculate $\Delta S^{(\vec{m})}_{i,j}$
-Let's mark vector of residuals 
-$\vec{r}^{(m)} = \vec{Y} - \vec{X} \vec{\hat{w}} $
+For now let us assume that we also have
+$\vec{H}^{-1}$ and $\vec{\hat{w}} = \vec{H}^{-1}\vec{X}^T\vec{M}\vec{y}$.
+We now want to calculate $\Delta S^{(\vec{m})}_{i,j}$.
+Let us mark vector of residuals 
+$\vec{r}^{(\vec{m})} = \vec{Y} - \vec{X} \vec{\hat{w}} $
 and also $d_{r,s} = \vec{x_r} \vec{H}^{-1}  \vec{x_s} $
 then by equation introduced in \cite{atkinson1991simulated} we get
 
 \begin{equation} \label{hawkins:rovnice}
-	\Delta S^{(\vec{m})}_{i,j} = 
-	\frac{({r}^{(m)}_{j})^2(1-d_{i,i})- ({r}^{(m)}_{i})^2(1+d_{j,j}) + 2{r}^{(m)}_{i}{r}^{(m)}_{j}d_{j,j}}
-	{(1-d_{i,i})(1+d_{j,j}) + d_{i,j}^2}.
+    \Delta S^{(\vec{m})}_{i,j} = 
+    \frac{({r}^{(\vec{m})}_{j})^2(1-d_{i,i})- ({r}^{(\vec{m})}_{i})^2(1+d_{j,j}) + 2{r}^{(\vec{m})}_{i}{r}^{(\vec{m})}_{j}d_{j,j}}
+    {(1-d_{i,i})(1+d_{j,j}) + d_{i,j}^2}.
 \end{equation}
 
-Let's now describe core of the algorithm. It's a  similar to the FAST-LTS algorithm in the sense of iterative refinement of $h$ subset. So let's assume that we have some vector  $\vec{m} \in Q^{(n,h)}$. No we'll compute  $\Delta S^{(\vec{m})}_{i,j}$ for all $i \in O$ and $j \in Z$. This may lead to several different outcomes
-
+Let us now describe the core of the algorithm. It is similar to the FAST-LTS algorithm in the sense of iterative refinement of a $h$ subset. So let us assume that we have some vector  $\vec{m} \in Q^{(n,h)}$. No we compute  $\Delta S^{(\vec{m})}_{i,j}$ for all $i \in O$ and $j \in Z$. This may lead to several different outcomes:
 \begin{enumerate}
-	\item all $S^{(\vec{m})}_{i,j}$ are non-negative
-	\item one $S^{(\vec{m})}_{i,j}$ is positive
-	\item multiple $S^{(\vec{m})}_{i,j}$ are positive
+    \item all $S^{(\vec{m})}_{i,j}$ are non-negative
+    \item one $S^{(\vec{m})}_{i,j}$ is negative
+    \item multiple $S^{(\vec{m})}_{i,j}$ are negative
 \end{enumerate}
 
-In the first case, all $\oflts(\vec{m}^{(i,j)})$ are higher than $\oflts(\vec{m})$ so none swap will lead to an improvement. That also means that strong necessary condition is satisfied and the algorithm ends.
+In the first case, all $\oflts(\vec{m}^{(i,j)})$ are higher or the same as the $\oflts(\vec{m})$ so none swap will lead to an improvement. That also means that strong necessary condition is satisfied and the algorithm ends.
 
-In the second and third case strong necessary condition is not satisfied and we make the swap. In second case it's easy which one to choose, because we have only one. in the third case we have couple of options again. 
+In the second and third case, the strong necessary condition is not satisfied, and we can make the swap. In the second case, it is easy which one to choose because we have only one. In the third case, we have a couple of options again:
 \begin{enumerate}
-	\item use the first swap that leads to the improvement (so don't event try to find different swap)
-	\item from all possible swaps choose one that has highest improvement value  $\oflts(\vec{m}^{(i,j)})$
-	\item use the first swap that has improvement higher than some given threshold
+    \item use the first swap that leads to the improvement
+    \item from all possible swaps choose one that has highest improvement value  $\oflts(\vec{m}^{(i,j)})$
+    \item use the first swap that has improvement higher than some given threshold
 \end{enumerate}
-In the terms of complexity all three options give the same results \todo{O(n2p) or O(n3p) remains}, because to find feasible solution you need to evaluate all pair swaps. In practice third options is winner because it'll lead to least amount of iterations. On the other hand as we said this won't improve complexity of the algorithm, so from now on let's assume that we'll use case number two.
-So if there positive  $S^{(\vec{m})}_{i,j}$ we'll make the swap and repeat the process again. 
-Algorithm ends when there is no possible improvement i.e. when all $S^{(\vec{m})}_{i,j}$ are non-negative.
-Number of iterations needed till algorithm stops is usually quite low, but for practical usage it's still convenient to use some parameter $max\_iteration$ after which algorithm will stop without finding $h$ subset satisfying strong necessary condition. 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+In terms of complexity, all three options give the same results, because to find a feasible solution you need to evaluate all pair swaps. In practice, the third option is the winner because it leads to the least amount of iterations. On the other hand, as we said this does not improve the complexity of the algorithm, so from now on let us assume that we use the case number two.
+So if there negative  $S^{(\vec{m})}_{i,j}$, we choose the one with the lowest value, make the swap and repeat the process.  
+
+The algorithm ends when there is no possible improvement, i.e., when all $S^{(\vec{m})}_{i,j}$ are non-negative.
+The number of iterations needed till algorithm stops is usually quite low, but for practical usage, it is still convenient to use some parameter $i_{max}$ after which algorithm stops without finding $h$ subset satisfying the strong necessary condition. 
+One step of this algorithm we call optimal swap algorithm (OSA) is described by the following pseudocode.
+
+\begin{algorithm}[H]
+    \label{alg:optimal:improvement}
+    \KwIn{$\vec{H}^{-1} \in \mathbb{R}^{p \times p}$, 
+    $\vec{r}^{(\vec{m})} \in \mathbb{R}^{n \times 1}$, 
+    $O_m$, $Z_m$, $\vec{X} \in \mathbb{R}^{n \times p} $}
+    \KwOut{ $\what{{new}}$, $m_{new}$ }
+    \caption{OSA}
+    
+    $S \gets 0$\;
+    $i_{swap} \gets \emptyset$\;
+    $j_{swap} \gets \emptyset$\;
+
+    \For{$m_i \in  O_m$}{  
+        \For{$m_j \in  Z_m$}{ 
+            $r_i^{(m)} = \vec{r}^{(\vec{m})}_{m_i}$ \;
+            $r_j^{(m)} = \vec{r}^{(\vec{m})}_{m_j}$ \;
+            $d_{i,i} = \vec{x_{m_i}} \vec{H}^{-1} \vec{x^T_{m_i}}$ \;
+            $d_{i,j} = \vec{x_{m_i}} \vec{H}^{-1} \vec{x^T_{m_j}}$ \;
+            $d_{j,j} = \vec{x_{m_j}} \vec{H}^{-1} \vec{x^T_{m_j}}$ \;
+            $S_{tmp} = calculate~\Delta S^{(\vec{m})}_{i,j}~by$ \eqref{hawkins:rovnice} \;
+            \If{$S_{tmp} < S$}{
+                $S \gets S_{tmp}$\;
+                $i_{swap} \gets m_i$\;
+                $j_{swap} \gets m_j$\;
+            }
+        }
+    }
+    \Return{ $i_{swap}, j_{swap}, S$ }\;
+\end{algorithm}
 
 
-\todo{put sem part of the pseudocode describing core iteration?}
+
 \todo{and its time compleixty}
-% \begin{observation} 
-% 	Time complexity of algorithm feasible solution \ref{alg:Cstep} is the same as time complexity as OLS. Thus $O(p^2n)$
-% 	\todo{create better proof. And take into account both versions - directly vs. using decomposition}
-% \end{observation} 
+\begin{observation} 
+     The time complexity of the algorithm OSA \ref{alg:optimal:improvement} is $\mathcal{O}(n^2p^2)$
+\end{observation} 
 
 
-% \begin{proof}
-% 	In C-step we must compute $n$ absolute residuals. Computation of one absolute residual consists of
-% 	matrix multiplication of shapes $1 \times p$ and $p \times 1$ that gives us $\mathcal{O}(p)$. Rest is in constant time.
-% 	So time of computation $n$ residuals is $\mathcal{O}(np)$.
-% 	Next we must select set of $h$ smallest residuals which can be done in $\mathcal{O}(n)$ using modification of algorithm QuickSelect. \todo{reference or define quick select} 
-% 	Finally we must compute $\hat{w}$ OLS estimate on $h$ subset of data.
-% 	Because $h$ is linearly dependent on $n$, we can say that it is $\mathcal{O}(p^2n + p^3)$ which 
-% 	is asymptotically dominant against previous steps which are $\mathcal{O}(np + n)$.
-% \end{proof}
+\begin{proof}
+All $d_{i,i}$ and $d_{j,j}$ can be calculated before the for loops. 
+To calculate $d_{i,i}$ resp. $d_{j,j}$ we need co multiply vector $\in \mathbb{R}^p$ with matrix  $\in \mathbb{R}^{p \times p}$ and vector $\in \mathbb{R}^p$ that is $\mathcal{O}(p^2)$. For all $d_{i,i}$ this have to be done $h$ times and for $d_{j,j}$ $n-h$ times. So all together it is $\mathcal{O}(np^2)$. 
 
-% As we stated above, repeating algorithm C-step will lead to sequence of $\what{1}, \what{2} \ldots$ 
-% on subsets $H_1, H_2 \ldots$ with corresponding residual sum of squares
-% $RSS(\what{{1}}) \geq RSS(\what{{2}}) \geq \ldots$. One could ask if this sequence will converge, so that
-% $RSS(\what{{i}}) == RSS(\what{{i+1}})$. 
-% Answer to this question will be presented by the following theorem.
+The two loops go through all pairs; thus it is $\mathcal{O}(n^2)$. $d_{i,j}$ can be calculated in the loop, and it can be done in $\mathcal{O}(p^2)$.
+
+If we put everything together we get 
+$\mathcal{O}(np^2 + n^2p^2) \sim \mathcal{O}(n^2p^2)$.
+\end{proof}
 
 
-% %******************************** C-STEP alg. will converge ***********************%
-% \begin{theorem}
-% 	Sequence of C-step will converge to $\what{{m}}$ after maximum of $m = {n \choose h}$
-% 	so that $RSS(\what{{m}}) == RSS(\what{{n}})\,, \forall n\geq m$ where $n$ is number of data samples 
-% 	and $h$ is size of subset $H_i$.
-% \end{theorem}
+One run of this iteration process leads to some local optimum, i.e., set satisfying the strong necessary condition. In \cite{hawkins:1994} they refer to to this set as to \defterm{feasible set}.
+This because it is not global optima the algorithm needs to be run multiple times say $T$ times. A $h$  subset with the smallest value of the objective function is chosen as the final solution.
 
-% \begin{proof}
-% 	Since  $RSS(\what{{i}})$ is non-negative and $RSS(\what{{i}}) \leq RSS(\what{{i+i}})$ the 
-% 	sequence will converge. $\what{{i}}$  is computed out of subset 
-% 	$H_i \subset \{{1,2,\ldots,n\}}$. When there is finite number of subsets of size $h$ out of $n$ samples, namely ${n \choose h}$, the sequence will converge at the latest after this number of steps.
-% \end{proof}
-
-
-% \todo{REWRITE UP FROM THIS TO MATCH FEASIBLE SOLUTION qwerty}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-One run of this iteration process will lead to some local optima i.e. set satisfying strong necessary condition. In \cite{hawkins:1994} they refer to to this set as to \defterm{feasible set}.
-This because it is not global optima the algorithm needs to be run multiple times say $N$ times. As a final solution is taken such $h$  subset with the smallest residual sum of squares. 
-
-We didn't yet mention how to create initial $h$ subset respectively initial $\vec{m}$. We already had this discussion when describing FAST-LTS algorithm. The \cite{hawkins:1994} describes only random starting $h$ subsets, but using $p$ subsets instead may lead to improvement \todo{experiment with this and refer here}. More importantly as we already suggested $h$ subset satisfying weak necessary condition don't need to satisfy strong necessary condition so passing such a $h$ subset as input to this algorithm is another option and we'll discuss it in detail later. For that reasons we'll now describe feasible algorithm with pseudocode and we'll assume that we already have some function that generates for us $h$ subsets e.g. random one. 
+Discussion about how to find the initial $h$ subset resp. initial $\vec{m}$ was already discussed when describing FAST-LTS algorithm.
+More importantly, as we already suggested $h$ subset satisfying weak necessary condition do not need to satisfy strong necessary condition so passing such a $h$ subset as input to this algorithm is another option and we discuss it in detail later. We now describe a feasible solution algorithm (FSA) with pseudocode, and we assume that we already have some function that generates for us $h$ subsets, e.g., random one. 
 
 \newcommand\mycommfont[1]{\footnotesize\ttfamily\textcolor{blue}{#1}}
 \SetCommentSty{mycommfont}
 
 \begin{algorithm}[H]
-	\label{alg:feasible_solution}
-		\KwIn{$\boldsymbol{X} \in \mathbb{R}^{n \times p}, \boldsymbol{y} \in \mathbb{R}^{n \times 1},  max\_iteration, N $}
-		\KwOut{ $\vec{\hat{w}_{final}}$, $H_{final}$ }
-		
-	\caption{Feasible solution}
-	\SetKw{Break}{break}
-	$\vec{\hat{w}_{final}} \gets \emptyset$\;
-	$H_{final} \gets \emptyset$\;
-	$Results \gets \emptyset$\;
+    \label{alg:feasible_solution}
+        \KwIn{$\boldsymbol{X} \in \mathbb{R}^{n \times p}, \boldsymbol{y} \in \mathbb{R}^{n \times 1},  i_{max}, T $}
+        \KwOut{ $\vec{\hat{w}_{final}}$, $\vec{m_{final}}$ }
+        
+    \caption{FSA}
+    \SetKw{Break}{break}
+    $\vec{\hat{w}_{final}} \gets \emptyset$\;
+    $\vec{m_{final}} \gets \emptyset$\;
+    $R \gets \emptyset$\;
 
-	\For{$k \gets 0$ \textbf{to} $N$}{
-		$\vec{m} \gets generate\_intial\_subset()$  \tcp*{e.g. random $\vec{m} \in Q^{(n,h)}$}
-		\While{$True$}{ 
-			$best_i \gets 0$ \;
-			$best_j \gets 0$ \;
-			$best_{delta} \gets 0$ \;
-			\For{$ i \in O_m$}{ 
-				\For{$j \in Z_m$}{ 
-					$delta \gets calculate \Delta S^{(\vec{m})}_{i,j}$\;
-					\If{$delta >  best_{delta}$}{
-						$best_{delta} \gets delta$\;
-						$best_i \gets i$ \;
-						$best_j \gets j$ \;
-					}
-				}
-			}
-			\If{$best_{delta} > 0$}{
-				$\vec{m} \gets \vec{m}^{(i,j)}$\;
-			}
-			\Else {
-				$H \gets h\ subset\ corresponding\ to\ \vec{m}$\;
-				$\vec{M} \gets diag(\vec{m})$\;
-				${\hat{w}} \gets \of^{(OLS,\vec{M}\vec{X},  \vec{M}\vec{y} )}$\;
-				$Results \gets Results \cup \{ H, {\hat{w}} \}$\;
-				\Break\;
-			}
-		}		
-	}
-	$H_{final}, \vec{\hat{w}_{final}}  \gets $ select best from $Results$ based on smallest $RSS$\;
-	\Return{ $\what{{final}}$\,, $H_{final}$ }\;
+    \For{$k \gets 0$ \textbf{to} $T$}{
+        $\vec{m} \gets generate\_intial\_subset()$  \tcp*{e.g. random $\vec{m} \in Q^{(n,h)}$}
+
+    $l \gets 0$\;
+        \While{$True$}{           
+           $\vec{M} \gets diag(\vec{m})$\;
+       $\vec{H} = (\vec{X}^T\vec{M}^T\vec{X})$\;
+       $\vec{H}^{-1} = calculate~inversion~of~\vec{H}$\;
+       $\vec{\hat{w}} \gets \of^{(OLS,\vec{M}\vec{X},  \vec{M}\vec{y} )}$\;
+       $\vec{r}^{(\vec{m})} = \vec{Y} - \vec{X} \vec{\hat{w}}$\;
+      
+    $S_{i,j}, i, j$ = 
+       $OSA$(
+            $\vec{H}^{-1}$, 
+                $\vec{r}^{(\vec{m})}$, 
+                $O_m$, 
+                        $Z_m$, 
+                        $\vec{X}$)\;
+
+            \If{$ S_{i,j} \geq 0$ \textbf{or}  $l \geq i_{max}$ }{
+                $\vec{m_{final}} \gets \vec{m}$\;
+                $\vec{\hat{w}} \gets \of^{(OLS,\vec{M}\vec{X},  \vec{M}\vec{y} )}$\;
+                $R \gets R \cup \{\vec{m_{final}} , \vec{\hat{w}} \}$\;
+                \Break\;
+            }
+            \Else {
+                $\vec{m} \gets \vec{m}^{(i,j)}$\;
+            }
+        }        
+    }
+    $\vec{m_{final}}, \vec{\hat{w}_{final}}  \gets $ select best from $R$ based on smallest value of $\oflts$\;
+    \Return{ $\what{{final}}$\,, $\vec{m_{final}}$ }\;
 \end{algorithm}
 
-\todo{time complexity}
-
-\section{Combined algorithms}
-\todo{ todo this section and move it somewhere else qwerty}
-Here we'll describe what we've indicated above and that is combination of both previous algorithms.
-Two options. 
-z
-\begin{enumerate}
-	\item Let fast-lts converge and then run FSA and let it converge
-	\item Let fast-lts converge make one step of FSA and try fast-LTS again and iterate between this
-\end{enumerate}
-
-Second option would be faster ? Let's think about it.. etc etc..
 
 
+\begin{observation} 
+The FSA time complexity is dominated by the OSA. 
+\end{observation} 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+In this section, we've described the FSA algorithm. In the next section, we introduce a very similar algorithm, but which have higher numerical stability and also contains various optimizations for higher performance.
 
 
 
@@ -1483,7 +1469,7 @@ Finally let's talk about matrix $\vec{\tilde{Z}}$ which we used \ref{matrixZ} fo
 		\vec{R^T} & 0 \\
     \vec{\phi^T} & r
 	\end{bmatrix} 
-	\begin{bmatrix}
+	\begin{bmatrix} 
 		\vec{R} & \vec{\phi} \\
      0 & r
 	\end{bmatrix} 
@@ -1527,6 +1513,19 @@ Now we've described all properties of improved FSA algorithm. We can see that tw
 \todo{time complexity QR qwerty}
 \todo{time complexity tildeZQR is the same as QR}
 
+\section{Combined algorithm}
+\todo{ todo this section and move it somewhere else qwerty}
+Here we describe what we indicated above, and that is a combination of both previous algorithms.
+Two options. 
+z
+\begin{enumerate}
+    \item Let fast-lts converge and then run FSA and let it converge
+    \item Let fast-lts converge make one step of FSA and try fast-LTS again and iterate between this
+\end{enumerate}
+
+The second option would be faster? Let us think about it.
+
+
 
 \subsection{MMEA}
 \todo{no taak. to je na stranku. to das}
@@ -1535,6 +1534,8 @@ Now we've described all properties of improved FSA algorithm. We can see that tw
 \todo{zminit podobnost s: Hoffmann, Kontoghiorghes, 2010 (Matrix strategies SUR)}
 \section{BSA algorithm}
 In this section we'll introduce another exact algorithm. It have a little different approach than previous algorithms. First of all we'll built a theoretical basis for this algorithm.
+
+
 
 % \subsubsection{Domain of $\oflts$}
 % We've already showed that we can derivate LTS objective function so it's domain is on discrete set  $Q^{(n,h)}$ see \ref{oflts_discrete}. We'll now show that we can transform this objective function to the non-discrete form so that $\oflts (\vec{w}) \vec{w} \in \mathbb{R}^p$ \cite{klouda2015exact}.

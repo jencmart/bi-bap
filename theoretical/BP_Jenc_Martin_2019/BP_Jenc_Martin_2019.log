@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2019.3.5)  22 APR 2019 18:25
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2019.3.5)  23 APR 2019 22:00
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1371,57 +1371,61 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
  [25]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [26] [27]
+ [26]
+Overfull \hbox (70.72842pt too wide) in paragraph at lines 659--660
+[]\OT1/lmr/m/n/10.95 Let us con-sider that we have some $[] \OMS/lmsy/m/n/10.95 2 \OML/lmm/m/it/10.95 Q[]$ \OT1/lmr/m/n/10.95 and de-note $\OML/lmm/m/it/10.95 O[] \OT1/lmr/m/n/10.95 = \OMS/lmsy/m/n/10.95 f[]$
+ []
 
-LaTeX Warning: Marginpar on page 28 moved by 61.38638pt.
 
-LaTeX Font Info:    Try loading font information for OT1+lmtt on input line 797.
-(/usr/share/texmf/tex/latex/lm/ot1lmtt.fd
+Overfull \hbox (11.75677pt too wide) in paragraph at lines 667--678
+\OT1/lmr/m/n/10.95 ([][][][][])$ For now let us as-sume that we also have $[][]$ and $[] = [][][][][][]$.
+ []
+
+[27]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [28] [29]
+LaTeX Font Info:    Try loading font information for OT1+lmtt on input line 807.
+ (/usr/share/texmf/tex/latex/lm/ot1lmtt.fd
 File: ot1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <9> on input line 797.
+(Font)              <9> on input line 807.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 797.
+(Font)              <5> on input line 807.
 
-Underfull \vbox (badness 6825) has occurred while \output is active []
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [28] [29] [30]
-Overfull \hbox (1.92656pt too wide) detected at line 917
+ [30] [31]
+Overfull \hbox (1.92656pt too wide) detected at line 903
 [] [] \OT1/lmr/m/n/10.95 = [][][] + [][] = [] + [][]\OML/lmm/m/it/10.95 ;
  []
 
-[31] [32]
-Overfull \hbox (23.9913pt too wide) detected at line 1035
+[32] [33]
+Overfull \hbox (23.9913pt too wide) detected at line 1021
 \OML/lmm/m/it/10.95 ^^Z\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 z[]; z[]\OT1/lmr/m/n/10.95 ) = []\OML/lmm/m/it/10.95 ;
  []
 
-[33] [34] [35] [36]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+[34] [35] [36] [37]
+Underfull \vbox (badness 2529) has occurred while \output is active []
 
- [37]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [38]
-Underfull \vbox (badness 3623) has occurred while \output is active []
-
- [39]
-Overfull \hbox (17.0pt too wide) in paragraph at lines 1335--1345
+ [38] [39]
+Overfull \hbox (17.0pt too wide) in paragraph at lines 1321--1331
 [][][]$[]$ 
  []
 
 [40]
-Overfull \hbox (32.6747pt too wide) detected at line 1405
+Overfull \hbox (32.6747pt too wide) detected at line 1391
 [][] \OT1/lmr/m/n/10.95 = ([][][](1\OML/lmm/m/it/10.95 ; \OT1/lmr/m/n/10.95 2) [] [](\OML/lmm/m/it/10.95 n \OMS/lmsy/m/n/10.95 ^^@ \OT1/lmr/m/n/10.95 1\OML/lmm/m/it/10.95 ; n\OT1/lmr/m/n/10.95 ))([](\OML/lmm/m/it/10.95 n \OMS/lmsy/m/n/10.95 ^^@ \OT1/lmr/m/n/10.95 1\OML/lmm/m/it/10.95 ; n\OT1/lmr/m/n/10.95 ) [] [](1\OML/lmm/m/it/10.95 ; \OT1/lmr/m/n/10.95 2)[][])[]  = [] [] \OML/lmm/m/it/10.95 ;
  []
 
 
-Overfull \hbox (17.0pt too wide) in paragraph at lines 1411--1421
+Overfull \hbox (17.0pt too wide) in paragraph at lines 1397--1407
 [][][]$[]$ 
  []
 
 
-Overfull \hbox (7.6629pt too wide) in paragraph at lines 1442--1444
+Overfull \hbox (7.6629pt too wide) in paragraph at lines 1428--1430
 []\OT1/lmr/m/n/10.95 Let's start with []2.58[]. Here in-ver-sion is need to cal-cu-late $[][][][]$, $[][][][]$
  []
 
@@ -1430,10 +1434,7 @@ Overfull \hbox (7.6629pt too wide) in paragraph at lines 1442--1444
 LaTeX Warning: Marginpar on page 43 moved by 36.31552pt.
 
 
-LaTeX Warning: Marginpar on page 43 moved by 35.73685pt.
-
-
-LaTeX Warning: Marginpar on page 43 moved by 10.9787pt.
+LaTeX Warning: Marginpar on page 43 moved by 27.28653pt.
 
 ) [43]
 \openout2 = `chapters/04_experiments.aux'.
@@ -1471,7 +1472,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 191.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 191.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 191.
 Package rerunfilecheck Info: File `BP_Jenc_Martin_2019.out' has not changed.
-(rerunfilecheck)             Checksum: 3196C31B3062AC67FCAAC3363A62748D;5998.
+(rerunfilecheck)             Checksum: 229A6DCBBFC40966F35EE7F21F41E1DE;5993.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
@@ -1479,18 +1480,18 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 191.
  ) 
 Here is how much of TeX's memory you used:
- 26194 strings out of 494945
- 443737 string characters out of 6181033
- 589271 words of memory out of 5000000
- 28598 multiletter control sequences out of 15000+600000
+ 26175 strings out of 494945
+ 443127 string characters out of 6181033
+ 595311 words of memory out of 5000000
+ 28567 multiletter control sequences out of 15000+600000
  90076 words of font info for 85 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  68i,25n,78p,1159b,884s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-rmtt.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rmsc.enc}</usr/share/texmf/fonts/type1/public/lm/lmbsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx6.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx8.pfb></usr/share/texmf/fonts/type1/public/lm/lmbxi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmcsc10.pfb></usr/share/texmf/fonts/type1/public/lm/lmex10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi6.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi8.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi9.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr6.pfb></usr/share/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy9.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on BP_Jenc_Martin_2019.pdf (67 pages, 585560 bytes).
+Output written on BP_Jenc_Martin_2019.pdf (67 pages, 586975 bytes).
 PDF statistics:
- 1125 PDF objects out of 1200 (max. 8388607)
- 1018 compressed objects within 11 object streams
- 441 named destinations out of 1000 (max. 500000)
+ 1140 PDF objects out of 1200 (max. 8388607)
+ 1033 compressed objects within 11 object streams
+ 453 named destinations out of 1000 (max. 500000)
  322 words of extra memory for PDF output out of 10000 (max. 10000000)
 
