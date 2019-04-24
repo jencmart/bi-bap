@@ -832,16 +832,30 @@ In this section, we've described the FSA algorithm. In the next section, we intr
 
 
 
-% only to different computation - 1100
-%%% IMPROVED by FSA %%%%%%%
-
-\section{Improved FSA} % two exchanging algorithms from Agulló, 2000
-So far as we've described FSA algorithm we assumed that after each cycle of the algorithm (after each best swap) wee need to recalculate inversion $(\vec{X}^T\vec{X})$ together with $\vec{\hat{w}}$. In this section we'll introduce different approaches described in \cite{agullo2001new} which will improve it so that we'll be able to update it instead of recalculate. Moreover these ideas will lead us to bounding condition of FSA which will improve the speed and we'll also be able to construct another algorithms based on this idea. 
-
-We've introduced additive formula \ref{hawkins:rovnice}. Let's now try to obtain similar formula but let us try to focus on how individual elements in our current algorithm changes not only on the swap of two rows but how those elements are affected after adding one row and also removing one row. Moreover, during this derivation, we'll be able to obtain two different approaches to calculating one thing. Both are important, and we'll recapitulate them after.
 
 
-Let $\vec{A} = (\vec{X}, \vec{y})$ be a matrix $\vec{X}$ expended by one column of corresponding dependent variables and $\vec{Z} = \vec{X}^T\vec{X}$ and $\vec{\tilde{Z}} = \vec{A}^T\vec{A}$. Then
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% IMPROVED by FSA %%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{OEA, MOEA, MMEA} 
+%three exchanging algorithms from Agulló, 2000
+
+In the FSA algorithm, we assumed that after each cycle of OSAA 
+\ref{alg:optimal:improvement} we need to recalculate inversion $(\vec{X}^T\vec{X})$ together with $\vec{\hat{w}}$. In this section, we introduce a different approach described in \cite{agullo2001new} so that we can update it instead of recalculating. Moreover, these ideas lead to bounding condition of FSA which not only improves the speed but also gives options to construct different algorithms. 
+
+In section \ref{section_feasible_solution} we introduce additive formula \ref{hawkins:rovnice} which corresponds to $\oflts(\vec{m}^{(i,j)}) - \oflts(\vec{m})$. Let us now try to obtain similar formula but with the focus on how the individual elements in our current algorithm change namely the inversion $\vec{Z^{-1}}$ and $\vec{\hat{w}}$. We also split the idea of swap the $i, j$ into the insertion of $j$ and remove of $i$. Thus we describe how individual elements are affected after adding one row and also removing one row. Moreover, during this derivation, we obtain two different approaches to calculate it. Both are important, and we recapitulate them after.
+
+
+
+
+%%%%%%% MULTIPLICATIVE INCREMENT FORMULA   %%%%%%%%%
+
+\subsection{Multiplicative formula}
+
+
+\todo{rename H in FSA to Z}
+$\vec{Z} = \vec{X}^T\vec{X}$
+Let us denote $\vec{A} = (\vec{X}, \vec{y})$, a matrix $\vec{X}$ expanded by one column of corresponding dependent variables and and $\vec{\tilde{Z}} = \vec{A}^T\vec{A}$. Then
 
 \[  \numberthis \label{matrixZ}
     \vec{\tilde{Z}} = \begin{bmatrix}
@@ -849,19 +863,19 @@ Let $\vec{A} = (\vec{X}, \vec{y})$ be a matrix $\vec{X}$ expended by one column 
     \vec{y}^T\vec{X} & \vec{y}^T\vec{y}
   \end{bmatrix} .
 \]
-Notice that $Z$ is symmetric square matrix $\in \mathbb{R}^ {p \times p}$ moreover we suppose that $Z$ is regular. $\vec{X}^T\vec{y}$ is column vector $\in \mathbb{R}^ {1 \times p}$, $\vec{y}^T\vec{X}$ is vector $\in \mathbb{R}^ {p \times 1}$ and $\vec{y}^T\vec{y}$ is scalar.
-OLS estimate $\vec{\hat{w}}$ is then
+Notice that $\vec{Z}$ is symmetric square matrix $\in \mathbb{R}^ {p \times p}$, moreover we suppose that $Z$ is regular. $\vec{X}^T\vec{y}$ is $p$ dimensional column vector, $\vec{y}^T\vec{X}$ is $p$ dimensional row vector and $\vec{y}^T\vec{y}$ is a scalar.
+OLS estimate $\vec{\hat{w}}$ is then given by
 \begin{equation}
     \vec{\hat{w}^{(OLS, n)}} = \vec{Z}^{-1} \vec{X}^T\vec{y}
 \end{equation}
-and residual sum of squares 
+and the RSS by 
 
 \begin{equation}
-    RSS = \vec{y}^T\vec{y} - \vec{y}^T\vec{X}\vec{\hat{w}}
+    RSS = \vec{y}^T\vec{y} - \vec{y}^T\vec{X}\vec{\hat{w}}.
 \end{equation}
+Also, note that all necessary matrix multiplications are already in the matrix $\vec{\tilde{Z}}$.
 
-Also, note that all necessary multiplications are already in the matrix $\vec{\tilde{Z}}$.
-Let's now realize that $RSS$ can  be expressed as ratio of determinants $\det(\vec{\tilde{Z}})$ and $\det(\vec{Z})$ (using determinant rule for block matrices) so that 
+Let us show that $RSS$ can  be expressed as ratio of determinants $\det(\vec{\tilde{Z}})$ and $\det(\vec{Z})$ (using determinant rule for block matrices) so that 
 
 \begin{align*} \numberthis \label{rssdeterminant} 
     RSS &= \frac{\det(\vec{\tilde{Z}})}{\det(\vec{Z})} \\ &= \frac{
@@ -875,132 +889,156 @@ Let's now realize that $RSS$ can  be expressed as ratio of determinants $\det(\v
         &= \vec{y}^T\vec{y} - \vec{y}^T\vec{X}\vec{\hat{w}}.
 \end{align*}
 
-If we assume $RSS > 0$ then $\vec{\tilde{Z}}^{-1}$ can be expressed as 
+If we assume that $RSS > 0$ then $\vec{\tilde{Z}}^{-1}$ can be expressed as 
 
 \[ \numberthis
     \vec{\tilde{Z}}^{-1} = 
     \begin{bmatrix}
-        \vec{Z}^{-1}+\dfrac{\vec{\hat{w}} \vec{\hat{w}}^{T}}{RSS} & - \dfrac{\vec{\hat{w}}^T}{RSS} \\[6pt]
-        - \dfrac{\vec{\hat{w}}}{RSS} & \dfrac{1}{RSS}
+        \vec{Z}^{-1}+\dfrac{\vec{\hat{w}} \vec{\hat{w}}}{RSS} & - \dfrac{\vec{\hat{w}}^T}{RSS} \\[6pt]
+        - \dfrac{\vec{\hat{w}^{T}}}{RSS} & \dfrac{1}{RSS}
     \end{bmatrix}.
 \]
-For following equations it's important to notice that for any two observations $z_i = (x_i, y_i)$  and $\vec{z_j} = (\vec{x_j}, y_j)\, \vec{z_i}, z_i \in \mathbb{R}^{p+1 \times 1}$ is 
+For following equations it is important to notice that for any two row vectors $\vec{c_i} = (\vec{x_i}, y_i)$  and $\vec{c_j} = (\vec{x_j}, y_j)$, $\vec{c_i}, \vec{c_j} \in \mathbb{R}^{1 \times p+1}$ is 
 
 \begin{equation}
-    \vec{z_i} \vec{\tilde{Z}}^{-1} \vec{z_i^T} = \dfrac{ ( y_i - \vec{x_i}\vec{\hat{w}} )^2 }{RSS}  + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}
+    \vec{c_i} \vec{\tilde{Z}}^{-1} \vec{c_i^T} = \dfrac{ ( y_i - \vec{x_i}\vec{\hat{w}} )^2 }{RSS}  + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}
 \end{equation}
 and
 \begin{equation}
-    \vec{z_j} \vec{\tilde{Z}}^{-1} \vec{z^T} = \dfrac{ ( y_j - \vec{x_j}\vec{\hat{w}} ) ( y_i - \vec{x_i}\vec{\hat{w}} ) }{RSS}  + \vec{x_j}\vec{Z}^{-1}\vec{x_j^T}
+    \vec{c_j} \vec{\tilde{Z}}^{-1} \vec{c_j^T} = \dfrac{ ( y_j - \vec{x_j}\vec{\hat{w}} ) ( y_i - \vec{x_i}\vec{\hat{w}} ) }{RSS}  + \vec{x_j}\vec{Z}^{-1}\vec{x_j^T}
 \end{equation}
-Using above let's express how the determinant $\det(\vec{Z})$ and inverse of $vec{Z}^{-1}$ will change when we'll add one observation $\vec{z_i} = (\vec{x_i}, y_i) \in \mathbb{R}^{p+1 \times 1} $ to the matrix $\vec{A}$. First lets notice that if we add this row to $\vec{A}$, then  $\vec{Z}$ will change 
+
+
+
+%%%%%%% INCLUDING OBSERVATION %%%%%%%%%%%
+
+\subsubsection*{Including the observation}
+
+Using above let us express how the determinant $\det(\vec{Z})$ and the inverse of the $vec{Z}^{-1}$ changes when observation $\vec{c_i} = (\vec{x_i}, y_i)$ is added to the matrix $\vec{A}$. First let us notice that if we add this row to $\vec{A}$, then  $\vec{Z}$ changes as
 
 \[ \numberthis \label{addedrow}
 \begin{bmatrix}
-    x_{11} & x_{12} & \dots  & x_{1n} & x_{1i}  \\
-    x_{21} & x_{22} & \dots  & x_{2n} & x_{2i} \\
+    x_{11} & x_{12} & \dots  & x_{1n} & x_{i_1}  \\
+    x_{21} & x_{22} & \dots  & x_{2n} & x_{i_2} \\
     \vdots & \vdots & \vdots & \ddots & \vdots \\
-    x_{p1} & x_{p2} & \dots  & x_{pn} & x_{pi}     
+    x_{p1} & x_{p2} & \dots  & x_{pn} & x_{i_p}     
 \end{bmatrix}
 \begin{bmatrix}
     x_{11} & x_{12}  & \dots  & x_{1p} \\
     x_{21} & x_{22}  & \dots  & x_{2p} \\
     \vdots  & \vdots & \ddots & \vdots \\
     x_{n1} & x_{n2}  & \dots  & x_{np} \\
-    x_{i1} & x_{i2}  & \dots  & x_{ip}
+    x_{i_1} & x_{i_2}  & \dots  & x_{i_p}
 \end{bmatrix}
  = \vec{X}^T\vec{X} + \vec{x_i^T}\vec{x_i} = \vec{Z} + \vec{x_i^T}\vec{x_i},
 \]
-so determinant with appended row will be
+so determinant with appended row changes as
 \begin{equation} \label{udpateddeterminant}
-    \det(\vec{Z} + \vec{x_i^T}\vec{x_i}) = det(\vec{Z})(1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T})
+    \det(\vec{Z} + \vec{x_i^T}\vec{x_i}) = det(\vec{Z})(1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}).
 \end{equation}
-and inversion can be obtained using Sherman-Morrison formula \cite{bartlett1951inverse} so that 
+Finally the inversion $\vec{Z}^{-1}$ can be obtained using Sherman-Morrison formula \cite{bartlett1951inverse} so that 
 \begin{equation} \label{shermanmorris}
     (\vec{Z} + \vec{x_i^T}\vec{x_i})^{-1} = \vec{Z}^{-1} - \dfrac{\vec{Z}^{-1}\vec{x_i^T}\vec{x_i}\vec{Z}^{-1}}{1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}}
 \end{equation}
-For following equations it'll be convenient for us to mark 
+
+It is now convenient to denote 
 \begin{equation}
     b = \dfrac{-1}{(1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T})},  b \in \mathbb{R},
 \end{equation}
 and 
 \begin{equation} \label{agullo_u}
-    \vec{u} = \vec{Z}^{-1}\vec{x_i^T},      \vec{u} \in \mathbb{R}^{p \times 1},
+    \vec{u} = \vec{Z}^{-1}\vec{x_i^T},      \vec{u} \in \mathbb{R}^{p \times 1}.
 \end{equation}
-so that \ref{shermanmorris} can be written as
+
+Then \eqref{shermanmorris} can be written as
 \begin{equation} \label{inversionplus}
     (\vec{Z} + \vec{x_i^T}\vec{x_i})^{-1} = \vec{Z}^{-1} + b\vec{u}\vec{u^T}.
 \end{equation}
-Given that last piece that we're missing to express updated $\vec{\hat{w}}$ is appended $\vec{X}^T\vec{y}$ by one row, which can be simply expressed by same idea as \ref{addedrow} so that updated $\vec{\hat{w}}$ which we'll denote as $\vec{\overline{\hat{w}}}$ is 
+
+Given that last missing piece to express updated $\vec{\hat{w}}$ is appended $\vec{X}^T\vec{y}$ by one row, which can be simply expressed by same idea as \eqref{addedrow} so that updated $\vec{\hat{w}}$ which we denote as $\vec{\overline{\hat{w}}}$ is 
 \begin{equation}
     \vec{\overline{\hat{w}}} = (\vec{Z}^{-1} + b\vec{u}\vec{u^T})(\vec{X^T}\vec{y} + y_i\vec{x_i^T}).
 \end{equation}
 This can be simplified so that we get
-\todo{mistake in original paper where is w + (y - xw)bu}
+\todo{mention the mistake in original paper? w + (y - xw)bu}
 \begin{equation} \label{thetaplus}
     \vec{\overline{\hat{w}}} = \vec{\hat{w}} - (y_i - \vec{x_i}\vec{\hat{w}})b\vec{u}.
 \end{equation}
-Last but not least we want to express updated $RSS$ which we denote as $\overline{RSS}$. This can be done easily from \ref{rssdeterminant} and \ref{udpateddeterminant} as 
+Least but not last we want to express updated $RSS$ which we denote as $\overline{RSS}$. This can be done easily from \ref{rssdeterminant} and \ref{udpateddeterminant} as 
 
 \begin{equation}
-    \overline{RSS} =  RSS + \dfrac{(y_i - \vec{x_i}\vec{\hat{w})^2}}{(1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T})}
+    \overline{RSS} =  RSS + \dfrac{(y_i - \vec{x_i}\vec{\hat{w})^2}}{(1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T})}.
 \end{equation}
-and again, it's convenient to mark 
-
-\begin{equation}
-    \gamma^{+}(\vec{z_i}) = \dfrac{(y_i - \vec{x_i}\vec{\hat{w})^2}}{(1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T})},
+It is convenient to mark 
+\begin{equation} \label{gamma:plus}
+    \gamma^{+}(\vec{c_i}) = \dfrac{(y_i - \vec{x_i}\vec{\hat{w})^2}}{(1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T})},
 \end{equation}
 so that 
-\begin{equation}
-    \overline{RSS} =  RSS + \gamma^{+}(\vec{z_i})
+\begin{equation} \label{rssplus}
+    \overline{RSS} =  RSS + \gamma^{+}(\vec{c_i})
 \end{equation}
-We can see that $\gamma^{+}(\vec{z_i})$ measures how $RSS$ increase after we append our dataset with observation $\vec{z_i}$, thus we can see that $\gamma^{+}(\vec{z_i}) \geq 0$
+We can see that $\gamma^{+}(\vec{c_i})$ measures how $RSS$ increase after we append our dataset with observation $\vec{c_i}$, thus $\gamma^{+}(\vec{c_i}) \geq 0$
 
-Because we want to express both increment and decrement change in our dataset, let's now focus how $RSS$, $\vec{Z^{-1}}$ and $\vec{\hat{w}}$  changes after we exclude one observation. 
 
-Consider that we've already included one observation $z_i$ in our dataset and mark $\vec{\overline{Z}} = \vec{Z} + \vec{x_i} \vec{x_i^T} $ If we exclude one observation $\vec{z_j} = (\vec{x_j}, y_j) \in \mathbb{R}^{p+1 \times 1} $ from already updated matrix $\vec{A}$ then determinant $\det(\vec{\overline{Z}})$  will change as
+
+%%%%%%% EXCLUDING OBSERVATION %%%%%%%%%%%
+
+\subsubsection*{Excluding the observation}
+
+Because we want to express both increment and decrement change in our dataset, let us now focus how $RSS$, $\vec{Z^{-1}}$ and $\vec{\hat{w}}$  changes after we exclude one observation. 
+
+Consider that we already included one observation $\vec{c_i}$ in our dataset and mark $\vec{\overline{Z}} = \vec{Z} + \vec{x_i} \vec{x_i^T} $. If we exclude one observation $\vec{c_j} = (\vec{x_j}, y_j) \in \mathbb{R}^{p+1 \times 1} $ from already updated matrix $\vec{A}$ then the determinant $\det(\vec{\overline{Z}})$  changes as
 
 \begin{equation} 
     \det(\vec{\overline{Z}} - \vec{x_j^T}\vec{x_j}) = det(\vec{\overline{Z}})(1 - \vec{x_j}\vec{\overline{Z}}^{-1}\vec{x_j^T})
 \end{equation}
-and inversion will change (again according to Sherman-Morrison formula) as 
-\begin{equation}  \label{updatedinversion2}
+and the inversion changes (again, according to Sherman-Morrison formula) as 
+\begin{equation}  
     (\vec{\overline{Z}} - \vec{x_j^T}\vec{x_j})^{-1} = \vec{\overline{Z}}^{-1} + \dfrac{\vec{\overline{Z}}^{-1}\vec{x_j^T}\vec{x_j}\vec{\overline{Z}}^{-1}}{1 - \vec{x_j}\vec{\overline{Z}}^{-1}\vec{x_j^T}}.
 \end{equation}
-Once again, it's convenient to denote
+
+Once again, it is convenient to denote
 \begin{equation}
-    \overline{b} = \dfrac{-1}{(1  \vec{x_j}\vec{\overline{Z}}^{-1}\vec{x_j^T})},  \overline{v} \in \mathbb{R},
+    \overline{b} = \dfrac{-1}{(1  \vec{x_j}\vec{\overline{Z}}^{-1}\vec{x_j^T})},  \overline{b} \in \mathbb{R},
 \end{equation}
 and 
 \begin{equation}
     \vec{\overline{u}} = \vec{\overline{Z}}^{-1}\vec{x_j^T},      \vec{\overline{u}} \in \mathbb{R}^{p \times 1},
 \end{equation}
 so that we can write
-\begin{equation}
+\begin{equation} \label{updatedinversion2}
     (\vec{\overline{Z}} + \vec{x_j^T}\vec{x_j})^{-1} = \vec{Z}^{-1} - \overline{b}\vec{\overline{u}}\vec{\overline{u}^T}.
 \end{equation}
-Using same approach as before we can denote express downdated estimate which we denote as $\vec{\overline{\overline{\hat{w}}}}$
+
+Using the same approach as before we can denote express down-dated estimate which we denote as $\vec{\overline{\overline{\hat{w}}}}$
 
 \begin{equation} \label{thetaminus}
     \vec{\overline{\overline{\hat{w}}}} =  +\vec{\overline{\hat{w}}} (y_j - \vec{x_j}\vec{\overline{\hat{w}}}) \overline{b} \vec{\overline{u}}.
 \end{equation}
 
-Finally lets also express updated $\overline{RSS}$ which we denote as $\overline{\overline{RSS}}$. This can be done easily from \ref{rssdeterminant} and \ref{udpateddeterminant} and \ref{updatedinversion2} as 
+Finally lets also express updated $\overline{RSS}$ which we denote as $\overline{\overline{RSS}}$. This can be done easily from \ref{rssdeterminant} and \ref{udpateddeterminant} and \eqref{updatedinversion2} as 
 
 \begin{equation}
-    \overline{\overline{RSS}} =  \overline{RSS} - \dfrac{(y_j - \vec{x_j}\vec{\overline{\hat{w}})^2}}{(1 - \vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T})}
+    \overline{\overline{RSS}} =  \overline{RSS} - \dfrac{(y_j - \vec{x_j}\vec{\overline{\hat{w}})^2}}{(1 - \vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T})}.
 \end{equation}
-and let's also mark
 
-\begin{equation}
-    \gamma^{-}(\vec{z_j}) = \dfrac{(y_j - \vec{x_j}\vec{\overline{\hat{w}})^2}}{(1 - \vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T})},
+Let us mark
+
+\begin{equation} \label{gamma:minus}
+    \gamma^{-}(\vec{c_j}) = \dfrac{(y_j - \vec{x_j}\vec{\overline{\hat{w}})^2}}{(1 - \vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T})},
 \end{equation}
 so that 
-\begin{equation}
-    \overline{\overline{RSS}} =  \overline{RSS} - \gamma^{-}(\vec{z_j})
+\begin{equation} \label{rssminus}
+    \overline{\overline{RSS}} =  \overline{RSS} - \gamma^{-}(\vec{c_j}).
 \end{equation}
 
-Lets now express equation for including and removing observation at once. First, let's notice that from \ref{updatedinversion2} we can express 
+
+
+%%%%%%      S W A P P I N G    T W O   O B S E R V A T I O N S     %%%%%
+
+\subsubsection*{Swapping two observations}
+
+Let us now express the equation for including and excluding observation at once. First, notice that from \eqref{updatedinversion2} we can express 
 
 \begin{equation} \label{xjoverlinez}
     \vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T}) =  \vec{x_j}\vec{Z}^{-1}\vec{x_j^T}) - 
@@ -1015,14 +1053,14 @@ Lets now express equation for including and removing observation at once. First,
 \end{align*}
 \end{gather}
 
-Finally we can express $\overline{\overline{RSS}} $ as
+Finally we can express the $\overline{\overline{RSS}} $ as
 
 \begin{equation} \label{updaterss}
-    \overline{\overline{RSS}}  = RSS\rho(z_i, z_j),
+    \overline{\overline{RSS}}  = RSS\rho(\vec{c_i}, \vec{c_j}),
 \end{equation}
 where
 \begin{equation} \label{agullo:rovnice}
-    \rho(z_i, z_j) =
+    \rho(\vec{c_i}, \vec{c_j}) =
      \dfrac
      {(1+\vec{x_i}\vec{Z}^{-1}\vec{x_i^T} + \dfrac{e_j^2}{RSS})
         (1 - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T} - \dfrac{e_i^2}{RSS} )+
@@ -1031,92 +1069,118 @@ where
 \end{equation}
 where $e_i = y_i - x_i\vec{\hat{w}}$ and $e_j = y_j - x_j\vec{\hat{w}}$.
 
-We can see that this formula is similar to the one \ref{hawkins:rovnice} but here the $\rho(z_i, z_j)$ represents multiplicative increment. Moreover $0 < \rho(z_i, z_j) $ and if $0 < \rho(z_i, z_j)< 1 $ then the swap leads to improvement in terms of feasible solution.
+We can see that this formula is similar to the \eqref{hawkins:rovnice} but here the $\rho(\vec{c_i}, \vec{c_j})$ represents multiplicative increment. Moreover $0 < \rho(\vec{c_i}, \vec{c_j}) $ and if $0 < \rho(\vec{c_i}, \vec{c_j})< 1$ then the swap leads to improvement in terms of feasible solution.
 
-With all this we are now able to change FSA so that we don't need to recompute $\vec{\hat{w}}$ and inversion $(\vec{X}^T \vec{X})^{-1}$ but we can update it. That means after we find $z_i, z_j$ that improve the current RSS the most (that means we find smallest $\rho(z_i, z_j)$ by \ref{agullo:rovnice}). We can then update $RSS$ by \ref{updaterss}, update $(\vec{X}^T \vec{X})^{-1}$ by \ref{inversionplus} and \ref{updatedinversion2} and finally update $\vec{\hat{w}}$ by \ref{thetaplus} and \ref{thetaminus}.
-
-\todo{pseudokod}
+We are now able to modify the FSA so that we do not need to recompute $\vec{\hat{w}}$ and inversion $(\vec{X}^T \vec{X})^{-1}$ but we can update it. Authors call this algorithm optimal exchange algorithm (OEA)
 
 
-Let's now talk about the time complexity of such a solution. We can see that core iteration takes the most time. So let's first describe time complexity of finding optimal swap and updating result with such a pair. 
-We need to go through all pairs between $z_i, z_j$ where $z_i$ is from $h$-subset and $z_j$ is from $g$-subset. That is 
-\begin{equation}
-    h(n-h) \approx (\frac{n^2 - p^2}{4})^2 \sim \mathcal{O}(n^2 - p^2)
-\end{equation}
-For each of this pair we need to calculate \ref{hawkins:rovnice}. Note that $e_i$ and $e_j$ can be calculated before this loop. The same goes for $\vec{x_i}\vec{Z}^{-1}\vec{x_i^T}$ and $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T} $. So inside the loop there is only one vector-matrix-vector multiplication that is $\vec{x_i}\vec{Z}^{-1}\vec{x_j^T}$ which is $\mathcal{p^2}$. Rest are scalars. The whole loop is then 
-\begin{equation}
-    \mathcal{O}( (n^2 - p^2) p^2) 
-\end{equation}
-Before we'll move to the updating we must not to forget for quantities which we said we can calculate in advance. That is $\\mathcal{O}(2np^2)$ for all $\vec{x_i}\vec{Z}^{-1}\vec{x_i^T}$ and $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$ and $\mathcal{O}(2np)$ for all $e_j$ and $e_j$.
-
-Finally we need to update $RSS$ which is trivial. Next inversion by \ref{inversionplus} which is $\mathcal{O}(4p^2)$ and \ref{updatedinversion2} which is also $\mathcal{O}(4p^2)$. Finally we need to update $\vec{\hat{w}}$ by \ref{thetaplus} and \ref{thetaminus} which are both $\mathcal{O}(p^2 +p)$. Putting everything together we get
-
-\begin{equation}
-    \mathcal{O}( (n^2 - p^2) p^2 + 2np^2 + 2np + 8p^2 + 2p^2 + p) \sim \mathcal{O}(n^2p^2 - p^4) 
-\end{equation}
-
-\todo{nejak zminit kolikrat ten loop vetsinou projede atd.. }
-
-Note that right now it doesn't matter if we use \ref{hawkins:rovnice} with stopping criterion $    \Delta S^{(\vec{m})}_{i,j} \geq 0$  or \ref{agullo:rovnice} and use $\rho(z_i, z_j) \geq 1 $ stopping criterion. With both results we can update $RSS$. But the advantage of \ref{agullo:rovnice} is that we can use following bounding condition to improve performance.
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%% BOUNDING CONDITION SPEEDUP %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%     O E A    A L G O R I TH M        %%%%%%%%%%%%%
+
+\subsection{The OEA and its properties}
+We can apply theory from the previous section to the FSA. Sets $O_m$ and $Z_m$ (see section \ref{section_feasible_solution}) contains indexes of observations to exclude and include respectively.
+The matrix $\vec{Z_M}$ can be used instead of the matrix $\vec{Z}$ and
+ $\vec{X_M}$ with $\vec{y_M}$ to calculate $\vec{\hat{w}}$. 
+
+In terms of the FSA \ref{alg:feasible_solution} we first need to change the OSAA.  There are only minor tweaks. First, we need to pass one more argument, and that is $RSS$. Second, We want to find minimal $\rho(\vec{c_i}, \vec{c_j})$ calculated by \eqref{agullo:rovnice} so that $0 < \rho(\vec{c_i}, \vec{c_j}) < 1 $. Other parts of the algorithm remains the same. Time complexity thus remains the same.
+
+This algorithm produces $\rho(\vec{c_i}$, and indexes  $i_{swap} \in O_m$ and $j_{swap} \in Z_m$ of observations we want to swap. Given that, we can update the $RSS$ by \eqref{updaterss}, $\vec{Z_M^{-1}}$ by \eqref{inversionplus} and \eqref{updatedinversion2} and finally update $\vec{\hat{w}}$ by \eqref{thetaplus} and \eqref{thetaminus}.
+
+Let us now talk about the time complexity of such a solution. As we said, the time complexity of modifies OSAA is $\mathcal{O}( n^2 p^2)$. Thus there is no asymptotic improvement. On the other hand, there are some significant constants outside the OSAA so let us look at how they improve.
+
+When an improvement is found, thus when $0 < \rho(\vec{c_i}, \vec{c_j}) < 1 $, then we update $RSS$, which is constant. Next we update inversion by
+\eqref{inversionplus} which is $\mathcal{O}(4p^2)$ and \eqref{updatedinversion2} which is also $\mathcal{O}(4p^2)$.  Finally we need to update $\vec{\hat{w}}$ by \eqref{thetaplus} and \eqref{thetaminus} which are both $\mathcal{O}(p^2 +p)$. 
+
+\begin{observation}
+Time complexity of updating all the quantities is 
+$\mathcal{O}(8p^2 + 2p^2 + p) \sim \mathcal{O}(p^2)$.
+That is quite an improvement if we compare it to time complexity $\mathcal{O}(p^2n)$ of updating those quantities in the FSA (see observation~\ref{time:complexity:fsa}).
+\end{observation}
+
+
+Note that right now it actually does not matter if we use additive formula \eqref{hawkins:rovnice} with the stopping criterion $\Delta S^{(\vec{m})}_{i,j} \geq 0$---thus unmodified OSAA---or multiplicative formula \eqref{agullo:rovnice} with the stopping criterion $\rho(\vec{c_i}, \vec{c_j}) \geq 1 $. Both results we can update $RSS$ and other quantities can be used to calculate both formulas. 
+
+However, the advantage of the multiplicative formula \ref{agullo:rovnice} is that we can use the following bounding condition to improve the performance of the modified OSAA.
+
+
+%%%%%       B O U N D I N G   C O N D I T I ON    S P E E D U P       %%%%%
+
 \subsubsection*{Bounding condition improvement}
-$\rho(z_i, z_j)$ is expressed as a ratio. We can see that in the numerator we have
+
+The $\rho(\vec{c_i}, \vec{c_j})$ is expressed as a ratio. We can see that in the numerator we have
 
 \begin{equation}
     (1+\vec{x_i}\vec{Z}^{-1}\vec{x_i^T} + \dfrac{e_j^2}{RSS})
         (1 - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T} - \dfrac{e_i^2}{RSS} )+
-        (\vec{x_i}\vec{Z}^{-1}\vec{x_j^T} + \dfrac{e_i e_j}{RSS} )^2
+        (\vec{x_i}\vec{Z}^{-1}\vec{x_j^T} + \dfrac{e_i e_j}{RSS} )^2,
 \end{equation}
-
 and because $ \dfrac{e_i e_j}{RSS} )^2 \geq 0$ then whole numerator is greater or equal to
-
 \begin{equation}
     (1+\vec{x_i}\vec{Z}^{-1}\vec{x_i^T} + \dfrac{e_j^2}{RSS})
 (1 - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T} - \dfrac{e_i^2}{RSS} ).
 \end{equation}
-
 On the other hand, we can see that denominator is
 
 \begin{equation}
-    1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}  - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T}  + (\vec{x_i}\vec{Z}^{-1}\vec{x_j^T})^2 -   \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}\vec{x_j}\vec{Z}^{-1}\vec{x_j^T} 
+    1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}  - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T}  + (\vec{x_i}\vec{Z}^{-1}\vec{x_j^T})^2 -   \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}, 
 \end{equation}
-
-and because $(\vec{x_i}\vec{Z}^{-1}\vec{x_j^T})^2$ and $\vec{x_i}\vec{Z}^{-1}\vec{x_i^T}\vec{x_j}\vec{Z}^{-1}\vec{x_j^T} $ are actually inner products of $x_i$ and $x_j$  ($\vec{Z}^{-1}$ is positive definite) so 
+and because $(\vec{x_i}\vec{Z}^{-1}\vec{x_j^T})^2$ and $\vec{x_i}\vec{Z}^{-1}\vec{x_i^T}\vec{x_j}\vec{Z}^{-1}\vec{x_j^T} $ are actually inner products of $\vec{x_i}$ and $\vec{x_j}$  ($\vec{Z}^{-1}$ is positive definite) thus
 \begin{equation}
     (\vec{x_i}\vec{Z}^{-1}\vec{x_j^T})^2 \leq \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}\vec{x_j}
 \end{equation}
-using Cauchy-Schwarz inequality. That means that denominator is less or equal to
+using the Cauchy-Schwarz inequality. This means that denominator is less or equal to
 \begin{equation}
     1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}  - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T}.
 \end{equation}
-Given that we can denote $\rho_b(z_i, z_j)$ so that
-
+Given that we can denote $\rho_b(\vec{c_i}, \vec{c_j})$  as
 
 \begin{equation} \label{boundingcondition}
-    \rho_b(z_i, z_j) = \dfrac{(1+\vec{x_i}\vec{Z}^{-1}\vec{x_i^T} + \dfrac{e_j^2}{RSS})
-    (1 - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T} - \dfrac{e_i^2}{RSS} )}{1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}  - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T}} \quad \leq \rho(z_i, z_j)
+\rho_b(\vec{c_i}, \vec{c_j}) = \dfrac{(1+\vec{x_i}\vec{Z}^{-1}\vec{x_i^T} + \dfrac{e_j^2}{RSS})
+    (1 - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T} - \dfrac{e_i^2}{RSS} )}{1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}  - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T}} \quad \leq \rho(\vec{c_i}, \vec{c_j}).
 \end{equation}
 
-So the actual speed improvement is given by we don't need to compute $\vec{x_i}\vec{Z}^{-1}\vec{x_j^T}$ in each of $h(n-h)$ pairs swap comparison. Every time that algorithm starts to compare all pairs we set $\rho_{min} :=1$. Then every time we only compute $\rho_b(z_i, z_j)$ and if it is greater of equal to $\rho_{min}$ we can continue to next pair without computing $\rho(z_i, z_j)$. On the other hand if $\rho_b(z_i, z_j)$ is less that  $\rho_{min}$ we compute $\rho(z_i, z_j)$ and set $\rho_{min} := \rho(z_i, z_j)$ This of course won't improve $\mathcal{n^2}$ time required to compare all $z_i, z_j$ pairs.
-Finally lets note that \cite{agullo2001new} call FSA  which compute $\rho(z_i, z_j)$  \ref{agullo:rovnice} as \defterm{Optimal exchange algorithm (OEA)} and OEA using bounding condition \ref{boundingcondition} as  \defterm{Modified optimal exchange algorithm (MOEA)}.
+The actual speed improvement is then given by that we do not need to compute $\vec{x_i}\vec{Z}^{-1}\vec{x_j^T}$ in each of $h(n-h)$ pairs swap comparison. As we know this quantity cannot be computed outside the loop; thus it is the reason for such a high time complexity. The modified OSAA can be further modified as follows.
 
+First we set $\rho_{min} :=1$. Then for each pair we only compute $\rho_b(\vec{c_i}, \vec{c_j})$ and if it is greater of equal to $\rho_{min}$ we can continue to next pair without computing $\rho(\vec{c_i}, \vec{c_j})$. 
+It is very useful because all quantities necessary for calculating $\rho_b(\vec{c_i}, \vec{c_j})$ can be precalculated outside of the loop.
 
-\todo{write the pseudocode}
+If $\rho_b(\vec{c_i}, \vec{c_j})$ is less that  $\rho_{min}$ we actually compute $\rho(\vec{c_i}, \vec{c_j})$ and set $\rho_{min} := \rho(\vec{c_i}, \vec{c_j})$.
 
+That means in the double loop which time complexity is $\mathcal{n^2}$  we do not always need to calculate $\rho(\vec{c_i}, \vec{c_j})$ which time complexity is $\mathcal{n^2}$. This does not improve the asymptotic time complexity, but (as can be seen in the table \todo{crate experiment}) it can improve the speed of the algorithm. 
 
-
-
-
-
-
-
+Finally, let us note that \cite{agullo2001new} calls this algorithm with bounding condition as \defterm{modified optimal exchange algorithm} (MOEA).
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%     M M E A        %%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Minimum-maximum exchange algorithm}
+The minimum-maximum exchange algorithm (MMEA) is very similar to the FSA respectively to its modified version the OEA. The main difference is the greediness of this algorithm. What we mean by that is that this algorithm does not find the optimal swap, but rather first find the $\vec{c_j}$  which increase the $RSS$ by the minimum value and include this observation.
+Next, it finds $\vec{c_j}$ such that in decrease $RSS$ by maximum and exclude this observation.
+
+The minimum increase can be found by calculating $\gamma^{+}(\vec{c_i}) $ by \ref{gamma:plus} for each trimmed observation in  $Z_m$.
+
+Next, this observation is included, so we get $h+1$ untrimmed observations. We update 
+$\vec{Z_M^{-1}}$ to  $\vec{\overline{Z_M}}^{-1}$ by \eqref{inversionplus} and  and $\vec{\hat{w}}$ to $\vec{\overline{\hat{w}}}$ by \eqref{thetaplus}.
+
+Then we can find maximum  $\gamma^{-}(\vec{c_j})$ by \eqref{gamma:minus} among $O_m^{(i)}$ where $m^{(i)}$ denotes included observation $c_i$.
+
+Next, we can update $\vec{\overline{Z_M}}^{-1}$ to the   $\vec{\overline{\overline{Z_M}}}^{-1}$ by \eqref{updatedinversion2} and 
+$\vec{\overline{\hat{w}}}$ to $\vec{\overline{\overline{\hat{w}}}}$ by 
+\eqref{thetaminus}.
+
+Finally, we can update $RSS$ to $\overline{\overline{RSS}}$ by \ref{rssplus} and  \ref{rssminus}. We can repeat this process until $\gamma^{-}(\vec{c_j}) > \gamma^{+}(\vec{c_i})$.
+
+\begin{observation}
+    Because we are not iterating through all pairs but only over $n-h$ followed by $h+1$ subsets the loops takes only $\mathcal{O}(n)$ time. In the loops, we are computing $\gamma^{-}(\vec{c_j}) $ and $\gamma^{+}(\vec{c_i})$ both takes $\mathcal{O}(p^2)$ time. Outside the loops, all the each of the quantities we are updating take $\mathcal{O}(p^2)$ time.
+That means the one loop of the whole algorithm last $\mathcal{O}(p^2n)$.
+As in the case of the FSA, if we introduce parameters $t$ and $l$, then the time complexity of the algorithm is $\mathcal{O}(tlp^2n)$
+\end{observation}
 
 
 
@@ -1128,10 +1192,18 @@ Finally lets note that \cite{agullo2001new} call FSA  which compute $\rho(z_i, z
 
 
 
-\subsubsection*{Different method of computing Improved FSA}
-\todo{zmenit to oznaceni Improved FSA na neco jineho. myslim ze to pouzivam nekonzistentne}
 
-We've described way how to modify FSA so that we can update $\vec{hat{w}}$ and inversion $(\vec{X}^T \vec{X})^{-1}$. This requires to compute inversion at the start of the algorithm (this is also the case for the FSA). In practice, however, this is not usually the way how OLS estimate $\vec{\hat{w}}$ is compute. That is primarily due to low numerical stability. In practice we usually use QR decomposition. In this subsection we describe how we can modify FSA to use QR decomposition. Let us start by describing Givens rotations algorithm in detail, because it is critical part of the modified algorithm. 
+
+
+
+
+
+
+
+
+\subsection{Different method of computation}
+
+In last section way how to modify OEA so that we can update $\vec{\hat{w}}$ and inversion $(\vec{X}^T \vec{X})^{-1}$ was introduced. This however requires to compute inversion at the start of the algorithm (this is also the case for the FSA) As we know, calculating inversion is not practical due to low numerical stability. In practice we usually use the QR decomposition. In this section we describe how we can modify OEA to use the QR decomposition (the same idea can be applied to the MOEA and the MMEA). Let us start by describing Givens rotations algorithm in detail, because it is critical part of this modified computation.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1440,6 +1512,15 @@ Computing $\vec{R^{-}}$ is $\mathcal{O}(p^2)$ and computing $\vec{Q^{-}}$ is $\m
 
 
 
+
+
+
+
+
+
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1543,6 +1624,11 @@ Now we've described all properties of improved FSA algorithm. We can see that tw
 \todo{time complexity QR qwerty}
 \todo{time complexity tildeZQR is the same as QR}
 
+
+
+
+
+
 \section{Combined algorithm}
 \todo{ todo this section and move it somewhere else qwerty}
 Here we describe what we indicated above, and that is a combination of both previous algorithms.
@@ -1556,9 +1642,6 @@ z
 The second option would be faster? Let us think about it.
 
 
-
-\subsection{MMEA}
-\todo{no taak. to je na stranku. to das}
 
 \section{BAB algorithm}  % Also from Agulló, 2000
 \todo{zminit podobnost s: Hoffmann, Kontoghiorghes, 2010 (Matrix strategies SUR)}
