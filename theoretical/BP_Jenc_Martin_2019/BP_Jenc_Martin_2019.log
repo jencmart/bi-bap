@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2019.3.5)  23 APR 2019 22:07
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2019.3.5)  24 APR 2019 20:08
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -902,28 +902,28 @@ subscribe by emailing sympa@lirmm.fr with 'subscribe <list> <firstname name>'
 ) (./BP_Jenc_Martin_2019.aux (./chapters/00_introduction.aux) (./chapters/01_linear_regression.aux) (./chapters/03_algorithms.aux) (./chapters/04_experiments.aux) (./chapters/99_conclusion.aux))
 \openout1 = `BP_Jenc_Martin_2019.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 118.
-LaTeX Font Info:    ... okay on input line 118.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 118.
-LaTeX Font Info:    ... okay on input line 118.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 118.
-LaTeX Font Info:    ... okay on input line 118.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 118.
-LaTeX Font Info:    ... okay on input line 118.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 118.
-LaTeX Font Info:    ... okay on input line 118.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 118.
-LaTeX Font Info:    ... okay on input line 118.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 118.
-LaTeX Font Info:    ... okay on input line 118.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 118.
-LaTeX Font Info:    ... okay on input line 118.
-LaTeX Font Info:    Try loading font information for OT1+lmr on input line 118.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 124.
+LaTeX Font Info:    ... okay on input line 124.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 124.
+LaTeX Font Info:    ... okay on input line 124.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 124.
+LaTeX Font Info:    ... okay on input line 124.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 124.
+LaTeX Font Info:    ... okay on input line 124.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 124.
+LaTeX Font Info:    ... okay on input line 124.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 124.
+LaTeX Font Info:    ... okay on input line 124.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 124.
+LaTeX Font Info:    ... okay on input line 124.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 124.
+LaTeX Font Info:    ... okay on input line 124.
+LaTeX Font Info:    Try loading font information for OT1+lmr on input line 124.
  (/usr/share/texmf/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 \AtBeginShipoutBox=\box50
-Package hyperref Info: Link coloring OFF on input line 118.
+Package hyperref Info: Link coloring OFF on input line 124.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
  (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
@@ -933,10 +933,10 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 Redoing nameref's sectioning
 Redoing nameref's label
-LaTeX Info: Redefining \nameref on input line 118.
-LaTeX Info: Redefining \ref on input line 118.
-LaTeX Info: Redefining \pageref on input line 118.
-LaTeX Info: Redefining \nameref on input line 118.
+LaTeX Info: Redefining \nameref on input line 124.
+LaTeX Info: Redefining \ref on input line 124.
+LaTeX Info: Redefining \pageref on input line 124.
+LaTeX Info: Redefining \nameref on input line 124.
 (./BP_Jenc_Martin_2019.out) (./BP_Jenc_Martin_2019.out)
 \@outlinefile=\write5
 \openout5 = `BP_Jenc_Martin_2019.out'.
@@ -972,7 +972,7 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ] <img/cvut-logo-bw-en.pdf, id=169, 591.64943pt x 193.23091pt>
 File: img/cvut-logo-bw-en.pdf Graphic file (type pdf)
  <use img/cvut-logo-bw-en.pdf>
-Package pdftex.def Info: img/cvut-logo-bw-en.pdf used on input line 118.
+Package pdftex.def Info: img/cvut-logo-bw-en.pdf used on input line 124.
 (pdftex.def)             Requested size: 184.5pt x 60.25772pt.
  [1
 
@@ -981,31 +981,31 @@ Package pdftex.def Info: img/cvut-logo-bw-en.pdf used on input line 118.
 ]
 
 LaTeX Font Warning: Font shape `OT1/lmr/bx/sc' undefined
-(Font)              using `OT1/lmr/bx/n' instead on input line 118.
+(Font)              using `OT1/lmr/bx/n' instead on input line 124.
 
-LaTeX Font Info:    Try loading font information for OT1+lmss on input line 118.
+LaTeX Font Info:    Try loading font information for OT1+lmss on input line 124.
 (/usr/share/texmf/tex/latex/lm/ot1lmss.fd
 File: ot1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 
 LaTeX Font Warning: Font shape `OT1/lmss/bx/sc' undefined
-(Font)              using `OT1/lmss/bx/n' instead on input line 118.
+(Font)              using `OT1/lmss/bx/n' instead on input line 124.
 
 [3
 
 ] [4
 
 ] [5]
-LaTeX Font Info:    Try loading font information for OMS+lmr on input line 118.
+LaTeX Font Info:    Try loading font information for OMS+lmr on input line 124.
  (/usr/share/texmf/tex/latex/lm/omslmr.fd
 File: omslmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 118.
+LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 124.
  (/usr/share/texmf/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Font shape `OMS/lmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/lmsy/m/n' tried instead on input line 118.
+(Font)              Font shape `OMS/lmsy/m/n' tried instead on input line 124.
  [6
 
 ] [7
@@ -1058,7 +1058,7 @@ l.13
 ])pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.129 \include{chapters/00_introduction}
+l.135 \include{chapters/00_introduction}
                                          [2]
 \openout2 = `chapters/01_linear_regression.aux'.
 
@@ -1377,7 +1377,7 @@ Overfull \hbox (70.72842pt too wide) in paragraph at lines 659--660
  []
 
 
-Overfull \hbox (11.75677pt too wide) in paragraph at lines 667--678
+Overfull \hbox (26.46158pt too wide) in paragraph at lines 667--678
 \OT1/lmr/m/n/10.95 ([][][][][])$ For now let us as-sume that we also have $[][]$ and $[] = [][][][][][]$.
  []
 
@@ -1394,56 +1394,65 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <5> on input line 807.
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 5302) has occurred while \output is active []
 
- [30] [31]
-Overfull \hbox (1.92656pt too wide) detected at line 912
+ [30]
+Underfull \vbox (badness 4621) has occurred while \output is active []
+
+ [31]
+Overfull \hbox (1.92656pt too wide) detected at line 913
 [] [] \OT1/lmr/m/n/10.95 = [][][] + [][] = [] + [][]\OML/lmm/m/it/10.95 ;
  []
 
 [32] [33]
-Overfull \hbox (23.9913pt too wide) detected at line 1030
+Overfull \hbox (23.9913pt too wide) detected at line 1031
 \OML/lmm/m/it/10.95 ^^Z\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 z[]; z[]\OT1/lmr/m/n/10.95 ) = []\OML/lmm/m/it/10.95 ;
  []
 
 [34] [35] [36] [37]
-Underfull \vbox (badness 2529) has occurred while \output is active []
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [38] [39]
-Overfull \hbox (17.0pt too wide) in paragraph at lines 1350--1360
+ [38]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [39]
+Underfull \vbox (badness 3623) has occurred while \output is active []
+
+ [40]
+Overfull \hbox (17.0pt too wide) in paragraph at lines 1351--1361
 [][][]$[]$ 
  []
 
-[40]
-Overfull \hbox (32.6747pt too wide) detected at line 1420
+[41]
+Overfull \hbox (32.6747pt too wide) detected at line 1421
 [][] \OT1/lmr/m/n/10.95 = ([][][](1\OML/lmm/m/it/10.95 ; \OT1/lmr/m/n/10.95 2) [] [](\OML/lmm/m/it/10.95 n \OMS/lmsy/m/n/10.95 ^^@ \OT1/lmr/m/n/10.95 1\OML/lmm/m/it/10.95 ; n\OT1/lmr/m/n/10.95 ))([](\OML/lmm/m/it/10.95 n \OMS/lmsy/m/n/10.95 ^^@ \OT1/lmr/m/n/10.95 1\OML/lmm/m/it/10.95 ; n\OT1/lmr/m/n/10.95 ) [] [](1\OML/lmm/m/it/10.95 ; \OT1/lmr/m/n/10.95 2)[][])[]  = [] [] \OML/lmm/m/it/10.95 ;
  []
 
 
-Overfull \hbox (17.0pt too wide) in paragraph at lines 1426--1436
+Overfull \hbox (17.0pt too wide) in paragraph at lines 1427--1437
 [][][]$[]$ 
  []
 
 
-Overfull \hbox (7.6629pt too wide) in paragraph at lines 1457--1459
+Overfull \hbox (7.6629pt too wide) in paragraph at lines 1458--1460
 []\OT1/lmr/m/n/10.95 Let's start with []2.58[]. Here in-ver-sion is need to cal-cu-late $[][][][]$, $[][][][]$
  []
 
-[41] [42]
+[42] [43]
 
-LaTeX Warning: Marginpar on page 43 moved by 36.31552pt.
+LaTeX Warning: Marginpar on page 44 moved by 36.31552pt.
 
 
-LaTeX Warning: Marginpar on page 43 moved by 27.28653pt.
+LaTeX Warning: Marginpar on page 44 moved by 27.28653pt.
 
-) [43]
+) [44]
 \openout2 = `chapters/04_experiments.aux'.
 
- (./chapters/04_experiments.tex [44
+ (./chapters/04_experiments.tex) [45
 
 
 
-]) [45]
+]
 \openout2 = `chapters/99_conclusion.aux'.
 
  (./chapters/99_conclusion.tex [46
@@ -1466,32 +1475,32 @@ bibitemlist
 \tf@lof=\write7
 \openout7 = `BP_Jenc_Martin_2019.lof'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 191.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 191.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 197.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 197.
  (./BP_Jenc_Martin_2019.aux (./chapters/00_introduction.aux) (./chapters/01_linear_regression.aux) (./chapters/03_algorithms.aux) (./chapters/04_experiments.aux) (./chapters/99_conclusion.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 191.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 191.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 197.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 197.
 Package rerunfilecheck Info: File `BP_Jenc_Martin_2019.out' has not changed.
 (rerunfilecheck)             Checksum: 229A6DCBBFC40966F35EE7F21F41E1DE;5993.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 191.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 197.
  ) 
 Here is how much of TeX's memory you used:
- 26175 strings out of 494945
- 443127 string characters out of 6181033
- 595311 words of memory out of 5000000
- 28567 multiletter control sequences out of 15000+600000
+ 26176 strings out of 494945
+ 443148 string characters out of 6181033
+ 589997 words of memory out of 5000000
+ 28568 multiletter control sequences out of 15000+600000
  90076 words of font info for 85 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  68i,25n,78p,1159b,884s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-rmtt.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rmsc.enc}</usr/share/texmf/fonts/type1/public/lm/lmbsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx6.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx8.pfb></usr/share/texmf/fonts/type1/public/lm/lmbxi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmcsc10.pfb></usr/share/texmf/fonts/type1/public/lm/lmex10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi6.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi8.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi9.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr6.pfb></usr/share/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy9.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on BP_Jenc_Martin_2019.pdf (67 pages, 586950 bytes).
+Output written on BP_Jenc_Martin_2019.pdf (67 pages, 588212 bytes).
 PDF statistics:
- 1140 PDF objects out of 1200 (max. 8388607)
- 1033 compressed objects within 11 object streams
+ 1141 PDF objects out of 1200 (max. 8388607)
+ 1034 compressed objects within 11 object streams
  453 named destinations out of 1000 (max. 500000)
  322 words of extra memory for PDF output out of 10000 (max. 10000000)
 

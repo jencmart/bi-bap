@@ -667,13 +667,13 @@ thus a change of the LTS objective function by swapping one observation from not
 Let us mark  
 $M = diag(\vec{m})$ and 
 $M^{(i,j)} = diag(\vec{m}^{(i,j)})$ and also
-$\vec{H} = (\vec{X}^T\vec{M}^T\vec{X})$
+$\vec{Z_M} = (\vec{X}^T\vec{M}^T\vec{X})$
 For now let us assume that we also have
-$\vec{H}^{-1}$ and $\vec{\hat{w}} = \vec{H}^{-1}\vec{X}^T\vec{M}\vec{y}$.
+$\vec{Z_M}^{-1}$ and $\vec{\hat{w}} = \vec{Z_M}^{-1}\vec{X}^T\vec{M}\vec{y}$.
 We now want to calculate $\Delta S^{(\vec{m})}_{i,j}$.
 Let us mark vector of residuals 
 $\vec{r}^{(\vec{m})} = \vec{Y} - \vec{X} \vec{\hat{w}} $
-and also $d_{r,s} = \vec{x_r} \vec{H}^{-1}  \vec{x_s} $
+and also $d_{r,s} = \vec{x_r} \vec{Z_M}^{-1}  \vec{x_s} $
 then by equation introduced in \cite{atkinson1991simulated} we get
 
 \begin{equation} \label{hawkins:rovnice}
@@ -703,15 +703,15 @@ So if there negative  $S^{(\vec{m})}_{i,j}$, we choose the one with the lowest v
 
 The algorithm ends when there is no possible improvement, i.e., when all $S^{(\vec{m})}_{i,j}$ are non-negative.
 The number of iterations needed till algorithm stops is usually quite low, but for practical usage, it is still convenient to use some parameter $i_{max}$ after which algorithm stops without finding $h$ subset satisfying the strong necessary condition. 
-One step of this algorithm we call optimal swap algorithm (OSA) is described by the following pseudocode.
+One step of this algorithm we call optimal swap additive algorithm (OSAA) is described by the following pseudocode.
 
 \begin{algorithm}[H]
     \label{alg:optimal:improvement}
-    \KwIn{$\vec{H}^{-1} \in \mathbb{R}^{p \times p}$, 
+    \KwIn{$\vec{Z_M}^{-1} \in \mathbb{R}^{p \times p}$, 
     $\vec{r}^{(\vec{m})} \in \mathbb{R}^{n \times 1}$, 
     $O_m$, $Z_m$, $\vec{X} \in \mathbb{R}^{n \times p} $}
     \KwOut{ $\what{{new}}$, $m_{new}$ }
-    \caption{OSA}
+    \caption{OSAA}
     
     $S \gets 0$\;
     $i_{swap} \gets \emptyset$\;
@@ -721,9 +721,9 @@ One step of this algorithm we call optimal swap algorithm (OSA) is described by 
         \For{$m_j \in  Z_m$}{ 
             $r_i^{(m)} = \vec{r}^{(\vec{m})}_{m_i}$ \;
             $r_j^{(m)} = \vec{r}^{(\vec{m})}_{m_j}$ \;
-            $d_{i,i} = \vec{x_{m_i}} \vec{H}^{-1} \vec{x^T_{m_i}}$ \;
-            $d_{i,j} = \vec{x_{m_i}} \vec{H}^{-1} \vec{x^T_{m_j}}$ \;
-            $d_{j,j} = \vec{x_{m_j}} \vec{H}^{-1} \vec{x^T_{m_j}}$ \;
+            $d_{i,i} = \vec{x_{m_i}} \vec{Z_M}^{-1} \vec{x^T_{m_i}}$ \;
+            $d_{i,j} = \vec{x_{m_i}} \vec{Z_M}^{-1} \vec{x^T_{m_j}}$ \;
+            $d_{j,j} = \vec{x_{m_j}} \vec{Z_M}^{-1} \vec{x^T_{m_j}}$ \;
             $S_{tmp} = calculate~\Delta S^{(\vec{m})}_{i,j}~by$ \eqref{hawkins:rovnice} \;
             \If{$S_{tmp} < S$}{
                 $S \gets S_{tmp}$\;
@@ -739,7 +739,7 @@ One step of this algorithm we call optimal swap algorithm (OSA) is described by 
 
 \todo{and its time compleixty}
 \begin{observation} 
-     The time complexity of the algorithm OSA \ref{alg:optimal:improvement} is $\mathcal{O}(n^2p^2)$
+     The time complexity of the OSAA \ref{alg:optimal:improvement} is $\mathcal{O}(n^2p^2)$
 \end{observation} 
 
 
@@ -755,7 +755,7 @@ $\mathcal{O}(np^2 + n^2p^2) \sim \mathcal{O}(n^2p^2)$.
 
 
 One run of this iteration process leads to some local optimum, i.e., set satisfying the strong necessary condition. In \cite{hawkins:1994} they refer to to this set as to \defterm{feasible set}.
-This because it is not global optima the algorithm needs to be run multiple times say $T$ times. A $h$  subset with the smallest value of the objective function is chosen as the final solution.
+This because it is not global optima the algorithm needs to be run multiple times say $t$ times. A $h$  subset with the smallest value of the objective function is chosen as the final solution.
 
 Discussion about how to find the initial $h$ subset resp. initial $\vec{m}$ was already discussed when describing FAST-LTS algorithm.
 More importantly, as we already suggested $h$ subset satisfying weak necessary condition do not need to satisfy strong necessary condition so passing such a $h$ subset as input to this algorithm is another option and we discuss it in detail later. We now describe a feasible solution algorithm (FSA) with pseudocode, and we assume that we already have some function that generates for us $h$ subsets, e.g., random one. 
@@ -765,7 +765,7 @@ More importantly, as we already suggested $h$ subset satisfying weak necessary c
 
 \begin{algorithm}[H]
     \label{alg:feasible_solution}
-        \KwIn{$\boldsymbol{X} \in \mathbb{R}^{n \times p}, \boldsymbol{y} \in \mathbb{R}^{n \times 1},  i_{max}, T $}
+        \KwIn{$\boldsymbol{X} \in \mathbb{R}^{n \times p}, \boldsymbol{y} \in \mathbb{R}^{n \times 1},  i_{max}, t $}
         \KwOut{ $\vec{\hat{w}_{final}}$, $\vec{m_{final}}$ }
         
     \caption{FSA}
@@ -774,20 +774,20 @@ More importantly, as we already suggested $h$ subset satisfying weak necessary c
     $\vec{m_{final}} \gets \emptyset$\;
     $R \gets \emptyset$\;
 
-    \For{$k \gets 0$ \textbf{to} $T$}{
+    \For{$k \gets 0$ \textbf{to} $t$}{
         $\vec{m} \gets generate\_intial\_subset()$  \tcp*{e.g. random $\vec{m} \in Q^{(n,h)}$}
 
     $l \gets 0$\;
         \While{$True$}{           
            $\vec{M} \gets diag(\vec{m})$\;
-       $\vec{H} = (\vec{X}^T\vec{M}^T\vec{X})$\;
-       $\vec{H}^{-1} = calculate~inversion~of~\vec{H}$\;
+       $\vec{Z_M} = (\vec{X}^T\vec{M}^T\vec{X})$\;
+       $\vec{Z_M}^{-1} = calculate~inversion~of~\vec{Z_M}$\;
        $\vec{\hat{w}} \gets \of^{(OLS,\vec{M}\vec{X},  \vec{M}\vec{y} )}$\;
        $\vec{r}^{(\vec{m})} = \vec{Y} - \vec{X} \vec{\hat{w}}$\;
       
     $S_{i,j}, i, j$ = 
-       $OSA$(
-            $\vec{H}^{-1}$, 
+       $OSAA$(
+            $\vec{Z_M}^{-1}$, 
                 $\vec{r}^{(\vec{m})}$, 
                 $O_m$, 
                         $Z_m$, 
@@ -810,8 +810,9 @@ More importantly, as we already suggested $h$ subset satisfying weak necessary c
 
 
 
-\begin{observation} 
-The FSA time complexity is dominated by the OSA. 
+\begin{observation}  \label{time:complexity:fsa}
+In the main loop beside running OSAA which time complexity is $\mathcal{O}(n^2p^2)$ we need to recalculate $\vec{\hat{w}}$ using the matrix inversion which time complexity is $\mathcal{O}(p^2n)$ (see observation \ref{time:complexity:ols:inversion}).
+Main loop of the FSA runs up to $l$ iterations for each start $t$. So the time complexity of whole algorithm is  $\mathcal{O}( lt(n^2p^2 + p^2n)  )$. Because $l$ and $t$ are usually quite low, we can see that the FSA time complexity is dominated by the OSAA. 
 \end{observation} 
 
 In this section, we've described the FSA algorithm. In the next section, we introduce a very similar algorithm, but which have higher numerical stability and also contains various optimizations for higher performance.
@@ -1141,9 +1142,9 @@ We've described way how to modify FSA so that we can update $\vec{hat{w}}$ and i
 
 %%%%%%%%%%%%%%%%%%%%%%%%    H E R E   W E R E   O L S   M E T H O D S %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%% QR DECOMPOSITION - GIVENS ROTATION  %%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection*{Givens Rotation} \label{givensrotation}
 In this section, we describe Givens rotations in detail. Moreover, we also show how to update QR decomposition in terms of including and excluding row from factorized matrix $\vec{X}$ which help us in our algorithm.
