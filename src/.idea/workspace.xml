@@ -6,6 +6,11 @@
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/run.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/runall.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/runall.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen/scripts/eigen_monitor_perf.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen/scripts/eigen_monitor_perf.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/lts/feasibleoe/feasible_solution_oe.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lts/feasibleoe/feasible_solution_oe.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.log" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.synctex.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.synctex.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/03_algorithms.tex" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/03_algorithms.tex" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -34,7 +39,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/package-lts/tests/feasibleoe/test_dev.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="494">
+            <state relative-caret-position="720">
               <caret line="42" column="35" selection-start-line="42" selection-start-column="35" selection-end-line="42" selection-end-column="35" />
             </state>
           </provider>
@@ -43,8 +48,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/package-lts/lts/feasibleoe/feasible_solution_oe.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="29">
-              <caret line="1119" column="8" selection-start-line="1119" selection-start-column="8" selection-end-line="1119" selection-end-column="8" />
+            <state relative-caret-position="292">
+              <caret line="391" column="49" selection-start-line="391" selection-start-column="45" selection-end-line="391" selection-end-column="49" />
               <folding>
                 <element signature="e#0#51#0" expanded="true" />
               </folding>
@@ -103,7 +108,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/package-lts/lts/feasible/feasible_solution.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="364">
+            <state relative-caret-position="3258">
               <caret line="187" column="10" selection-start-line="187" selection-start-column="10" selection-end-line="187" selection-end-column="10" />
               <folding>
                 <element signature="e#0#51#0" expanded="true" />
@@ -135,8 +140,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>(yi_xi_theta ** 2) / (1 + i_m_i)</find>
-      <find>mmea</find>
       <find>nothu</find>
       <find>bab_lts</find>
       <find>calculate_res</find>
@@ -165,6 +168,8 @@
       <find>go_through_all_pairs</find>
       <find>all</find>
       <find>all_</find>
+      <find>qr_insert</find>
+      <find>mmea</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -219,16 +224,16 @@
         <option value="$PROJECT_DIR$/package-lts/tests/feasibleOE/test_dev.py" />
         <option value="$PROJECT_DIR$/package-lts/main.py" />
         <option value="$USER_HOME$/fit/bi-bap/src/package-lts/lts/feasibleoe/feasible_solution_oe.py" />
-        <option value="$PROJECT_DIR$/package-lts/lts/feasibleoe/feasible_solution_oe.py" />
         <option value="$PROJECT_DIR$/package-lts/tests/feasibleoe/test_dev.py" />
         <option value="$PROJECT_DIR$/package-lts/lts/feasible/feasible_solution.py" />
+        <option value="$PROJECT_DIR$/package-lts/lts/feasibleoe/feasible_solution_oe.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1439" />
+    <option name="x" value="959" />
     <option name="y" value="3" />
-    <option name="width" value="482" />
+    <option name="width" value="962" />
     <option name="height" value="1078" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -439,17 +444,18 @@
       <workItem from="1555337131785" duration="14174000" />
       <workItem from="1555414799415" duration="8635000" />
       <workItem from="1556041865571" duration="2683000" />
+      <workItem from="1556264125265" duration="7055000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="232611000" />
+    <option name="totallyTimeSpent" value="239666000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1439" y="3" width="482" height="1078" extended-state="0" />
+    <frame x="959" y="3" width="962" height="1078" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.7186046" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22857143" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -670,17 +676,17 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/package-lts/out/fast_lts_cpp_results.csv">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="24" column="2" selection-start-line="24" selection-start-column="2" selection-end-line="24" selection-end-column="2" />
-        </state>
-      </provider>
       <provider editor-type-id="csv-table-editor">
         <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
       </provider>
       <provider selected="true" editor-type-id="csv-text-editor">
         <state relative-caret-position="468">
           <caret line="26" column="12" selection-start-line="26" selection-start-column="12" selection-end-line="26" selection-end-column="12" />
+        </state>
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="24" column="2" selection-start-line="24" selection-start-column="2" selection-end-line="24" selection-end-column="2" />
         </state>
       </provider>
     </entry>
@@ -692,11 +698,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/package-lts/out/lts_cpp_vs_numpy_results.csv">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="508">
-          <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
-        </state>
-      </provider>
       <provider editor-type-id="csv-table-editor">
         <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
       </provider>
@@ -705,17 +706,22 @@
           <caret line="29" selection-start-line="29" selection-end-line="29" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/out/fast_lts_cpp_big_results.csv">
       <provider editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
+        <state relative-caret-position="508">
+          <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package-lts/out/fast_lts_cpp_big_results.csv">
       <provider editor-type-id="csv-table-editor">
         <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
       </provider>
       <provider selected="true" editor-type-id="csv-text-editor">
+        <state relative-caret-position="18">
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+      <provider editor-type-id="text-editor">
         <state relative-caret-position="18">
           <caret line="1" selection-start-line="1" selection-end-line="1" />
         </state>
@@ -746,6 +752,13 @@
           <folding>
             <element signature="e#0#49#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package-lts/tests/feasibleoe/test_dev.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="720">
+          <caret line="42" column="35" selection-start-line="42" selection-start-column="35" selection-end-line="42" selection-end-column="35" />
         </state>
       </provider>
     </entry>
@@ -787,6 +800,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/package-lts/lts/feasible/feasible_solution.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3258">
+          <caret line="187" column="10" selection-start-line="187" selection-start-column="10" selection-end-line="187" selection-end-column="10" />
+          <folding>
+            <element signature="e#0#51#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/package-lts/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="216">
@@ -797,27 +820,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/tests/feasibleoe/test_dev.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="494">
-          <caret line="42" column="35" selection-start-line="42" selection-start-column="35" selection-end-line="42" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/lts/feasible/feasible_solution.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="364">
-          <caret line="187" column="10" selection-start-line="187" selection-start-column="10" selection-end-line="187" selection-end-column="10" />
-          <folding>
-            <element signature="e#0#51#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/package-lts/lts/feasibleoe/feasible_solution_oe.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="29">
-          <caret line="1119" column="8" selection-start-line="1119" selection-start-column="8" selection-end-line="1119" selection-end-column="8" />
+        <state relative-caret-position="292">
+          <caret line="391" column="49" selection-start-line="391" selection-start-column="45" selection-end-line="391" selection-end-column="49" />
           <folding>
             <element signature="e#0#51#0" expanded="true" />
           </folding>

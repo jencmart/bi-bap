@@ -1202,6 +1202,7 @@ class FSRegressor(AbstractRegression):
         n = q.shape[0]
         p = r.shape[1]
 
+        # od n-2 do 0 ( O(n) )
         for j in range(n - 2, i - 1, -1):  # n-2 protoze vzdy o jeden vic (tj. do idx n-1)
 
             cos, sin, R = self.calculate_cos_sin(qnew[0, j], qnew[0, j + 1])  # i, i = 0
@@ -1213,6 +1214,7 @@ class FSRegressor(AbstractRegression):
             #     rot(p - i - 1, index2(W, ws, i + 1, j), ws[0],
             #         index2(W, ws, i + 1, j + 1), ws[0], c, s)
 
+            # O(p) asi ...
             # Rotare R if nonzero row
             if j < p:  # m x n # j - i
 
@@ -1229,6 +1231,7 @@ class FSRegressor(AbstractRegression):
                     rnew[j + 1, i] = cos * rowY[i] - sin * rowX[i]  # Y
                     rnew[j, i] = temp  # X
 
+            # 1 ... n O(n)
             # Rotate Q - pozor - fucking TRICK qs[0]
             qcolX = qnew[:, j]
             qcolY = qnew[:, j + 1]
@@ -1272,8 +1275,8 @@ class FSRegressor(AbstractRegression):
             rnew[n - 1, j] = 0
 
             # rotate rnew
-            rowX = rnew[j, :]
-            rowY = rnew[n - 1, :]
+            rowX = rnew[j, :] # row
+            rowY = rnew[n - 1, :] # row
             # blas srot
             for i in range(j + 1, p):  # vzdy od j do konce (udelej rotaci celeho radku)
                 temp = cos * rowX[i] + sin * rowY[i]
@@ -1281,8 +1284,8 @@ class FSRegressor(AbstractRegression):
                 rnew[j, i] = temp  # X
 
             # rotate qnew
-            qrowX = qnew[:, j]  # j ty slouepk
-            qrowY = qnew[:, n - 1]  # posledni slopek
+            qrowX = qnew[:, j]  # j ty slouepk (delky n)
+            qrowY = qnew[:, n - 1]  # posledni slopek (delky n)
 
             # blas srot
             for i in range(n):  # vzdy od j do konce

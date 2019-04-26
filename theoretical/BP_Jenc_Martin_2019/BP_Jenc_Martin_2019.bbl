@@ -74,6 +74,10 @@ Krishnamoorthy, A.; Menon, D. Matrix inversion using Cholesky decomposition. In
   \emph{2013 Signal Processing: Algorithms, Architectures, Arrangements, and
   Applications (SPA)}, IEEE, 2013, pp. 70--72.
 
+\bibitem{hammarling2008updatingqr}
+Hammarling, S.; Lucas, C. Updating the QR factorization and the least squares
+  problem. 2008.
+
 \bibitem{rouss:2000}
 Rousseeuw, P.~J.; Driessen, K.~V. An Algorithm for Positive-Breakdown
   Regression Based on Concentration Steps. In \emph{Data Analysis: Scientific
@@ -93,9 +97,5 @@ Atkinson, A.~C.; Weisberg, S. Simulated annealing for the detection of multiple
 Bartlett, M.~S. An inverse matrix adjustment arising in discriminant analysis.
   \emph{The Annals of Mathematical Statistics}, volume~22, no.~1, 1951: pp.
   107--111.
-
-\bibitem{hammarling2008updatingqr}
-Hammarling, S.; Lucas, C. Updating the QR factorization and the least squares
-  problem. 2008.
 
 \end{thebibliography}

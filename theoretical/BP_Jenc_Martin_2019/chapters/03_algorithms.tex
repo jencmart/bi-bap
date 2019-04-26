@@ -202,19 +202,19 @@ This decomposition is known as \defterm{QR decomposition}.
 \end{definition}
 If matrix $\vec{A} \in \mathbb{R}^{m \times n}$ thus is not square, then decomposition can be found as
 
-    \begin{equation}
-        \vec{A} = \vec{Q}\vec{R} = \vec{Q} \begin{bmatrix}
-            \vec{R_1} \\
-            \vec{0}
-        \end{bmatrix}
-        =  \begin{bmatrix}
-            \vec{Q_1} & \vec{Q_2}
-        \end{bmatrix}  \begin{bmatrix}
-            \vec{R_1} \\
-            \vec{0}
-        \end{bmatrix} 
-        = \vec{Q_1} \vec{R_1}
-    \end{equation}
+\begin{equation} \label{matrixq1r1}
+    \vec{A} = \vec{Q}\vec{R} = \vec{Q} \begin{bmatrix}
+        \vec{R_1} \\
+        \vec{0}
+    \end{bmatrix}
+    =  \begin{bmatrix}
+        \vec{Q_1} & \vec{Q_2}
+    \end{bmatrix}  \begin{bmatrix}
+        \vec{R_1} \\
+        \vec{0}
+    \end{bmatrix} 
+    = \vec{Q_1} \vec{R_1}
+\end{equation}
     Where $\vec{Q} \in \mathbb{R}^{m \times m}$ is orthogonal matrix, $\vec{R_1} \in \mathbb{R}^{n \times n} $ is upper triangular matrix, $\vec{0} \in \mathbb{R}^{ (m-n) \times n} $  is zero matrix,  $\vec{Q_1} \in \mathbb{R}^{n \times n}$ is matrix with orthogonal columns and  $\vec{Q_2} \in \mathbb{R}^{(m-n) \times n}$ is also matrix with orthogonal columns.
     
 That means that  $\vec{X}$ can be factorized as
@@ -269,26 +269,24 @@ So the algorithm for solving OLS using QR decomposition can go as follows:
   \item Solve upper triangular system $\vec{R_1}\vec{w} = \vec{b_1}$ for $\vec{w}$.
 \end{enumerate}
 
-QR factorization can be calculated in multiple ways. The most basic method is applying the Gram–Schmidt process
+QR factorization can be calculated in multiple ways. The most basic method is applying the Gram-Schmidt process
 to columns of matrix $\vec{X}$. This approach is not numerically stable so in practice is not used as much as two other methods. Those are \defterm{Householder transformations} and \defterm{Givens rotations}.
 The time complexity of both algorithms is similar. QR decomposition of matrix $\vec{X} \in \mathbb{R}^{n \times p}$ is 
 
-\begin{equation}
-    \mathcal{O}(2p^2n - \frac{2}{3}p^3).
+\begin{equation} \label{qrtimewhat}
+    \mathcal{O}(2p^2n - \frac{2}{3}p^3) \sim {O}(p^2n).
 \end{equation}
 \todo{find citation}
-
 On the other hand, using Givens rotation for QR decomposition of the same matrix is 
 \begin{equation} \label{givenstimenoproof}
-    \mathcal{O}(3np^2 - p^3)
+    \mathcal{O}(3np^2 - p^3) \sim \sim {O}(p^2n).
 \end{equation}
-so Householder transformations are about $50\%$ faster, but Givens rotations are more numerically stable. 
-Moreover, Givens rotations and are suitable for sparse matrices.  This property of Givens rotations we use in section \todo{ref}.
-That is why we describe Givens rotation in detail in \ref{givensrotation}. We also make proof of \eqref{givenstimenoproof} time complexity there.
+so although Householder transformations are about $50\%$ faster, both have asymptotically same time complexity. Moreover Givens rotations are more numerically stable. 
+We speak about Givens rotations in detail in section \ref{givensrotation} where we also make proof of the \eqref{givenstimenoproof}. Moreover, Givens rotations and are suitable for sparse matrices. This property of Givens rotations we use in section \ref{differentcomputation}. 
 
 For now, let us look at time complexity of solving OLS using Householder transformations. 
 \begin{observation}
-    The time complexity of solving OLS estimate using QR decomposition by Householder transformations is $\mathcal{O}(2p^2n - \frac{2}{3}p^3)$
+    The time complexity of solving OLS estimate using QR decomposition by Householder transformations is $\mathcal{O}(2p^2n - \frac{2}{3}p^3) \sim \mathcal{O}(p^2n) $
 \end{observation}
 
 \begin{proof}
@@ -299,10 +297,203 @@ For now, let us look at time complexity of solving OLS using Householder transfo
     \begin{equation} \label{time:complexity:ols:qr:householder}
         \mathcal{O}(2np^2 - \frac{2}{3}p^3 + np + \frac{1}{2}p^2)
     \end{equation}
-    We can see that $p^2n$ asymptotically dominates.
+    We can see that $p^2n$ asymptotically dominates (this is the same in case we use Givens rotations).
 \end{proof}
 
-The QR decomposition is considered as a standard way of computing OLS estimate because of its high numerical stability. Let us mention that a little slower, but a more stable method of computing OLS estimate exists, and that is the singular value decomposition (SVD). On the other hand, the QR decomposition is sufficiently stable for most cases so describing SVD decomposition is out of the scope of this work.
+The QR decomposition is considered as a standard way of computing OLS estimate because of its high numerical stability. Let us mention that a little slower, but a more stable method of computing OLS estimate exists, and that is the singular value decomposition (SVD). On the other hand, the QR decomposition is sufficiently stable for most cases so describing SVD decomposition is out of the scope of this work. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% QR DECOMPOSITION - GIVENS ROTATION  %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection*{Givens Rotation} \label{givensrotation}
+In this section, we describe Givens rotations in detail. Moreover, we also show how to update QR decomposition in terms of including and excluding row from factorized matrix $\vec{X}$ which we use in the algorithm described in section \ref{differentcomputation}.
+
+We compute the QR factorization of $\vec{A} \in \mathbb{R}^{m \times n}$ which has full column rank so that we apply orthogonal transformation by a matrix $\vec{Q}^T$ as \cite{hammarling2008updatingqr}
+
+\begin{equation}
+    \vec{Q}^T\vec{A} = \vec{R}
+\end{equation}
+ 
+where $\vec{Q}$ is product of orthogonal matrices. One such example of orthogonal matrix can be:
+
+\begin{equation} \label{givensmatrix}
+\vec{Q} = 
+\begin{bmatrix} 
+\cos(\varphi) & \sin(\varphi) \\
+- \sin(\varphi) & \cos(\varphi)
+\end{bmatrix}
+\end{equation}
+This matrix is indeed orthogonal since 
+\begin{equation} 
+\vec{Q}\vec{Q}^T = \vec{Q}^T\vec{Q} = \vec{I}
+\end{equation}
+ 
+% \begin{equation*}
+%    = \begin{bmatrix} 
+%        \cos(\varphi)^2 + \sin(\varphi)^2  & \sin(\varphi)\cos(\varphi) - %\cos(\varphi)\sin(\varphi) \\
+%        \cos(\varphi)\sin(\varphi) - \sin(\varphi)\cos(\varphi) & \cos(\varphi)^2 + \sin(\varphi)^2
+%    \end{bmatrix} \\ 
+%    \numberthis
+% \end{equation*}
+
+Moreover, if we multiply this orthogonal matrix with some column vector $\vec{x} \in \mathbb{R}^{2 \times 1}$ thus $\vec{Q}\vec{x}$; as a result, we get a vector of the same length but which is rotated clockwise by  $\varphi$ radians. When we say that vector has the same length we mean that $L^2$ norm of such vector stays the same. This is an important property of all orthogonal matrices (operations that preserve $L^2$ norm are known as \defterm{unitary transformations}). Let us verify this claim. Let us have an orthogonal matrix $\vec{Q} \in \mathbb{R}^{m \times m}$ and any column vector $\vec{x} \in  \mathbb{R}^{m \times 1}$ then
+
+\begin{equation}
+    \norm{\vec{Q}\vec{x}}^2 = (\vec{Q}\vec{x})^T (\vec{Q}\vec{x}) = \vec{x}^T\vec{Q}^T\vec{Q}\vec{x} = 
+    \vec{x}^T\vec{I}\vec{x} = \vec{x}^T\vec{x} = \norm{\vec{x}}^2.
+\end{equation}
+
+So as we said,  the idea is to create a series of orthogonal matrices which gradually rotates column vectors of $\vec{A}$, so we obtain zeros under diagonal. One such method - \defterm{Givens rotation} uses \defterm{Givens matricies} that zero one element under diagonal at a time.
+
+The example of \eqref{givensmatrix} is not random. Let us look at this orthogonal matrix one more time and let us multiply this matrix with some vector.
+
+\begin{equation}
+    \begin{bmatrix} 
+        \cos(\varphi) & \sin(\varphi) \\
+        - \sin(\varphi) & \cos(\varphi)
+        \end{bmatrix}
+        \begin{bmatrix} 
+            a \\
+            b
+            \end{bmatrix} = 
+            \begin{bmatrix} 
+                r \\
+                z
+                \end{bmatrix}
+\end{equation}
+
+To introduce this zeroing effect, we need to rotate this vector so that it is parallel to $
+\begin{bmatrix} 
+    1 \\
+    0
+\end{bmatrix}
+$. So we only need to find  $\cos(\varphi) a + \sin(\varphi) = r $.
+As we know rotation with $\vec{Q}$ preserve $L^2$ norm. That means if we want to $z = 0$  then $r$ must be equal to $L^2$ norm of the vector  
+$
+\begin{bmatrix} 
+    a \\
+    b
+\end{bmatrix}
+$;  thus $r = \sqrt{a^2 + b^2}$. 
+Then the solution is trivial. We do not even need to calculate $\varphi$ because if we put
+\begin{equation} \label{givens_cos}
+    \cos(\varphi) = \frac{a}{\sqrt{a^2 + b^2}} 
+\end{equation}
+and   
+\begin{equation} \label{givens_sin}
+    \sin(\varphi) = \frac{b}{\sqrt{a^2 + b^2}} 
+\end{equation}
+then 
+\begin{align}
+    r &= \frac{a^2}{\sqrt{a^2 + b^2}} + \frac{b^2}{\sqrt{a^2 + b^2}} = \sqrt{a^2 + b^2} \\
+    z &= \frac{-ab}{\sqrt{a^2 + b^2}} +  \frac{ab}{\sqrt{a^2 + b^2}} = 0.
+\end{align}
+
+Practically used algorithm of computing $\cos{\varphi}$ and  $\sin{\varphi}$ is slightly different because we want to prevent overflow. This algorithm is described by the following pseudocode:
+
+\begin{algorithm}[H]
+    \label{alg:givens}
+    % \SetKwInOut{Input}{input}
+    % \SetKwInOut{Output}{output}
+    \KwIn{$a, b$}
+    \KwOut{$cos, sin$ }
+    \caption{Rotate}
+    $sin \gets \emptyset$\;
+    $cos \gets \emptyset$\;
+    \uIf{$b == 0$}{
+        $sin \gets 0$\;
+        $cos \gets 1$\;
+    }
+    \uElseIf{$abs(b) \geq abs(a)$}{
+        $cotg \gets \frac{a}{b}$\;
+        $sin \gets \frac{1}{\sqrt{1 + (cotg)^2}}$\;
+        $cos \gets sin\ cotg$\;
+    }
+    \Else{
+        $tan \gets \frac{b}{b} $\;
+        $cos \gets \frac{1}{\sqrt{1 + (tan)^2}}$\;
+        $sin \gets cos\ tan$\;
+    }
+    \Return{ $cos$\,, $sin$ }\;
+\end{algorithm}
+
+We can scale this same idea to higher dimensions. Let us denote matrix $\vec{Q}(i, j) \in \mathbb{R}^{m \times m}$ defined as 
+\renewcommand{\kbldelim}{[}% Left delimiter
+\renewcommand{\kbrdelim}{]}% Right delimiter
+\[
+  \vec{Q}(i, j) = \kbordermatrix{
+    &   &       & i &       & j &      &  \\
+    & 1 & \dots & 0 & \dots & 0 &\dots & 0 \\
+    & \vdots & \ddots & \vdots & & \vdots & & \vdots \\
+   i  & 0 & \dots & c & \dots & s & \dots & 0 \\
+     & \vdots &  & \vdots & \ddots & \vdots & & \vdots \\
+     j  & 0 & \dots & -s & \dots & c & \dots & 0 \\
+     & \vdots &  & \vdots &  & \vdots & \ddots & \vdots \\
+     & 0 & \dots & 0 & \dots & 0 &\dots & 1 \\
+  }
+\]
+
+where $c =     \cos(\varphi) $ and $ s = \sin(\varphi)$ for some $\varphi$. That means this matrix is orthogonal. Now if we have some column vector $\vec{x} \in \mathbb{R}^{m \times 1}$ and we calculate $c$ and $s$ by means of \ref{givens_cos} and \ref{givens_sin} for $a := x_i $ and $b := x_j$. 
+Finally if we multiply $\vec{Q}(i, j) \vec{x} = \vec{p}$ we can see that $\vec{p}$ is same as vector $\vec{x}$ except $p_i$ and $p_j$ so that:
+
+\[
+    \vec{Q}(i, j) \vec{x} = \vec{Q}(i,j) 
+    \kbordermatrix{
+    &   \\
+    & x_1 \\
+    & \vdots \\
+   i  & x_i  \\
+     & \vdots \\
+     j  & x_j  \\
+     & \vdots \\
+     & x_m \\
+  }
+    =  \vec{p} = \kbordermatrix{
+    &   \\
+    & x_1 \\
+    & \vdots \\
+   i  & r  \\
+     & \vdots \\
+     j  & 0  \\
+     & \vdots \\
+     & x_m \\
+  }
+\]
+
+where $r = \sqrt{x_i^2 + x_j^2}$. If we have matrix $\vec{A} \in \mathbb{R}^{n \times p}$ instead of only one column $\vec{x}$ it works the same way. So if we have such matrix we need to create matrix $    \vec{Q}(i, j)$ for each $a_{ij}$ under the diagonal in order to create upper triangular matrix. Usually we are zeroing columns so that we start with $a_{12}$ then $a_{13} \ldots a_{1_n}$.
+Then we start with second column $a_{23}$ and so on. That means we need to create in total
+$e = \frac{p^2 - p}{2} + np - p^2$ matrices $\vec{Q}(i, j)$. We can denote this sequence of matrices as $\vec{Q_1},  \vec{Q_2}, \ldots \vec{Q_e}$.
+The QR decomposition then looks like
+
+\begin{equation}
+    \vec{Q_e}\ldots\vec{Q_2}\vec{Q_1}\vec{A} = \vec{R}
+\end{equation}
+where $\vec{Q_e}\ldots\vec{Q_2}\vec{Q_1}$ is actually $\vec{Q}^T$. So $\vec{Q}$ is obtained by 
+
+\begin{equation}
+ \vec{Q} = \vec{Q_1^T}\vec{Q_2^T}\ldots\vec{Q_e^T}.
+\end{equation}
+
+We can see that for each row of the matrix, we need one additional matrix $\vec{Q_i}$, and with such matrix, we are multiplying only two rows. Moreover, the rows are getting shorter after each finished column. So the total number of operations can be expressed as
+
+\begin{equation}
+    \sum\limits_{i=1}^n  \sum\limits_{j=i+1}^p 6(n-i+1) \approx 6np^2 - 3np^2 - 3p^3 + 2p^3 = 3np^2 - p^3.
+\end{equation}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -640,13 +831,6 @@ $\oflts(\what{{i}}) = \oflts(\what{{i+1}})$ . When we put all together, we get \
 
 
 
-
-% 645 - 800
-% ****************************************************************************************************
-% ************************* FEASIBLE SOLUTION ******************************************************
-% **************************************************************************************************
-
-% 645 - 800
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%        FEASIBLE SOLUTION        %%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -736,8 +920,6 @@ One step of this algorithm we call optimal swap additive algorithm (OSAA) is des
 \end{algorithm}
 
 
-
-\todo{and its time compleixty}
 \begin{observation} 
      The time complexity of the OSAA \ref{alg:optimal:improvement} is $\mathcal{O}(n^2p^2)$
 \end{observation} 
@@ -823,20 +1005,10 @@ In this section, we've described the FSA algorithm. In the next section, we intr
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%% IMPROVED by FSA %%%%%%%%%%%%%%
+%%%%% OEA, MOEA, MMEA %%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{OEA, MOEA, MMEA} 
 %three exchanging algorithms from Agulló, 2000
 
@@ -853,7 +1025,7 @@ In section \ref{section_feasible_solution} we introduce additive formula \ref{ha
 \subsection{Multiplicative formula}
 
 
-\todo{rename H in FSA to Z}
+
 $\vec{Z} = \vec{X}^T\vec{X}$
 Let us denote $\vec{A} = (\vec{X}, \vec{y})$, a matrix $\vec{X}$ expanded by one column of corresponding dependent variables and and $\vec{\tilde{Z}} = \vec{A}^T\vec{A}$. Then
 
@@ -1094,7 +1266,7 @@ Let us now talk about the time complexity of such a solution. As we said, the ti
 When an improvement is found, thus when $0 < \rho(\vec{c_i}, \vec{c_j}) < 1 $, then we update $RSS$, which is constant. Next we update inversion by
 \eqref{inversionplus} which is $\mathcal{O}(4p^2)$ and \eqref{updatedinversion2} which is also $\mathcal{O}(4p^2)$.  Finally we need to update $\vec{\hat{w}}$ by \eqref{thetaplus} and \eqref{thetaminus} which are both $\mathcal{O}(p^2 +p)$. 
 
-\begin{observation}
+\begin{observation} \label{updatinginversionobservation}
 Time complexity of updating all the quantities is 
 $\mathcal{O}(8p^2 + 2p^2 + p) \sim \mathcal{O}(p^2)$.
 That is quite an improvement if we compare it to time complexity $\mathcal{O}(p^2n)$ of updating those quantities in the FSA (see observation~\ref{time:complexity:fsa}).
@@ -1188,222 +1360,26 @@ As in the case of the FSA, if we introduce parameters $t$ and $l$, then the time
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%    D I F F E R E N T   M E T H O D    O F    C O M P U T A T I O N    %%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+\subsection{Different method of computation} \label{differentcomputation}
+In the last section we introduced a way of calculating the OEA so that we update $\vec{\hat{w}}$ and inversion $(\vec{X}^T \vec{X})^{-1}$. This, however, requires to compute inversion at the start of the algorithm (this is also the case for the FSA, MOEA and MMEA) As we know, calculating inversion is not practical due to low numerical stability. In practice, we usually use QR decomposition. In this section, we describe how we can modify OEA to use the QR decomposition (the same idea can also be applied to the FSA, MOEA and the MMEA). 
 
-
-
-
-
-
-
-
-
-
-
-\subsection{Different method of computation}
-
-In last section way how to modify OEA so that we can update $\vec{\hat{w}}$ and inversion $(\vec{X}^T \vec{X})^{-1}$ was introduced. This however requires to compute inversion at the start of the algorithm (this is also the case for the FSA) As we know, calculating inversion is not practical due to low numerical stability. In practice we usually use the QR decomposition. In this section we describe how we can modify OEA to use the QR decomposition (the same idea can be applied to the MOEA and the MMEA). Let us start by describing Givens rotations algorithm in detail, because it is critical part of this modified computation.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%    H E R E   W E R E   O L S   M E T H O D S %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%% QR DECOMPOSITION - GIVENS ROTATION  %%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\subsection*{Givens Rotation} \label{givensrotation}
-In this section, we describe Givens rotations in detail. Moreover, we also show how to update QR decomposition in terms of including and excluding row from factorized matrix $\vec{X}$ which help us in our algorithm.
-
-We compute the QR factorization of $\vec{A} \in \mathbb{R}^{m \times n}$ which has full column rank so that we apply orthogonal transformation by a matrix $\vec{Q}^T$ so that \cite{hammarling2008updatingqr}
-
-\begin{equation}
-    \vec{Q}^T\vec{A} = \vec{R}
-\end{equation}
- 
-where $\vec{Q}$ is product of orthogonal matrices. One such example of orthogonal matrix can be:
-
-\begin{equation} \label{givensmatrix}
-\vec{Q} = 
-\begin{bmatrix} 
-\cos(\varphi) & \sin(\varphi) \\
-- \sin(\varphi) & \cos(\varphi)
-\end{bmatrix}
-\end{equation}
-This matrix is indeed orthogonal since 
-\begin{align*} 
-\vec{Q}\vec{Q}^T = \vec{Q}^T\vec{Q}    
-\end{align*}
- \begin{equation*}
-    = \begin{bmatrix} 
-        \cos(\varphi)^2 + \sin(\varphi)^2  & \sin(\varphi)\cos(\varphi) - \cos(\varphi)\sin(\varphi) \\
-        \cos(\varphi)\sin(\varphi) - \sin(\varphi)\cos(\varphi) & \cos(\varphi)^2 + \sin(\varphi)^2
-    \end{bmatrix} \\ = \vec{I}
-    \numberthis
-\end{equation*}
-Moreover if we multiply this orthogonal with some column vector $\vec{x} \in \mathbb{R}^{2 \times 1}$ thus $\vec{Q}\vec{x}$ as a result we get vector of same length but is rotated clockwise by  $\varphi$ radians. When we say that vector have same length we mean than L-2 norm of such vector stays the same.This is important property of all orthogonal matrices. We can simply verify correctness of this claim. Let us have any orthogonal matrix $\vec{Q} \in \mathbb{R}^{m \times m}$ and any column vector $\vec{x} \in  \mathbb{R}^{m \times 1}$ then
-
-\begin{equation}
-    \norm{\vec{Q}\vec{x}}^2 = (\vec{Q}\vec{x})^T (\vec{Q}\vec{x}) = \vec{x}^T\vec{Q}^T\vec{Q}\vec{x} = 
-    \vec{x}^T\vec{I}\vec{x} = \vec{x}^T\vec{x} = \norm{\vec{x}}^2
-\end{equation}
-
-So we would like to create a series of orthogonal matrices which gradually rotates column vectors of $\vec{A}$, so we obtain zeros under diagonal. One such method - \defterm{Givens rotation} uses \defterm{Givens matricies} that zero one element under diagonal at a time.
-The example of \ref{givensmatrix} is not random. Let us look at this orthogonal matrix one more time and let us multiply this matrix with some vector.
-
-\begin{equation}
-    \begin{bmatrix} 
-        \cos(\varphi) & \sin(\varphi) \\
-        - \sin(\varphi) & \cos(\varphi)
-        \end{bmatrix}
-        \begin{bmatrix} 
-            a \\
-            b
-            \end{bmatrix} = 
-            \begin{bmatrix} 
-                r \\
-                z
-                \end{bmatrix}
-\end{equation}
-
-To introduce this zeroing effect, we need to rotate this vector so that it is parallel to $
-\begin{bmatrix} 
-    1 \\
-    0
-\end{bmatrix}
-$. Now it is only up to find  $\cos(\varphi) a + \sin(\varphi) = r $.
-As we know rotation with $\vec{Q}$ preserve L-2 norm. That means if we want to $z = 0$  then $r$ must be equal to L-2 norm of the vector  
-$
-\begin{bmatrix} 
-    a \\
-    b
-\end{bmatrix}
-$  thus $r = \sqrt{a^2 + b^2}$. 
-Then the solution seems trivial. We do not even need to calculate $\varphi$ because if we put
-\begin{equation} \label{givens_cos}
-    \cos(\varphi) = \frac{a}{\sqrt{a^2 + b^2}} 
-\end{equation}
-and   
-\begin{equation} \label{givens_sin}
-    \sin(\varphi) = \frac{b}{\sqrt{a^2 + b^2}} 
-\end{equation}
-then 
-\begin{align}
-    r &= \frac{a^2}{\sqrt{a^2 + b^2}} + \frac{b^2}{\sqrt{a^2 + b^2}} = \sqrt{a^2 + b^2} \\
-    z &= \frac{-ab}{\sqrt{a^2 + b^2}} +  \frac{ab}{\sqrt{a^2 + b^2}} = 0.
-\end{align}
-
-Practically used algorithm of computing $\cos{\varphi}$ and  $\sin{\varphi}$ is slightly different because we want to prevent overflow. This algorithm is described by the following pseudocode:
-
-
-\begin{algorithm}[H]
-    \label{alg:givens}
-    % \SetKwInOut{Input}{input}
-    % \SetKwInOut{Output}{output}
-    \KwIn{$a, b$}
-    \KwOut{$cos, sin$ }
-    \caption{Rotate}
-    $sin \gets \emptyset$\;
-    $cos \gets \emptyset$\;
-    \uIf{$b == 0$}{
-        $sin \gets 0$\;
-        $cos \gets 1$\;
-    }
-    \uElseIf{$abs(b) \geq abs(a)$}{
-        $cotg \gets \frac{a}{b}$\;
-        $sin \gets \frac{1}{\sqrt{1 + (cotg)^2}}$\;
-        $cos \gets sin\ cotg$\;
-    }
-    \Else{
-        $tan \gets \frac{b}{b} $\;
-        $cos \gets \frac{1}{\sqrt{1 + (tan)^2}}$\;
-        $sin \gets cos\ tan$\;
-    }
-    \Return{ $cos$\,, $sin$ }\;
-\end{algorithm}
-
-We can scale this same idea to higher dimensions. Let us denote matrix $\vec{Q}(i, j) \in \mathbb{R}^{m \times m}$ defined as 
-\renewcommand{\kbldelim}{[}% Left delimiter
-\renewcommand{\kbrdelim}{]}% Right delimiter
-\[
-  \vec{Q}(i, j) = \kbordermatrix{
-    &   &       & i &       & j &      &  \\
-    & 1 & \dots & 0 & \dots & 0 &\dots & 0 \\
-    & \vdots & \ddots & \vdots & & \vdots & & \vdots \\
-   i  & 0 & \dots & c & \dots & s & \dots & 0 \\
-     & \vdots &  & \vdots & \ddots & \vdots & & \vdots \\
-     j  & 0 & \dots & -s & \dots & c & \dots & 0 \\
-     & \vdots &  & \vdots &  & \vdots & \ddots & \vdots \\
-     & 0 & \dots & 0 & \dots & 0 &\dots & 1 \\
-  }
-\]
-
-where $c =     \cos(\varphi) $ and $ s = \sin(\varphi)$ for some $\varphi$. That means this matrix is orthogonal. Now if we have some column vector $\vec{x} \in \mathbb{R}^{m \times 1}$ and calculate $c$ and $s$ by means of \ref{givens_cos} and \ref{givens_sin} for $a := x_i $ and $b := x_j$. 
-Finally if we multiply $\vec{Q}(i, j) \vec{x} = \vec{p}$ we can see that $\vec{p}$ is same as vector $\vec{x}$ except $p_i$ and $p_j$ so that:
-
-\[
-    \vec{Q}(i, j) \vec{x} = \vec{Q}(i,j) 
-    \kbordermatrix{
-    &   \\
-    & x_1 \\
-    & \vdots \\
-   i  & x_i  \\
-     & \vdots \\
-     j  & x_j  \\
-     & \vdots \\
-     & x_m \\
-  }
-    =  \vec{p} = \kbordermatrix{
-    &   \\
-    & x_1 \\
-    & \vdots \\
-   i  & r  \\
-     & \vdots \\
-     j  & 0  \\
-     & \vdots \\
-     & x_m \\
-  }
-\]
-
-where $r = \sqrt{x_i^2 + x_j^2}$. If we have matrix $\vec{A} \in \mathbb{R}^{n \times p}$ instead of only one column $\vec{x}$ it works the same way. So if we have such matrix we need to create matrix $    \vec{Q}(i, j)$ for each $a_{ij}$ under the diagonal in order to create upper triangular matrix. Usually we are zeroing columns so that we start with $a_{12}$ then $a_{13} \ldots a_{1_n}$.
-Then we start with second column $a_{23}$ and so on. That means we need to create in total exactly
-$e = \frac{p^2 - p}{2} + np - p^2$ matrices $\vec{Q}(i, j)$. We can denote this sequence of matrices as $\vec{Q_1},  \vec{Q_2}, \ldots \vec{Q_e}$.
-The QR decomposition then looks like
-
-\begin{equation}
-    \vec{Q_e}\ldots\vec{Q_2}\vec{Q_1}\vec{A} = \vec{R}
-\end{equation}
-where $\vec{Q_e}\ldots\vec{Q_2}\vec{Q_1}$ is actually $\vec{Q}^T$. So $\vec{Q}$ is obtained by 
-
-\begin{equation}
- \vec{Q} = \vec{Q_1^T}\vec{Q_2^T}\ldots\vec{Q_e^T}.
-\end{equation}
-
-We can see that for each row of the matrix we need one additional matrix $\vec{Q_i}$ and with such matrix, we are multiplying only two rows. Moreover, the rows are getting shorter after each finished column. So the time we see that time complexity is equal to
-\todo{todo write the pseudocode}
-\begin{equation}
-    \sum\limits_{i=1}^n  \sum\limits_{j=i+1}^p 6(n-i+1) \approx 6np^2 - 3np^2 - 3p^3 + 2p^3 = 3np^2 - p^3
-\end{equation}
-\todo{move all this about rotations somewhere else}
-
-So we are now in a situation when we have QR decomposition of $\vec{X}$, and we need to exchange $i$th row for $j$th row. We can simulate this by first adding $j$th row and consequently removing $i$th row.
+Let us start by describing how we can update the QR factorization, which is a critical part of this modified computation. Assume that we have QR decomposition of $\vec{X}$, and we need to exchange $i$th observation from $O_m$ with $j$th observation from $Z_m$. We can simulate this by inserting $j$th row and consequently extracting $i$th row from the QR decomposition. 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%    QR INSERT     %%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsubsection*{Updating QR decomposition}
-First, let us discuss how to update QR decomposition when a row is added. 
-If we add a row to $\vec{A}$ our decomposition looks like
+\subsubsection*{QR insert}
+First, let us discuss how to update QR decomposition when a row $\vec{x_j}$ is inserted. 
+If we add a row to $\vec{A}$ as the last row, our decomposition looks like
 \begin{equation}
-    \vec{R^{+}} = \vec{Q_e}\ldots\vec{Q_2}\vec{Q_1}\vec{A_{new}}  = 
+    \vec{\overline{R}} =  \vec{\overline{Q}} \vec{A^{(+)}}  = 
     \begin{bmatrix}
         \times & \cdots & \cdots & \cdots & \times \\
         0 &\times & \cdots & \cdots & \times \\
@@ -1415,27 +1391,65 @@ If we add a row to $\vec{A}$ our decomposition looks like
         \times & \cdots & \cdots & \cdots & \times \\
     \end{bmatrix}
 \end{equation}
+Where $\vec{\overline{R}}$ denotes matrix $\vec{R}$ which is now not upper triangular and needs to be updated and $\vec{\overline{Q}} \in \mathbb{R}^{p+1 \times p+1}$ denotes matrix created from $\vec{Q}$ by adding one row and one column with zeros. To preserve zeroes on the diagonal we in addition put $\vec{\overline{Q}}_{n+1,n+1} = 1$ . 
+To update $\vec{\overline{R}}$ to upper triangular matrix $\vec{R^{(+)}}$, we need to create additional orthogonal Givens matrices $\vec{Q_{e+1}}\ldots\vec{Q_{e+p}}$. Then updated upper triangular matrix is
+$\vec{R^{(+)}}  =  \vec{Q_{e+p}} \ldots \vec{Q_{e+2}} \vec{Q_{e+1}} \vec{R}$. 
 
-So all we need to do is create matrices $\vec{Q_{e+1}}\ldots\vec{Q_{e+p}}$ to zero newly added row.
-So the $R$ is then equal to $\vec{R_{new}} = \vec{R}\vec{Q_{e+1}}\vec{Q_e}\ldots\vec{Q_2}\vec{Q_1}\vec{A}$. \todo{better notation}
-$\vec{Q}$ is updated in the same way thus $\vec{Q_{new}} = \vec{Q}\vec{Q_e^T}\vec{Q_{e+1}^T}\ldots\vec{Q_{e+p}^T}$.
+Updated matrix $\vec{\overline{Q}}$ which we denote as $\vec{Q^{(+)}}$
+is updated in the same manner, thus $\vec{Q^{(+)}} = \vec{Q}\vec{Q_e^T}\vec{Q_{e+1}^T}\ldots\vec{Q_{e+p}^T}$.
+Note that if we do not want to have inserted row $\vec{x_j}$ as the last but as (say $k$th) row, then in terms of QR decomposition, we only need to move (last) $\vec{x_j}$ row to the $k$th position. In other words, we create a permutation  matrix $\vec{P}$ so that 
+\begin{equation}
+    \vec{P}\vec{Q^{(+)}} = \begin{bmatrix}
+        \vec{A}(1:k-1 , 1:p) \\
+        \vec{x_j} \\
+        \vec{A}(1:k+1 , 1:p), 
+    \end{bmatrix}
+\end{equation} 
+where $\vec{A}(a:b , 1:p) $ denotes rows of matrix $\vec{A}$ from $a$ to $b$.
+We can describe the whole process by the following pseudocode. 
 
-\todo{todo pseudokod? moc se mi nechce :-D}
+
+
 \begin{algorithm}[H]
     \label{addingrowqr}
-    % \SetKwInOut{Input}{input}
-    % \SetKwInOut{Output}{output}
-    \KwIn{$\vec{Q}, \vec{R}, \vec{x_i}$}
-        \KwOut{$\vec{Q^{+}}, \vec{R^{+}}$ }
-      \caption{QR insert}
+            \KwIn{$\vec{Q} \in \mathbb{R}^{n \times n}, \vec{R} \in \mathbb{R}^{n \times p}, \vec{x_j} \in \mathbb{R}^p, k $}
+        \KwOut{ $\vec{Q^{(+)}} \in \mathbb{R}^{n+1 \times n+1}, \vec{R^{(+)}} \in \mathbb{R}^{n+1 \times p}$ }
 
-    \Return{ $\vec{Q^{+}}$\,, $\vec{R^{+}}$ }\;
+      \caption{QR insert}
+      $\vec{R^{(+)}} \gets \vec{R}~with~appended~last~row~by~\vec{x_j}$\;
+      $\vec{Q^{(+)}} \gets \vec{Q}~with~appended~last~row~and~last~column~by~zeors$\;
+      $\vec{Q^{(+)}}_{n+1, n+1} \gets 1$ \tcp*{i.e.  ${Q^{(+)}}$ now has $1$ on the diagonal}
+
+
+      \For{$i \gets n$ \textbf{to} $p$}{
+        $\vec{Q}(i, n+1) \gets create~Givens~matrix \vec{Q}(i, n+1) \in \mathbb{R}^{n+1 \times n+1}$\;
+        $\vec{R^{(+)}} \gets   \vec{Q}(i, n+1) \vec{R^{(+)}} $\;
+        $\vec{Q^{(+)}} \gets \vec{Q^{(+)}} \vec{Q}^T(i, n+1) $\;        
+        }
+      
+    \For{$i \gets n+1$ \textbf{to} $k$}{
+        $\vec{Q^{(+)}} \gets  \vec{Q^{(+)}} where~we~swap~the~i~row~with~the~i-1~row$
+    }
+
+    \Return{ $\vec{Q^{(+)}}$\,, $\vec{R^{(+)}}$ }\;
 \end{algorithm}
 
-Computing $\vec{R^{+}}$ is $\mathcal{O}(p^2)$ and computing $\vec{Q^{+}}$ is $\mathcal{O}(np)$.
+
+\begin{observation} \label{qrinserttime}
+Computing $\vec{R^{(+)}}$ is $\mathcal{O}(p^2)$ and computing $\vec{Q^{(+)}}$ is $\mathcal{O}(np)$.
+\end{observation}
+
+\begin{proof} \label{qrinsertproof}
+We have loop over $p$ $\vec{Q}(i,j)$ Givens matrices. We do not need to create those matrices, because by multiplying $\vec{R}^{(+)}$ or $\vec{Q}^{(+)}$ with the matrix $\vec{Q}(i,j)$ only one row of is affected. That means we can simulate this matrix-matrix multiplication only by iterating over those matrices and multiplying elements with $\cos(\varphi)$ and $\sin(\varphi)$ adequately. This means in case of $\vec{R}^{(+)}$ we are iterating $p$ times over nonzero rows of $\vec{R}^{(+)}$ thus $p$ rows. That gives us time complexity of $\mathcal{O}(p^2)$. In the case of $\vec{Q}^{(+)}$  we are iterating $p$ times over columns of $\vec{Q}^{(+)}$ and that gives us time complexity of $\mathcal{O}(np)$.
+\end{proof}
+
+\begin{note}
+This process can also be done in case we are using an economic version of matrices $\vec{R}$ and $\vec{Q}$  thus matrices $\vec{R_1}$ and $\vec{Q_1}$ (see \eqref{matrixq1r1}). In such a case
+$\vec{Q_1} \in \mathbb{R}^{p \times p}$ thus then updating $\vec{Q_1}$ to $\vec{Q_1}^{(+)}$ is only $\mathcal{O}(p^2)$.
+\end{note}
 
 \begin{note} \label{qnotrequired}
-    For adding rows, the matrix $\vec{Q}$ is not needed so that we can update $\vec{R}$ to $\vec{R^{+}}$. Later we show that this is useful. \todo{say where}
+The matrix $\vec{\overline{R}}$  can be updated to $\vec{R}^{(+)}$  without the presence of matrix $\vec{Q}$. We use this observation  in the algorithm described in \ref{sectionbanb}.
 \end{note}
 
 
@@ -1444,26 +1458,26 @@ Computing $\vec{R^{+}}$ is $\mathcal{O}(p^2)$ and computing $\vec{Q^{+}}$ is $\m
 %%%%%%%%%%%    QR DELETE     %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-When we are deleting the row $\vec{x_i}$ from matrix $\vec{A}$ we can use following trick 
-\cite{hammarling2008updatingqr}. First, we move such row as the first row of the matrix $\vec{A}$ so ve create permutation matrix $\vec{P}$ so that 
+\subsubsection*{QR delete}
+When we extract the row $\vec{x_i}$ from matrix $\vec{A}$ we can use following trick \cite{hammarling2008updatingqr}. First, we move such row as the first row of the matrix $\vec{A}$ so ve create permutation matrix $\vec{P}$ so that 
 \begin{equation}
     \vec{P}\vec{A} = \begin{bmatrix}
         \vec{x_i} \\
-        \vec{A(1:i-1 , 1:p)} \\
-        \vec{A(1:i+1 , 1:p)} 
+        \vec{A}(1:i-1 , 1:p) \\
+        \vec{A}(1:i+1 , 1:p) 
     \end{bmatrix}
     = 
     \begin{bmatrix}
         \vec{x_i} \\
-        \vec{A^{-}}
+        \vec{A^{(-)}}
     \end{bmatrix}
     = \vec{P}\vec{Q}\vec{R}
 \end{equation} 
-where $\vec{A(a:b , 1:p)} $ means rows of matrix $\vec{A}$ from $a$ to $b$.
-No we can se that we only need to zero first row $\vec{q_1}$ of matrix $\vec{Q}$. We can do this by $n-1$ matrixes matrixes $\vec{Q}(i,j) \in \mathbb{R}^{n \times n}$ so that
+where $\vec{A}(a:b , 1:p) $ means rows of matrix $\vec{A}$ from $a$ to $b$.
+We can see that we only need to introduce zeros in the first row $\vec{q_1}$ (except $q_{11}$) of the matrix $\vec{Q}$. We can do this by $n-1$ matrices $\vec{Q}(i,j) \in \mathbb{R}^{n \times n}$ so that
 
 \begin{equation}
-    \vec{Q}(n-1,n) \ldots \vec{Q}(1,2)\vec{q_1^T} =     \begin{bmatrix}
+    \vec{Q}(1,2) \ldots \vec{Q}(n-1,n)\vec{q_1^T} =     \begin{bmatrix}
         1 \\
         0\\
         \vdots \\
@@ -1472,19 +1486,18 @@ No we can se that we only need to zero first row $\vec{q_1}$ of matrix $\vec{Q}$
 
 To propagate the change into $\vec{R}$ we then consequently need to update $\vec{R}$ so that
 \begin{equation}
-    \vec{Q}(n-1,n) \ldots \vec{Q}(1,2)\vec{q_1^T} \vec{R} =     \begin{bmatrix}
-        \times \\
-        \vec{R^{-}}\\
-        \vdots \\
+    \vec{Q}(1,2) \ldots \vec{Q}(n-1,n) \vec{R} =   \begin{bmatrix}
+        \vec{v} \\
+        \vec{R^{(-)}}\\
     \end{bmatrix}.
 \end{equation}
-The result is
+The result is then
 \begin{equation}
-    \vec{P}\vec{A} = (\vec{P}\vec{Q}  \vec{Q^T}(1,2) \ldots   \vec{Q^T}(n-1,n)) (\vec{Q}(n-1,n) \ldots \vec{Q}(1,2)\vec{q_1^T} \vec{R} ) \\
+    \vec{P}\vec{A} = (\vec{P}\vec{Q}  \vec{Q^T}(n-1,n) \ldots   \vec{Q^T}(1,2)) (\vec{Q}(1,2) \ldots \vec{Q}(n-1,n) \vec{R} ) \\
     = 
     \begin{bmatrix}
         1 & 0 \\
-        0 & \vec{Q^{-}}
+        0 & \vec{Q^{(-)}}
     \end{bmatrix}
     \begin{bmatrix}
         \times \\
@@ -1493,144 +1506,151 @@ The result is
 \end{equation}
 so that 
 \begin{equation}
-    \vec{A^{-}} = \vec{Q^{-}}\vec{R^{-}}
+    \vec{A^{(-)}} = \vec{Q^{(-)}}\vec{R^{(-)}}
 \end{equation}
 
-\todo{napsat pseudokod. opet se mi moc necche :-D }
-\begin{algorithm}[H]
-    \label{removingrow}
-    % \SetKwInOut{Input}{input}
-    % \SetKwInOut{Output}{output}
-    \KwIn{$\vec{Q}, \vec{R}, i$}
-        \KwOut{$\vec{Q^{-}}, \vec{R^{-}}$ }
-      \caption{QR delete}
+Pseudocode is very similar to the QR Insert algorithm \ref{addingrowqr} so it is not necessary to provide it here.
 
-    \Return{ $\vec{Q^{-}}$\,, $\vec{R^{-}}$ }\;
-\end{algorithm}
+\begin{observation} \label{qrdeletetime}
+Time complexity of QR delete is   $\mathcal{O}(n^2)$.
+\end{observation}
 
-Computing $\vec{R^{-}}$ is $\mathcal{O}(p^2)$ and computing $\vec{Q^{-}}$ is $\mathcal{O}(np)$.
+\begin{proof}
+We need to create $n-1$ Givens matrices, and with each of this we need to multiply $\vec{Q^{(-)}}$ and $\vec{R^{(-)}}$. As we stated in \ref{qrinsertproof} this can be node in $\mathcal{O}(n)$ for each matrix.
+So together we get $\mathcal{O}(n^2)$.
+\end{proof}
 
-
-
+\begin{note}
+In case of QR delete, it is not possible to use the economic version of matrices.
+\end{note}
 
 
 
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%% IMPROVED FSA - QR DECOMPOSITION  %%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%% IMPROVED FSA - QR DECOMPOSITION  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\subsubsection*{Calculation of improved FSA using QR}
-So let's focus on our problem. As we said using decomposition is better than calculating inversion primarily due to higher numerical stability. \todo{nevim jestli zminovat ze muzu delat i SVD dekompozici ktera je nejstabilnejsi ze vsech...}
-We'll show that both FSA as well as improved FSA can be calculated using QR decomposition.
-
-Let's start with \ref{agullo:rovnice}. Here inversion is need to calculate 
-$\vec{x_i}\vec{Z}^{-1}\vec{x_i^T}$, $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$ and $\vec{x_i}\vec{Z}^{-1}\vec{x_j^T}$. This can also be done without inversion, only using the decomposition. We can write this equation
+\subsubsection*{Calculation of OEA using QR decomposition}
+Given all the required theory above, let us describe the computation. Let us start with \eqref{agullo:rovnice}. Here we need inversion to calculate 
+$\vec{x_i}\vec{Z}^{-1}\vec{x_i^T}$, $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$ and $\vec{x_i}\vec{Z}^{-1}\vec{x_j^T}$. But this can also be done without inversion, only using the decomposition. We can write this equation
 \begin{equation} \label{solveimi}
-	\vec{x_i}\vec{Z}^{-1}\vec{x_i^T} = \vec{v}^T\vec{v} 	\iff \vec{x_i}(\vec{R}^T\vec{R})^{-1}\vec{x_i^T} = \vec{v}^T\vec{v}
+    \vec{x_i}\vec{Z}^{-1}\vec{x_i^T} = \vec{v}^T\vec{v}     \iff \vec{x_i}(\vec{R}^T\vec{R})^{-1}\vec{x_i^T} = \vec{v}^T\vec{v}
 \end{equation} 
 where $\vec{v}$ can be obtained by solving lower triangular system
 \begin{equation} \label{vsolution}
-	\vec{R}^T\vec{v} = \vec{x_i}^T.
+    \vec{R}^T\vec{v} = \vec{x_i}^T.
 \end{equation} 
-The same can be done with  $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$. Last but not least we need to solve 
+The same can be done with  $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$. Least but not last we need to solve 
 $\vec{x_i}\vec{Z}^{-1}\vec{x_j^T}$. We can write this 
 \begin{equation}
-	\vec{x_i}\vec{Z}^{-1}\vec{x_j^T} = \vec{x_j}\vec{u} 	\iff \vec{x_i}(\vec{R}^T\vec{R})^{-1}\vec{x_j^T} = \vec{x_j}^T\vec{u}
+    \vec{x_i}\vec{Z}^{-1}\vec{x_j^T} = \vec{x_j}\vec{u}     \iff \vec{x_i}(\vec{R}^T\vec{R})^{-1}\vec{x_j^T} = \vec{x_j}^T\vec{u},
 \end{equation} 
-Where column vector $\vec{u}$ is defined by \ref{agullo_u}. We can see that 
+where column vector $\vec{u}$ is defined by \eqref{agullo_u}. We can see that 
 
 \begin{equation}
-	\vec{u} = \vec{Z}^{-1}\vec{x_i^T} 	\iff (\vec{R}^T\vec{R})^{-1}\vec{x_i^T} = \vec{u}
+    \vec{u} = \vec{Z}^{-1}\vec{x_i^T}     \iff (\vec{R}^T\vec{R})^{-1}\vec{x_i^T} = \vec{u}
 \end{equation}
-so that $\vec{u}$ can be obtained ba solving upper triangular system 
-
+so that $\vec{u}$ can be obtained by solving the upper triangular system 
 \begin{equation} \label{solve_u_qr}
-	\vec{R}\vec{u} = \vec{v}
+    \vec{R}\vec{u} = \vec{v},
 \end{equation}
-where $\vec{v}$ is solution of \ref{vsolution}. Other quantities of \ref{agullo:rovnice} does not require $\vec{Z}^{-1}$.
+where $\vec{v}$ is solution of \eqref{vsolution}. Other quantities of \eqref{agullo:rovnice} does not require $\vec{Z}^{-1}$.
 
-When optimal exchange $\vec{z_i}, \vec{z_j}$ is found then we need to update $RSS$ which can be done same way by \ref{updaterss}. Updating $\vec{\hat{w}}$ to  $\vec{\overline{\hat{w}}}$ by \ref{thetaplus} requires
-$\vec{u}$  which in this case we calculate by \ref{solve_u_qr} and $b$ which requires  $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$ but that we've also already covered by idea \ref{solveimi}. Analogous operations can be used to update $\vec{\overline{\hat{w}}}$ to $\vec{\overline{\overline{\hat{w}}}}$  by means of \ref{thetaminus}. Only thing wee need to realize that we can express \ref{xjoverlinez} as $\vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T} = \vec{x_i}\vec{{{Z}}}^{-1}\vec{x_i^T} + b(\vec{u}\vec{x_j}^2)$.
+\begin{observation}
+We can see that time complexity of all these calculations is the same as in case of calculating with inversion thus $\mathcal{O}(p^2)$.
+\end{observation}
 
-We can't use updating inversion because we don't have one so we need to somehow update our QR decomposition. This can be done by both Householder rotation as well as by Givens rotation, but because our $\vec{R}$ is already sparse matrix, Givens rotations are ideal tool for this. We've already described how this can be done. First we can use \ref{addingrowqr} to add row $\vec{x_i}$ to the decomposition and consequently \ref{removingrow} to remove $\vec{x_j}$  from the decomposition. We can see that this is slower than updating inversion directly. On the other hand this solution is numerically stable and requires less time than computing factorization again from scratch. 
+\begin{proof}
+Indeed, in the case of the inversion, we are multiplying quantities such as $\vec{x_i}\vec{Z}^{-1}\vec{x_i^T}$ which can be done in $\mathcal{O}(p^2)$.
+In the case of decomposition, we solve this problem by solving the triangular system of $p$ equations. This can also be done in $\mathcal{O}(p^2)$.
+\end{proof}
 
-Finally let's talk about matrix $\vec{\tilde{Z}}$ which we used \ref{matrixZ} for derivation of our equations. If we use \ref{qrcholesky} observation then we realize that if we make QR factorization of $\vec{A} = (\vec{X}, \vec{y})$ then
+When optimal exchange $\vec{c_i}, \vec{c_j}$ is found then we need to update $RSS$ which can be done same way by \eqref{updaterss}. Updating $\vec{\hat{w}}$ to  $\vec{\overline{\hat{w}}}$ by \eqref{thetaplus} requires
+$\vec{u}$  which in this case we calculate by \eqref{solve_u_qr} and $b$ which requires  $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$. This can be done in the same manner as \eqref{solveimi}. Analogous operations can be used to update $\vec{\overline{\hat{w}}}$ to $\vec{\overline{\overline{\hat{w}}}}$  by means of \eqref{thetaminus}. Only thing wee need to realize that we can express \eqref{xjoverlinez} as $\vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T} = \vec{x_i}\vec{{{Z}}}^{-1}\vec{x_i^T} + b(\vec{u}\vec{x_j}^2)$.
+
+On the other hand, we cannot use equation \eqref{inversionplus} and \eqref{updatedinversion2} for updating the inversion, because we do not have one. So we need to update our QR decomposition somehow. 
+We describe algorithms for updating the QR decomposition in the section \todo{ref section}. 
+First, we can use the QR Insert algorithm to add row $\vec{x_j}$ to the decomposition and consequently QR delete to extract $\vec{x_j}$  from the decomposition. 
+
+\begin{observation}
+This approach is slower than updating inversion directly. On the other hand, this solution is numerically stable. Updating inversion can be done in $\mathcal{p^2}$ (see observation \ref{updatinginversionobservation})  while QR insert has $\mathcal{O}(np)$ (see observation \ref{qrinserttime}) and time complexity and QR delete even $\mathcal{O}(n^2)$ (see observation \ref{qrdeletetime}).
+\end{observation}
+
+\begin{note}
+Because time complexity of the QR delete is $\mathcal{O}(n^2)$, it is up to consideration if instead of recycling QR decomposition is not worth it to recalculate it from scratch which takes $\mathcal{O}(p^2n)$ (see \eqref{qrtimewhat}).
+\end{note}
+
+
+Finally let us talk about matrix $\vec{\tilde{Z}}$ \eqref{matrixZ} which we used for derivation of our equations. If we use \ref{qrcholesky} observation then we realize that if we make QR factorization of $\vec{A} = (\vec{X}, \vec{y})$ then
 
 \begin{equation}
-	\vec{\tilde{Z}} = 
-	\begin{bmatrix}
-		\vec{Z} & \vec{X}^T\vec{y} \\
+    \vec{\tilde{Z}} = 
+    \begin{bmatrix}
+        \vec{Z} & \vec{X}^T\vec{y} \\
     \vec{y}^T\vec{X} & \vec{y}^T\vec{y}
-	\end{bmatrix} 
-	= 
-	\begin{bmatrix}
-		\vec{R^T} & 0 \\
+    \end{bmatrix} 
+    = 
+    \begin{bmatrix}
+        \vec{R^T} & 0 \\
     \vec{\phi^T} & r
-	\end{bmatrix} 
-	\begin{bmatrix} 
-		\vec{R} & \vec{\phi} \\
+    \end{bmatrix} 
+    \begin{bmatrix} 
+        \vec{R} & \vec{\phi} \\
      0 & r
-	\end{bmatrix} 
+    \end{bmatrix} 
 \end{equation}
 
 where 
 
 \begin{equation}
-	\vec{\tilde{R}} = 
-	\begin{bmatrix}
-		\vec{R} & \vec{\phi} \\
+    \vec{\tilde{R}} = 
+    \begin{bmatrix}
+        \vec{R} & \vec{\phi} \\
      0 & r
-	\end{bmatrix} 
-	= \vec{\tilde{Q^T}}\vec{A}
+    \end{bmatrix} 
+    = \vec{\tilde{Q^T}}\vec{A}
 \end{equation}
 
 is matrix from QR factorization of $\vec{A}$. 
-Next we can realize that $\vec{R} \in \mathbb{R}^{p \times p}$ is actually matrix $\vec{R}$ which we can obtain by QR factorization of $\vec{X}$. 
+Next, we can realize that $\vec{R} \in \mathbb{R}^{p \times p}$ is matrix $\vec{R}$ which we can obtain by QR factorization of $\vec{X}$. 
 Moreover $\vec{\phi} \in \mathbb{R}^{p \times 1}$ is column vector which is actually equal to
 \begin{equation}
-	\vec{\phi} =  \vec{Q^T}\vec{y}
+    \vec{\phi} =  \vec{Q^T}\vec{y}
 \end{equation}
 where $\vec{Q}$ is matrix $\vec{Q}$ from QR factorization of $\vec{R}$.
 Due to this fact $\vec{\hat{w}}$ is solution of upper triangular system 
 \begin{equation}
-	\vec{R}\vec{\hat{w}} = \vec{\phi}
+    \vec{R}\vec{\hat{w}} = \vec{\phi}
 \end{equation}
 
 Finally $r \in \mathbb{R}$ is scalar such that 
 
 \begin{equation}
-	r^2 = \vec{y}^T\vec{y} - \vec{y}^T\vec{X}\vec{\hat{w}} = RSS
+    r^2 = \vec{y}^T\vec{y} - \vec{y}^T\vec{X}\vec{\hat{w}} = RSS
 \end{equation}
 
 \begin{remark} \label{qnotrequiredspeedupremark}
-	We can see that all quantities we use in the algorithm can be obtained from matrix $\vec{\tilde{R}}$ moreover if we didn't need to remove rows from $\vec{X}$ then matrix $\vec{\tilde{Q}}$ would not need \ref{qnotrequired}, thus speedup while inserting and rows would be possible. 
+    We can see that all the quantities we use in the algorithm can be obtained from matrix $\vec{\tilde{R}}$.
 \end{remark}
 
-Now we've described all properties of improved FSA algorithm. We can see that two different methods of computation are possible. One, using inversion $\vec{Z}^{-1}$ is faster, but numerically less stable, second using QR decomposition is slower due to updating matrix $\vec{R}$ and matrix $\vec{Q}$. We've also shown that using matrix $\vec{\tilde{R}}$ is useful because it contains all necessary quantities for the improved FSA algorithm, although it won't improve the speed of the algorithm. Later we'll introduce different algorithm where we won't need to remove rows from $\vec{X}$ so then we'll be ab1`A																		`e to use this observation in our favor.
-
-\todo{time complexity QR qwerty}
-\todo{time complexity tildeZQR is the same as QR}
+Now we have described both versions of calculation the algorithm OEA. As we already stated, it easy to use this approach on algorithms FSA, MOEA, and MMEA. Using inversion $\vec{Z}^{-1}$ is slightly faster, but numerically less stable, second, using QR decomposition is more numerically stable. Asymptotically both approaches provide the same performance. Finally, we have also shown that using matrix $\vec{\tilde{R}}$ is useful because it contains all necessary quantities for the algorithms.
 
 
 
 
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% COMBINED ALGORITHM  %%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \section{Combined algorithm}
-\todo{ todo this section and move it somewhere else qwerty}
 Here we describe what we indicated above, and that is a combination of both previous algorithms.
 Two options. 
 z
@@ -1643,8 +1663,21 @@ The second option would be faster? Let us think about it.
 
 
 
-\section{BAB algorithm}  % Also from Agulló, 2000
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% BAB ALGORITHM  %%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{BAB algorithm} \label{sectionbanb}  % Also from Agulló, 2000
 \todo{zminit podobnost s: Hoffmann, Kontoghiorghes, 2010 (Matrix strategies SUR)}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% BSA ALGORITHM  %%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{BSA algorithm}
 In this section we'll introduce another exact algorithm. It have a little different approach than previous algorithms. First of all we'll built a theoretical basis for this algorithm.
 
