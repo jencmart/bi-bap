@@ -597,7 +597,7 @@ One step of algorithm C-step is visualized on figure~\ref{figure:one:c:step}.
 %%%%%%%%    C-STEP time complexity    %%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{observation} 
+\begin{observation} \label{csteptimecomplexity}
     The time complexity of algorithm C-step~\ref{alg:Cstep} is asymptotically similar to the time complexity as OLS fit. Thus $O(p^2n)$.
 \end{observation} 
 
@@ -1132,7 +1132,7 @@ Given that last missing piece to express updated $\vec{\hat{w}}$ is appended $\v
     \vec{\overline{\hat{w}}} = (\vec{Z}^{-1} + b\vec{u}\vec{u^T})(\vec{X^T}\vec{y} + y_i\vec{x_i^T}).
 \end{equation}
 This can be simplified so that we get
-\todo{mention the mistake in original paper? w + (y - xw)bu}
+\todo{mention the mistake in original paper? w + (y - xw)bu ??}
 \begin{equation} \label{thetaplus}
     \vec{\overline{\hat{w}}} = \vec{\hat{w}} - (y_i - \vec{x_i}\vec{\hat{w}})b\vec{u}.
 \end{equation}
@@ -1321,7 +1321,7 @@ It is very useful because all quantities necessary for calculating $\rho_b(\vec{
 
 If $\rho_b(\vec{c_i}, \vec{c_j})$ is less that  $\rho_{min}$ we actually compute $\rho(\vec{c_i}, \vec{c_j})$ and set $\rho_{min} := \rho(\vec{c_i}, \vec{c_j})$.
 
-That means in the double loop which time complexity is $\mathcal{n^2}$  we do not always need to calculate $\rho(\vec{c_i}, \vec{c_j})$ which time complexity is $\mathcal{n^2}$. This does not improve the asymptotic time complexity, but (as can be seen in the table \todo{crate experiment}) it can improve the speed of the algorithm. 
+That means in the double loop which time complexity is $\mathcal{n^2}$  we do not always need to calculate $\rho(\vec{c_i}, \vec{c_j})$ which time complexity is $\mathcal{n^2}$. This does not improve the asymptotic time complexity, but (as can be seen in the table \todo{create experiment}) it can improve the speed of the algorithm. 
 
 Finally, let us note that \cite{agullo2001new} calls this algorithm with bounding condition as \defterm{modified optimal exchange algorithm} (MOEA).
 
@@ -1348,12 +1348,15 @@ $\vec{\overline{\hat{w}}}$ to $\vec{\overline{\overline{\hat{w}}}}$ by
 
 Finally, we can update $RSS$ to $\overline{\overline{RSS}}$ by \ref{rssplus} and  \ref{rssminus}. We can repeat this process until $\gamma^{-}(\vec{c_j}) > \gamma^{+}(\vec{c_i})$.
 
-\begin{observation}
-    Because we are not iterating through all pairs but only over $n-h$ followed by $h+1$ subsets the loops takes only $\mathcal{O}(n)$ time. In the loops, we are computing $\gamma^{-}(\vec{c_j}) $ and $\gamma^{+}(\vec{c_i})$ both takes $\mathcal{O}(p^2)$ time. Outside the loops, all the each of the quantities we are updating take $\mathcal{O}(p^2)$ time.
-That means the one loop of the whole algorithm last $\mathcal{O}(p^2n)$.
-As in the case of the FSA, if we introduce parameters $t$ and $l$, then the time complexity of the algorithm is $\mathcal{O}(tlp^2n)$
+\begin{observation} \label{timecomplexitymmea}
+    One step of the algorithm MMEA has time complexity $O(p^2n)$. So the whole algorithm has time complexity $\mathcal{O}(tlp^2n)$ where $t$ is number of the starts and $l$ is maximum number of iterations of each start.
 \end{observation}
 
+\begin{proof}
+    Because we do not iterate through all pairs but only over $n-h$ followed by $h+1$ subsets the loops takes only $\mathcal{O}(n)$ time. In the loops, we are computing $\gamma^{-}(\vec{c_j}) $ and $\gamma^{+}(\vec{c_i})$ both takes $\mathcal{O}(p^2)$ time. Outside the loops, all the each of the quantities we are updating take $\mathcal{O}(p^2)$ time.
+That means the one loop of the whole algorithm last $\mathcal{O}(p^2n)$.
+As in the case of the FSA, if we introduce parameters $t$ and $l$, then the time complexity of the algorithm is $\mathcal{O}(tlp^2n)$
+\end{proof}
 
 
 
@@ -1449,7 +1452,7 @@ $\vec{Q_1} \in \mathbb{R}^{p \times p}$ thus then updating $\vec{Q_1}$ to $\vec{
 \end{note}
 
 \begin{note} \label{qnotrequired}
-The matrix $\vec{\overline{R}}$  can be updated to $\vec{R}^{(+)}$  without the presence of matrix $\vec{Q}$. We use this observation  in the algorithm described in \ref{sectionbanb}.
+The matrix $\vec{\overline{R}}$  can be updated to $\vec{R}^{(+)}$  without the presence of matrix $\vec{Q}$. We use this observation  in the algorithm described in \ref{sectionbab}.
 \end{note}
 
 
@@ -1649,27 +1652,64 @@ Now we have described both versions of calculation the algorithm OEA. As we alre
 %%%%% COMBINED ALGORITHM  %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\section{Combined algorithm} \label{sectioncombined}
+In this section, we shortly describe how we can utilize lemma \ref{lemma_conditions}; thus that strong necessary condition is not satisfied unless the weak necessary condition is satisfied.
 
-\section{Combined algorithm}
-Here we describe what we indicated above, and that is a combination of both previous algorithms.
-Two options. 
+Algorithm FAST-LTS outputs $h$ element subset satisfying the weak necessary condition. One step of this algorithm has time complexity $\mathcal{O}(p^2n)$ (see observation \ref{csteptimecomplexity}). The iteration of this step is quite low and moreover usually limited by parameter. 
+
+On the other hand, algorithms for finding strong necessary condition FSA, OEA and MOEA have time complexity of one step $\mathcal{O}(p^2n^2)$ (we now don't take into account eager version MMEA, because we have no proof that it finds $h$ element subset satisfying strong necessary condition). 
+
+We can use this in our favor so that we can find $h$ element subset satisfying weak necessary condition by the FAST-LTS algorithm and consequently use this $h$ element subset as an input to some of the algorithms which find $h$ element subset satisfying the strong necessary condition.
+
+Let us consider the combination of the FAST-LTS and the MOEA. We have two options on how to perform this:
 z
 \begin{enumerate}
-    \item Let fast-lts converge and then run FSA and let it converge
-    \item Let fast-lts converge make one step of FSA and try fast-LTS again and iterate between this
+    \item Let the FAST-LTS converge and use this $h$ element subset as input to the MOEA which we let converge.
+    \item Let the FAST-LTS converge to some $h$ element subset. Perform one step of the MOEA and use the result as the input to the FAST-LTS. We can then iterate between steps of these two algorithms till convergence.
 \end{enumerate}
 
-The second option would be faster? Let us think about it.
+On the large data sets, where even one step of the MOEA is too exhausting, we can use the eager MMEA which time complexity of one step is lower than in the case of MOEA.
+
+In chapter \ref{chapterexperiments} we show the experimental results of various combinations of these algorithms.
 
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%% BAB ALGORITHM  %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{BAB algorithm} \label{sectionbanb}  % Also from Agulló, 2000
-\todo{zminit podobnost s: Hoffmann, Kontoghiorghes, 2010 (Matrix strategies SUR)}
+\section{BAB algorithm} \label{sectionbab}
+In this section, we describe the algorithm from \cite{agullo2001new}.Very similar algorithm can also be found in \cite{hofmann2010matrix}.
+
+Unlike previous algorithms, this one is exact. As we discussed in section \ref{sectionofltsdiscrete}, exact algorithm calculate OLS fit on all of the $\binom{n}{h}$ $h$ element subsets. For larger data sets this approach is computationally prohibitive.
+
+This version of the exact algorithm is based on the branch and bound design paradigm; thus it tries to avoid calculation OLS on all $h$ element subsets. First, let us describe how the combination tree is built. 
+
+Let us denote subset of indexes 
+$J_k = (j_1, j_2, \ldots , j_k) \subset {1,2,\ldots , n}$. We can then mark
+$\vec{ X_{J_k} }$ and $\vec{ Y_{J_k} }$ matrices created from $\vec{X}$
+and $\vec{Y}$ so that all rows that are not indexed by $J_k$ are removed.
+We can see that the number of subsets is given by $\binom{n}{k}$.
+
+Let us now consider tree such that at level $k$ is $\binom{n}{k}$ nodes representing all $J_k$ subsets. The depth of the tree is $h$, so this tree has $\binom{n}{h}$ leaves representing all $h$ index subsets. Example of such a tree we can see at figure \ref{figure:full:tree}.
+
+\begin{figure}[h]
+\centering
+\missingfigure{Tree with nodes that represents all $J_k$ subsets. }
+\caption{Tree consiting of all index subsets for $n=4$ and $h=3$}
+\label{figure:full:tree}
+\end{figure}
+
+
+\subsection{Improvements}
+
+Sort data, so that the first $h$ subset is smallest possible. We can use Any previous probabilistic algorithm. Moreover, a suitable solution may be some combined algorithm described in section \ref{sectioncombined}.
+
+Sorting rule. Compute partial increments. Go from the highest.
+
+
 
 
 

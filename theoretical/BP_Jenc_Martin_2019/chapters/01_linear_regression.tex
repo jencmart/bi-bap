@@ -269,7 +269,7 @@ Let us have $\vec{X} \in \mathbb{R}^{n,p}$, $\vec{y} \in \mathbb{R}^{n,1}$,
 where $r_{i:n}^2$ denotes $i$th smallest squared residuum out of $n$ thus $r_{1:n}^2 \leq r_{2:n}^2 \ldots r_{n:n}^2$
 Even though that objective function of LTS seems similar to the OLS objective function, finding minimum is far more complex because the order of the least squared residuals is dependent on $\vec{w}$. Moreover  $r_{i:n}^2(\vec{w})$ residuum is not uniquely determined if more squared residuals have same value as $r_{i:n}^2(\vec{w})$. This makes from finding LTS estimate non-convex optimization problem and finding global minimum is NP-hard \cite{bernholt2006robust}. 
 
-\subsection{Discrete objective function}
+\subsection{Discrete objective function} \label{sectionofltsdiscrete}
 The LTS objective function from definition~\ref{definition:of:lts:real} is not differentiable and not convex, so we are unable to use the same approach as with OLS objective function. Let us transform this objective function to a discrete version which can appropriately be used by algorithms to minimize it.
 
 Let us assume for now that we know the $\vec{\hat{w}^{(LTS, h, n)}}$ vector of estimated regression coefficients. $(LTS, h, n)$ denotes that coefficients are estimated using LTS on the $h$ subset of $n$ data samples. 

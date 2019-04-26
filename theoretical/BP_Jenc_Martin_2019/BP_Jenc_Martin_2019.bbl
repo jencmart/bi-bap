@@ -98,4 +98,10 @@ Bartlett, M.~S. An inverse matrix adjustment arising in discriminant analysis.
   \emph{The Annals of Mathematical Statistics}, volume~22, no.~1, 1951: pp.
   107--111.
 
+\bibitem{hofmann2010matrix}
+Hofmann, M.; Kontoghiorghes, E.~J. Matrix strategies for computing the least
+  trimmed squares estimation of the general linear and sur models.
+  \emph{Computational Statistics \& Data Analysis}, volume~54, no.~12, 2010:
+  pp. 3392--3403.
+
 \end{thebibliography}

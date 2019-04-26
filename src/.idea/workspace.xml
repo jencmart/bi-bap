@@ -6,10 +6,6 @@
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/run.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/runall.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/runall.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen/scripts/eigen_monitor_perf.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen/scripts/eigen_monitor_perf.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/lts/feasibleoe/feasible_solution_oe.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lts/feasibleoe/feasible_solution_oe.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.log" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.synctex.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.synctex.gz" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/03_algorithms.tex" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/03_algorithms.tex" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -444,12 +440,12 @@
       <workItem from="1555337131785" duration="14174000" />
       <workItem from="1555414799415" duration="8635000" />
       <workItem from="1556041865571" duration="2683000" />
-      <workItem from="1556264125265" duration="7055000" />
+      <workItem from="1556264125265" duration="7657000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="239666000" />
+    <option name="totallyTimeSpent" value="240268000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="959" y="3" width="962" height="1078" extended-state="0" />
