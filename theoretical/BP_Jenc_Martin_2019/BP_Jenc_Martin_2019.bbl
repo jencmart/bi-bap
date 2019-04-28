@@ -104,4 +104,9 @@ Hofmann, M.; Kontoghiorghes, E.~J. Matrix strategies for computing the least
   \emph{Computational Statistics \& Data Analysis}, volume~54, no.~12, 2010:
   pp. 3392--3403.
 
+\bibitem{klouda2015exact}
+Klouda, K. An exact polynomial time algorithm for computing the least trimmed
+  squares estimate. \emph{Computational Statistics \& Data Analysis},
+  volume~84, 2015: pp. 27--40.
+
 \end{thebibliography}

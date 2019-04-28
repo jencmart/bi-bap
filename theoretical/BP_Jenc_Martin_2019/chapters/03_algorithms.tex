@@ -1009,7 +1009,7 @@ In this section, we've described the FSA algorithm. In the next section, we intr
 %%%%% OEA, MOEA, MMEA %%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{OEA, MOEA, MMEA} 
+\section{OEA, MOEA, MMEA} \label{oeamoeammea}
 %three exchanging algorithms from Agulló, 2000
 
 In the FSA algorithm, we assumed that after each cycle of OSAA 
@@ -1084,7 +1084,7 @@ and
 
 %%%%%%% INCLUDING OBSERVATION %%%%%%%%%%%
 
-\subsubsection*{Including the observation}
+\subsubsection*{Including the observation} 
 
 Using above let us express how the determinant $\det(\vec{Z})$ and the inverse of the $vec{Z}^{-1}$ changes when observation $\vec{c_i} = (\vec{x_i}, y_i)$ is added to the matrix $\vec{A}$. First let us notice that if we add this row to $\vec{A}$, then  $\vec{Z}$ changes as
 
@@ -1675,7 +1675,6 @@ In chapter \ref{chapterexperiments} we show the experimental results of various 
 
 
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%% BAB ALGORITHM  %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1685,7 +1684,7 @@ In this section, we describe the algorithm from \cite{agullo2001new}.Very simila
 
 Unlike previous algorithms, this one is exact. As we discussed in section \ref{sectionofltsdiscrete}, exact algorithm calculate OLS fit on all of the $\binom{n}{h}$ $h$ element subsets. For larger data sets this approach is computationally prohibitive.
 
-This version of the exact algorithm is based on the branch and bound design paradigm; thus it tries to avoid calculation OLS on all $h$ element subsets. First, let us describe how the combination tree is built. 
+This version of the exact algorithm is based on the branch and bound design paradigm; thus it tries to avoid exhaustive computation on all $h$ element subsets. First, let us describe how the combination tree is built. 
 
 Let us denote subset of indexes 
 $J_k = (j_1, j_2, \ldots , j_k) \subset {1,2,\ldots , n}$. We can then mark
@@ -1698,18 +1697,47 @@ Let us now consider tree such that at level $k$ is $\binom{n}{k}$ nodes represen
 \begin{figure}[h]
 \centering
 \missingfigure{Tree with nodes that represents all $J_k$ subsets. }
-\caption{Tree consiting of all index subsets for $n=4$ and $h=3$}
+\caption{Tree consisting of all index subsets for $n=4$ and $h=3$}
 \label{figure:full:tree}
 \end{figure}
 
+In the case of the exhaustive approach, we can then traverse the tree starting in the root using the right to left (RTL) preorder traversal, and in each node, we can calculate the OLS fit on $\vec{ X_{J_k} }$ and $\vec{ Y_{J_k} }$. If we are in the level $k = h$, we calculate the fit on the $h$ element subset. This approach is exhaustive, so let us now describe how we can improve efficiency. 
+
+First, it is not necessary to calculate fit on $k$th level of the tree in a case $k < p$ because this would mean that matrix $\vec{ X_{J_k} }$ is not regular. The main improvement can because we can skip parts of the tree (perform pruning) based on the following criteria. 
+
+If at any step (at any node) of the tree traversal we calculate the
+$\oflts(m_k)$ where $m_{k_i} = 1$ when $k_i \in J_k$ and $m_{k_i} = 0$ and we find out that this value is higher than minimal value found for some $\oflts(m_h)$ thus value of OLS fit on some $h$ element subset, then we can discard all subsets which contain $J_k$. That means we can trim all descendants of the node which represent $J_k$ subset.
+
+We can describe the algorithm as follows:
+
+\begin{enumerate}
+    \item Set $RSS^* = \inf$. $m^*$
+    \item For each node in RTL preorder traversal calculate $\oflts(m_k)$
+    \item If $\oflts(m_k) > RSS^*$, skip all siblings of this node in the traversal.
+    \item If $\oflts(m_k) < RSS^* $ and $k = h$, then set $RSS^* = \oflts(m_k)$ and $m^*$ so that $m_{k_i} = 1$ when $k_i \in J_k$ and $m_{k_i} = 0$.
+ \item After the traversal return $m^*$ and $\vec{\hat{w}}$
+\end{enumerate}
+
+During the traversal of the tree, we only need to know the path back to the root. Thus the whole tree does not have to be in the memory. 
+
+\begin{remark}
+If we calculated $\oflts(m_{k})$ than we do not need to calculate $\oflts(m_{k+1})$ from scratch. In section \ref{oeamoeammea} we described the way how to update it when a row is added using the matrix inversion any we can apply it here. In section \ref{differentcomputation} we described the way of doing this using the matrix decomposition which is another option. 
+
+Moreover, we described that if rows are not extracted and only inserted, then matrix $\vec{Q}$ do not have to be present and only matrix $\vec{R}$ can be updated. We can use this in our favor because we can keep all the decompositions on the path from the root in the memory.  If we use matrix $\vec{tilde{Z}}$ and $\vec{tilde{R}}$ we can  (see remark \ref{qnotrequiredspeedupremark} ) calculate all the quantities required for the update only using the matrix $\vec{tilde{R}}$. This means that both versions of updating are possible and both can be done in $\mathcal{O}(p^2)$. Thus we recommend using the matrix decomposition version of the updating because it can provide higher numerical stability at the same speed.
+\end{remark}
 
 \subsection{Improvements}
+Because the tree is pruned based on the smallest value $RSS^*$, it would be convenient if we were able to obtain small value $RSS^*$ early in the traversal. We can obtain this value by calculating an approximative LTS estimate. This can be done using any probabilistic algorithm described in the previous sections of this chapter. An ideal candidate may be some combined algorithm described in section \ref{sectioncombined}. When we find such small value, it is then also convenient to permutate the observations based on its absolute residuals based on this LTS estimate in the decreasing order.
 
-Sort data, so that the first $h$ subset is smallest possible. We can use Any previous probabilistic algorithm. Moreover, a suitable solution may be some combined algorithm described in section \ref{sectioncombined}.
+Another improvement can be made using the following sorting rule \defterm{sorting rule}: If we are at the level $k$ ( we assume that $k > p$ )
+in the node $J_k$ and this node has $s$ siblings indexed as $s_1 \ldots s_s$ then we can change the order of those siblings first by calculating partial increment \eqref{gamma:plus} for each sibling and consequently ordered them in the descending order from left to right. This means we visit siblings with a lowest partial increment first. Trimming can then be done in the same manner. Moreover, if we calculate $RSS$ in one of those siblings we and realize that $RSS > RSS^*$, then we can on the top of trimming all siblings of this sibling trim also all brothers left to this sibling. That means we can trim parent node $J_k$ because all of his siblings have already been explored or can be trimmed. We can see such a procedure at figure \ref{figure:sorting:rule}.
 
-Sorting rule. Compute partial increments. Go from the highest.
-
-
+\begin{figure}[h]
+\centering
+\missingfigure{Visualisation of sorting rule }
+\caption{Step in the algorithms when due to the sorted siblings node $j_k$ can be trimmed}
+\label{figure:sorting:rule}
+\end{figure}
 
 
 
@@ -1718,92 +1746,93 @@ Sorting rule. Compute partial increments. Go from the highest.
 %%%%% BSA ALGORITHM  %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
 \section{BSA algorithm}
 In this section we'll introduce another exact algorithm. It have a little different approach than previous algorithms. First of all we'll built a theoretical basis for this algorithm.
 
 
 
-% \subsubsection{Domain of $\oflts$}
-% We've already showed that we can derivate LTS objective function so it's domain is on discrete set  $Q^{(n,h)}$ see \ref{oflts_discrete}. We'll now show that we can transform this objective function to the non-discrete form so that $\oflts (\vec{w}) \vec{w} \in \mathbb{R}^p$ \cite{klouda2015exact}.
-% We'll do this by relation $Z \subset \mathbb{R}^p \times Q^{(n,h)}$ so that $(\vec{w}, \vec{m}) \in Z$ only and if only
-% \begin{equation}
-% 	\sum\limits_{i=1}^h r^{2}_{(i:n)}(\vec{w})  =  \sum\limits_{i=1}^n m_{i}r^{2}_{i}(\vec{w}).
-% \end{equation}
-% $Z$ is not a mapping. To show this we can take simple example so that $r^{2}_{h} = r^{2}_{h+1}$. Then we have for given $\vec{w}$ two different vectors $\vec{m}$ that are in relation with it.
+\subsubsection{Domain of $\oflts$}
+We've already showed that we can derivate LTS objective function so it's domain is on discrete set  $Q^{(n,h)}$ see \ref{oflts_discrete}. We'll now show that we can transform this objective function to the non-discrete form so that $\oflts (\vec{w}) \vec{w} \in \mathbb{R}^p$ \cite{klouda2015exact}.
+We'll do this by relation $Z \subset \mathbb{R}^p \times Q^{(n,h)}$ so that $(\vec{w}, \vec{m}) \in Z$ only and if only
+\begin{equation}
+	\sum\limits_{i=1}^h r^{2}_{(i:n)}(\vec{w})  =  \sum\limits_{i=1}^n m_{i}r^{2}_{i}(\vec{w}).
+\end{equation}
+$Z$ is not a mapping. To show this we can take simple example so that $r^{2}_{h} = r^{2}_{h+1}$. Then we have for given $\vec{w}$ two different vectors $\vec{m}$ that are in relation with it.
 
-% If we want to find domain where $Z$ is mapping, we simply define $\mathcal{U} \subset \mathbb{R}^{p}$ as a maximal set where $Z$ is a mapping. Next we define 
-% $\mathcal{H} = \mathbb{R}^{p}  \setminus   \mathcal{U}$
-% as a complement of $\mathcal{U}$.
+If we want to find domain where $Z$ is mapping, we simply define $\mathcal{U} \subset \mathbb{R}^{p}$ as a maximal set where $Z$ is a mapping. Next we define 
+$\mathcal{H} = \mathbb{R}^{p}  \setminus   \mathcal{U}$
+as a complement of $\mathcal{U}$.
 
-% Let's now describe some properties based on which $\vec{w}$ is in $\mathcal{U}$ or $\mathcal{H}$ set.
+Let's now describe some properties based on which $\vec{w}$ is in $\mathcal{U}$ or $\mathcal{H}$ set.
 
-% \begin{theorem} \label{klouda1}
-% 	$\vec{w} \in \mathcal{U}, \vec{w} \in \mathbb{R}^{p}$ if and only if 
-% 	$r^{2}_{(h:n)}(\vec{w}) < r^{2}_{(h+1:n)}(\vec{w})$
-% \end{theorem}
-% \begin{proof}
-% 	As shown in example above. If $r^{2}_{i}(\vec{w}) = r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w}) = r^{2}_{j}(\vec{w}), i,j \in   \{{1,2,\ldots , n\}} $ then $(\vec{w}, \vec{m_1}) \in Z$ and also $(\vec{w}, \vec{m_2}) \in Z$ where $\vec{m_1}$ has ones at indexes of $h$ smallest residuals and $\vec{m_2}$ has ones at the same indexes except swap $i$th one with $j$th zero.
-% \end{proof}
+\begin{theorem} \label{klouda1}
+	$\vec{w} \in \mathcal{U}, \vec{w} \in \mathbb{R}^{p}$ if and only if 
+	$r^{2}_{(h:n)}(\vec{w}) < r^{2}_{(h+1:n)}(\vec{w})$
+\end{theorem}
+\begin{proof}
+	As shown in example above. If $r^{2}_{i}(\vec{w}) = r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w}) = r^{2}_{j}(\vec{w}), i,j \in   \{{1,2,\ldots , n\}} $ then $(\vec{w}, \vec{m_1}) \in Z$ and also $(\vec{w}, \vec{m_2}) \in Z$ where $\vec{m_1}$ has ones at indexes of $h$ smallest residuals and $\vec{m_2}$ has ones at the same indexes except swap $i$th one with $j$th zero.
+\end{proof}
 
-% \begin{corollary}
-% 	Complement of vectors $\vec{w}$ from theorem \ref{klouda1} are vectors such that 
-% 	\begin{equation}
-% 		r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w})
-% 	\end{equation}
-% 	thus
-% 	\begin{equation}
-% 		\mathcal{H} = \{{ \vec{w} \in \mathbb{R}^{p} | r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w}) \}}.
-% 	\end{equation}
-% 	That means that for each $\vec{w} \in \mathcal{H}$ there are two different $(\vec{x_i}, y_i)$ and  $(\vec{x_j}, y_j)$ so that
-% 	\begin{equation}
-% 		(y_i - \vec{x_i} \vec{w})^2 = r^{2}_i(\vec{w}) =  r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w}) =  r^{2}_j(\vec{w}) = (y_j - \vec{x_j} \vec{w})^2.
-% 	\end{equation}
+\begin{corollary}
+	Complement of vectors $\vec{w}$ from theorem \ref{klouda1} are vectors such that 
+	\begin{equation}
+		r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w})
+	\end{equation}
+	thus
+	\begin{equation}
+		\mathcal{H} = \{{ \vec{w} \in \mathbb{R}^{p} | r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w}) \}}.
+	\end{equation}
+	That means that for each $\vec{w} \in \mathcal{H}$ there are two different $(\vec{x_i}, y_i)$ and  $(\vec{x_j}, y_j)$ so that
+	\begin{equation}
+		(y_i - \vec{x_i} \vec{w})^2 = r^{2}_i(\vec{w}) =  r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w}) =  r^{2}_j(\vec{w}) = (y_j - \vec{x_j} \vec{w})^2.
+	\end{equation}
 
-% 	We can see that 
-% 	\begin{equation}
-% 		(y_i - \vec{x_i} \vec{w})^2 =  (y_j - \vec{x_j} \vec{w})^2 \iff	  y_i \pm y_j + (\vec{x_i} \pm \vec{x_j})  \vec{w} = 0
-% 	\end{equation}
-% \end{corollary}
+	We can see that 
+	\begin{equation}
+		(y_i - \vec{x_i} \vec{w})^2 =  (y_j - \vec{x_j} \vec{w})^2 \iff	  y_i \pm y_j + (\vec{x_i} \pm \vec{x_j})  \vec{w} = 0
+	\end{equation}
+\end{corollary}
 
-% Moreover if we assume that for all $i,j, \in \{{1,2 \ldots, n \}}$  if $ i \neq j$ then $\vec{x_i} \neq \pm \vec{x_j}$ and $\norm{\vec{x_i}} \neq 0$ then $ y_i \pm y_j + (\vec{x_i} \pm \vec{x_j})  \vec{w} = 0$ represents a hyperplane. 
+Moreover if we assume that for all $i,j, \in \{{1,2 \ldots, n \}}$  if $ i \neq j$ then $\vec{x_i} \neq \pm \vec{x_j}$ and $\norm{\vec{x_i}} \neq 0$ then $ y_i \pm y_j + (\vec{x_i} \pm \vec{x_j})  \vec{w} = 0$ represents a hyperplane. 
 
-% It's easy to show that set $\mathcal{U}$ is open and 	lebesgue measure of $\mathcal{H}$  is $0$ \cite{klouda2015exact}. Moreover $\mathcal{H}$ splits $\mathbb{R}^{p}$ into finite number of $m$ open disjoint subsets of $\mathcal{U}$. 
+It's easy to show that set $\mathcal{U}$ is open and 	lebesgue measure of $\mathcal{H}$  is $0$ \cite{klouda2015exact}. Moreover $\mathcal{H}$ splits $\mathbb{R}^{p}$ into finite number of $m$ open disjoint subsets of $\mathcal{U}$. 
 
-% \begin{definition}
-% 	Let's define set of $m \in \mathbb{N}$ sets $\mathcal{U}^{(set)} = \{{ U_i\}}_{i=1}^{m}$ so that
-% 	all $U_i$ are open and connected sets, $U_i$ $U_j$ are disjoined thus $U_i \cap  U_j = \emptyset$, $\cup_{i=1}^{m}	U_i = \mathcal{U}$ and $\cup_{i=1}^{m}	\partial U_i =  \mathcal{H}$.
+\begin{definition}
+	Let's define set of $m \in \mathbb{N}$ sets $\mathcal{U}^{(set)} = \{{ U_i\}}_{i=1}^{m}$ so that
+	all $U_i$ are open and connected sets, $U_i$ $U_j$ are disjoined thus $U_i \cap  U_j = \emptyset$, $\cup_{i=1}^{m}	U_i = \mathcal{U}$ and $\cup_{i=1}^{m}	\partial U_i =  \mathcal{H}$.
 
-% 	We define neighbor sets $U_i, U_j, i \neq j$ so that $ U_i \cap U_j \neq \emptyset$. 
+	We define neighbor sets $U_i, U_j, i \neq j$ so that $ U_i \cap U_j \neq \emptyset$. 
 
-% 	We also define $M^{(min)}$ set of $m$ vectors $\vec{m} \in Q^{(n,h)}$ so that 
-% 	\begin{equation*}
-% 		M^{(min)} = \{{ \vec{m_1}, \ldots, \vec{m_m} | \vec{m_i} = Z(\vec{w}) \vec{w} \in U_i  \}}.
-% 	\end{equation*}
-% 	where $Z(\vec{w})$ represent unique vector $\vec{m_i}$. That means $Z(\vec{w}) = Z(\vec{w^{\prime}})$ for all $w, w^{\prime} \in U_i$.
-% \end{definition}
+	We also define $M^{(min)}$ set of $m$ vectors $\vec{m} \in Q^{(n,h)}$ so that 
+	\begin{equation*}
+		M^{(min)} = \{{ \vec{m_1}, \ldots, \vec{m_m} | \vec{m_i} = Z(\vec{w}) \vec{w} \in U_i  \}}.
+	\end{equation*}
+	where $Z(\vec{w})$ represent unique vector $\vec{m_i}$. That means $Z(\vec{w}) = Z(\vec{w^{\prime}})$ for all $w, w^{\prime} \in U_i$.
+\end{definition}
 
-% For a better understanding definition above see \missingfigure{p=1 n=5 h=3. visualise all $U_i$ and elements of $\mathcal{H}$}
+For a better understanding definition above see \missingfigure{p=1 n=5 h=3. visualise all $U_i$ and elements of $\mathcal{H}$}
 
-% \begin{theorem}
-% 	If the matrix $\vec{X}$ have $h$-full rank then for every local minima at point satisfying weak-necessary condition $\vec{w_{0}}$ of the lts objective function, then there exists a vector $\vec{m} \in Q^{(n,h)}$ such that $(\vec{w_{0}}, \vec{m}) \in Z$.
-% \end{theorem}
+\begin{theorem}
+	If the matrix $\vec{X}$ have $h$-full rank then for every local minima at point satisfying weak-necessary condition $\vec{w_{0}}$ of the lts objective function, then there exists a vector $\vec{m} \in Q^{(n,h)}$ such that $(\vec{w_{0}}, \vec{m}) \in Z$.
+\end{theorem}
 
-% Proof can be found in \cite{klouda2015exact}. 
+Proof can be found in \cite{klouda2015exact}. 
 
-% Given that we can see that 
+Given that we can see that 
 
-% \begin{equation}
-% 	\minim_{\vec{m} \in Q^{(n,h)}} \of^{(OLS, \vec{M}\vec{X}, \vec{M}\vec{Y})} (\vec{w}) =
-% 	\minim_{m \in M^{(min)}} \of^{(OLS, \vec{m^i}\vec{X}, \vec{m^i}\vec{Y})} (\vec{w})
-% \end{equation}
+\begin{equation}
+	\minim_{\vec{m} \in Q^{(n,h)}} \of^{(OLS, \vec{M}\vec{X}, \vec{M}\vec{Y})} (\vec{w}) =
+	\minim_{m \in M^{(min)}} \of^{(OLS, \vec{m^i}\vec{X}, \vec{m^i}\vec{Y})} (\vec{w})
+\end{equation}
 
-% where $\vec{M} = diag(\vec{m})$, $\vec{m^i} = diag(m)$. We can see that set $M^{(min)}$ is very useful because we can minimize only on this set and not on whole $Q^{(n,h)$.
+where $\vec{M} = diag(\vec{m})$, $\vec{m^i} = diag(m)$. We can see that set $M^{(min)}$ is very useful because we can minimize only on this set and not on whole $Q^{(n,h)}$.
 
-% Then minimizing objective function $\oflts(\vec{m})$ from \ref{oflts_discrete} can be reformulated as 
-% \begin{equation}
-% 	\minim_{\vec{m} \in Q^{(n,h)}}  \oflts(\vec{m}) = \minim_{m \in M^{(min)}} \oflts(m)
-% \end{equation}
+Then minimizing objective function $\oflts(\vec{m})$ from \ref{oflts_discrete} can be reformulated as 
+\begin{equation}
+	\minim_{\vec{m} \in Q^{(n,h)}}  \oflts(\vec{m}) = \minim_{m \in M^{(min)}} \oflts(m)
+\end{equation}
 
-% We now have all the theory necessary for describing two dimensional version of the algorithm. We'll now describe this algorithm and next we'll provide some more theory necessary to extend this algorithm to higher dimensions.
+We now have all the theory necessary for describing two dimensional version of the algorithm. We'll now describe this algorithm and next we'll provide some more theory necessary to extend this algorithm to higher dimensions.
 
-% First we'll show how to find fde
+First we'll show how to find fde
