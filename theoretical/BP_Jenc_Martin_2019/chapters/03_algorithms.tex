@@ -1378,7 +1378,7 @@ Let us start by describing how we can update the QR factorization, which is a cr
 %%%%%%%%%%%    QR INSERT     %%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsubsection*{QR insert}
+\subsubsection*{QR insert} 
 First, let us discuss how to update QR decomposition when a row $\vec{x_j}$ is inserted. 
 If we add a row to $\vec{A}$ as the last row, our decomposition looks like
 \begin{equation}
@@ -1575,7 +1575,7 @@ When optimal exchange $\vec{c_i}, \vec{c_j}$ is found then we need to update $RS
 $\vec{u}$  which in this case we calculate by \eqref{solve_u_qr} and $b$ which requires  $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$. This can be done in the same manner as \eqref{solveimi}. Analogous operations can be used to update $\vec{\overline{\hat{w}}}$ to $\vec{\overline{\overline{\hat{w}}}}$  by means of \eqref{thetaminus}. Only thing wee need to realize that we can express \eqref{xjoverlinez} as $\vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T} = \vec{x_i}\vec{{{Z}}}^{-1}\vec{x_i^T} + b(\vec{u}\vec{x_j}^2)$.
 
 On the other hand, we cannot use equation \eqref{inversionplus} and \eqref{updatedinversion2} for updating the inversion, because we do not have one. So we need to update our QR decomposition somehow. 
-We describe algorithms for updating the QR decomposition in the section \todo{ref section}. 
+We describe algorithms for updating the QR decomposition in the section \ref{differentcomputation}. 
 First, we can use the QR Insert algorithm to add row $\vec{x_j}$ to the decomposition and consequently QR delete to extract $\vec{x_j}$  from the decomposition. 
 
 \begin{observation}
@@ -1741,14 +1741,13 @@ in the node $J_k$ and this node has $s$ siblings indexed as $s_1 \ldots s_s$ the
 
 
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%% BSA ALGORITHM  %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \section{BSA algorithm}
-In this section we'll introduce another exact algorithm. It have a little different approach than previous algorithms. First of all we'll built a theoretical basis for this algorithm.
+In this section, we'll introduce another exact algorithm. It has a little different approach than previous algorithms. First of all, build a theoretical basis for this algorithm.
 
 
 
@@ -1760,7 +1759,7 @@ We also know that
 $\minim_{\vec{w} \in \mathbb{R}^p} \of^{(LTS, h, n)}(\vec{w})  =  \minim_{\vec{m} \in Q^{(n,h)}} \oflts(\vec{m})$.
 
 % Let us now extend this relationship.
- (see \eqref{kloudaodvozeni}) Let us now talk about the non discrete version and introduce some new feature.
+ (see \eqref{kloudaodvozeni}) Let us now talk about the non-discrete version and introduce some new feature.
 
 \begin{definition}
     Let $Z \subset \mathbb{R}^p \times  Q^{(n,h)}$ be an relation defined as
@@ -1770,7 +1769,7 @@ $\minim_{\vec{w} \in \mathbb{R}^p} \of^{(LTS, h, n)}(\vec{w})  =  \minim_{\vec{m
 \end{definition}
 
 
-$Z$ is not a mapping. To show this we can take simple example so that $r^{2}_{h} = r^{2}_{h+1}$. Then we have for given $\vec{w}$ two different vectors $\vec{m}$ that are in relation with it.
+$Z$ is not a mapping. To show this we can take simple example so that $r^{2}_{h} = r^{2}_{h+1}$. Then we have for the given $\vec{w}$ two different vectors $\vec{m}$ that are in relation with it.
 
 For that reason, let us define  $\mathcal{U} \subset \mathbb{R}^{p}$ as a maximal set where $Z$ is a mapping. Next we define 
 $\mathcal{H} = \mathbb{R}^{p}  \setminus   \mathcal{U}$
@@ -1779,31 +1778,31 @@ as a complement of $\mathcal{U}$.
 Let's now describe some properties based on which $\vec{w}$ is in $\mathcal{U}$ or $\mathcal{H}$ set.
 
 \begin{theorem} \label{klouda1}
-	$\vec{w} \in \mathcal{U}, \vec{w} \in \mathbb{R}^{p}$ if and only if 
-	$r^{2}_{(h:n)}(\vec{w}) < r^{2}_{(h+1:n)}(\vec{w})$
+    $\vec{w} \in \mathcal{U}, \vec{w} \in \mathbb{R}^{p}$ if and only if 
+    $r^{2}_{(h:n)}(\vec{w}) < r^{2}_{(h+1:n)}(\vec{w})$
 \end{theorem}
 \begin{proof}
-	As shown in example above. If $r^{2}_{i}(\vec{w}) = r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w}) = r^{2}_{j}(\vec{w}), i,j \in   \{{1,2,\ldots , n\}} $ then $(\vec{w}, \vec{m_1}) \in Z$ and also $(\vec{w}, \vec{m_2}) \in Z$ where $\vec{m_1}$ has ones at indexes of $h$ smallest residuals and $\vec{m_2}$ has ones at the same indexes except swap $i$th one with $j$th zero.
+    As shown in example above. If $r^{2}_{i}(\vec{w}) = r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w}) = r^{2}_{j}(\vec{w}), i,j \in   \{{1,2,\ldots , n\}} $ then $(\vec{w}, \vec{m_1}) \in Z$ and also $(\vec{w}, \vec{m_2}) \in Z$ where $\vec{m_1}$ has ones at indexes of $h$ smallest residuals and $\vec{m_2}$ has ones at the same indexes except swap $i$th one with $j$th zero.
 \end{proof}
 
 \begin{corollary}
-	Complement of vectors $\vec{w}$ from theorem \ref{klouda1} are vectors such that 
-	\begin{equation}
-		r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w})
-	\end{equation}
-	thus
-	\begin{equation}
-		\mathcal{H} = \{{ \vec{w} \in \mathbb{R}^{p} | r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w}) \}}.
-	\end{equation}
-	That means that for each $\vec{w} \in \mathcal{H}$ there are two different $(\vec{x_i}, y_i)$ and  $(\vec{x_j}, y_j)$ so that
-	\begin{equation}
-		(y_i - \vec{x_i} \vec{w})^2 = r^{2}_i(\vec{w}) =  r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w}) =  r^{2}_j(\vec{w}) = (y_j - \vec{x_j} \vec{w})^2.
-	\end{equation}
+    Complement of vectors $\vec{w}$ from theorem \ref{klouda1} are vectors such that 
+    \begin{equation}
+        r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w})
+    \end{equation}
+    thus
+    \begin{equation}
+        \mathcal{H} = \{{ \vec{w} \in \mathbb{R}^{p} | r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w}) \}}.
+    \end{equation}
+    That means that for each $\vec{w} \in \mathcal{H}$ there are two different $(\vec{x_i}, y_i)$ and  $(\vec{x_j}, y_j)$ so that
+    \begin{equation}
+        (y_i - \vec{x_i} \vec{w})^2 = r^{2}_i(\vec{w}) =  r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w}) =  r^{2}_j(\vec{w}) = (y_j - \vec{x_j} \vec{w})^2.
+    \end{equation}
 
-	We can see that 
-	\begin{equation}
-		(y_i - \vec{x_i} \vec{w})^2 =  (y_j - \vec{x_j} \vec{w})^2 \iff	  y_i \pm y_j + (\vec{x_i} \pm \vec{x_j})  \vec{w} = 0
-	\end{equation}
+    We can see that 
+    \begin{equation}
+        (y_i - \vec{x_i} \vec{w})^2 =  (y_j - \vec{x_j} \vec{w})^2 \iff      y_i \pm y_j + (\vec{x_i} \pm \vec{x_j})  \vec{w} = 0
+    \end{equation}
 \end{corollary}
 
 
@@ -1813,19 +1812,19 @@ Let's now describe some properties based on which $\vec{w}$ is in $\mathcal{U}$ 
 
 If assumption \ref{klouda:asump:1} is fulfilled then $ y_i \pm y_j + (\vec{x_i} \pm \vec{x_j})  \vec{w} = 0$ represents a hyperplane. 
 
-It's easy to show that set $\mathcal{U}$ is open and lebesgue measure of $\mathcal{H}$  is $0$ \cite{klouda2015exact}. Moreover $\mathcal{H}$ splits $\mathbb{R}^{p}$ into finite number of $m$ open disjoint subsets of $\mathcal{U}$. 
+It's easy to show that set $\mathcal{U}$ is an open and Lebesgue measure of $\mathcal{H}$  is $0$ \cite{klouda2015exact}. Moreover $\mathcal{H}$ splits $\mathbb{R}^{p}$ into finite number of $m$ open disjoint subsets of $\mathcal{U}$. 
 
 \begin{definition}
-	Let's define set of $m \in \mathbb{N}$ sets $\mathcal{U}^{(set)} = \{{ U_i\}}_{i=1}^{m}$ so that
-	all $U_i$ are open and connected sets, $U_i$ $U_j$ are disjoined thus $U_i \cap  U_j = \emptyset$, $\cup_{i=1}^{m}	U_i = \mathcal{U}$ and $\cup_{i=1}^{m}	\partial U_i =  \mathcal{H}$.
+    Let's define set of $m \in \mathbb{N}$ sets $\mathcal{U}^{(set)} = \{{ U_i\}}_{i=1}^{m}$ so that
+    all $U_i$ are open and connected sets, $U_i$ $U_j$ are disjoined thus $U_i \cap  U_j = \emptyset$, $\cup_{i=1}^{m}    U_i = \mathcal{U}$ and $\cup_{i=1}^{m}    \partial U_i =  \mathcal{H}$.
 
-	We define neighbor sets $U_i, U_j, i \neq j$ so that $ U_i \cap U_j \neq \emptyset$. 
+    We define neighbor sets $U_i, U_j, i \neq j$ so that $ U_i \cap U_j \neq \emptyset$. 
 
-	We also define $M^{(min)}$ set of $m$ vectors $\vec{m} \in Q^{(n,h)}$ so that 
-	\begin{equation*}
-		M^{(min)} = \{{ \vec{m_1}, \ldots, \vec{m_m} | \vec{m_i} = Z(\vec{w}) \vec{w} \in U_i  \}}.
-	\end{equation*}
-	where $Z(\vec{w})$ represent unique vector $\vec{m_i}$. That means $Z(\vec{w}) = Z(\vec{w^{\prime}})$ for all $w, w^{\prime} \in U_i$.
+    We also define $M^{(min)}$ set of $m$ vectors $\vec{m} \in Q^{(n,h)}$ so that 
+    \begin{equation*}
+        M^{(min)} = \{{ \vec{m_1}, \ldots, \vec{m_m} | \vec{m_i} = Z(\vec{w}) \vec{w} \in U_i  \}}.
+    \end{equation*}
+    where $Z(\vec{w})$ represent unique vector $\vec{m_i}$. That means $Z(\vec{w}) = Z(\vec{w^{\prime}})$ for all $w, w^{\prime} \in U_i$.
 \end{definition}
 
 For a better understanding definition above see \missingfigure{p=1 n=5 h=3. visualise all $U_i$ and elements of $\mathcal{H}$}
@@ -1834,28 +1833,28 @@ For a better understanding definition above see \missingfigure{p=1 n=5 h=3. visu
 We say that matrix $\vec{X} \in \mathbb{R}^{n \times p}$ has \defterm{$h$-full} if for all $m \in \qnh$ matrix $\vec{M}\vec{X}$ has rank $p$.
 
 \begin{theorem} \label{minimas:in:relation}
-	If the matrix $\vec{X}$ has $h$-full rank then for every local minima at point satisfying weak-necessary condition $\vec{w_{0}}$ of the OF-LTS function, then there exists a vector $\vec{m} \in Q^{(n,h)}$ such that $(\vec{w_{0}}, \vec{m}) \in Z$.
+    If the matrix $\vec{X}$ has $h$-full rank then for every local minima at point satisfying weak-necessary condition $\vec{w_{0}}$ of the OF-LTS function, then there exists a vector $\vec{m} \in Q^{(n,h)}$ such that $(\vec{w_{0}}, \vec{m}) \in Z$.
 \end{theorem}
 
 Proof can be found in \cite[Theorem~7]{klouda2015exact}. 
 
-\subsection{One dimensional version of the algorithm}
+\subsection{ One-dimensional version of the algorithm}
 
 Based on the theorem~\ref{minimas:in:relation} we can see that
 \begin{equation}
-	\minim_{\vec{m} \in Q^{(n,h)}} \of^{(OLS, \vec{M}\vec{X}, \vec{M}\vec{Y})} (\vec{w}) =
-	\minim_{m \in M^{(min)}} \of^{(OLS, \vec{m^i}\vec{X}, \vec{m^i}\vec{Y})} (\vec{w})
+    \minim_{\vec{m} \in Q^{(n,h)}} \of^{(OLS, \vec{M}\vec{X}, \vec{M}\vec{Y})} (\vec{w}) =
+    \minim_{m \in M^{(min)}} \of^{(OLS, \vec{m^i}\vec{X}, \vec{m^i}\vec{Y})} (\vec{w})
 \end{equation}
 
 where $\vec{M} = diag(\vec{m})$, $\vec{m^i} = diag(m)$. Set $M^{(min)}$ is very useful because we can iterate only through this set and not through whole $Q^{(n,h)}$.
 
 Then minimizing objective function $\oflts(\vec{m})$ from \ref{oflts_discrete} can be reformulated as 
 \begin{equation} \label{mminqnh}
-	\minim_{\vec{m} \in Q^{(n,h)}}  \oflts(\vec{m}) = \minim_{m \in M^{(min)}} \oflts(m)
+    \minim_{\vec{m} \in Q^{(n,h)}}  \oflts(\vec{m}) = \minim_{m \in M^{(min)}} \oflts(m)
 \end{equation}
 
 
-That means if we are able to find all $m \in M^{(min)}$ then minimizing $\oflts$ would be easy.
+That means if we can find all $m \in M^{(min)}$ then minimizing $\oflts$ would be easy.
 So how we can find the elements of $M^{(min)}$ set? 
 
 For now, let us assume that we know elements of $\mathcal{H}$.
@@ -1902,7 +1901,7 @@ Finally we need to find all elements of $\mathcal{H}$. As we know for all elemen
 
 Note that $|H| \leq 2 \choose{n}{p+1}$. So in  the case of the one dimensional case $|H| \leq 2 \choose{n}{2} = n(n-1)$.
 
-Finding all elements of $H$ is then equal for for solving $\choose{n}{p+1}$ equations. And because equations are quadratic, we can have up to two solutions for each equation.
+Finding all elements of $H$ is then equal for for solving $\choose{n}{p+1}$ equations. Moreover, because equations are quadratic, we can have up to two solutions for each equation.
 
 So idea of the whole algorithm is to find all elements of $H$ (by solving quadratic equations), consequently finding which of them are part of $\mathcal{H}$ (by ordering squared residuals and checking if $r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w}$) and finally for each $\vec{w} \in \mathcal{H}$ find $\vec{m}$ that are in relation. All of those $\vec{m}$ vectors form $M^{(min)}$ set. Finally we can use $\vec{m} \in M^{(min)}$ for minimizing $\oflts(\vec{m})$ by the terms of \eqref{mminqnh}. The whole algorithm, which authors call Border Scanning Algorithm (BSA) is described by the following pseudocode:
 
@@ -1934,7 +1933,7 @@ So idea of the whole algorithm is to find all elements of $H$ (by solving quadra
 
 \subsection{Multidimensional BSA}
 
-If we would like to scale the algorithm into the higher dimension we have to face one major complication. Algorithm finds all elements of $H$ and $\mathcal{H}$. This is possible in one dimension, but because $\mathcal{H}$ forms a hyperplane, then for higher dimensions is infinite.
+If we would like to scale the algorithm into the higher dimension, we have to face one major complication. The algorithm finds all elements of $H$ and $\mathcal{H}$. This is possible in one dimension, but because $\mathcal{H}$ forms a hyperplane, then for higher dimensions is infinite.
 
 Authors then propose to find finite set $mathcal{H}_p$ such that 
 \begin{equation} \label{hp:set:condition}
@@ -1954,13 +1953,13 @@ where $i_1, i_2 \ldots i_{p+1}$  is $(p+1)$-element subset of ${1, 2, \ldots n}$
 
 
 System of those quadratic equations can be rewritten as 
-Because this is system of quadratic equations, we can have up to $2^p$ solutions.
+Because this is a system of quadratic equations, we can have up to $2^p$ solutions.
 
 Moreover total number of $(p+1)$-element subsets out of $n$ is $\binom{n}{p+1}$.
-This means that total number of solutions can be up to $\binom{n}{p+1} 2^p$. 
-We denote set of all this solutions $H_p$.
+This means that the total number of solutions can be up to $\binom{n}{p+1} 2^p$. 
+We denote set of all these solutions $H_p$.
 
-So if set $H_p$ satisfies \ref{hp:set:condition} then it can be used for finding $\mathcal{H}_p$ subset, thus we would be able to use this set for multidimensional version of the algorithm.
+So if set $H_p$ satisfies \ref{hp:set:condition} then it can be used for finding $\mathcal{H}_p$ subset, thus we would be able to use this set for the multidimensional version of the algorithm.
 
 Let $\circ \in {+, -}$ be either operation $+$ or $-$. Then system of quadratic equations \eqref{p:plus:one:equations} is equivalent to $2^p$ linear systems
 
@@ -1994,10 +1993,10 @@ The seconds assumption prevents the set $\mathcal{H_p}$ to be empty thus the cas
 
 This assumption can cause problem because when we assume model with the intercept, thus for all rows $\vec{x_i}$ of matrix $\vec{X}$ is $x_{i1} = 1$ then in the case  $\circ_1,\circ_2 \ldots,  \circ_{n-1} = -$, first column of matrix $\vec{X}$ only contains zeroes. We can modify this assumption so that instead of using $(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -}$ we use only $(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -} \setminus {(-, \ldots, -)}$ \cite{klouda2015exact}. 
 
-Given that we now know that set $H_p$ and $\mathcal{H}_p$ are suitable for our algorithm and we also know how to calculate them, so let us describe multidimensional version of the algorithm.
+Given that we now know that set $H_p$ and $\mathcal{H}_p$ are suitable for our algorithm and we also know how to calculate them, so let us describe the multidimensional version of the algorithm.
 
 \todo{write the pseudocode}
 
-Let us now describe time complexity of this algorithm. 
+Let us now describe the time complexity of this algorithm. 
 
 \todo{write the time complexity}
