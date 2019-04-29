@@ -1723,7 +1723,7 @@ During the traversal of the tree, we only need to know the path back to the root
 \begin{remark}
 If we calculated $\oflts(m_{k})$ than we do not need to calculate $\oflts(m_{k+1})$ from scratch. In section \ref{oeamoeammea} we described the way how to update it when a row is added using the matrix inversion any we can apply it here. In section \ref{differentcomputation} we described the way of doing this using the matrix decomposition which is another option. 
 
-Moreover, we described that if rows are not extracted and only inserted, then matrix $\vec{Q}$ do not have to be present and only matrix $\vec{R}$ can be updated. We can use this in our favor because we can keep all the decompositions on the path from the root in the memory.  If we use matrix $\vec{tilde{Z}}$ and $\vec{tilde{R}}$ we can  (see remark \ref{qnotrequiredspeedupremark} ) calculate all the quantities required for the update only using the matrix $\vec{tilde{R}}$. This means that both versions of updating are possible and both can be done in $\mathcal{O}(p^2)$. Thus we recommend using the matrix decomposition version of the updating because it can provide higher numerical stability at the same speed.
+Moreover, we described that if rows are not extracted and only inserted, then matrix $\vec{Q}$ do not have to be present and only matrix $\vec{R}$ can be updated. We can use this in our favor because we can keep all the decompositions on the path from the root in the memory.  If we use matrix $\vec{\tilde{Z}}$ and $\vec{\tilde{R}}$ we can  (see remark \ref{qnotrequiredspeedupremark} ) calculate all the quantities required for the update only using the matrix $\vec{\tilde{R}}$. This means that both versions of updating are possible and both can be done in $\mathcal{O}(p^2)$. Thus we recommend using the matrix decomposition version of the updating because it can provide higher numerical stability at the same speed.
 \end{remark}
 
 \subsection{Improvements}
@@ -1752,15 +1752,27 @@ In this section we'll introduce another exact algorithm. It have a little differ
 
 
 
-\subsubsection{Domain of $\oflts$}
-We've already showed that we can derivate LTS objective function so it's domain is on discrete set  $Q^{(n,h)}$ see \ref{oflts_discrete}. We'll now show that we can transform this objective function to the non-discrete form so that $\oflts (\vec{w}) \vec{w} \in \mathbb{R}^p$ \cite{klouda2015exact}.
-We'll do this by relation $Z \subset \mathbb{R}^p \times Q^{(n,h)}$ so that $(\vec{w}, \vec{m}) \in Z$ only and if only
-\begin{equation}
-	\sum\limits_{i=1}^h r^{2}_{(i:n)}(\vec{w})  =  \sum\limits_{i=1}^n m_{i}r^{2}_{i}(\vec{w}).
-\end{equation}
+\subsubsection{Domain of OF-LTS}
+We introduced two version of OF-LTS. First one is 
+$\of^{(LTS, h, n)}(\vec{w}), \vec{w} \in \mathbb{R}^p$ and the second is discrete version 
+$\oflts(\vec{m}), \vec{m} \in Q^{(n,h)}$. 
+We also know that 
+$\minim_{\vec{w} \in \mathbb{R}^p} \of^{(LTS, h, n)}(\vec{w})  =  \minim_{\vec{m} \in Q^{(n,h)}} \oflts(\vec{m})$.
+
+% Let us now extend this relationship.
+ (see \eqref{kloudaodvozeni}) Let us now talk about the non discrete version and introduce some new feature.
+
+\begin{definition}
+    Let $Z \subset \mathbb{R}^p \times  Q^{(n,h)}$ be an relation defined as
+    \begin{equation}
+        (\vec{w}, \vec{m}) \in Z \Leftrightarrow \sum\limits_{i=1}^h r_{i:n}^2(\vec{w}) = \sum\limits_{i=1}^n m_i r_{i}^2(\vec{w})
+    \end{equation}
+\end{definition}
+
+
 $Z$ is not a mapping. To show this we can take simple example so that $r^{2}_{h} = r^{2}_{h+1}$. Then we have for given $\vec{w}$ two different vectors $\vec{m}$ that are in relation with it.
 
-If we want to find domain where $Z$ is mapping, we simply define $\mathcal{U} \subset \mathbb{R}^{p}$ as a maximal set where $Z$ is a mapping. Next we define 
+For that reason, let us define  $\mathcal{U} \subset \mathbb{R}^{p}$ as a maximal set where $Z$ is a mapping. Next we define 
 $\mathcal{H} = \mathbb{R}^{p}  \setminus   \mathcal{U}$
 as a complement of $\mathcal{U}$.
 
@@ -1794,9 +1806,14 @@ Let's now describe some properties based on which $\vec{w}$ is in $\mathcal{U}$ 
 	\end{equation}
 \end{corollary}
 
-Moreover if we assume that for all $i,j, \in \{{1,2 \ldots, n \}}$  if $ i \neq j$ then $\vec{x_i} \neq \pm \vec{x_j}$ and $\norm{\vec{x_i}} \neq 0$ then $ y_i \pm y_j + (\vec{x_i} \pm \vec{x_j})  \vec{w} = 0$ represents a hyperplane. 
 
-It's easy to show that set $\mathcal{U}$ is open and 	lebesgue measure of $\mathcal{H}$  is $0$ \cite{klouda2015exact}. Moreover $\mathcal{H}$ splits $\mathbb{R}^{p}$ into finite number of $m$ open disjoint subsets of $\mathcal{U}$. 
+\begin{assumption} \label{klouda:asump:1}
+    For $\vec{X} \in \mathbb{R}^{n \times p}$ let as assume that for all $i,j, \in \{{1,2 \ldots, n \}}$  if $ i \neq j$ then $\vec{x_i} \neq \pm \vec{x_j}$ and $\norm{\vec{x_i}} \neq 0$.
+\end{assumption}
+
+If assumption \ref{klouda:asump:1} is fulfilled then $ y_i \pm y_j + (\vec{x_i} \pm \vec{x_j})  \vec{w} = 0$ represents a hyperplane. 
+
+It's easy to show that set $\mathcal{U}$ is open and lebesgue measure of $\mathcal{H}$  is $0$ \cite{klouda2015exact}. Moreover $\mathcal{H}$ splits $\mathbb{R}^{p}$ into finite number of $m$ open disjoint subsets of $\mathcal{U}$. 
 
 \begin{definition}
 	Let's define set of $m \in \mathbb{N}$ sets $\mathcal{U}^{(set)} = \{{ U_i\}}_{i=1}^{m}$ so that
@@ -1813,26 +1830,174 @@ It's easy to show that set $\mathcal{U}$ is open and 	lebesgue measure of $\math
 
 For a better understanding definition above see \missingfigure{p=1 n=5 h=3. visualise all $U_i$ and elements of $\mathcal{H}$}
 
-\begin{theorem}
-	If the matrix $\vec{X}$ have $h$-full rank then for every local minima at point satisfying weak-necessary condition $\vec{w_{0}}$ of the lts objective function, then there exists a vector $\vec{m} \in Q^{(n,h)}$ such that $(\vec{w_{0}}, \vec{m}) \in Z$.
+
+We say that matrix $\vec{X} \in \mathbb{R}^{n \times p}$ has \defterm{$h$-full} if for all $m \in \qnh$ matrix $\vec{M}\vec{X}$ has rank $p$.
+
+\begin{theorem} \label{minimas:in:relation}
+	If the matrix $\vec{X}$ has $h$-full rank then for every local minima at point satisfying weak-necessary condition $\vec{w_{0}}$ of the OF-LTS function, then there exists a vector $\vec{m} \in Q^{(n,h)}$ such that $(\vec{w_{0}}, \vec{m}) \in Z$.
 \end{theorem}
 
-Proof can be found in \cite{klouda2015exact}. 
+Proof can be found in \cite[Theorem~7]{klouda2015exact}. 
 
-Given that we can see that 
+\subsection{One dimensional version of the algorithm}
 
+Based on the theorem~\ref{minimas:in:relation} we can see that
 \begin{equation}
 	\minim_{\vec{m} \in Q^{(n,h)}} \of^{(OLS, \vec{M}\vec{X}, \vec{M}\vec{Y})} (\vec{w}) =
 	\minim_{m \in M^{(min)}} \of^{(OLS, \vec{m^i}\vec{X}, \vec{m^i}\vec{Y})} (\vec{w})
 \end{equation}
 
-where $\vec{M} = diag(\vec{m})$, $\vec{m^i} = diag(m)$. We can see that set $M^{(min)}$ is very useful because we can minimize only on this set and not on whole $Q^{(n,h)}$.
+where $\vec{M} = diag(\vec{m})$, $\vec{m^i} = diag(m)$. Set $M^{(min)}$ is very useful because we can iterate only through this set and not through whole $Q^{(n,h)}$.
 
 Then minimizing objective function $\oflts(\vec{m})$ from \ref{oflts_discrete} can be reformulated as 
-\begin{equation}
+\begin{equation} \label{mminqnh}
 	\minim_{\vec{m} \in Q^{(n,h)}}  \oflts(\vec{m}) = \minim_{m \in M^{(min)}} \oflts(m)
 \end{equation}
 
-We now have all the theory necessary for describing two dimensional version of the algorithm. We'll now describe this algorithm and next we'll provide some more theory necessary to extend this algorithm to higher dimensions.
 
-First we'll show how to find fde
+That means if we are able to find all $m \in M^{(min)}$ then minimizing $\oflts$ would be easy.
+So how we can find the elements of $M^{(min)}$ set? 
+
+For now, let us assume that we know elements of $\mathcal{H}$.
+
+Because for each $m \in M^{(min)}$ exists at least one $\vec{w} \in \mathcal{H}$ such that $(\vec{w}, \vec{m}) \in Z$ then for given $\vec{w} \in \mathcal{H}$ we can find all $\vec{m}$ by algorithm described by following pseudocode:
+
+\todo{write the pseudocode}
+\begin{algorithm}[H]
+    \label{find:all:m}
+            \KwIn{$\vec{Q} \in \mathbb{R}^{n \times n}, \vec{R} \in \mathbb{R}^{n \times p}, \vec{x_j} \in \mathbb{R}^p, k $}
+        \KwOut{ $\vec{Q^{(+)}} \in \mathbb{R}^{n+1 \times n+1}, \vec{R^{(+)}} \in \mathbb{R}^{n+1 \times p}$ }
+
+      \caption{Find all $\vec{m}$}
+    %   $\vec{R^{(+)}} \gets \vec{R}~with~appended~last~row~by~\vec{x_j}$\;
+    %   $\vec{Q^{(+)}} \gets \vec{Q}~with~appended~last~row~and~last~column~by~zeors$\;
+    %   $\vec{Q^{(+)}}_{n+1, n+1} \gets 1$ \tcp*{i.e.  ${Q^{(+)}}$ now has $1$ on the diagonal}
+
+
+    %   \For{$i \gets n$ \textbf{to} $p$}{
+    %     $\vec{Q}(i, n+1) \gets create~Givens~matrix \vec{Q}(i, n+1) \in \mathbb{R}^{n+1 \times n+1}$\;
+    %     $\vec{R^{(+)}} \gets   \vec{Q}(i, n+1) \vec{R^{(+)}} $\;
+    %     $\vec{Q^{(+)}} \gets \vec{Q^{(+)}} \vec{Q}^T(i, n+1) $\;        
+    %     }
+      
+    % \For{$i \gets n+1$ \textbf{to} $k$}{
+    %     $\vec{Q^{(+)}} \gets  \vec{Q^{(+)}} where~we~swap~the~i~row~with~the~i-1~row$
+    % }
+
+    \Return{ $\vec{Q^{(+)}}$\,, $\vec{R^{(+)}}$ }\;
+\end{algorithm}
+
+
+Finally we need to find all elements of $\mathcal{H}$. As we know for all elements $\vec{w} \in \mathcal{H}$ $r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w})$. So if we find all $\vec{w}$ that solve this, then we found $\mathcal{H}$. The problem is that residuals are sorted. To overcome this issue by finding some candidates which would possible be equal $(h:n)$th and $(h+1:n)$th squared residuals. In \cite{klouda2015exact} we are provided necessary condition for such a candidates.
+
+\begin{definition}
+    If $\vec{w} \in \mathcal{H}$ then there exists $i,j, i \neq j$ so that
+     $r^{2}_i(\vec{w}) = r^{2}_j(\vec{w})$. We denote set $H$ containing $\vec{w}$ satisfying this necessary condition, thus
+
+    \begin{equation}
+        H = \{{ \vec{w} \in \mathbb{R}^p | r^{2}_i(\vec{w}) = r^{2}_j(\vec{w}), i \neq j  \}}.   
+    \end{equation}
+     
+\end{definition}
+
+Note that $|H| \leq 2 \choose{n}{p+1}$. So in  the case of the one dimensional case $|H| \leq 2 \choose{n}{2} = n(n-1)$.
+
+Finding all elements of $H$ is then equal for for solving $\choose{n}{p+1}$ equations. And because equations are quadratic, we can have up to two solutions for each equation.
+
+So idea of the whole algorithm is to find all elements of $H$ (by solving quadratic equations), consequently finding which of them are part of $\mathcal{H}$ (by ordering squared residuals and checking if $r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w}$) and finally for each $\vec{w} \in \mathcal{H}$ find $\vec{m}$ that are in relation. All of those $\vec{m}$ vectors form $M^{(min)}$ set. Finally we can use $\vec{m} \in M^{(min)}$ for minimizing $\oflts(\vec{m})$ by the terms of \eqref{mminqnh}. The whole algorithm, which authors call Border Scanning Algorithm (BSA) is described by the following pseudocode:
+
+\todo{write the pseudocode}
+\begin{algorithm}[H]
+    \label{alg:border:scanning:bsa:onedim}
+            \KwIn{$\vec{Q} \in \mathbb{R}^{n \times n}, \vec{R} \in \mathbb{R}^{n \times p}, \vec{x_j} \in \mathbb{R}^p, k $}
+        \KwOut{ $\vec{Q^{(+)}} \in \mathbb{R}^{n+1 \times n+1}, \vec{R^{(+)}} \in \mathbb{R}^{n+1 \times p}$ }
+
+      \caption{BSA}
+    %   $\vec{R^{(+)}} \gets \vec{R}~with~appended~last~row~by~\vec{x_j}$\;
+    %   $\vec{Q^{(+)}} \gets \vec{Q}~with~appended~last~row~and~last~column~by~zeors$\;
+    %   $\vec{Q^{(+)}}_{n+1, n+1} \gets 1$ \tcp*{i.e.  ${Q^{(+)}}$ now has $1$ on the diagonal}
+
+
+    %   \For{$i \gets n$ \textbf{to} $p$}{
+    %     $\vec{Q}(i, n+1) \gets create~Givens~matrix \vec{Q}(i, n+1) \in \mathbb{R}^{n+1 \times n+1}$\;
+    %     $\vec{R^{(+)}} \gets   \vec{Q}(i, n+1) \vec{R^{(+)}} $\;
+    %     $\vec{Q^{(+)}} \gets \vec{Q^{(+)}} \vec{Q}^T(i, n+1) $\;        
+    %     }
+      
+    % \For{$i \gets n+1$ \textbf{to} $k$}{
+    %     $\vec{Q^{(+)}} \gets  \vec{Q^{(+)}} where~we~swap~the~i~row~with~the~i-1~row$
+    % }
+
+    \Return{ $\vec{Q^{(+)}}$\,, $\vec{R^{(+)}}$ }\;
+\end{algorithm}
+
+
+\subsection{Multidimensional BSA}
+
+If we would like to scale the algorithm into the higher dimension we have to face one major complication. Algorithm finds all elements of $H$ and $\mathcal{H}$. This is possible in one dimension, but because $\mathcal{H}$ forms a hyperplane, then for higher dimensions is infinite.
+
+Authors then propose to find finite set $mathcal{H}_p$ such that 
+\begin{equation} \label{hp:set:condition}
+    \forall \vec{m} \in M^{(min)} \exists \vec{w} \in \mathcal{H}_p : (\vec{w},\vec{m}) \in Z
+\end{equation}
+
+and also finite set $H_p$, so that $mathcal{H}_p \subset H_p \subset H$. We can see that for $p=1$ we need only one equation so the solution has dimension $0$. If we would like to have some solution with dimension equal to $0$ for $p > 1$ we need system of $p$ equations. Moreover this system of equations have to be independent. So we can consider system of $p$ equations of type $ r^{2}_i(\vec{w}) = r^{2}_j(\vec{w})$
+
+\begin{align} 
+    r^{2}_{i_1}(\vec{w}) &= r^{2}_{i_2}(\vec{w}) \label{p:plus:one:equations}   \\
+    r^{2}_{i_2}(\vec{w}) &= r^{2}_{i_3}(\vec{w}) \nonumber  \\
+    \vdots \ \ \  & \ \ \ \  \ \vdots  \nonumber \\ 
+    r^{2}_{i_p}(\vec{w}) &=  r^{2}_{i_{p+1}}(\vec{w}) \nonumber 
+\end{align}
+
+where $i_1, i_2 \ldots i_{p+1}$  is $(p+1)$-element subset of ${1, 2, \ldots n}$.
+
+
+System of those quadratic equations can be rewritten as 
+Because this is system of quadratic equations, we can have up to $2^p$ solutions.
+
+Moreover total number of $(p+1)$-element subsets out of $n$ is $\binom{n}{p+1}$.
+This means that total number of solutions can be up to $\binom{n}{p+1} 2^p$. 
+We denote set of all this solutions $H_p$.
+
+So if set $H_p$ satisfies \ref{hp:set:condition} then it can be used for finding $\mathcal{H}_p$ subset, thus we would be able to use this set for multidimensional version of the algorithm.
+
+Let $\circ \in {+, -}$ be either operation $+$ or $-$. Then system of quadratic equations \eqref{p:plus:one:equations} is equivalent to $2^p$ linear systems
+
+\begin{align} 
+    (\vec{x}_{i_1} \circ_1 \vec {x}_{i_2} )^T \vec{w} &= y_{i_1} \circ_1 y_{i_2} \label{p:plus:one:equations:linear}   \\
+    \vdots \ \ \  & \ \ \ \  \ \vdots  \nonumber \\ 
+    (\vec{x}_{i_p} \circ_p \vec {x}_{i_{p+1}} )^T \vec{w} &= y_{i_p} \circ_p y_{i_{p+1}}. \nonumber 
+\end{align}
+
+Moreover \eqref{p:plus:one:equations:linear} is equivalent to the set of equations
+
+
+\begin{align} 
+    (\vec{x}_{i_1} \circ_1 \vec {x}_{i_2} )^T \vec{w} &= y_{i_1} \circ_1 y_{i_2} \label{p:plus:one:equations:linear:simple}   \\
+    \vdots \ \ \  & \ \ \ \  \ \vdots  \nonumber \\ 
+    (\vec{x}_{i_1} \circ_p \vec {x}_{i_{p+1}} )^T \vec{w} &= y_{i_1} \circ_p y_{i_{p+1}}. \nonumber 
+\end{align}
+Elements of set $\mathcal{H_p}$ then satisfies $r_{i_1^2}(\vec{w}) = r_{(h:n))}(\vec{w}) = r_{(h+1:n))}(\vec{w})$.
+
+
+Set $H_p$ was proven to be suitable for finding $\mathcal{H_p}$ in \cite{klouda2015exact} thus that set $\mathcal{H_p}$ satisfies \eqref{hp:set:condition} if following assumptions are satisfied (we already assume that \ref{klouda:asump:1} holds). First is that for all $\vec{w}$ $r_{(h:n))}(\vec{w}) > 0$, second , for all 
+$(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -}$ the matrix system of $n-1$ equations
+
+\begin{align} 
+    (\vec{x}_{i_1} \circ_1 \vec {x}_{i_2} )^T \vec{w} &= y_{i_1} \circ_1 y_{i_2} \label{p:plus:one:equations:linear:simple:to:n}   \\
+    \vdots \ \ \  & \ \ \ \  \ \vdots  \nonumber \\ 
+    (\vec{x}_{i_1} \circ_{n-1} \vec {x}_{i_{n}} )^T \vec{w} &= y_{i_1} \circ_p y_{i_{n}}. \nonumber.
+\end{align}
+The seconds assumption prevents the set $\mathcal{H_p}$ to be empty thus the case where all systems 
+\ref{p:plus:one:equations:linear:simple} are dependent. 
+
+This assumption can cause problem because when we assume model with the intercept, thus for all rows $\vec{x_i}$ of matrix $\vec{X}$ is $x_{i1} = 1$ then in the case  $\circ_1,\circ_2 \ldots,  \circ_{n-1} = -$, first column of matrix $\vec{X}$ only contains zeroes. We can modify this assumption so that instead of using $(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -}$ we use only $(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -} \setminus {(-, \ldots, -)}$ \cite{klouda2015exact}. 
+
+Given that we now know that set $H_p$ and $\mathcal{H}_p$ are suitable for our algorithm and we also know how to calculate them, so let us describe multidimensional version of the algorithm.
+
+\todo{write the pseudocode}
+
+Let us now describe time complexity of this algorithm. 
+
+\todo{write the time complexity}

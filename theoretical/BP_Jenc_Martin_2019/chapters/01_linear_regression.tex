@@ -297,15 +297,13 @@ This means that if we know the vector $\vec{m}_{LTS}$ than we can compute the LT
 \end{equation}
 In other words, finding the minimum of the LTS objective function can be done by finding the OLS estimate \eqref{lts:discrete:objective} for all vectors 
 $\vec{m} \in Q^{(n,h)}$. 
-Thus if we denote $\vec{X_{M}} = \vec{M}\vec{X} $ and $\vec{y_{M}} = \vec{M}\vec{y}$ which corresponds to $h$ subsets  of $\vec{X}$ and $\vec{Y}$, then \cite{kloudaVyzkumnyUkol}
+Thus if we denote $\vec{X_{M}} = \vec{M}\vec{X} $ and $\vec{y_{M}} = \vec{M}\vec{y}$ which corresponds to $h$ subsets  of $\vec{X}$ and $\vec{Y}$, then as described in \cite{kloudaVyzkumnyUkol},
 
 
 % \of^{(LTS,\vec{X_{M}}, \vec{y_{M}} }(\vec{m})
-\todo{cite klouda}
 
 
-
-\begin{align*} 
+\begin{align} \label{kloudaodvozeni}
 \minim_{\vec{w} \in \mathbb{R}^p} 
     \of^{(LTS, h, n)}(\vec{w})  
 &=\minim_{\vec{w} \in \mathbb{R}^p} 
@@ -318,7 +316,7 @@ Thus if we denote $\vec{X_{M}} = \vec{M}\vec{X} $ and $\vec{y_{M}} = \vec{M}\vec
 &= \minim_{\vec{m} \in Q^{(n,h)}} 
             \Big(\minim_{\vec{w} \in\mathbb{R}^p}  
             \norm{ \vec{M}\vec{y} -   \vec{M}\vec{X}\vec{w}  }^2 \Big).
-\end{align*}
+\end{align}
 
 Substituting $\vec{w}$ with \eqref{ltshat} we get
 %% TODO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
