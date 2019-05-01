@@ -1,6 +1,7 @@
 <component name="ProjectDictionaryState">
   <dictionary name="jencmart">
     <words>
+      <w>agullo</w>
       <w>cholesky</w>
       <w>coef</w>
       <w>cppimport</w>
@@ -8,6 +9,7 @@
       <w>eigen</w>
       <w>fastlts</w>
       <w>iters</w>
+      <w>lapack</w>
       <w>mmea</w>
       <w>moea</w>
       <w>pybind</w>
@@ -15,6 +17,7 @@
       <w>regressor</w>
       <w>scikit</w>
       <w>scipy</w>
+      <w>slartg</w>
     </words>
   </dictionary>
 </component>

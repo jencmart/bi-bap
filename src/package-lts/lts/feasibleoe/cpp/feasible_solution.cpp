@@ -228,9 +228,7 @@ PYBIND11_MODULE(feasible_solution, m) {
 
     // bind functions - and use documentation
     m.def("fs_lts", &fs_lts,  R"pbdoc(
-        Fast-LTS algorithm
-
-        Some other explanation about the fast-lts function.
+        Feasible Solution Algorithm (FSA)
     )pbdoc");
 
     // bind classes -- warning !!! -- same class name (only in c++) leads to "generic type ClassName already registered"

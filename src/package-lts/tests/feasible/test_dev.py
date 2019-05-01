@@ -27,11 +27,12 @@ def test_cpp(n=100, p=2):
     print('...test finished')
 
 
-def test_numpy(n=100, p=2):
+def test_numpy(n=100, p=2, algorithm='fsa', calculation='inv'):
     print('test started...')
     x, y, x_clean, y_clean = generate_data_ND(n, p)
-    lts = feasible.FSRegressor()
-    lts.fit(x, y, use_intercept=True, num_starts=10)
+    lts = feasible.FSRegressor(num_starts=10, max_steps=50, use_intercept=True,
+                               algorithm=algorithm, calculation=calculation)
+    lts.fit(x, y, h_size='default')
 
     # lts
     weights_lts = lts.coef_
@@ -42,7 +43,7 @@ def test_numpy(n=100, p=2):
     print('sec: ', lts.time_total_)
 
     # OLS on the clean data
-    lts.fit(x_clean, y_clean, use_intercept=True, h_size=x_clean.shape[0])
+    lts.fit(x_clean, y_clean, h_size=x_clean.shape[0])
     weights_global_minimum = lts.coef_
 
     # cos similarity

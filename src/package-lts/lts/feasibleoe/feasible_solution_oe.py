@@ -377,7 +377,7 @@ class FSRegressor(AbstractRegression):
         for i in range(num_starts):
 
             # generate random subset J, |J| = h and its complement M
-            idx_initial, idx_rest = self.select_initial_h1()
+            idx_initial, idx_rest = self.generate_random_start()
             # save split data
             J = np.matrix(self._data[idx_initial], copy=True)
             M = np.matrix(self._data[idx_rest], copy=True)
@@ -389,7 +389,7 @@ class FSRegressor(AbstractRegression):
             # J2 = np.asmatrix(J2)
             # M2 = np.asmatrix(M2)
             # do the refinement process
-            res = self.refinement_process_fs_mmea_inversion(J, M, idx_initial, idx_rest)
+            res = self.refinement_process_mmea_inv(J, M, idx_initial, idx_rest)
             # print(res.rss)
             #
             # res = self.refinement_process_fsa(J, M, idx_initial, idx_rest)
@@ -504,7 +504,7 @@ class FSRegressor(AbstractRegression):
         for i in range(num_starts):
 
             # generate random subset J, |J| = h and its complement M
-            idx_initial, idx_rest = self.select_initial_h1()
+            idx_initial, idx_rest = self.generate_random_start()
             # save split data
             J = np.matrix(self._data[idx_initial], copy=True)
             M = np.matrix(self._data[idx_rest], copy=True)
@@ -516,7 +516,7 @@ class FSRegressor(AbstractRegression):
             # J2 = np.asmatrix(J2)
             # M2 = np.asmatrix(M2)
             # do the refinement process
-            res = self.refinement_process_fs_mmea_inversion(J, M, idx_initial, idx_rest)
+            res = self.refinement_process_mmea_inv(J, M, idx_initial, idx_rest)
             # print(res.rss)
             #
             # res = self.refinement_process_fsa(J, M, idx_initial, idx_rest)
@@ -594,10 +594,10 @@ class FSRegressor(AbstractRegression):
         while True:
 
             # Calculate theta and store inversion
-            theta, inversion = self.calculate_theta_inversion(J)
+            theta, inversion = self.theta_inv(J)
 
             # Calculate residuals
-            residuals_J, residuals_M = self.calculate_residuals_y_first(J, M, theta)
+            residuals_J, residuals_M = self.all_residuals(J, M, theta)
 
             # Iterate all swap combinations
             i_to_swap, j_to_swap, delta = self.all_pairs_fsa(J, M, inversion, residuals_J, residuals_M)
@@ -664,22 +664,21 @@ class FSRegressor(AbstractRegression):
 
     # Calculate theta using normal equation: R1 theta = Q1y
     def calculate_theta_qr(self, J):
-        # # Q ... n x n
-        # # R ... n x p
+        # Q ... n x n
+        # R ... n x p
         q, r = linalg.qr(J[:, 1:])  # X = QR ; x.T x = R.T R ;
-        # ( connection to Cholesky: L * L.T  where l = R.T)
 
-        # #  Q.T *  ( x * w - y ) ^ 2
-        # #  Q.T * Q * R * w - Q.T * y
-        # #  R * w - Q.T * y
-        # #  R * w = Q.T * y
-        theta, r1 = self.update_theta_qr(q, r, J)
+        #  Q.T *  ( x * w - y ) ^ 2
+        #  Q.T * Q * R * w - Q.T * y
+        #  R * w - Q.T * y
+        #  R * w = Q.T * y
+        theta, r1 = self.theta_from_qr(q, r, J)
 
         return theta, q, r, r1
 
     def calculate_theta_and_rss(self, J):
         q, r = linalg.qr(J[:, 1:])  # X = QR ; x.T x = R.T R ;
-        theta, r1 = self.update_theta_qr(q, r, J)
+        theta, r1 = self.theta_from_qr(q, r, J)
 
         y_fin = J[:, [0]]
         x_fin = J[:, 1:]
@@ -688,7 +687,7 @@ class FSRegressor(AbstractRegression):
 
         return theta, rss
 
-    def calculate_theta_inversion(self, J):
+    def theta_inv(self, J):
         y = J[:, [0]]
         x = J[:, 1:]
 
@@ -697,7 +696,7 @@ class FSRegressor(AbstractRegression):
         return theta, inversion
 
     # Update theta using normal equation: R1 theta = Q1y
-    def update_theta_qr(self, q, r, J):
+    def theta_from_qr(self, q, r, J):
         y = J[:, [0]]
         p = r.shape[1]
         #  r1 pxp
@@ -735,7 +734,7 @@ class FSRegressor(AbstractRegression):
         return theta, rss, r1
 
     # calculate residuals from all used and unused observations
-    def calculate_residuals_y_first(self, J, M, theta):
+    def all_residuals(self, J, M, theta):
         residuals_J = J[:, [0]] - J[:, 1:] * theta
         residuals_M = (M[:, [0]]) - (M[:, 1:]) * theta
 
@@ -782,14 +781,14 @@ class FSRegressor(AbstractRegression):
 
         return
 
-    def refinement_process_fs_moe_qr(self, J, M, idx_initial, idx_rest):
+    def refinement_process_moea_qr(self, J, M, idx_initial, idx_rest):
         steps = 0
 
         # Calculate QR decompositon
         theta, q, r, r1 = self.calculate_theta_qr(J)
 
         # Calculate residuals e
-        residuals_J, residuals_M = self.calculate_residuals_y_first(J, M, theta)
+        residuals_J, residuals_M = self.all_residuals(J, M, theta)
 
         # Calculate RSS
         rss = residuals_J.T * residuals_J
@@ -815,10 +814,10 @@ class FSRegressor(AbstractRegression):
                 q, r = self.qr_delete(q, r, i_to_swap)
 
                 # Update Theta, R1
-                theta, r1 = self.update_theta_qr(q, r, J)
+                theta, r1 = self.theta_from_qr(q, r, J)
 
                 # calculate residuals M and J
-                residuals_J, residuals_M = self.calculate_residuals_y_first(J, M, theta)
+                residuals_J, residuals_M = self.all_residuals(J, M, theta)
 
                 steps += 1
 
@@ -870,14 +869,14 @@ class FSRegressor(AbstractRegression):
 
         return idx_i, i_m_i_min, yi_xi_theta_min, gama_insert_min
 
-    def refinement_process_fs_mmea_inversion(self, J, M, idx_initial, idx_rest):
+    def refinement_process_mmea_inv(self, J, M, idx_initial, idx_rest):
         steps = 0
 
         # Calculate theta and store inversion
-        theta, inversion = self.calculate_theta_inversion(J)
+        theta, inversion = self.theta_inv(J)
 
         # Calculate residuals
-        residuals_J, residuals_M = self.calculate_residuals_y_first(J, M, theta)
+        residuals_J, residuals_M = self.all_residuals(J, M, theta)
 
         # Calculate RSS
         rss = (residuals_J.T * residuals_J)[0, 0]
@@ -939,14 +938,14 @@ class FSRegressor(AbstractRegression):
 
         return self.Result(theta, idx_initial, rss, steps)
 
-    def refinement_process_fs_moe_inversion(self, J, M, idx_initial, idx_rest):
+    def refinement_process_moea_inv(self, J, M, idx_initial, idx_rest):
         steps = 0
 
         # Calculate theta and store inversion
-        theta, inversion = self.calculate_theta_inversion(J)
+        theta, inversion = self.theta_inv(J)
 
         # Calculate residuals
-        residuals_J, residuals_M = self.calculate_residuals_y_first(J, M, theta)
+        residuals_J, residuals_M = self.all_residuals(J, M, theta)
 
         # Calculate RSS
         rss = (residuals_J.T * residuals_J)[0, 0]
@@ -1007,7 +1006,7 @@ class FSRegressor(AbstractRegression):
                 # Update J and M arrays and also idx array by means of swapped rows
                 self.swap_row_J_M(J, M, idx_initial, idx_rest, i_to_swap, j_to_swap)
 
-                residuals_J, residuals_M = self.calculate_residuals_y_first(J, M, theta)
+                residuals_J, residuals_M = self.all_residuals(J, M, theta)
 
                 steps += 1
         return self.Result(theta, idx_initial, rss, steps)
@@ -1019,7 +1018,7 @@ class FSRegressor(AbstractRegression):
         theta, qM, rM, r1, rss = self.calculate_theta_fii(J)
 
         # Calculate residuals e
-        residuals_J, residuals_M = self.calculate_residuals_y_first(J, M, theta)
+        residuals_J, residuals_M = self.all_residuals(J, M, theta)
 
         while True:
             i_to_swap, j_to_swap, delta = self.all_pairs_fsa_oe_qr(J, M, r1, rss, residuals_J, residuals_M)
@@ -1046,7 +1045,7 @@ class FSRegressor(AbstractRegression):
                 theta, rss, r1 = self.update_theta_fii(rM)
 
                 # calculate residuals M and J
-                residuals_J, residuals_M = self.calculate_residuals_y_first(J, M, theta)
+                residuals_J, residuals_M = self.all_residuals(J, M, theta)
 
                 steps += 1
 

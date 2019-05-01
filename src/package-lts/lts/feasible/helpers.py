@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 import numpy as np
 
+
 # currently support for np.ndarray and matrix
 def validate(X, y, h_size, use_intercept):
     if X is None or not isinstance(X, (np.ndarray, np.matrix)):
@@ -48,10 +49,7 @@ class AbstractRegression(ABC):
         super().__init__()
 
     @abstractmethod
-    def fit(self, X, y,
-            num_starts: 'number of initial starts (H1)' = 10,
-            h_size: 'default := (n + p + 1) / 2' = 'default',
-            use_intercept=True):
+    def fit(self, X, y):
         raise NotImplementedError("You must implement this")
 
     # for storage only
