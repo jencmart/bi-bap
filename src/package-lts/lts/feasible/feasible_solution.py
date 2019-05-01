@@ -70,7 +70,7 @@ class FSRegressor(AbstractRegression):
                  num_starts: 'number of starting subsets' = 10,
                  max_steps: 'max number of steps to converge' = 50,
                  use_intercept=True,
-                 algorithm: 'str, ‘fsa’, ‘oea’, ‘moea’ or ‘mmea’, default: ‘fsa’' = 'fsa',
+                 algorithm: 'str, ‘fsa’ or ‘mmea’, default: ‘fsa’' = 'fsa',
                  calculation: 'str, ‘inv’, ‘qr’, default: ‘qr’' = 'inv'):
         super().__init__()
 
@@ -102,6 +102,7 @@ class FSRegressor(AbstractRegression):
     # ############### FIT #######################################################
     # ###########################################################################
 
+    # is parameter index_subset is used, then h_size and num_starts is not used...
     def fit(self, X, y, h_size: 'int, default:(n + p + 1) / 2' = 'default', index_subset=None):
 
         # Init some properties
@@ -121,6 +122,9 @@ class FSRegressor(AbstractRegression):
             self._h_size = math.ceil((n + p + 1) / 2)  # todo with or without intercept?
         else:
             self._h_size = h_size
+
+        if index_subset is not None:
+            self._h_size = index_subset.shape[1]
 
         results = []
 
@@ -145,10 +149,6 @@ class FSRegressor(AbstractRegression):
                         # do the refinement process
                         res = self.refinement_process_fsa_inv(J, M, idx_ones, idx_zeroes)
 
-                    # elif self._alg == 'oea':
-                    #     # do the refinement process
-                    #     res = self.refinement_process_oea_inv(J, M, idx_ones, idx_zeroes)
-
                     elif self._alg == 'moea':
                         # do the refinement process
                         res = self.refinement_process_moea_inv(J, M, idx_ones, idx_zeroes)
@@ -157,7 +157,7 @@ class FSRegressor(AbstractRegression):
                         # do the refinement process
                         res = self.refinement_process_mmea_inv(J, M, idx_ones, idx_zeroes)
                     else:
-                        raise ValueError('param. algorithm must be one fo the strings: ‘fsa’, ‘oea’, ‘moea’ or ‘mmea’')
+                        raise ValueError('param. algorithm must be one fo the strings: ‘fsa’, ‘moea’ or ‘mmea’')
 
                     # store the results
                     results.append(res)
@@ -181,7 +181,7 @@ class FSRegressor(AbstractRegression):
                         res = self.refinement_process_mmea_qr(J, M, idx_ones, idx_zeroes)
                     else:
                         raise ValueError(
-                            'param. algorithm must be one fo the strings: ‘fsa’, ‘oea’, ‘moea’ or ‘mmea’')
+                            'param. algorithm must be one fo the strings: ‘fsa’, ‘oea’ or ‘mmea’')
 
                     # store the results
                     results.append(res)
@@ -190,17 +190,65 @@ class FSRegressor(AbstractRegression):
                     raise ValueError('param. calculation must be one fo the strings: ‘inv’ or ‘qr’')
 
         else:
-            for subs in range(self._num_starts):
-                # generate random subset J, |J| = h and its complement M
-                idx_ones, idx_zeroes = self.generate_random_start(n)
-                # save splitted data
+            for subs in range(index_subset):
+
+                # create index arrays
+                mask = np.ones(data.shape[0], np.bool)
+                mask[subs] = 0
+                all_idx = np.arange(data.shape[0])
+                idx_ones = all_idx[subs]
+                idx_zeroes = all_idx[mask]
+
+                # save split data
                 J = np.matrix(data[idx_ones], copy=True)
                 M = np.matrix(data[idx_zeroes], copy=True)
-                # do the refinement process
-                res = self.refinement_process_fsa_inv(J, M, idx_ones, idx_zeroes)
 
-                # store the results
-                results.append(res)
+                # calculation using inversion
+                if self._calculation == 'inv':
+                    if self._alg == 'fsa':
+                        # do the refinement process
+                        res = self.refinement_process_fsa_inv(J, M, idx_ones, idx_zeroes)
+
+                    elif self._alg == 'moea':
+                        # do the refinement process
+                        res = self.refinement_process_moea_inv(J, M, idx_ones, idx_zeroes)
+
+                    elif self._alg == 'mmea':
+                        # do the refinement process
+                        res = self.refinement_process_mmea_inv(J, M, idx_ones, idx_zeroes)
+                    else:
+                        raise ValueError('param. algorithm must be one fo the strings: ‘fsa’, ‘moea’ or ‘mmea’')
+
+                    # store the results
+                    results.append(res)
+
+                # calculation using qr decomposition
+                elif self._calculation == 'qr':
+                    if self._alg == 'fsa':
+                        # do the refinement process
+                        res = self.refinement_process_fsa_qr(J, M, idx_ones, idx_zeroes)
+
+                    # elif self._alg == 'oea':
+                    #     # do the refinement process
+                    #     res = self.refinement_process_oea_qr(J, M, idx_ones, idx_zeroes)
+
+                    elif self._alg == 'moea':
+                        # do the refinement process
+                        res = self.refinement_process_moea_qr(J, M, idx_ones, idx_zeroes)
+
+                    elif self._alg == 'mmea':
+                        # do the refinement process
+                        res = self.refinement_process_mmea_qr(J, M, idx_ones, idx_zeroes)
+                    else:
+                        raise ValueError(
+                            'param. algorithm must be one fo the strings: ‘fsa’, ‘oea’ or ‘mmea’')
+
+                    # store the results
+                    results.append(res)
+
+                else:
+                    raise ValueError('param. calculation must be one fo the strings: ‘inv’ or ‘qr’')
+
 
         # stop measuring the time
         self.time1_ = time.process_time() - time1
@@ -315,7 +363,7 @@ class FSRegressor(AbstractRegression):
     def refinement_process_fsa_inv(self, J, M, idx_ones, idx_zeroes):
         steps = 0
 
-        while True:
+        for it in range(self._max_steps):
 
             # calculate theta and inversion  # O(np^2)
             theta, inversion = self.theta_inv(J)
@@ -342,7 +390,7 @@ class FSRegressor(AbstractRegression):
     def refinement_process_fsa_qr(self, J, M, idx_ones, idx_zeroes):
         steps = 0
 
-        while True:
+        for it in range(self._max_steps):
 
             # calculate theta and QR decomposition  O(p^2n)
             theta, q, r, r1 = self.theta_qr(J)
@@ -414,7 +462,7 @@ class FSRegressor(AbstractRegression):
         if M.shape[0] == 0:
             return self.Result(theta, idx_ones, rss, steps)
 
-        while True:
+        for it in range(self._max_steps):
 
             # calculate residuals r_1 ... r_n    O(np)
             res_J, res_M = self.all_residuals(J, M, theta)
@@ -460,7 +508,7 @@ class FSRegressor(AbstractRegression):
         if M.shape[0] == 0:
             return self.Result(theta, idx_ones, rss, steps)
 
-        while True:
+        for it in range(self._max_steps):
 
             # calculate residuals r_1 ... r_n  O(np)
             residuals_J, residuals_M = self.all_residuals(J, M, theta)
@@ -561,8 +609,6 @@ class FSRegressor(AbstractRegression):
         x_idx = A[idx, 1:]
         vi = linalg.solve_triangular(R.T, x_idx.T, lower=True)
         idx_m_idx = np.dot(vi.T, vi)  # vi.T * vi
-        idx_m_idx = idx_m_idx[0, 0]
-
         idx_m_idx = idx_m_idx[0, 0]
         return idx_m_idx, vi
 
@@ -745,7 +791,7 @@ class FSRegressor(AbstractRegression):
         if M.shape[0] == 0:
             return self.Result(theta, idx_ones, rss, steps)
 
-        while True:
+        for it in range(self._max_steps):
 
             # find optimal include  O(p^2n)
             j_swap, gamma_plus = self.smallest_include_inv(M, theta, inversion)
@@ -790,14 +836,14 @@ class FSRegressor(AbstractRegression):
         if M.shape[0] == 0:
             return self.Result(theta, idx_ones, rss, steps)
 
-        while True:
+        for it in range(self._max_steps):
 
             # find optimal include  O(p^2n)
             j_swap, gamma_plus = self.smallest_include_qr(M, theta, r1)
 
             # update theta -> theta_plus ; qr -> qr_plus  O(p^2)
             # create J_plus
-            row_to_add = np.copy(M[j_swap, 1:])
+            row_to_add = np.copy(M[j_swap, :])
             shape = [J.shape[0] + 1, J.shape[1]]
             J_plus = np.zeros(shape, dtype=float)
             J_plus[:J.shape[0], :] = np.copy(J)
