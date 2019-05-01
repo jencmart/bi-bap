@@ -232,7 +232,7 @@ class FSRegressor(AbstractRegression):
         self.coef_ = np.ravel(self.coef_)  # RAVELED
 
     # ###########################################################################
-    # ############### ALL PAIRS  ################################################
+    # ############### ALL PAIRS  FSA INV ########################################
     # ###########################################################################
     def all_pairs_fsa_inv(self, J, M, inversion, residuals_J, residuals_M):
         delta = 1
@@ -243,7 +243,28 @@ class FSRegressor(AbstractRegression):
         for i in range(J.shape[0]):
             for j in range(M.shape[0]):
                 # . calculate deltaRSS
-                tmp_delta = self.calculate_delta_rss(J, M, inversion, residuals_J, residuals_M, i, j)
+                tmp_delta = self.calculate_delta_rss_inv(J, M, inversion, residuals_J, residuals_M, i, j)
+                # if delta rss < bestDeltaRss
+                if tmp_delta < 0 and tmp_delta < delta:
+                    delta = tmp_delta
+                    i_to_swap = i
+                    j_to_swap = j
+
+        return i_to_swap, j_to_swap, delta
+
+    # ###########################################################################
+    # ############### ALL PAIRS  FSA INV ########################################
+    # ###########################################################################
+    def all_pairs_fsa_qr(self, J, M, R, residuals_J, residuals_M):
+        delta = 1
+        i_to_swap = None
+        j_to_swap = None
+
+        # go through all combinations
+        for i in range(J.shape[0]):
+            for j in range(M.shape[0]):
+                # . calculate deltaRSS
+                tmp_delta = self.calculate_delta_rss_qr(J, M, R, residuals_J, residuals_M, i, j)
                 # if delta rss < bestDeltaRss
                 if tmp_delta < 0 and tmp_delta < delta:
                     delta = tmp_delta
@@ -304,6 +325,33 @@ class FSRegressor(AbstractRegression):
 
             # find the optimal swap   O(n^2p^2)
             i_swap, j_swap, delta = self.all_pairs_fsa_inv(J, M, inversion, resid_J, resid_M)
+
+            # strong necessary condition satisfied
+            if delta >= 0:
+                break
+
+            # swap observations
+            else:
+                self.swap_xi_xj(J, M, idx_ones, idx_zeroes, i_swap, j_swap)
+                steps += 1
+
+        # calculate rss and return result
+        rss = (resid_J.T * resid_J)[0, 0]
+        return self.Result(theta, idx_ones, rss, steps)
+
+    def refinement_process_fsa_qr(self, J, M, idx_ones, idx_zeroes):
+        steps = 0
+
+        while True:
+
+            # calculate theta and QR decomposition  O(p^2n)
+            theta, q, r, r1 = self.theta_qr(J)
+
+            # calculate residuals r_1 ... r_n  O(np)
+            resid_J, resid_M = self.all_residuals(J, M, theta)
+
+            # find the optimal swap   O(n^2p^2)
+            i_swap, j_swap, delta = self.all_pairs_fsa_qr(J, M, r1, resid_J, resid_M)
 
             # strong necessary condition satisfied
             if delta >= 0:
@@ -502,15 +550,21 @@ class FSRegressor(AbstractRegression):
         arr_idx_m_idx = []
         arr_v_idx = []
         for j in range(M.shape[0]):
-            x_idx = M[j, 1:]
-            vi = linalg.solve_triangular(R.T, x_idx.T, lower=True)
-            idx_m_idx = np.dot(vi.T, vi)  # vi.T * vi
-            idx_m_idx = idx_m_idx[0, 0]
-
+            idx_m_idx, vi = FSRegressor.idx_m_idx_qr(M, j, R)
             arr_idx_m_idx.append(idx_m_idx)
             arr_v_idx.append(vi)
 
         return arr_idx_m_idx, arr_v_idx
+
+    @staticmethod
+    def idx_m_idx_qr(A, idx, R):
+        x_idx = A[idx, 1:]
+        vi = linalg.solve_triangular(R.T, x_idx.T, lower=True)
+        idx_m_idx = np.dot(vi.T, vi)  # vi.T * vi
+        idx_m_idx = idx_m_idx[0, 0]
+
+        idx_m_idx = idx_m_idx[0, 0]
+        return idx_m_idx, vi
 
     # ###########################################################################
     # ############### QR HELPERS ################################################
@@ -613,33 +667,53 @@ class FSRegressor(AbstractRegression):
 
         return i_swap, j_swap, ro_min
 
-    # ro_i_j multiplicative difference (Agullo)
-    # @staticmethod
-    # def ro_equation(rss, ei, ej, i_m_i, j_m_j, i_m_j):
-    #     nn = (i_m_j + (ei*ej)/rss)
-    #     nom = (1 + i_m_i + (ei**2)/rss)*(1 - j_m_j - (ej**2)/rss) + nn**2
-    #     denom = (1 + i_m_i - j_m_j + (i_m_j**2) - i_m_i*j_m_j)
-    #     ro = nom / denom
-    #
-    #     return ro
-
     # ###########################################################################
-    # ############### DELTA RSS #################################################
+    # ############### DELTA RSS INV #############################################
     # ###########################################################################
     @staticmethod
-    def calculate_delta_rss(J, M, inversion,
-                            residuals_J, residuals_M, i, j):
+    def calculate_delta_rss_inv(J, M, inversion,
+                                residuals_J, residuals_M, i, j):
         ei = residuals_J[i, 0]
         ej = residuals_M[j, 0]
 
-        hii = J[i, 1:] * inversion * (J[i, 1:]).T  # 1xp * pxp * pX1
+        hii = J[i, 1:] * inversion * (J[i, 1:]).T
         hij = J[i, 1:] * inversion * (M[j, 1:]).T
         hjj = M[j, 1:] * inversion * (M[j, 1:]).T
         hii = hii[0, 0]
         hij = hij[0, 0]
         hjj = hjj[0, 0]
 
-        nom = (ej * ej * (1 - hii)) - (ei * ei * (1 + hjj)) + 2 * ei * ej * hij
+        nom = ((ej**2)*(1 - hii)) - ((ei**2)*(1 + hjj)) + 2*ei*ej*hij
+        denom = (1 - hii) * (1 + hjj) + hij*hij
+        return nom / denom
+
+    # ###########################################################################
+    # ############### DELTA RSS #################################################
+    # ###########################################################################
+    @staticmethod
+    def calculate_delta_rss_qr(J, M, R, res_J, res_M, i, j):
+        ei = res_J[i, 0]
+        ej = res_M[j, 0]
+
+        xi = M[j, 1:]
+        vi = linalg.solve_triangular(R.T, xi.T, lower=True)
+        i_m_i = np.dot(vi.T, vi)  # vi.T * vi
+        i_m_i = i_m_i[0, 0]
+
+        xj = J[i, 1:]
+        vj = linalg.solve_triangular(R.T, xj.T, lower=True)
+        j_m_j = np.dot(vj.T, vj)
+        j_m_j = j_m_j[0, 0]
+
+        u = linalg.solve_triangular(R, vi)
+        i_m_j = np.dot(xj, u)
+        i_m_j = i_m_j[0, 0]
+
+        hii = j_m_j
+        hij = i_m_j
+        hjj = i_m_i
+
+        nom = ((ej ** 2) * (1 - hii)) - ((ei ** 2) * (1 + hjj)) + 2 * ei * ej * hij
         denom = (1 - hii) * (1 + hjj) + hij * hij
         return nom / denom
 
@@ -700,6 +774,59 @@ class FSRegressor(AbstractRegression):
 
         return self.Result(theta, idx_ones, rss, steps)
 
+    # ###########################################################################
+    # ############### REFINEMENT MMEA QR ########################################
+    # ###########################################################################
+    def refinement_process_mmea_qr(self, J, M, idx_ones, idx_zeroes):
+        steps = 0
+
+        # calculate theta and QR decomposition  O(p^2n)
+        theta, q, r, r1 = self.theta_qr(J)
+
+        # calculate rss
+        rss = self.rss(J, theta)
+
+        # shortcut
+        if M.shape[0] == 0:
+            return self.Result(theta, idx_ones, rss, steps)
+
+        while True:
+
+            # find optimal include  O(p^2n)
+            j_swap, gamma_plus = self.smallest_include_qr(M, theta, r1)
+
+            # update theta -> theta_plus ; qr -> qr_plus  O(p^2)
+            # create J_plus
+            row_to_add = np.copy(M[j_swap, 1:])
+            shape = [J.shape[0] + 1, J.shape[1]]
+            J_plus = np.zeros(shape, dtype=float)
+            J_plus[:J.shape[0], :] = np.copy(J)
+            J_plus[J.shape[0]:, :] = row_to_add  # just one row in th
+            J_plus = np.asmatrix(J_plus)
+            theta_plus, q_plus, r_plus, r1_plus = self.theta_qr(J_plus)
+
+            # find the optimal exclude (no need to update J ... worst case: gamma_plus == gamma_minus )  O(p^2n)
+            i_swap, gamma_minus = self.greatest_exclude_qr(J, theta_plus, r1_plus)
+
+            # improvement cannot be made
+            if not (gamma_plus < gamma_minus):
+                break
+
+            # update theta, inversion, rss, J, M, residualsJ residualsM
+
+            # update rss
+            rss = rss + gamma_plus - gamma_minus
+
+            # swap observations
+            self.swap_xi_xj(J, M, idx_ones, idx_zeroes, i_swap, j_swap)
+
+            # update theta q, r, r1
+            theta, q, r, r1 = self.theta_qr(J)
+
+            steps += 1
+
+        return self.Result(theta, idx_ones, rss, steps)
+
     # calculate gama plus  O(p^2)
     def gamma_plus_inv(self, M, j, inversion, theta):
         i_m_i = self.dot_idx_m_idx(M, j, inversion)
@@ -708,6 +835,26 @@ class FSRegressor(AbstractRegression):
         yi_xi_theta = (yi - np.dot(xi, theta))[0, 0]
         gamma_plus = (yi_xi_theta ** 2) / (1 + i_m_i)
         return gamma_plus
+
+    # calculate gama plus  O(p^2)
+    @staticmethod
+    def gamma_plus_qr(M, j, R, theta):
+        i_m_i, _ = FSRegressor.idx_m_idx_qr(M, j, R)
+        xi = M[j, 1:]
+        yi = M[j, [0]]  # 1 x 1
+        yi_xi_theta = (yi - np.dot(xi, theta))[0, 0]
+        gamma_plus = (yi_xi_theta ** 2) / (1 + i_m_i)
+        return gamma_plus
+
+    # calculate gamma minus  O(p^2)
+    @staticmethod
+    def gamma_minus_qr(J, i, R, theta):
+        j_m_j, _ = FSRegressor.idx_m_idx_qr(J, i, R)
+        xj = J[i, 1:]
+        yj = J[i, [0]]  # 1 x 1
+        yj_xj_theta = (yj - np.dot(xj, theta))[0, 0]
+        gamma_minus = (yj_xj_theta ** 2) / (1 - j_m_j)
+        return gamma_minus
 
     # calculate gamma minus  O(p^2)
     def gamma_minus_inv(self, J, i, inversion, theta):
@@ -734,6 +881,40 @@ class FSRegressor(AbstractRegression):
                 idx_i = j
 
         return idx_i, gamma_plus_min
+
+    # find row which increase RSS the smallest if included O(p^2n)
+    def smallest_include_qr(self, M, theta, R):
+        gamma_plus_min = float('inf')
+        idx_i = 0
+
+        for j in range(M.shape[0]):
+
+            # calculate rss change after including row j
+            gamma_plus = self.gamma_plus_qr(M, j, R, theta)
+
+            # and store the smallest
+            if gamma_plus < gamma_plus_min:
+                gamma_plus_min = gamma_plus
+                idx_i = j
+
+        return idx_i, gamma_plus_min
+
+    # find row which reduce RSS the most if excluded O(p^2n)
+    def greatest_exclude_qr(self, J, theta, R):
+        gamma_minus_max = float('-inf')
+        idx_j = 0
+
+        for i in range(J.shape[0]):
+
+            # calculate rss change after excluding row i
+            gamma_minus = self.gamma_minus_qr(J, i, R, theta)
+
+            # and store the greatest
+            if gamma_minus > gamma_minus_max:
+                gamma_minus_max = gamma_minus
+                idx_j = i
+
+        return idx_j, gamma_minus_max
 
     # find row which reduce RSS the most if excluded O(p^2n)
     def greatest_exclude_inv(self, J, theta, inversion):
