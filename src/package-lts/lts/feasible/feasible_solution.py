@@ -19,9 +19,29 @@ cppimport
 
 class FSRegressorCPP(AbstractRegression):
 
-    def __init__(self):
+    def __init__(self,
+                 num_starts: 'number of starting subsets' = 10,
+                 max_steps: 'max number of steps to converge' = 50,
+                 use_intercept=True,
+                 algorithm: 'str, ‘fsa’ or ‘mmea’, default: ‘fsa’' = 'fsa',
+                 calculation: 'str, ‘inv’, ‘qr’, default: ‘qr’' = 'inv'):
         super().__init__()
-        self._h_size = None
+
+        # number of initial starts starts
+        self._num_starts = num_starts
+
+        # maximum number of iterations
+        self._max_steps = max_steps
+
+        # set using intercept
+        self._use_intercept = use_intercept
+
+        # algorithm and calculation
+        self._alg = algorithm
+        self._calculation = calculation
+
+        self._h_size = 0
+
         # public
         self.n_iter_ = None
         self.coef_ = None
@@ -31,26 +51,42 @@ class FSRegressorCPP(AbstractRegression):
         self.time1_ = None
         self.time_total_ = None
 
+    # ###########################################################################
     # ############### FIT #######################################################
-    def fit(self, X, y,
-            num_starts: 'number of starting subsets' = 10,
-            custom_start_subset: 'array of size h, the custom starting subset' = None,
-            max_steps: 'max number of steps to converge' = 50,
-            h_size: 'int, default:(n + p + 1) / 2' = 'default',
-            use_intercept=True,
-            algorithm: 'str, ‘fsa’, ‘oea’, ‘moea’ or ‘mmea’, default: ‘fsa’' = 'default',
-            calculation: 'str, ‘inv’, ‘qr’, default: ‘qr’' = 'inv'):
+    # ###########################################################################
 
-        X, y = validate(X, y, h_size, use_intercept)
+    # is parameter index_subset is used, then h_size and num_starts is not used...
+    def fit(self, X, y, h_size: 'int, default:(n + p + 1) / 2' = 'default', index_subset=None):
 
-        # todo h_size including intercept?
+        # Init some properties
+        X, y = validate(X, y, h_size, self._use_intercept)
+
         h_size = math.ceil((X.shape[0] + X.shape[1] + 1) / 2) if h_size == 'default' else h_size  # N + p + 1
 
-        result = cpp_solution.fs_lts(X, y, num_starts, h_size)
+        if self._alg == 'fsa':
+            int_alg = 0
+        elif self._alg == 'moea':
+            int_alg = 1
+        elif self._alg == 'mmea':
+            int_alg = 2
+        else:
+            raise ValueError('param. algorithm must be one fo the strings: ‘fsa’, ‘moea’ or ‘mmea’')
+
+        if self._calculation == 'inv':
+            int_calc = 0
+        elif self._calculation == 'qr':
+            int_calc = 1
+        else:
+            raise ValueError('param. calculation must be one fo the strings: ‘inv’ or ‘qr’')
+
+        if index_subset is None:
+            result = cpp_solution.fs_lts(X, y, self._num_starts, self._max_steps, h_size, int_alg, int_calc)
+        else:
+            raise ValueError('todo')
 
         # Store result - weights first
         weights = result.get_theta()
-        if use_intercept:
+        if self._use_intercept:
             self.intercept_ = weights[-1, 0]  # last row first col
             self.coef_ = np.ravel(weights[:-1, 0])  # for all but last column,  only first col
         else:
@@ -256,6 +292,7 @@ class FSRegressor(AbstractRegression):
 
         self.save_the_best(results)
 
+    # select and store the best solution ...
     def save_the_best(self, results):
         # select best results
         best_result = results[0]
@@ -383,8 +420,10 @@ class FSRegressor(AbstractRegression):
                 self.swap_xi_xj(J, M, idx_ones, idx_zeroes, i_swap, j_swap)
                 steps += 1
 
-        # calculate rss and return result
-        rss = (resid_J.T * resid_J)[0, 0]
+        # calculate theta and inversion  # O(np^2)
+        theta, inversion = self.theta_inv(J)
+        # calculate rss  O(np)
+        rss = self.rss(J, theta)
         return self.Result(theta, idx_ones, rss, steps)
 
     def refinement_process_fsa_qr(self, J, M, idx_ones, idx_zeroes):
@@ -410,8 +449,10 @@ class FSRegressor(AbstractRegression):
                 self.swap_xi_xj(J, M, idx_ones, idx_zeroes, i_swap, j_swap)
                 steps += 1
 
-        # calculate rss and return result
-        rss = (resid_J.T * resid_J)[0, 0]
+        # calculate theta and QR decomposition  O(p^2n)
+        theta, q, r, r1 = self.theta_qr(J)
+        # calculate rss  O(np)
+        rss = self.rss(J, theta)
         return self.Result(theta, idx_ones, rss, steps)
 
     # update theta and inversion when row is included O(p^2)
@@ -531,8 +572,9 @@ class FSRegressor(AbstractRegression):
                 # swap observations
                 self.swap_xi_xj(J, M, idx_ones, idx_zeroes, i_swap, j_swap)
 
-                # update QR O(np^2) + O(n^2)
+                # update QR O(np^2)
                 q, r = self.qr_insert(q, r, row_to_add, i_swap + 1)
+                # update QR O(n ^ 2)
                 q, r = self.qr_delete(q, r, i_swap)
 
                 # update theta, r1  O(p^2)
@@ -572,10 +614,7 @@ class FSRegressor(AbstractRegression):
                     continue
 
                 # calculate ro_i_j multiplicative difference (Agullo)
-                xj = J[i, 1:]
-                u = linalg.solve_triangular(R, vi)
-                i_m_j = np.dot(xj, u)
-                i_m_j = i_m_j[0, 0]
+                i_m_j = FSRegressor.idx_qr_j(J, i, R, vi)
 
                 a = a + ((i_m_j + (ei * ej) / rss) ** 2)
                 b = b + (i_m_j ** 2) - imi * jmj
@@ -736,24 +775,24 @@ class FSRegressor(AbstractRegression):
     # ###########################################################################
     # ############### DELTA RSS #################################################
     # ###########################################################################
+
+    @staticmethod
+    def idx_qr_j(J, i, R, vi):
+        xj = J[i, 1:]
+        u = linalg.solve_triangular(R, vi)
+        i_m_j = np.dot(xj, u)  # x * u.T -> number
+        i_m_j = i_m_j[0, 0]
+        return i_m_j
+
     @staticmethod
     def calculate_delta_rss_qr(J, M, R, res_J, res_M, i, j):
         ei = res_J[i, 0]
         ej = res_M[j, 0]
 
-        xi = M[j, 1:]
-        vi = linalg.solve_triangular(R.T, xi.T, lower=True)
-        i_m_i = np.dot(vi.T, vi)  # vi.T * vi
-        i_m_i = i_m_i[0, 0]
+        i_m_i, vi = FSRegressor.idx_m_idx_qr(M, j, R)
+        j_m_j, vj = FSRegressor.idx_m_idx_qr(J, i, R)
 
-        xj = J[i, 1:]
-        vj = linalg.solve_triangular(R.T, xj.T, lower=True)
-        j_m_j = np.dot(vj.T, vj)
-        j_m_j = j_m_j[0, 0]
-
-        u = linalg.solve_triangular(R, vi)
-        i_m_j = np.dot(xj, u)
-        i_m_j = i_m_j[0, 0]
+        i_m_j = FSRegressor.idx_qr_j(J, i, R, vi)
 
         hii = j_m_j
         hij = i_m_j
@@ -990,49 +1029,37 @@ class FSRegressor(AbstractRegression):
         if idx != 0:  # swap it to the first line
             for j in range(idx, 0, -1):  # jdx ... 3, 2, 1
                 qnew[[j, j - 1]] = qnew[[j - 1, j]]
-                # swap(qnew[j,:], qnew[j-1, : ]) j jde od posledniho (od vlozeneho) a posouva ho na spravny index
 
-        # for i in range p_del
-        i = 0
+
         n = q.shape[0]
         p = r.shape[1]
 
         # od n-2 do 0 ( O(n) )
-        for j in range(n - 2, i - 1, -1):  # n-2 protoze vzdy o jeden vic (tj. do idx n-1)
+        for j in range(n - 2, - 1, -1):  # we use j+1 thus all cols...
 
-            cos, sin, R = self.calculate_cos_sin(qnew[0, j], qnew[0, j + 1])  # i, i = 0
+            # create the givens matrix
+            cos, sin, R = self.calculate_cos_sin(qnew[0, j], qnew[0, j+1])  # i, i = 0
             qnew[0, j] = R
-            qnew[0, j + 1] = 0  # myslim ze pro nas nyni zbytecne ?
+            qnew[0, j + 1] = 0
 
-            # update rows to del - no need
-            # if i + 1 < p_del: #  1 < 1
-            #     rot(p - i - 1, index2(W, ws, i + 1, j), ws[0],
-            #         index2(W, ws, i + 1, j + 1), ws[0], c, s)
-
-            # O(p) asi ...
-            # Rotare R if nonzero row
+            # O(p)
+            # Rotate R if nonzero row (multiply R)
             if j < p:  # m x n # j - i
-
-                # tod o rot( [ p-j-1 ]  [--, j+1 ] [--, j+1]
-                # to znamena naky radky...
-                # a v kazdem du od j+1 do konce
-
-                # rotate rnew
-                rowX = rnew[j, :]
-                rowY = rnew[j + 1, :]
+                rowX = rnew[j, :]  # row
+                rowY = rnew[j + 1, :]  # row
                 # blas srot
-                for i in range(j, p):  # vzdy od j do p konce # mozna j+1; ne myslim ze ok
+                for i in range(j, p):  # rotate non-zero part of the row
                     temp = cos * rowX[i] + sin * rowY[i]
                     rnew[j + 1, i] = cos * rowY[i] - sin * rowX[i]  # Y
                     rnew[j, i] = temp  # X
 
             # 1 ... n O(n)
-            # Rotate Q - pozor - fucking TRICK qs[0]
-            qcolX = qnew[:, j]
-            qcolY = qnew[:, j + 1]
-            for i in range(p_del, n):  # radky 1, 2, ... n-1 #
-                temp = cos * qcolX[i] + sin * qcolY[i]  # here was error
-                qnew[i, j + 1] = cos * qcolY[i] - sin * qcolX[i]  # Y
+            # Rotate Q
+            q_colX = qnew[:, j]
+            q_colY = qnew[:, j + 1]  # here we multiply columns and save rows!
+            for i in range(p_del, n):  # rows 1, 2, ... n-1
+                temp = cos * q_colX[i] + sin * q_colY[i]  # bug fix
+                qnew[i, j + 1] = cos * q_colY[i] - sin * q_colX[i]  # Y
                 qnew[i, j] = temp  # X
 
         return qnew[p_del:, p_del:], rnew[p_del:, :]
@@ -1052,49 +1079,45 @@ class FSRegressor(AbstractRegression):
 
         # fill matrix r
         rnew[:n, :] = np.copy(r)
-        rnew[n:, :] = row  # just one row in this case (1,7 into 1,6)
+        rnew[n:, :] = row  # just one row...
 
-        # fill matrix q
+        # add ones on the diagonal
         qnew[:-cnt_rows, :-cnt_rows] = q
-        for j in range(n, n + cnt_rows):  # again, neni treba loop; jen posledni radek
+        for j in range(n, n + cnt_rows):  # loop not necessary - only one row
             qnew[j, j] = 1
 
         n = n + 1
         # rotate last row and update both matrix
-        limit = min(n - 1, p)  # opet, autimaticky je to p ;  n-1 kvuli poslednimu sloupku q ?
+        limit = min(n - 1, p)  # although we assume n >= p
 
-        # we are basically removing just from Q
-        for j in range(limit):  # pro kazdy element posledniho radku (p)
-            cos, sin, R = self.calculate_cos_sin(rnew[j, j], rnew[n - 1, j])  # edge of triangle , last row
-            rnew[j, j] = R  # some hack as they have
-            rnew[n - 1, j] = 0
+        # create additional Givens matrices..
+        for j in range(limit):  # for each value of new row
+            cos, sin, R = self.calculate_cos_sin(rnew[j, j], rnew[n - 1, j])  # edge of upper triangle , last row
+            rnew[j, j] = R  # just set the rotated value
+            rnew[n - 1, j] = 0  # numerical stability...
 
-            # rotate rnew
+            # rotate rnew ... multiply with givens matrix (G := givens (j, n-1)  ;  R = G.T R )
             rowX = rnew[j, :]  # row
             rowY = rnew[n - 1, :]  # row
             # blas srot
-            for i in range(j + 1, p):  # vzdy od j do konce (udelej rotaci celeho radku)
+            for i in range(j + 1, p):  # rotate whole row
                 temp = cos * rowX[i] + sin * rowY[i]
                 rnew[n - 1, i] = cos * rowY[i] - sin * rowX[i]  # Y
                 rnew[j, i] = temp  # X
 
-            # rotate qnew
-            q_rowX = qnew[:, j]  # j ty slouepk (delky n)
-            q_rowY = qnew[:, n - 1]  # posledni slopek (delky n)
-
+            # propagate change to Q ... multiply matrix Q ...  (G := givens(j, n-1)  ;  Q = Q G.T )
+            q_colX = qnew[:, j]  # jth column (length n)
+            q_colY = qnew[:, n - 1]  # last column (length n)
             # blas srot
-            for i in range(n):  # vzdy od j do konce
-                temp = cos * q_rowX[i] + sin * q_rowY[i]
-                qnew[i, n - 1] = cos * q_rowY[i] - sin * q_rowX[i]  # Y
+            for i in range(n):  # whole cols...
+                temp = cos * q_colX[i] + sin * q_colY[i]
+                qnew[i, n - 1] = cos * q_colY[i] - sin * q_colX[i]  # Y
                 qnew[i, j] = temp  # X
 
-        # move last (inserted) row to correct position
-        # k je jako idx ? jo. je to jako idx v nove matici
-        # chci ho hodit za ten co potom odstranim (teda idx bude prvdepodobne idxj+1)
+        # move the last (inserted) row to the correct position
+        # put it behind the row we consequently remove ...
         for j in range(n - 1, idx, -1):
-            # this is bad - it is copy swap !!!
-            qnew[[j - 1, j]] = qnew[[j, j - 1]]
-            # swap(q new[j,:], q new[j-1, : ]) j jde od posledniho (od vlozeneho) a posouva ho na spravny index
+            qnew[[j - 1, j]] = qnew[[j, j - 1]]  # propagate last row up
 
         return qnew, rnew
 

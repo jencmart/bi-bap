@@ -13,6 +13,11 @@ def test_feasible_solution_numpy():
     feasible_test.test_numpy(n=150, p=3, algorithm='moea', calculation='inv')
 
 
+# Feasible solution
+def test_feasible_solution_cpp():
+    feasible_test.test_cpp(n=6, p=3, algorithm='moea', calculation='qr')
+
+
 # Feasible solution OE QR
 def test_feasible_OE_solution_numpy():
     feasible_oe_test.test_numpy(n=30, p=3)  # 150 44s 300 335sec # mmea 1000 3 70sec ; 1000 10 70sec ; MMEA - indepent of p !!!!! (mostly...)
@@ -34,7 +39,7 @@ if __name__ == '__main__':
     # experiment_fast_lts_speed()
     # lts_speed.fast_lts_cpp_only()
     # test_feasible_OE_solution_numpy()
-    test_feasible_solution_numpy()
+    test_feasible_solution_cpp()
     # test_feasible_solution_numpy()
     #lts_speed.fast_lts_cpp_big()
 

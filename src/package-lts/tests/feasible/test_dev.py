@@ -3,11 +3,12 @@ from data.data_generator import generate_data_ND
 from scipy import spatial
 
 
-def test_cpp(n=100, p=2):
+def test_cpp(n=100, p=2, algorithm='fsa', calculation='inv', num_starts=10, max_steps=50, intercept=True, h_size='default'):
     print('test started...')
     x, y, x_clean, y_clean = generate_data_ND(n, p)
-    lts = feasible.FSRegressorCPP()
-    lts.fit(x, y, use_intercept=True, num_starts=10)
+    lts = feasible.FSRegressorCPP(num_starts=num_starts, max_steps=max_steps, use_intercept=intercept,
+                                  algorithm=algorithm, calculation=calculation)
+    lts.fit(x, y, h_size=h_size)
 
     # lts
     weights_lts = lts.coef_
@@ -18,7 +19,7 @@ def test_cpp(n=100, p=2):
     print('sec: ', lts.time_total_)
 
     # OLS on the clean data
-    lts.fit(x_clean, y_clean, use_intercept=True, h_size=x_clean.shape[0])
+    lts.fit(x_clean, y_clean, h_size=x_clean.shape[0])
     weights_global_minimum = lts.coef_
 
     # cos similarity

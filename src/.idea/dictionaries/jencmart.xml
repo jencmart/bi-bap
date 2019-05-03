@@ -2,9 +2,11 @@
   <dictionary name="jencmart">
     <words>
       <w>agullo</w>
+      <w>blas</w>
       <w>cholesky</w>
       <w>coef</w>
       <w>cppimport</w>
+      <w>decomp</w>
       <w>denom</w>
       <w>eigen</w>
       <w>fastlts</w>
@@ -14,10 +16,13 @@
       <w>moea</w>
       <w>pybind</w>
       <w>pythonpath</w>
+      <w>qnew</w>
       <w>regressor</w>
+      <w>rnew</w>
       <w>scikit</w>
       <w>scipy</w>
       <w>slartg</w>
+      <w>srot</w>
     </words>
   </dictionary>
 </component>
