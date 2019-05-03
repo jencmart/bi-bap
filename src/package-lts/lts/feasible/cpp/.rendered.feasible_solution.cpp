@@ -516,12 +516,8 @@ std::tuple<Eigen::MatrixXd, Eigen::MatrixXd, Eigen::MatrixXd, Eigen::MatrixXd> t
     Eigen::MatrixXd q = qr.householderQ();
     Eigen::MatrixXd r = qr.matrixQR().triangularView<Eigen::Upper>(); // represents q.transpose()*dataJX
     Eigen::MatrixXd r1 = r.topRows(r.cols());
+
     Eigen::MatrixXd theta = qr.solve(dataJy);
-//    std::cout << q << std::endl;
-//    std::cout << std::endl << std::endl;
-//    std::cout << r << std::endl;
-//    std::cout << std::endl << std::endl;
-//    std::cout << r1 << std::endl;
 
     return std::make_tuple(theta, q, r, r1);
 }
@@ -531,9 +527,29 @@ std::tuple<double, Eigen::MatrixXd> idx_qr_idx(const Eigen::MatrixXd & dataMatri
 
     Eigen::MatrixXd x = dataMatrix(idx, Eigen::all);
 
+    Eigen::MatrixXd r1trans = r1.transpose();
     // transpose upper triangular and solve lower triangular system
-    Eigen::MatrixXd vi = r1.transpose().triangularView<Eigen::Lower>().solve(x.transpose());
-    double xmx = (vi.transpose() * vi)(0,0); // vi.T * vi
+    Eigen::MatrixXd vi = r1trans.triangularView<Eigen::Lower>().solve(x.transpose());
+
+    double xmx = (vi.transpose() * vi)(0, 0); // vi.T * vi
+   //Eigen::MatrixXd xmx2 = (vi.transpose() * vi); // vi.T * vi
+
+    if(xmx > 1) {
+    std::cout << r1 << std::endl;
+    std::cout << std::endl;
+    std::cout << r1trans << std::endl;
+    std::cout << std::endl;
+
+    std::cout << vi << std::endl;
+    std::cout << std::endl;
+    std::cout << x << std::endl;
+    std::cout << std::endl;
+    exit(12);
+    }
+
+
+
+
     return std::make_tuple(xmx, vi);
 }
 
@@ -644,7 +660,7 @@ std::tuple<Eigen::MatrixXd, Eigen::MatrixXd> qr_delete(const Eigen::MatrixXd & q
 
     // propagate the row we remove to the first position
     if(idx != 0){
-        for(int j = idx; j > 0; j-- ){ // (idx, ... 2, 1)
+        for(int j = idx; j > 0; --j ){ // (idx, ... 2, 1)
             qnew.row(j).swap(qnew.row(j-1)); // propagate row up
         }
     }
@@ -652,9 +668,10 @@ std::tuple<Eigen::MatrixXd, Eigen::MatrixXd> qr_delete(const Eigen::MatrixXd & q
     int n = qnew.rows();
     int p = rnew.cols();
 
+
     // todo - OK
     // we want to introduce zeroes in the first row od Q at indexes 1, 2 .... n-1
-    for(int j = n-2; j > -1 ; j--){   // n-2 ... 1, 0
+    for(int j = n-2; j > -1 ; --j){   // n-2 ... 1, 0
 
         // one by one from the end ... (we can imagine first rows as column vector)
         // so first we zero j+1 , in next iteration j etc...
@@ -752,20 +769,19 @@ void goThroughAllPairsMoeaQr(double & rho, int & iSwap, int & jSwap, const Eigen
             double b = (1 + imi - jmj);
             double ro_b = a / b;
 
-
-
-            if(ro_b < 0)
-            {
+            if(ro_b < 0) {
+                std::cout << "-----" << std::endl;
+                std::cout << ro_b << std::endl;
+                std::cout << a << std::endl;
+                std::cout << b << std::endl;
+                std::cout << std::endl;
                 std::cout << imi << std::endl;
                 std::cout << jmj << std::endl;
-                exit(54);
+                exit(21);
             }
-
-
 
             if(ro_b > ro_b_min)
                 continue;
-
 
             // calculate ro_i_j multiplicative difference (Agullo)
             double i_m_j = idx_qr_j(dataJX, i, r1, vi);
@@ -773,6 +789,19 @@ void goThroughAllPairsMoeaQr(double & rho, int & iSwap, int & jSwap, const Eigen
             a = a + (std::pow((i_m_j + (ei * ej) / rss), 2));
             b = b + (std::pow(i_m_j, 2)) - imi * jmj;
             double newRo = a / b;
+
+
+          if(newRo < 0) {
+                std::cout << "-----" << std::endl;
+                std::cout << newRo << std::endl;
+                std::cout << a << std::endl;
+                std::cout << b << std::endl;
+                std::cout << std::endl;
+                std::cout << i_m_j << std::endl;
+
+                exit(22);
+            }
+
 
             if(newRo < ro_b_min)
                 ro_b_min = newRo;
@@ -827,10 +856,11 @@ ResultFeasible * refinementProcessMoeaQr(std::vector<int> & indexesJ, std::vecto
             break;
         }else{
             // update rss
-            rss = rss*rho;
+            //double rss1 = rss*rho;
+
 
             // row to insert
-            // Eigen::MatrixXd rowToInsert = dataMX(jSwap, Eigen::all);
+            //Eigen::MatrixXd rowToInsert = dataMX(jSwap, Eigen::all);
 
             // swap observations
             swap_observations(dataJX, dataJy, dataMX, dataMy, iSwap, jSwap, indexesJ, indexesM);
@@ -842,12 +872,13 @@ ResultFeasible * refinementProcessMoeaQr(std::vector<int> & indexesJ, std::vecto
             //std::tie(q, r) = qr_delete(q, r, iSwap);
 
             //update theta and r1
-            // Eigen::MatrixXd r = qr.matrixQR().triangularView<Eigen::Upper>(); // represents q.transpose()*dataJX
+            // r = r.triangularView<Eigen::Upper>(); // represents q.transpose()*dataJX
             // r1 = r.topRows(r.cols());
             // theta =  r1.triangularView<Eigen::Upper>().solve( q.transpose().topRows(r.cols()) * dataJy);
 
             std::tie(theta, q, r, r1) = theta_qr(dataJX, dataJy);
-
+            rss = calculateRSS(dataJX, dataJy, theta);
+            std::cout << rss << std::endl;
             // step ++
             steps += 1;
         }

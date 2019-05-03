@@ -10,12 +10,12 @@ from experiments import speed_fast_lts as lts_speed
 
 # Feasible solution
 def test_feasible_solution_numpy():
-    feasible_test.test_numpy(n=150, p=3, algorithm='moea', calculation='inv')
+    feasible_test.test_numpy(n=150, p=3, algorithm='moea', calculation='qr')
 
 
 # Feasible solution
 def test_feasible_solution_cpp():
-    feasible_test.test_cpp(n=6, p=3, algorithm='moea', calculation='qr')
+    feasible_test.test_cpp(n=150, p=3, algorithm='moea', calculation='qr', num_starts=1000, max_steps=1000)
 
 
 # Feasible solution OE QR

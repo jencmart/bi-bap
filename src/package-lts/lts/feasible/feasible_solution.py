@@ -610,6 +610,7 @@ class FSRegressor(AbstractRegression):
                 a = ((1 + imi + (ei ** 2) / rss) * (1 - jmj - (ej ** 2) / rss))
                 b = (1 + imi - jmj)
                 ro_b = a / b
+
                 if ro_b > ro_b_min:
                     continue
 
