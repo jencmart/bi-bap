@@ -2,6 +2,8 @@
   <dictionary name="jencmart">
     <words>
       <w>agullo</w>
+      <w>argsort</w>
+      <w>binom</w>
       <w>blas</w>
       <w>cholesky</w>
       <w>coef</w>
@@ -14,6 +16,8 @@
       <w>lapack</w>
       <w>mmea</w>
       <w>moea</w>
+      <w>ndarray</w>
+      <w>permut</w>
       <w>pybind</w>
       <w>pythonpath</w>
       <w>qnew</w>

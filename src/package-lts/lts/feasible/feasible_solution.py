@@ -3,6 +3,8 @@ from lts.feasible.helpers import validate
 import numpy as np
 import math
 import time
+from itertools import combinations
+from itertools import product
 import cppimport.import_hook
 import lts.feasible.cpp.feasible_solution as cpp_solution
 from scipy import linalg
@@ -285,6 +287,60 @@ class FSRegressor(AbstractRegression):
                 else:
                     raise ValueError('param. calculation must be one fo the strings: ‘inv’ or ‘qr’')
 
+        # stop measuring the time
+        self.time1_ = time.process_time() - time1
+        self.time_total_ = self.time1_
+
+        self.save_the_best(results)
+
+    def fit_exact(self, X, y,
+                  h_size: 'default := (n + p + 1) / 2' = 'default',
+                  use_intercept=True,
+                  algorithm: 'str, ‘exa’, ‘bab’ or ‘bsa’, default: ‘bab’' = 'bab'):
+
+        self._alg = algorithm
+
+        # Init some properties
+        X, y = validate(X, y, h_size, use_intercept)
+
+        # concatenate to matrix
+        if type(X) is not np.matrix:
+            X = np.asmatrix(X)
+        if type(y) is not np.matrix:
+            y = np.asmatrix(y)
+        data = np.asmatrix(np.concatenate([y, X], axis=1))
+
+        # h size
+        p = data.shape[1] - 1
+        n = data.shape[0]
+        if h_size == 'default':
+            self._h_size = math.ceil((n + p + 1) / 2)  # todo with or without intercept?
+        else:
+            self._h_size = h_size
+
+        if h_size == 0 or h_size == 1:
+            print('h_size must be at least 2')
+            exit(1)
+
+        self.J = np.matrix(data, copy=True)
+
+        results = []
+
+        # start measuring the time
+        time1 = time.process_time()
+
+        if self._alg == 'exa':
+            # do the refinement process
+            res = self.refinement_exhaustive()
+
+        elif self._alg == 'bab':
+            # do the refinement process
+            res = self.refinement_bab_lts()
+        else:
+            res = self.refinement_bsa()
+
+        # store the result
+        results.append(res)
 
         # stop measuring the time
         self.time1_ = time.process_time() - time1
@@ -881,7 +937,6 @@ class FSRegressor(AbstractRegression):
             # find optimal include  O(p^2n)
             j_swap, gamma_plus = self.smallest_include_qr(M, theta, r1)
 
-            # update theta -> theta_plus ; qr -> qr_plus  O(p^2)
             # create J_plus
             row_to_add = np.copy(M[j_swap, :])
             shape = [J.shape[0] + 1, J.shape[1]]
@@ -889,6 +944,8 @@ class FSRegressor(AbstractRegression):
             J_plus[:J.shape[0], :] = np.copy(J)
             J_plus[J.shape[0]:, :] = row_to_add  # just one row in th
             J_plus = np.asmatrix(J_plus)
+
+            # update theta -> theta_plus ; qr -> qr_plus  O(p^2)
             theta_plus, q_plus, r_plus, r1_plus = self.theta_qr(J_plus)
 
             # find the optimal exclude (no need to update J ... worst case: gamma_plus == gamma_minus )  O(p^2n)
@@ -898,7 +955,7 @@ class FSRegressor(AbstractRegression):
             if not (gamma_plus < gamma_minus):
                 break
 
-            # update theta, inversion, rss, J, M, residualsJ residualsM
+            # update theta, qr, rss, J, M, residualsJ residualsM
 
             # update rss
             rss = rss + gamma_plus - gamma_minus
@@ -1031,7 +1088,6 @@ class FSRegressor(AbstractRegression):
             for j in range(idx, 0, -1):  # jdx ... 3, 2, 1
                 qnew[[j, j - 1]] = qnew[[j - 1, j]]
 
-
         n = q.shape[0]
         p = r.shape[1]
 
@@ -1145,3 +1201,245 @@ class FSRegressor(AbstractRegression):
             r = -r
 
         return cos, sin, r
+
+    # ###############################################################################################
+    # ###############################################################################################
+    # ############ E X A C T  - A L G O R I T H M S #################################################
+    # ###############################################################################################
+    # ###############################################################################################
+
+    # ################################################################################
+    # ############ E X H A U S T I V E ###############################################
+    # ################################################################################
+    def refinement_exhaustive(self):
+        rss_min = float('inf')
+        indexes_min = None
+        theta_min = None
+
+        all_indexes = np.arange(self.J.shape[0])
+
+        # Get all combinations of all_indexes
+        # and length h_size
+        all_comb = combinations(all_indexes, self._h_size)
+
+        # for each combination
+        for comb in list(all_comb):
+            indexes = list(comb)
+            data = self.J[indexes]
+            theta, inversion = self.theta_inv(data)
+            rss = self.rss(data, theta)
+
+            if rss < rss_min:
+                rss_min = rss
+                theta_min = theta
+                indexes_min = indexes
+
+        steps = 0
+        indexes_min = np.asarray(indexes_min)
+        return self.Result(theta_min, indexes_min, rss_min, steps)
+
+    # ################################################################################
+    # ############ E X A C T  -  B A B ###############################################
+    # ################################################################################
+    def refinement_bab_lts(self):
+        self.bab_rss_min = float('inf')
+        self.bab_indexes = None
+        self.bab_theta = None
+        a = []
+        b = list(range(self.J.shape[0]))
+        self.traverse_recursive(a, b, 0, None, None, None)
+        steps = 0
+        return self.Result(self.bab_theta, self.bab_indexes, self.bab_rss_min, steps)
+
+    def traverse_recursive(self, a, b, depth, rss, theta, inversion):
+        # bottom of the tree
+        if depth == self._h_size:
+            # calculate gama plus and new RSS
+            gamma_plus = self.gamma_plus_inv(self.J, a[-1], inversion, theta)
+            rss_here = rss + gamma_plus
+
+            # possibly update result
+            if rss_here < self.bab_rss_min:
+                self.bab_rss_min = rss_here
+                self.bab_indexes = np.copy(a)
+
+                # update theta and inversion
+                self.bab_theta, _ = self.theta_plus_inversion_plus(theta, inversion, self.J, a[-1])
+            return
+
+        # leaf, but cannot go deeper
+        if len(b) == 0:
+            exit(3)
+
+        # before 'root' - we need at least dept p because we assume regularity
+        if len(a) < self.J.shape[1]:  # nothing in root
+            rss_here = rss
+            theta_here = theta
+            inversion_here = inversion
+
+        # 'root' - calculate for the first time at the dept p
+        elif len(a) == self.J.shape[1]:
+            theta_here, inversion_here = self.theta_inv(self.J[a])
+            rss_here = self.rss(self.J[a], theta_here)
+
+        # ordinary edge
+        else:
+            # update RSS
+            gamma_plus = self.gamma_plus_inv(self.J, a[-1], inversion, theta)
+            rss_here = rss + gamma_plus
+
+            # check bounding condition and eventually cut all the branches
+            if rss_here >= self.bab_rss_min:
+                return
+
+            # update theta and inversion
+            theta_here, inversion_here = self.theta_plus_inversion_plus(theta, inversion, self.J, a[-1])
+
+        # traverse tree deeper
+        aa = a.copy()
+        bb = b.copy()
+        while len(bb) > 0:
+            if len(aa) + len(bb) < self._h_size:  # not enough to produce h subset in ancestors
+                break
+
+            # move index from from A to B
+            aa.append(bb[0])
+            del bb[0]
+
+            # go deeper
+            self.traverse_recursive(aa, bb, depth + 1, rss_here, theta_here, inversion_here)
+
+            # remove index from the end of the A
+            del aa[-1]
+
+        # return up from the current node
+        return
+
+    # ################################################################################
+    # ############ E X A C T  -  B S A ###############################################
+    # ################################################################################
+    def refinement_bsa(self):
+        rss_min = float('inf')
+        theta_min = None
+        h_subset_min = None
+        p = self.J.shape[1] - 1
+
+        # Get all combinations of all_indexes
+        # and length p + 1
+        all_indexes = np.arange(self.J.shape[0])
+        all_comb = combinations(all_indexes, p + 1)
+
+        for comb in list(all_comb):  # for all p+1 indexes ... \binom{n}{p+1}
+            indexes = list(comb)
+
+            # store first index
+            first = indexes[0]
+            del indexes[0]
+
+            x1 = self.J[first, 1:]   # 1 x p
+            y1 = self.J[first, [0]]  # 1 x 1
+
+            x_rest = np.copy(self.J[indexes, 1:])  # p x p
+            y_rest = np.copy(self.J[indexes, 0])   # p x 1
+
+            # for all 2^p signs {+,-}
+            all_sign_permut = list(map(list, product([0, 1], repeat=p)))  # (000)(001)(010)(011)(100)(101)(110)(111)
+            for signs in all_sign_permut:
+
+                # create equations
+                for i in range(p):
+                    if signs[i] == 1:
+                        x_rest[i] = x_rest[i] - x1
+                        y_rest[i] = y_rest[i] - y1
+                    else:
+                        x_rest[i] = x_rest[i] + x1
+                        y_rest[i] = y_rest[i] + y1
+
+                # solve theta
+                data = np.asmatrix(np.concatenate([y_rest, x_rest], axis=1))
+                theta_curr, q, r, r1 = self.theta_qr(data)
+
+                # check if solution is unique
+                if np.count_nonzero(r[-1, :]) == 0:  # if last row is zero ... not regular
+                    print('continue')
+                    continue
+
+                #  calculate all residuals, square them and sort them
+                all_residuals = self.J[:, [0]] - self.J[:, 1:] * theta_curr
+                all_residuals = np.square(all_residuals)
+                all_residuals = np.ravel(all_residuals)
+                sort_args = np.argsort(all_residuals)  # only the argsort
+
+                # calculate xi1 residuum
+                x1_res = ((y1 - np.dot(x1, theta_curr))[0, 0])**2
+
+                # if r_{x1} == r_h
+                res_h = all_residuals[sort_args[self._h_size - 1]]  # r_h residuum
+                res_h_1 = all_residuals[sort_args[self._h_size]]    # r_{h+1} residuum
+
+                if math.isclose(x1_res, res_h, rel_tol=1e-4):
+                    # print('yes')
+
+                    # if r_h == r_{h+1} .. find all corresponding h subsets; #subsets ~ binom{p}{l+1}; max binom{p}{p/2}
+                    if math.isclose(res_h, res_h_1, rel_tol=1e-4):
+                        all_h_subsets = self.all_h_subsets_bsa(all_residuals, sort_args)
+
+                    # else.. corresponding h subset is unique
+                    else:
+                        all_h_subsets = [sort_args[:self._h_size]]
+
+                    # for each h_subset in relation with theta calculate OLS estimate
+                    for h_sub_indexes in all_h_subsets:
+                        theta, _, _, _ = self.theta_qr(self.J[h_sub_indexes])
+                        rss = self.rss(self.J[h_sub_indexes], theta)
+
+                        # if current new minimum .. store it
+                        if rss < rss_min:
+                            rss_min = rss
+                            theta_min = theta
+                            h_subset_min = h_sub_indexes
+
+        steps = 0
+        return self.Result(theta_min, h_subset_min, rss_min, steps)
+
+    def all_h_subsets_bsa(self, residuals, sort_args):
+
+        res_h = residuals[sort_args[self._h_size - 1]]  # r_h residuum
+
+        # find smallest index i; i <= h;  so that r_i = r_h
+        idx_i = self._h_size-1
+        for i in reversed(range(self._h_size-1)):  # r_h, r_{h-1}, ... ,r_{0}
+            if math.isclose(residuals[sort_args[i]], res_h, rel_tol=1e-9):  # e-9 is default btw..
+                idx_i = i
+            else:
+                break
+
+        # find greatest index j; j >= h+1 ;  so that r_j = r_{h+1} ; [ h+1 because we know that r_h == r_{h+1} ]
+        idx_j = self._h_size
+        for j in range(self._h_size, residuals.shape[0]):
+            if math.isclose(residuals[sort_args[j]], res_h, rel_tol=1e-6):
+                idx_j = j
+            else:
+                break
+
+        # create list from those indexes [i, i+1, ... , j]
+        idx_list = list(range(idx_i, idx_j+1))
+
+        # create all combinations of size:= self._h_size-1 - idx_i + 1
+        # #equal residuals from i to h included (h-i+1)
+        # we are using indexes so (h-1-i+1) ... h - idx_i where h is #resuidals
+        comb = combinations(idx_list, self._h_size - idx_i)
+
+        # store all corresponding subsets
+        list_of_subsets = []
+
+        # start with first i unique indexes [0, 1, ... i-1]
+        begin = sort_args[:idx_i]
+
+        # and append rest of the indexes for each combination
+        for appendix in list(comb):
+            appendix = sort_args[list(appendix)]
+            concatenated_list = np.concatenate((begin, appendix), axis=0)
+            list_of_subsets.append(concatenated_list)
+
+        return list_of_subsets

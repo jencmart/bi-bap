@@ -229,9 +229,9 @@ void goThroughAllPairsFsaInv(double & delta, int & iSwap, int & jSwap, const Eig
             // prepare params
             double eI = residuals(indexesJ[i], 0); //  residual for excluded row
             double eJ = residuals(indexesM[j], 0); //  residual for included row
-            double hII =  dataJX(i, Eigen::all) * inversion * (dataJX(i, Eigen::all).transpose())  ; // todo bude asi zle
-            double hIJ =  dataJX(i, Eigen::all) * inversion * (dataMX(j, Eigen::all).transpose())  ;
-            double hJJ =  dataMX(j, Eigen::all) * inversion * (dataMX(j, Eigen::all).transpose())  ;
+            double hII =  dataJX(i, Eigen::all) * inversion * (dataJX(i, Eigen::all).transpose());
+            double hIJ =  dataJX(i, Eigen::all) * inversion * (dataMX(j, Eigen::all).transpose());
+            double hJJ =  dataMX(j, Eigen::all) * inversion * (dataMX(j, Eigen::all).transpose());
 
             // perform calculation
             double nom = (eJ * eJ * (1 - hII) ) - ( eI * eI * (1 + hJJ)) + 2*eI*eJ*hIJ;
@@ -282,6 +282,7 @@ ResultFeasible * refinementProcessFsaInv(std::vector<int> & indexesJ, std::vecto
 
         // swap observations
         swap_observations(dataJX, dataJy, dataMX, dataMy, iSwap, jSwap, indexesJ, indexesM);
+
         // step ++
         steps += 1;
     }
@@ -534,18 +535,18 @@ std::tuple<double, Eigen::MatrixXd> idx_qr_idx(const Eigen::MatrixXd & dataMatri
     double xmx = (vi.transpose() * vi)(0, 0); // vi.T * vi
    //Eigen::MatrixXd xmx2 = (vi.transpose() * vi); // vi.T * vi
 
-    if(xmx > 1) {
-    std::cout << r1 << std::endl;
-    std::cout << std::endl;
-    std::cout << r1trans << std::endl;
-    std::cout << std::endl;
-
-    std::cout << vi << std::endl;
-    std::cout << std::endl;
-    std::cout << x << std::endl;
-    std::cout << std::endl;
-    exit(12);
-    }
+//    if(xmx > 1) {
+//    std::cout << r1 << std::endl;
+//        std::cout << std::endl;
+//        std::cout << r1trans << std::endl;
+//        std::cout << std::endl;
+//
+//        std::cout << vi << std::endl;
+//        std::cout << std::endl;
+//        std::cout << x << std::endl;
+//        std::cout << std::endl;
+//        exit(12);
+//    }
 
 
 
@@ -553,14 +554,73 @@ std::tuple<double, Eigen::MatrixXd> idx_qr_idx(const Eigen::MatrixXd & dataMatri
     return std::make_tuple(xmx, vi);
 }
 
-
+// subroutine for solving triangular system r1 u = vi and product x u.T  for two different observations
 double idx_qr_j(const Eigen::MatrixXd & dataJX, int i, const Eigen::MatrixXd & r1, const Eigen::MatrixXd & vi){
 
     Eigen::MatrixXd x = dataJX(i, Eigen::all);
     Eigen::MatrixXd u = r1.triangularView<Eigen::Upper>().solve(vi);
-    double imj = (x * u.transpose())(0,0); // x * u.T
+    double imj = (x * u)(0,0); // x * u
     return imj;
 }
+
+// subroutine finding observation from matrix M, which if included to matrix J will increase RSS the smallest (Agullo)
+std::tuple<int, double> smallest_include_qr(const Eigen::MatrixXd & dataMX, const Eigen::MatrixXd & dataMy,
+                                             const Eigen::MatrixXd & theta, const Eigen::MatrixXd & r1){
+    double gamma_plus_min = std::numeric_limits<double>::infinity();
+    int jSwap = 0;
+
+    unsigned n = dataMX.rows();
+
+    for(unsigned j = 0 ; j < n ; ++j ){
+
+        // calculate gamma+ O(p^2)
+        double imi;
+        Eigen::MatrixXd vi; // not needed
+        std::tie(imi, vi) =  idx_qr_idx(dataMX, j, r1);
+
+        Eigen::MatrixXd xi = dataMX(j, Eigen::all);
+        Eigen::MatrixXd yi = dataMy(j, Eigen::all);
+        double gamma_plus = std::pow((yi - xi*theta)(0, 0), 2) / (1 + imi);
+
+
+        // update if smaller
+        if(gamma_plus < gamma_plus_min){
+            gamma_plus_min = gamma_plus;
+            jSwap = j;
+        }
+    }
+    return std::make_tuple(jSwap, gamma_plus_min);
+}
+
+
+// subroutine finding observation from matrix J, which if excluded, will reduce RSS the most
+std::tuple<int, double> greatest_exclude_qr(const Eigen::MatrixXd & dataJX, const Eigen::MatrixXd & dataJy,
+                                             const Eigen::MatrixXd & theta, const Eigen::MatrixXd & r1){
+    double gamma_minus_max = -1;
+    int iSwap = 0;
+    unsigned n = dataJX.rows();
+    for(unsigned i = 0 ; i < n ; ++i ){
+
+        // calculate gamma- O(p^2)
+        double jmj;
+        Eigen::MatrixXd vj; // not needed
+        std::tie(jmj, vj) =  idx_qr_idx(dataJX, i, r1);
+
+        Eigen::MatrixXd xj = dataJX(i, Eigen::all);
+        Eigen::MatrixXd yj = dataJy(i, Eigen::all);
+        double gamma_minus = std::pow((yj - xj*theta)(0, 0), 2) / (1 - jmj);
+        // update if greater
+        if(gamma_minus > gamma_minus_max){
+            gamma_minus_max = gamma_minus;
+            iSwap = i;
+        }
+    }
+
+    return std::make_tuple(iSwap, gamma_minus_max);
+}
+
+
+
 
 // subroutine for calculating sinus(fi) and cosinus(fi) between two points
 void calculate_cos_sin(double f, double g, double & cos, double & sin, double & R){
@@ -597,8 +657,6 @@ std::tuple<Eigen::MatrixXd, Eigen::MatrixXd> qr_insert(const Eigen::MatrixXd & q
     Eigen::MatrixXd rnew = Eigen::MatrixXd::Zero(r.rows()+1, r.cols());
     rnew.topRows(r.rows()) = r.topRows(r.rows());
     rnew.bottomRows(1) =  row.topRows(1);
-    // todo - up to here ok
-
 
     // set the limit
     int n = qnew.rows();
@@ -636,7 +694,6 @@ std::tuple<Eigen::MatrixXd, Eigen::MatrixXd> qr_insert(const Eigen::MatrixXd & q
         }
     }
 
-    // todo - from here ok
     // move the last (inserted) row to the correct position (row idx (that means at index idx-1)
     // put it behind the row we consequently remove ...
     for(int j = n-1; j > idx; j-- ){ // n-1, n-2 ... idx+1
@@ -669,7 +726,6 @@ std::tuple<Eigen::MatrixXd, Eigen::MatrixXd> qr_delete(const Eigen::MatrixXd & q
     int p = rnew.cols();
 
 
-    // todo - OK
     // we want to introduce zeroes in the first row od Q at indexes 1, 2 .... n-1
     for(int j = n-2; j > -1 ; --j){   // n-2 ... 1, 0
 
@@ -706,6 +762,112 @@ std::tuple<Eigen::MatrixXd, Eigen::MatrixXd> qr_delete(const Eigen::MatrixXd & q
     rnew = rnew.triangularView<Eigen::Upper>();
     return std::make_tuple(qnew, rnew);
 }
+
+
+
+
+// *********************************************************************************************************************
+// ************************  F S A - Q R -   T R Y   -   A L L  -  P A I R S  ****************************************
+// *********************************************************************************************************************
+/* Go through all pairs between J and M and calculate deltaRSS, save the smallest delta
+ * together with indexes of that pair
+ * */
+void goThroughAllPairsFsaQr(double & delta, int & iSwap, int & jSwap, const Eigen::MatrixXd & dataJX,
+        const Eigen::MatrixXd & dataMX,
+        const Eigen::MatrixXd & residuals,
+        const Eigen::MatrixXd & r1,
+        const std::vector<int> & indexesJ,
+        const std::vector<int> & indexesM) {
+
+    unsigned h = dataJX.rows();
+    unsigned nMinusH = dataMX.rows();
+    for (unsigned i = 0; i < h; ++i) {
+        for (unsigned j = 0; j < nMinusH; ++j) {
+
+            // calculate delta RSS (Hawkins)
+
+            // prepare params
+            double eI = residuals(indexesJ[i], 0); //  residual for excluded row
+            double eJ = residuals(indexesM[j], 0); //  residual for included row
+
+            double imi, jmj, imj;
+            Eigen::MatrixXd vi, vj;
+
+            std::tie(imi, vi) =  idx_qr_idx(dataMX, j, r1);
+            std::tie(jmj, vj) =  idx_qr_idx(dataJX, i, r1);
+            imj = idx_qr_j(dataJX, i, r1, vi);
+
+            double hII =  jmj;
+            double hIJ =  imi;
+            double hJJ =  imj;
+
+            // perform calculation
+            double nom = (eJ * eJ * (1 - hII) ) - ( eI * eI * (1 + hJJ)) + 2*eI*eJ*hIJ;
+            double deNom = (1 - hII)*(1 + hJJ) + hIJ * hIJ;
+            double newDelta = nom / deNom;
+
+            // update indexes and value if smaller
+            if(newDelta < delta){
+                delta = newDelta;
+                iSwap = i;
+                jSwap = j;
+            }
+        }
+    }
+}
+
+// *********************************************************************************************************************
+// ************************ F S A - Q R -  R E F I N E M E N T   -    P R O C E S S   **********************************
+// *********************************************************************************************************************
+ResultFeasible * refinementProcessFsaQr(std::vector<int> & indexesJ, std::vector<int> & indexesM,
+                                        const Eigen::MatrixXd & X, const Eigen::MatrixXd & y, int maxSteps ) {
+    // Create the sub-matrices
+    Eigen::MatrixXd dataJX = X(indexesJ, Eigen::all);
+    Eigen::MatrixXd dataJy = y(indexesJ, Eigen::all);
+
+    // Create the sub-matrices
+    Eigen::MatrixXd dataMX = X(indexesM, Eigen::all);
+    Eigen::MatrixXd dataMy = y(indexesM, Eigen::all);
+
+    Eigen::MatrixXd theta, q, r, r1;
+
+    int steps = 0;
+    for(int it = 0 ; it < maxSteps ; it++) {
+
+        // calculate theta and QR decomposition  O(p^2n)
+        std::tie(theta, q, r, r1) = theta_qr(dataJX, dataJy);
+
+        // calculate residuals r_1 ... r_n    O(np)
+        Eigen::MatrixXd residuals = y - X * theta;
+
+        // find the optimal swap - j add ; i remove O(n^2p^2)
+        double delta = 0;
+        int iSwap, jSwap;
+        goThroughAllPairsFsaQr(delta, iSwap, jSwap, dataJX, dataMX, residuals, r1, indexesJ, indexesM);
+
+        // strong necessary condition satisfied
+        if(!(delta < 0))
+            break;
+
+        // swap observations
+        swap_observations(dataJX, dataJy, dataMX, dataMy, iSwap, jSwap, indexesJ, indexesM);
+
+
+        // step ++
+        steps += 1;
+    }
+
+    // calculate theta and QR decomposition  O(p^2n)
+    std::tie(theta, q, r, r1) = theta_qr(dataJX, dataJy);
+
+    // calculate RSS O(np)
+    double rss = calculateRSS(dataJX, dataJy, theta);
+
+    return new ResultFeasible(indexesJ, theta, rss, steps);
+}
+
+
+
 
 // *********************************************************************************************************************
 // ************************  M O E A - Q R -   T R Y   -   A L L  -  P A I R S  ****************************************
@@ -814,6 +976,7 @@ void goThroughAllPairsMoeaQr(double & rho, int & iSwap, int & jSwap, const Eigen
         }
     }
 }
+
 // *********************************************************************************************************************
 // ************************ M O E A - Q R -  R E F I N E M E N T   -    P R O C E S S   ********************************
 // *********************************************************************************************************************
@@ -831,6 +994,7 @@ ResultFeasible * refinementProcessMoeaQr(std::vector<int> & indexesJ, std::vecto
 
     // calculate RSS O(np)
     double rss = calculateRSS(dataJX, dataJy, theta);
+    //double rss1 = rss;
 
     // shortcut
     if(indexesM.empty()){
@@ -856,28 +1020,28 @@ ResultFeasible * refinementProcessMoeaQr(std::vector<int> & indexesJ, std::vecto
             break;
         }else{
             // update rss
-            //double rss1 = rss*rho;
-
+            rss = rss*rho;
 
             // row to insert
-            //Eigen::MatrixXd rowToInsert = dataMX(jSwap, Eigen::all);
+            // Eigen::MatrixXd rowToInsert = dataMX(jSwap, Eigen::all);
+
+            // update QR O(np^2) and QR O(n^2)
+            // Eigen::MatrixXd q_plus, r_plus;
+            // std::tie(q_plus, r_plus) = qr_insert(q, r, rowToInsert, iSwap+1);
+
+            // CORRECT DECOMPOSITION ON DATA PLUS
+            // Eigen::MatrixXd dataJX_plus = Eigen::MatrixXd::Zero(dataJX.rows()+1, r.cols());
+            // dataJX_plus.topRows(iSwap+1) = dataJX.topRows(iSwap+1); // ok
+            // dataJX_plus.row(iSwap+1) = rowToInsert.topRows(1);
+            // dataJX_plus.bottomRows(dataJX.rows() - iSwap-1) = dataJX.bottomRows(dataJX.rows() - iSwap-1);
+
+            // Eigen::MatrixXd q_minus, r_minus;
+            // std::tie(q_minus, r_minus) = qr_delete(q_plus, r_plus, iSwap);
 
             // swap observations
             swap_observations(dataJX, dataJy, dataMX, dataMy, iSwap, jSwap, indexesJ, indexesM);
 
-            //update QR O(np^2)
-            //std::tie(q, r) = qr_insert(q, r, rowToInsert, iSwap+1);
-
-            //update QR O(n^2)
-            //std::tie(q, r) = qr_delete(q, r, iSwap);
-
-            //update theta and r1
-            // r = r.triangularView<Eigen::Upper>(); // represents q.transpose()*dataJX
-            // r1 = r.topRows(r.cols());
-            // theta =  r1.triangularView<Eigen::Upper>().solve( q.transpose().topRows(r.cols()) * dataJy);
-
             std::tie(theta, q, r, r1) = theta_qr(dataJX, dataJy);
-            rss = calculateRSS(dataJX, dataJy, theta);
             std::cout << rss << std::endl;
             // step ++
             steps += 1;
@@ -886,6 +1050,80 @@ ResultFeasible * refinementProcessMoeaQr(std::vector<int> & indexesJ, std::vecto
     return new ResultFeasible(indexesJ, theta, rss, steps);
 }
 
+
+// *********************************************************************************************************************
+// ************************ M M E A - Q R -  R E F I N E M E N T   -    P R O C E S S   ********************************
+// *********************************************************************************************************************
+ResultFeasible * refinementProcessMmeaQr(std::vector<int> & indexesJ, std::vector<int> & indexesM,
+                                        const Eigen::MatrixXd & X, const Eigen::MatrixXd & y, int maxSteps ) {
+
+    int steps = 0;
+    // Create the sub-matrices
+    Eigen::MatrixXd dataJX = X(indexesJ, Eigen::all);
+    Eigen::MatrixXd dataJy = y(indexesJ, Eigen::all);
+
+    // calculate theta and QR decomposition  O(p^2n)
+    Eigen::MatrixXd theta, q, r, r1;
+    std::tie(theta, q, r, r1) = theta_qr(dataJX, dataJy);
+
+    // calculate RSS O(np)
+    double rss = calculateRSS(dataJX, dataJy, theta);
+
+    // shortcut
+    if(indexesM.empty()){
+        return new ResultFeasible(indexesJ, theta, rss, steps);
+    }
+
+    Eigen::MatrixXd dataMX = X(indexesM, Eigen::all);
+    Eigen::MatrixXd dataMy = y(indexesM, Eigen::all);
+
+    for(int it = 0 ; it < maxSteps ; it++) {
+
+        // find optimal include  O(p^2n)
+        int jSwap;
+        double gamma_plus;
+        std::tie(jSwap, gamma_plus) = smallest_include_qr(dataMX, dataMy, theta, r1);
+
+
+        // create JX_plus
+        Eigen::MatrixXd dataJX_plus(dataJX.rows()+1, dataJX.cols());
+        dataJX_plus.topRows(dataJX.rows()) = dataJX.topRows(dataJX.rows());
+        dataJX_plus.bottomRows(1) =  dataMX(jSwap, Eigen::all);
+
+        // create JY_plus
+        Eigen::MatrixXd dataJy_plus(dataJy.rows()+1, dataJy.cols());
+        dataJy_plus.topRows(dataJy.rows()) = dataJy.topRows(dataJy.rows());
+        dataJy_plus.bottomRows(1) =  dataMy(jSwap, Eigen::all);
+
+        // update theta -> theta_plus ; qr -> qr_plus  O(p^2)
+        Eigen::MatrixXd theta_plus, q_plus, r_plus, r1_plus;
+        std::tie(theta_plus, q_plus, r_plus, r1_plus) = theta_qr(dataJX_plus, dataJy_plus);
+
+        // find the optimal exclude (no need to update J ... worst case: gamma_plus == gamma_minus )  O(p^2n)
+        int iSwap;
+        double gamma_minus;
+        std::tie(iSwap, gamma_minus) = greatest_exclude_qr(dataJX, dataJy, theta_plus, r1_plus);
+
+        // improvement cannot be made
+        if(!(gamma_plus < gamma_minus))
+            break;
+
+        // update theta, qr, rss, J, M, residualsJ residualsM
+
+        // update rss
+        rss = rss + gamma_plus - gamma_minus;
+
+        // swap observations
+        swap_observations(dataJX, dataJy, dataMX, dataMy, iSwap, jSwap, indexesJ, indexesM);
+
+        // update theta q, r, r1
+        std::tie(theta, q, r, r1) = theta_qr(dataJX, dataJy);
+
+        // step ++
+        steps += 1;
+   }
+    return new ResultFeasible(indexesJ, theta, rss, steps);
+}
 
 // *********************************************************************************************************************
 // *********************************************************************************************************************
@@ -929,13 +1167,13 @@ ResultFeasible* fs_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int numStarts, int 
         }else{
             if(alg == 0){
                 // do the refinement process on (indexes J, indexes M , X, Y)
-                result = refinementProcessFsaInv(indexesJ, indexesM, X, y, maxSteps);
+                result = refinementProcessFsaQr(indexesJ, indexesM, X, y, maxSteps);
             }else if(alg == 1){
                 // do the refinement process on (indexes J, indexes M , X, Y)
                 result = refinementProcessMoeaQr(indexesJ, indexesM, X, y, maxSteps);
             }else {
                 // do the refinement process on (indexes J, indexes M , X, Y)
-                result = refinementProcessFsaInv(indexesJ, indexesM, X, y, maxSteps);
+                result = refinementProcessMmeaQr(indexesJ, indexesM, X, y, maxSteps);
             }
         }
 

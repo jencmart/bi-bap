@@ -85,7 +85,7 @@ class FSRegressor(AbstractRegression):
     # ############### FIT #######################################################
     # ###########################################################################
 
-    def fit_klouda_bsa(self, X, y,  h_size: 'default := (n + p + 1) / 2' = 'default', use_intercept=False):
+    def fit_bsa(self, X, y, h_size: 'default := (n + p + 1) / 2' = 'default', use_intercept=False):
         # concatenate to matrix
         if type(X) is not np.matrix:
             X = np.asmatrix(X)
@@ -104,7 +104,7 @@ class FSRegressor(AbstractRegression):
         J = np.matrix(self._data, copy=True)
 
         # ****** Calculate klouda bsa lts *************
-        best_result = self.klouda_bsa_lts(J, self._h_size)
+        best_result = self.refinement_bsa(J, self._h_size)
 
         # ***** save the results *****
         # ... Store results
@@ -123,7 +123,7 @@ class FSRegressor(AbstractRegression):
 
         self.coef_ = np.ravel(self.coef_)  # RAVELED
 
-    def klouda_bsa_lts_find_all_h_subsets(self, theta, residuals, sort_args, J, h_size):  # todo
+    def all_h_subsets_bsa(self, theta, residuals, sort_args, J, h_size):  # todo
         # todo predelat na sorted_res[ args [h_size-1] ] - DONE
         #res_h = residuals[h_size - 1]
         res_h = residuals[ sort_args[h_size - 1] ]
@@ -181,7 +181,7 @@ class FSRegressor(AbstractRegression):
         # uloz tyto listy do listu a cele to vrat
         return list_of_subsets
 
-    def klouda_bsa_lts(self, J, h_size):
+    def refinement_bsa(self, J, h_size):
 
         from itertools import combinations
         from itertools import product
@@ -268,17 +268,17 @@ class FSRegressor(AbstractRegression):
                     # print('yes')
                     # zavolej [algoritmus 1] ktery vrati vsechny h podmnoziny - bude jich (p nad l+1) .. max (p nad p/2)
                     if (math.isclose(res_h, res_h_1, rel_tol=1e-4)):
-                        all_h_subsets = self.klouda_bsa_lts_find_all_h_subsets(theta,all_residuals, sort_args, J, h_size) # todo - posli argumenty argsort a nesortovane pole
+                        all_h_subsets = self.all_h_subsets_bsa(theta, all_residuals, sort_args, J, h_size) # todo - posli argumenty argsort a nesortovane pole
                     else:
                         all_h_subsets = [sort_args[:h_size]]
                     # pokud plati naka bab-bsa podminka - todo vrat i bab podminku
                     # else continue
 
                     # pro kazdou h podmnozinu spocitej OLS
-                    for h_subset in all_h_subsets:
+                    for indexes in all_h_subsets:
                         #print('double ues')
                         # calculate ols na h subsetu
-                        theta_fin, rss_fin = self.calculate_theta_and_rss(J[h_subset, :])
+                        theta_fin, rss_fin = self.calculate_theta_and_rss(J[indexes, :])
 
                         # pokud mensi nez socasne min - vymen a uloz
                         #print(rss_fin)
@@ -286,7 +286,7 @@ class FSRegressor(AbstractRegression):
                             #print('uiuiuiui')
                             rss_min = rss_fin
                             theta_min = theta_fin
-                            h_subset_min = h_subset
+                            h_subset_min = indexes
                 ###else:
                    # print('no')
         # last but not least
@@ -468,7 +468,7 @@ class FSRegressor(AbstractRegression):
         time1 = time.process_time()
         #self.fit_bab(X, y)
 
-        self.fit_klouda_bsa(X, y)
+        self.fit_bsa(X, y)
         # save the time
         self.time1_ = time.process_time() - time1
         self.time_total_ = self.time1_

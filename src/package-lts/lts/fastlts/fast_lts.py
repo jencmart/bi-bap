@@ -29,7 +29,8 @@ class FLTSRegressorCPP:
         self.time_total_ = None
 
     # currently support for np.ndarray and matrix
-    def _validate(self, X, y, h_size, num_start_c_steps, num_starts_to_finish, max_c_steps, threshold,
+    @staticmethod
+    def _validate(X, y, h_size, num_start_c_steps, num_starts_to_finish, max_c_steps, threshold,
                   use_intercept):
         if X is None or not isinstance(X, (np.ndarray, np.matrix)):
             raise Exception('X must be  type array or np.ndarray or np.matrix')
@@ -93,7 +94,6 @@ class FLTSRegressorCPP:
         X, y = self._validate(X, y, h_size, num_start_c_steps, num_starts_to_finish, max_c_steps, threshold,
                               use_intercept)
 
-        # todo - include intercept or not? now - p include intercept..
         _h_size = math.ceil((X.shape[0] + X.shape[1] + 1) / 2) if h_size == 'default' else h_size  # N + p + 1
 
         eigen_result = cpp_solution.fast_lts(X, y, num_starts, num_start_c_steps, num_starts_to_finish, _h_size,
@@ -132,7 +132,8 @@ class FLTSRegressor:
         self.time_total_ = None
 
     # currently support for np.ndarray and matrix
-    def _validate(self, X, y, h_size, num_start_c_steps, num_starts_to_finish, max_c_steps, threshold, use_intercept):
+    @staticmethod
+    def _validate(X, y, h_size, num_start_c_steps, num_starts_to_finish, max_c_steps, threshold, use_intercept):
         if X is None or not isinstance(X, (np.ndarray, np.matrix)):
             raise Exception('X must be  type array or np.ndarray or np.matrix')
         if y is None or not isinstance(y, (np.ndarray, np.matrix)):
@@ -202,11 +203,12 @@ class FLTSRegressor:
 
         # IF N > 1500
         # 1. CREATE 5 SUBSETS OF THE DATA
-        # ON EACH SUBSET CREATE SUBSET RESULTS ( NUMSTARTS / 5 )
-        # WHAT SHOULD BE THE SIZE OF H -- how many vectors to choose from ( for example n+p/2 ... 750 from 300 is not acceptable
+        # ON EACH SUBSET CREATE SUBSET RESULTS ( NUM STARTS / 5 )
+        # WHAT SHOULD BE THE SIZE OF H -- how many vectors to choose from
+        #       for example n+p/2 ... 750 from 300 is not acceptable
         # they say : hsub = [nsub(h/n)] nsub = 300 n = 1500
         # I SUPPOSE (and it make sense)
-        # nested extension : DATA = TEN SUBSET ( 300 napriklad..) H_SIZE := subset_size * h/n ???? jo dava smysl ...lece pres 50% opet..
+        # nested extension : DATA = TEN SUBSET (ex. 300) H_SIZE := subset_size * h/n
 
         # on each subset carry out few c steps
         # and from each subset select 10 best results
@@ -217,9 +219,10 @@ class FLTSRegressor:
         # iterate till convergence
 
         # Selective iteration := h1 + few c-steps + find few with best rss
-        # result = eigen_lts.fast_lts(data, num_starts, num_start_c_steps, num_starts_to_finish, max_c_steps, h_size, threshold)
-        X = data[:, 1:]
-        y = data[:, :1]
+        # result = eigen_lts.fast_lts(data, num_starts,
+        # num_start_c_steps, num_starts_to_finish, max_c_steps, h_size, threshold)
+        # X = data[:, 1:]
+        # y = data[:, :1]
 
         time1 = time.process_time()
         subset_results = self.create_all_h1_subsets(num_starts, _h_size, data)  # array of 500 Results (h1, thetha, inf)
@@ -256,7 +259,8 @@ class FLTSRegressor:
 
     # Select initial H1
     # ONLY ONE H1 ( one array of indexes to data)
-    def generate_h1_subset(self, _h_size, data):
+    @staticmethod
+    def generate_h1_subset(_h_size, data):
         p = data.shape[1] - 1
         N = data.shape[0]
 
@@ -277,7 +281,7 @@ class FLTSRegressor:
 
             while rank < p and J.shape[0] < N:
                 # get first index from rest of the indexes
-                current = idx_rest[[0],]
+                current = idx_rest[[0], ]
                 idx_rest = idx_rest[1:, ]
 
                 # add row on this index -fixed, ok
@@ -291,14 +295,14 @@ class FLTSRegressor:
 
         # abs dist on N, and return h smallest
         abs_residuals = abs_dist(data, theta_zero_hat)
-        indexes = k_smallest(abs_residuals, _h_size)  # vraci pole indexu, mohlo by vracet o theta
+        indexes = k_smallest(abs_residuals, _h_size)
         return indexes
 
     class ResultPython:
-        def __init__(self, h_subset, theta, rss, n_iter):
+        def __init__(self, h_subset, theta, rss_, n_iter):
             self.h_subset = h_subset  # array
             self.theta = theta  # matrix
-            self.rss = rss  # double
+            self.rss = rss_  # double
             self.n_iter = n_iter  # integer
 
     def create_all_h1_subsets(self, num_starts, _h_size, data):
@@ -310,21 +314,24 @@ class FLTSRegressor:
 
     def iterate_c_steps(self, data, _h_size, results, length, stop_on_rss, cnt_steps, threshold):
 
-        for i in range(length):  # bude brat v potaz jenom prvnich X
-            theta, h_subset, rss, n_iter = self._preform_c_steps(results[i].theta, data, stop_on_rss, results[i].rss,
-                                                                 _h_size, cnt_steps, threshold)
+        for i in range(length):  # only first X
+            theta, h_subset, rss_, n_iter = self._preform_c_steps(results[i].theta, data, stop_on_rss, results[i].rss,
+                                                                  _h_size, cnt_steps, threshold)
             results[i].theta = theta
             results[i].h_subset = h_subset
-            results[i].rss = rss
+            results[i].rss = rss_
             results[i].n_iter += n_iter
 
-    def _preform_c_steps(self, theta_old, data, use_sum, sum_old, h_size, max_steps, threshold):  # vola se 10x
+    @staticmethod
+    def _preform_c_steps(theta_old, data, use_sum, sum_old, h_size, max_steps, threshold):  # vola se 10x
+
+        if max_steps == 0:
+            exit(10)
 
         j = 0
         for i in range(max_steps):
             # c step
-            abs_residuals = abs_dist(data,
-                                     theta_old)  # nested extension : DATA = TEN SUBSET ( 300 napriklad..) H_SIZE := subset_size * h/n ???? jo dava smysl ...lece pres 50% opet..
+            abs_residuals = abs_dist(data, theta_old)  # nested extension
             h_new = k_smallest(abs_residuals, h_size)  #
             theta_new = ols(data[h_new, :])
             # ! c step
