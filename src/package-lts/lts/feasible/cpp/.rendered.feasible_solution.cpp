@@ -139,7 +139,6 @@ double calculateRSS(const Eigen::MatrixXd & dataJX, const Eigen::MatrixXd & data
     return rss;
 }
 
-
 // subroutine performing swap row xi from matrix J with row xj from matrix M
 void swap_observations(Eigen::MatrixXd & dataJX, Eigen::MatrixXd & dataJy,
                         Eigen::MatrixXd & dataMX, Eigen::MatrixXd & dataMy,

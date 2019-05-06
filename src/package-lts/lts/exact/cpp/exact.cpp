@@ -17,6 +17,7 @@ setup_pybind11(cfg)
 #include <algorithm>
 #include <cmath>
 #include <time.h>
+
 /*
 system_clock - real time clock which is actually the clock used by system
 high_resolution_clock - clock with the smallest tick/interval available/supported by the system
@@ -69,125 +70,463 @@ struct ResultExact{
 };
 
 
+
 // *********************************************************************************************************************
-// ************************   T R Y   -   A L L  -  P A I R S  *********************************************************
+// ***********************   S U B R O U T I N E S   *******************************************************************
 // *********************************************************************************************************************
-/* Go through all pairs between J and M and calculate deltaRSS, save the smallest delta
- * together with indexes of that pair
- * */
-void goThroughAllPairs(double & delta, int & iSwap, int & jSwap, const Eigen::MatrixXd & dataJX,
-        const Eigen::MatrixXd & dataMX,
-        const Eigen::MatrixXd & residuals,
-        const Eigen::MatrixXd & inversion,
-        const std::vector<int> & indexesJ,
-        const std::vector<int> & indexesM) {
 
-    unsigned h = dataJX.rows();
-    unsigned nMinusH = dataMX.rows();
+// subroutine to calculate inner product x M x.T, where M is orthogonal matrix
+double idx_inv_idx(const Eigen::MatrixXd & dataMatrix, int idx, const Eigen::MatrixXd & inversion){
+    double xmx =  ( dataMatrix(idx, Eigen::all) * inversion * (dataMatrix(idx, Eigen::all).transpose()))(0,0);
+    return xmx;
+}
 
-    for (unsigned i = 0; i < h; ++i) {
-        for (unsigned j = 0; j < nMinusH; ++j) {
+// subroutine to calculate theta using inversion; theta = (X.T X)^{-1} X.T y
+std::tuple<Eigen::MatrixXd, Eigen::MatrixXd> theta_and_inversion(const Eigen::MatrixXd & dataJX,
+                                        const Eigen::MatrixXd & dataJy){
+    // inversion =  (xT X).I ; theta = inversion * x.T * y ; residuals = all y - all * theta
+    Eigen::ColPivHouseholderQR<Eigen::MatrixXd> qr_decomposition(dataJX.transpose() * dataJX);
+    Eigen::MatrixXd inversion = qr_decomposition.inverse();
+    Eigen::MatrixXd theta = inversion * dataJX.transpose() * dataJy  ; // pxp * pxh  * hx1
 
-            // calculate delta RSS - first prepare parameters
-            double eI = residuals(indexesJ[i], 0); // na indexu i J
-            double eJ = residuals(indexesM[j], 0); // na indexu j M
-            double hII =  dataJX(i, Eigen::all) * inversion * (dataJX(i, Eigen::all).transpose())  ; // todo bude asi zle
-            double hIJ =  dataJX(i, Eigen::all) * inversion * (dataMX(j, Eigen::all).transpose())  ;
-            double hJJ =  dataMX(j, Eigen::all) * inversion * (dataMX(j, Eigen::all).transpose())  ;
+    return  std::make_tuple(theta, inversion);
+}
 
-            // next - do the calculation
-            double nom = (eJ * eJ * (1 - hII) ) - ( eI * eI * (1 + hJJ)) + 2*eI*eJ*hIJ;
-            double deNom = (1 - hII)*(1 + hJJ) + hIJ * hIJ;
-            double newDelta = nom / deNom;
+// subroutine to update theta and inversion if row is included to X (Agullo)
+std::tuple<Eigen::MatrixXd, Eigen::MatrixXd> theta_and_inversion_plus(const Eigen::MatrixXd & theta,
+                                        const Eigen::MatrixXd &  dataMX, const Eigen::MatrixXd &  dataMy, int jSwap,
+                                        const Eigen::MatrixXd &  inversion){
+    double imi =  idx_inv_idx(dataMX, jSwap, inversion);
+    Eigen::MatrixXd xi = dataMX(jSwap, Eigen::all);
+    Eigen::MatrixXd yi = dataMy(jSwap, Eigen::all);
 
-            if(newDelta < delta){
-                delta = newDelta;
-                iSwap = i;
-                jSwap = j;
-            }
+    double w = -1 / (1 + imi);
+    Eigen::MatrixXd u = inversion * (xi.transpose());
+    Eigen::MatrixXd theta_plus = theta + (-1 * (yi - (xi*theta))(0, 0) * (w*u)); // O(p)  # !!!! (changed [* -1] )
+    Eigen::MatrixXd inversion_plus = inversion + (w * u * u.transpose());   // O(p^2)
+
+    return std::make_tuple(theta_plus, inversion_plus);
+}
+
+// calculate increase of the RSS if observation is inserted to the matrix (Agullo)
+double gamma_plus_inv(const Eigen::MatrixXd & dataMX,
+                                const Eigen::MatrixXd & dataMy,
+                                int j,
+                                const Eigen::MatrixXd & inversion,
+                                const Eigen::MatrixXd & theta){
+
+    // calculate gamma+ O(p^2)
+    double imi = idx_inv_idx(dataMX, j, inversion);
+    Eigen::MatrixXd xi = dataMX(j, Eigen::all);
+    Eigen::MatrixXd yi = dataMy(j, Eigen::all);
+    double gamma_plus = std::pow((yi - xi*theta)(0, 0), 2) / (1 + imi);
+
+    return gamma_plus;
+}
+
+template <typename T>
+std::vector<int> sort_indexes(const std::vector<T> &v) {
+
+  // initialize original index locations
+  std::vector<int> idx(v.size());
+  std::iota(idx.begin(), idx.end(), 0);
+
+  // sort indexes based on comparing values in v
+  std::sort(idx.begin(), idx.end(),
+       [&v](int i1, int i2) {return v[i1] < v[i2];});
+
+  return idx;
+}
+
+
+#define Abs(x)    ((x) < 0 ? -(x) : (x))
+#define Max(a, b) ((a) > (b) ? (a) : (b))
+
+#define EPSILON 0.000000001
+
+double relDif(double a, double b)
+{
+	double c = Abs(a);
+	double d = Abs(b);
+
+	d = Max(c, d);
+
+	return d == 0.0 ? 0.0 : Abs(a - b) / d;
+}
+
+// *********************************************************************************************************************
+// ************************   E X H A U S T I V E   ********************************************************************
+// *********************************************************************************************************************
+ResultExact * refinementExhaustive(const Eigen::MatrixXd & X, const Eigen::MatrixXd & y, int hSize ) {
+
+    double rss_min = std::numeric_limits<double>::infinity();
+    std::vector<int> indexes_min;
+
+    // bool vector for the combinations
+    int n = X.rows();
+    std::vector<bool> bool_indexes(n);
+    std::fill(bool_indexes.begin(), bool_indexes.begin() + hSize, true);
+
+    do {
+        std::vector<int> indexes;
+
+        // Create index array
+        for (int i = 0; i < n; ++i)
+            if (bool_indexes[i])
+                indexes.push_back(i);
+
+        // Create the sub-matrices
+        Eigen::MatrixXd dataX = X(indexes, Eigen::all);
+        Eigen::MatrixXd dataY = y(indexes, Eigen::all);
+
+        // solve OLS
+        Eigen::HouseholderQR<Eigen::MatrixXd> qr(dataX);
+        Eigen::MatrixXd theta = qr.solve(dataY);
+        Eigen::MatrixXd residuals = dataY - dataX * theta;
+        double rss = (residuals.transpose() * residuals )(0,0);
+
+        // update if needed
+        if(rss < rss_min){
+            rss_min = rss;
+            indexes_min.swap(indexes);
         }
+
+    } while (std::prev_permutation(bool_indexes.begin(), bool_indexes.end()));
+
+    // Create the sub-matrices
+    Eigen::MatrixXd dataX = X(indexes_min, Eigen::all);
+    Eigen::MatrixXd dataY = y(indexes_min, Eigen::all);
+
+    // solve OLS
+    Eigen::HouseholderQR<Eigen::MatrixXd> qr(dataX);
+    Eigen::MatrixXd theta_final = qr.solve(dataY);
+
+    return new ResultExact(indexes_min, theta_final, rss_min, 0);
+}
+
+
+// *********************************************************************************************************************
+// ************************   B R A N C H   A N D   B O U N D   ********************************************************
+// *********************************************************************************************************************
+
+// combinatorial tree traversal (RTL post-order)
+// a,b needs to be copied (we are saving the path)
+// theta, inversion also copied (path...)
+// dept copied (path..)
+// rss copied (path..)
+// rss_min && indexes_min && cuts ... REF !
+void traverse_recursive(const Eigen::MatrixXd & X,
+                        const Eigen::MatrixXd & y,
+                        std::vector<int> a,
+                        std::vector<int> b,
+                        int depth,
+                        double rss,
+                        Eigen::MatrixXd theta,
+                        Eigen::MatrixXd inversion,
+                        double & rss_min,
+                        std::vector<int> & indexes_min,
+                        int & cuts,
+                        int & hSize){
+
+    double rss_here = 0.0;
+    Eigen::MatrixXd theta_here, inversion_here;
+
+    // bottom of the tree (leaf)
+    if(depth == hSize){
+
+        // calculate gama plus and new RSS
+        double gamma_plus = gamma_plus_inv(X, y, a.back(), inversion, theta);
+        rss_here = rss + gamma_plus;
+
+        if(rss_here < rss_min){
+            rss_min = rss_here;
+            indexes_min = a;
+        }
+        return;
+    }
+
+    // most common case - depth > p but not leaf
+    if((int)a.size() > X.cols()){
+        // calculate gama plus and new RSS
+        double gamma_plus = gamma_plus_inv(X, y, a.back(), inversion, theta);
+        rss_here = rss + gamma_plus;
+
+        // bounding condition
+        if(rss_here >= rss_min){
+            cuts +=1;
+            return;
+        }
+
+        // update theta and inversion
+        std::tie(theta_here, inversion_here) = theta_and_inversion_plus(theta, X, y, a.back(), inversion);
+    }
+    // depth p - "root" - calculate theta and inversion for the first time
+    else if((int)a.size() == X.cols()){
+
+        // Create the sub-matrices
+        Eigen::MatrixXd dataX = X(a, Eigen::all);
+        Eigen::MatrixXd dataY = y(a, Eigen::all);
+
+        // And calculate theta and inversion and RSS
+        std::tie(theta_here, inversion_here) = theta_and_inversion(dataX, dataY);
+        Eigen::MatrixXd residuals = dataY - dataX * theta_here;
+        rss_here = (residuals.transpose() * residuals )(0,0);
+    }
+
+    // till we can go deeper
+    while(! b.empty()){
+
+        // not enough to produce h subset in ancestors
+        if((int)a.size() + (int)b.size() < hSize)
+            break;
+
+        // move element from a to b
+        a.push_back(b.back());
+        b.pop_back();
+
+        // go deeper
+        traverse_recursive(X, y, a, b, depth +1, rss_here, theta_here, inversion_here, rss_min, indexes_min, cuts, hSize);
+
+        // remove from a
+        a.pop_back();
     }
 }
 
-// *********************************************************************************************************************
-// ************************   R E F I N E M E N T   -    P R O C E S S   ***********************************************
-// *********************************************************************************************************************
-ResultExact * refinementProcess(std::vector<int> & indexesJ, std::vector<int> & indexesM, const Eigen::MatrixXd & X, const Eigen::MatrixXd & y ) {
-    Eigen::MatrixXd dataJX = X(indexesJ, Eigen::all);
-    Eigen::MatrixXd dataMX = X(indexesM, Eigen::all); // okopiruji hodne dat -jinak ale indexuji 30x ve while
-    int steps = 0;
-    while(true) {
-        // inversion =  (xT X).I ; theta = inversion * x.T * y ; esiduals = all y - all * theta
-        Eigen::ColPivHouseholderQR<Eigen::MatrixXd> qr_decomp(dataJX.transpose() * dataJX);
-        Eigen::MatrixXd inversion = qr_decomp.inverse();
-        Eigen::MatrixXd dataJy = y(indexesJ, Eigen::all);
-        Eigen::MatrixXd theta = inversion * dataJX.transpose() * dataJy  ; // pxp * pxh  * hx1
-        Eigen::MatrixXd residuals = y - X * theta;
 
-        // go through all pairs
-        double delta = 0;
-        int iSwap;
-        int jSwap;
-        goThroughAllPairs(delta, iSwap, jSwap, dataJX, dataMX, residuals, inversion, indexesJ, indexesM);
 
-        if(delta < 0){
-           Eigen::MatrixXd tmp = dataJX(iSwap, Eigen::all); // swap data
-           dataJX.row(iSwap).swap( dataMX.row(jSwap) );
-           dataMX.row(jSwap).swap(tmp.row(0));
-           int tmp_idx = indexesJ[iSwap]; // swap indexes also
-           indexesJ[iSwap] = indexesM[jSwap];
-           indexesM[jSwap] = tmp_idx;
-           steps += 1; // inc number of steps
-           if(steps > 1000) {
-           std::cout << "while loop too long" << std::endl;
-                break;
-            }
-           continue;
-       }
-       break;
-    }
-    // save the result - todo optimize this
-    Eigen::MatrixXd yy = y(indexesJ, Eigen::all);
-    Eigen::MatrixXd XX = X(indexesJ, Eigen::all);
-    Eigen::HouseholderQR<Eigen::MatrixXd> finalDecomp(XX);
-    Eigen::MatrixXd theta_final = finalDecomp.solve(yy);
-    double rss =  ( (yy - XX * theta_final).transpose() * (yy - XX * theta_final) )(0,0);
-    return new ResultExact(indexesJ, theta_final, rss, steps);
+ResultExact * refinementBab(const Eigen::MatrixXd & X, const Eigen::MatrixXd & y, int hSize) {
+
+    // init variables
+    double rss_min = std::numeric_limits<double>::infinity();
+    std::vector<int> indexes_min;
+    int cuts = 0;
+
+    // prepare index vectors
+    unsigned N = X.rows();
+    std::vector<int> a;
+    std::vector<int> b(N);
+    std::iota(b.begin(), b.end(), 0);
+
+
+    Eigen::MatrixXd theta_tmp;
+    Eigen::MatrixXd inversion_tmp;
+    double rss_tmp = -1;
+    double depth_tmp = 0;
+    traverse_recursive(X, y, a, b, depth_tmp, rss_tmp, theta_tmp, inversion_tmp, rss_min, indexes_min, cuts, hSize);
+
+    // Create the sub-matrices
+    Eigen::MatrixXd dataX = X(indexes_min, Eigen::all);
+    Eigen::MatrixXd dataY = y(indexes_min, Eigen::all);
+
+    // solve OLS
+    Eigen::HouseholderQR<Eigen::MatrixXd> qr(dataX);
+    Eigen::MatrixXd theta_final = qr.solve(dataY);
+
+    // not needed actually... we have rss_min, but this improves num. stability
+    Eigen::MatrixXd residuals = dataY - dataX * theta_final;
+    double rss = (residuals.transpose() * residuals )(0,0);
+    return new ResultExact(indexes_min, theta_final, rss, cuts);
+}
+
+
+
+
+// *********************************************************************************************************************
+// ************************   B O R D E R    S C A N N I N G   *********************************************************
+// *********************************************************************************************************************
+
+void all_h_subsets_bsa(const std::vector<double> & vecResiduals,
+                       const std::vector<int> & sort_args,
+                       int p,
+                       double rss_min,
+                       std::vector<std::vector<int>> & all_subsets,
+                       int hSize){
+
+    double res_h =  vecResiduals[sort_args[hSize- 1]];  // r_h residuum
+
+    // find smallest index i; i <= h;  so that r_i = r_h
+
+
+    // find greatest index j; j >= h+1 ;  so that r_j = r_{h+1} ; [ h+1 because we know that r_h == r_{h+1} ]
+
+
+    // BSA-BAB speedup
+
+
+    // create list from those indexes [i, i+1, ... , j]
+
+
+    // create all combinations of size:= self._h_size-1 - idx_i + 1
+    // #equal residuals from i to h included (h-i+1)
+    // we are using indexes so (h-1-i+1) ... h - idx_i where h is #resuidals
+
+
+    // store all corresponding subsets
+
+
+    // start with first i unique indexes [0, 1, ... i-1]
+
+
+    // and append rest of the indexes for each combination
+}
+
+
+ResultExact * refinementBsa(const Eigen::MatrixXd & X, const Eigen::MatrixXd & y, int hSize, double rss_tmp) {
+    std::cout << "ahoj" << std::endl;
+    // init variables
+    double rss_min;
+    if(rss_tmp < 0)
+        rss_min = std::numeric_limits<double>::infinity();
+    else
+        rss_min = rss_tmp;
+    std::vector<int> indexes_min;
+    Eigen::MatrixXd theta_min;
+    int cuts = 0;
+
+
+
+    // bool vector for the combinations
+    int p = X.cols();
+    int N = X.rows();
+    std::vector<bool> bool_indexes(N);
+    std::fill(bool_indexes.begin(), bool_indexes.begin() + p+1, true); // we want  p+1 subsets (ones)
+    do {
+        std::vector<int> indexes;
+
+        // Create index array
+        for (int i = 0; i < N; ++i)
+            if (bool_indexes[i])
+                indexes.push_back(i);
+
+        // store one element by side
+        int first_idx = indexes.back();
+        indexes.pop_back();
+        Eigen::MatrixXd x1 = X(first_idx, Eigen::all);
+        Eigen::MatrixXd y1 = y(first_idx, Eigen::all);
+
+
+
+        // for all sign counts
+        for(int i = 1; i <= p; ++i){
+
+            // vectors of length p
+            std::vector<bool> sign_indexes(p);
+            // containing i ones an p-1 zeros  (1 represents +, 0 represents -
+            std::fill(sign_indexes.begin(), sign_indexes.begin() + i, true);
+            do {
+
+                for(int j= 0 ; j < (int)sign_indexes.size(); j++)
+                {
+                    // Create the sub-matrices form (p) indexes
+                    Eigen::MatrixXd dataX = X(indexes, Eigen::all);
+                    Eigen::MatrixXd dataY = y(indexes, Eigen::all);
+
+                    // create the equations
+                    for(int row_idx = 0; row_idx < dataX.rows() ; row_idx++){
+                        if(j){
+                            dataX(row_idx, Eigen::all) = x1 - dataX(row_idx, Eigen::all);
+                            dataY(row_idx, Eigen::all) = y1 - dataY(row_idx, Eigen::all);
+                        }else{
+                        dataX(row_idx, Eigen::all) = x1 + dataX(row_idx, Eigen::all);
+                        dataY(row_idx, Eigen::all) = y1 + dataY(row_idx, Eigen::all);
+                        }
+                    }
+
+                    // solve theta
+                    Eigen::HouseholderQR<Eigen::MatrixXd> qr(dataX);
+                    Eigen::MatrixXd theta = qr.solve(dataY);
+
+                    // calculate all residuals, square them and sort them
+                    Eigen::MatrixXd residuals = y - X * theta;
+                    residuals = residuals.transpose(); // squared 1 x n
+                    std::vector<double> vecResiduals(residuals.data(), residuals.data() + residuals.cols());
+                    for(unsigned k = 0; k < residuals.size(); k++)
+                        vecResiduals[k] = std::pow(vecResiduals[k], 2);
+
+                    std::vector<int> sort_args =  sort_indexes(vecResiduals);
+
+
+                    // calculate xi1 residuum
+                    double x1_res = (y1 - x1*theta)(0, 0);
+                    x1_res = std::pow(x1_res, 2);
+
+
+                    // if r_{x1} == r_h
+                    double res_h =  vecResiduals[sort_args[hSize - 1]];  // r_h residuum
+                    double res_h_1 = vecResiduals[sort_args[hSize]];    // r_{h+1} residuum
+
+
+                    std::vector<std::vector<int>> all_subsets;
+
+                    if(relDif(x1_res, res_h) <= EPSILON){
+                        if(relDif(res_h, res_h_1) <=  EPSILON){
+                            all_h_subsets_bsa(vecResiduals, sort_args, p, rss_min, all_subsets, hSize);
+                        }else{
+                            sort_args.resize(50);
+                            all_subsets.push_back(sort_args);
+                        }
+
+                        // for each subset calculate OLS and eventually update
+                        for( auto subset : all_subsets){
+                            // Create the sub-matrices form (p) indexes
+                            Eigen::MatrixXd dataX_tmp = X(subset, Eigen::all);
+                            Eigen::MatrixXd dataY_tmp = y(subset, Eigen::all);
+
+                            // solve theta
+                            Eigen::HouseholderQR<Eigen::MatrixXd> qr_tmp(dataX_tmp);
+                            Eigen::MatrixXd theta_tmp = qr_tmp.solve(dataY_tmp);
+                            // calculate residuals
+                            Eigen::MatrixXd residuals_tmp = dataY_tmp - dataX_tmp * theta;
+                            double rss = (residuals_tmp.transpose() * residuals_tmp )(0,0);
+
+                            if(rss < rss_min){
+                                rss_min = rss;
+                                indexes_min = subset;
+                                theta_min = theta_tmp;
+                            }
+                        }
+                    }
+                }
+            } while (std::prev_permutation(sign_indexes.begin(), sign_indexes.end()));
+        }
+
+
+    } while (std::prev_permutation(bool_indexes.begin(), bool_indexes.end()));
+
+    return new ResultExact(indexes_min, theta_min, rss_min, cuts);
 }
 
 // *********************************************************************************************************************
-// *********************   F E A S I B L E   -  S O L U T I O N   ******************************************************
+// *********************  E X A C T  -  S O L U T I O N   **************************************************************
 // *********************************************************************************************************************
-ResultExact* fs_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int numStarts, int hSize) {
+ResultExact* exact_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int hSize, int alg, int calc, double rss) {
     std::vector<ResultExact*> subsetResults;
     clock_t t;
     t = clock();
 
-    unsigned N = X.rows();
+    ResultExact * result;
 
-    // for all stars
-    for (int i = 0; i < numStarts; ++i) {
-        // select initial random array of indexes |J| = p, |M|= n-p
-        std::vector<int> permutation(N);
-        std::iota(permutation.begin(), permutation.end(), 0);
-        std::random_shuffle ( permutation.begin(), permutation.end());
-        std::vector<int> indexesJ(permutation.begin(), permutation.begin() + hSize);
-        std::vector<int> indexesM(permutation.begin() + hSize, permutation.end() );  // todo - toto funguje ok
-
-        // do the refinement process on (indexes J, indexes M , X, Y)
-        ResultExact * result = refinementProcess(indexesJ, indexesM, X, y);
-
-        // append result to result array
-        subsetResults.push_back(result);
+    if(alg == 0){
+        // exact exhaustive algorithm
+        result = refinementExhaustive(X, y, hSize);
+    }else if(alg == 1){
+        // exact branch and bound algorithm
+        result = refinementBab(X, y, hSize);
+    }else {
+        // exact border scanning algorithm
+        result = refinementBsa(X, y, hSize, rss);
+        //std::cout << "ahoj" << std::endl;
     }
 
+    // append result to result array
+    subsetResults.push_back(result);
 
     float time1 = ((float)(clock() - t))/CLOCKS_PER_SEC;
 
     // find and return best results
     ResultExact* best = subsetResults[0];
-    for (int i = 0 ; i < numStarts; ++i)
-        best = subsetResults[i]->rss < best->rss ? subsetResults[i] : best;
+//    for (int i = 0 ; i < numStarts; ++i)
+//        best = subsetResults[i]->rss < best->rss ? subsetResults[i] : best;
     // save total time (performance statistics)
     best->time1 = time1;
 
@@ -210,14 +549,14 @@ ResultExact* fs_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int numStarts, int hSi
 // test.py
 //	my_import =  cppimport.imp("xxx")
 
-PYBIND11_MODULE(feasible_solution, m) {
+PYBIND11_MODULE(exact, m) {
 
 	// documentation - not necessary
 	 m.doc() = R"pbdoc(
 		    Pybind11 exact solution of the lts estimate
 		    -----------------------
 
-		    .. currentmodule:: feasible_solution
+		    .. currentmodule:: exact
 
 		    .. autosummary::
 		       :toctree: _generate
@@ -229,7 +568,7 @@ PYBIND11_MODULE(feasible_solution, m) {
 
 
     // bind functions - and use documentation
-    m.def("fs_lts", &fs_lts,  R"pbdoc(
+    m.def("exact_lts", &exact_lts,  R"pbdoc(
         Exact algorithms calculating LTS estimate
     )pbdoc");
 

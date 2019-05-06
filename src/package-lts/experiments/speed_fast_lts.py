@@ -7,9 +7,9 @@ import pandas as pd
 
 def get_regressor(typ):
     if typ == 'ltsPython':
-        return fast_lts.FLTSRegressor()
+        return fast_lts.LTSRegressorFast()
     if typ == 'ltsCpp':
-        return fast_lts.FLTSRegressorCPP()
+        return fast_lts.LTSRegressorFastCPP()
 
 
 # it would be best to pass experiment class

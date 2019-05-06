@@ -15,7 +15,7 @@ import lts.fastlts.cpp.fastlts as cpp_solution
 # eigen_lts = cppimport.imp("../src/fastlts")
 
 
-class FLTSRegressorCPP:
+class LTSRegressorFastCPP:
     def __init__(self):
         # public
         self.n_iter_ = None
@@ -121,7 +121,7 @@ class FLTSRegressorCPP:
         self.time_total_ = self.time1_ + self.time2_ + self.time3_
 
 
-class FLTSRegressor:
+class LTSRegressorFast:
     def __init__(self):
         # public
         self.n_iter_ = None
