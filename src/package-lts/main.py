@@ -16,10 +16,10 @@ def test_feasible_solution_numpy():
 
 # Exact - todo just temp. solution
 def test_feasible_solution_numpy_exact():
-    for i in range(5, 21):
-        t = max(i-2, 3)
-        for j in range(1, t):
-            feasible_test.test_numpy_exact(n=i, p=j, algorithm='bsa', use_intercept=False)
+    # for i in range(5, 21):
+    #     t = max(i-2, 3)
+    #     for j in range(1, t):
+    feasible_test.test_numpy_exact(n=20, p=3, algorithm='bsa', use_intercept=False)
     # mmea-qr 1000 x 3  sec:  272.21239226800003
 
 
@@ -51,6 +51,7 @@ if __name__ == '__main__':
     # lts_speed.fast_lts_cpp_only()
     # test_feasible_OE_solution_numpy()
     test_feasible_solution_numpy_exact()
+    #feasible_test.test_fast_and_feasible(n=28, p=3)
     # test_feasible_solution_numpy()
     #lts_speed.fast_lts_cpp_big()
 

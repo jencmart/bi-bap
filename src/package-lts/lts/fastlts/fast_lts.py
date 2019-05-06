@@ -94,8 +94,12 @@ class FLTSRegressorCPP:
         X, y = self._validate(X, y, h_size, num_start_c_steps, num_starts_to_finish, max_c_steps, threshold,
                               use_intercept)
 
-        _h_size = math.ceil((X.shape[0] + X.shape[1] + 1) / 2) if h_size == 'default' else h_size  # N + p + 1
+        p = X.shape[1]
+        n = X.shape[0]
+        _h_size = calculate_h_size(n, p, h_size)
 
+        # _h_size = math.ceil((X.shape[0] + X.shape[1] + 1) / 2) if h_size == 'default' else h_size  # N + p + 1
+        print('fast-lts : {}'.format(_h_size))
         eigen_result = cpp_solution.fast_lts(X, y, num_starts, num_start_c_steps, num_starts_to_finish, _h_size,
                                              max_c_steps, threshold)
 
@@ -199,7 +203,10 @@ class FLTSRegressor:
         data = self._validate(X, y, h_size, num_start_c_steps, num_starts_to_finish, max_c_steps, threshold,
                               use_intercept)
 
-        _h_size = math.ceil((data.shape[0] + data.shape[1]) / 2) if h_size == 'default' else h_size  # N + (p-1) + 1
+        # h size
+        p = data.shape[1] - 1
+        n = data.shape[0]
+        _h_size = calculate_h_size(n, p, h_size)
 
         # IF N > 1500
         # 1. CREATE 5 SUBSETS OF THE DATA
@@ -352,6 +359,14 @@ class FLTSRegressor:
 
         return theta_new, h_new, sum_new[0, 0], j
 
+
+def calculate_h_size(n, p, h_size):
+    if h_size == 'default':
+        s = math.floor((n + p + 1) / 2)  # greatest integer function ~ floor
+    else:
+        s = h_size
+
+    return s
 
 ##################
 # MAIN FUNCTIONS #

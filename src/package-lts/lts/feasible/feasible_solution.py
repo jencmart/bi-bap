@@ -63,7 +63,9 @@ class FSRegressorCPP(AbstractRegression):
         # Init some properties
         X, y = validate(X, y, h_size, self._use_intercept)
 
-        h_size = math.ceil((X.shape[0] + X.shape[1] + 1) / 2) if h_size == 'default' else h_size  # N + p + 1
+        p = X.shape[1]
+        n = X.shape[0]
+        h_size = calculate_h_size(n, p, h_size)
 
         if self._alg == 'fsa':
             int_alg = 0
@@ -86,6 +88,8 @@ class FSRegressorCPP(AbstractRegression):
         else:
             raise ValueError('todo')
 
+        # todo - recalculate theta
+
         # Store result - weights first
         weights = result.get_theta()
         if self._use_intercept:
@@ -101,6 +105,15 @@ class FSRegressorCPP(AbstractRegression):
         self.n_iter_ = result.get_n_inter()
         self.time1_ = result.get_time_1()
         self.time_total_ = self.time1_
+
+
+def calculate_h_size(n, p, h_size):
+    if h_size == 'default':
+        s = math.floor((n + p + 1) / 2)  # greatest integer function ~ floor
+    else:
+        s = h_size
+
+    return s
 
 
 class FSRegressor(AbstractRegression):
@@ -156,14 +169,12 @@ class FSRegressor(AbstractRegression):
         # h size
         p = data.shape[1] - 1
         n = data.shape[0]
-        if h_size == 'default':
-            self._h_size = math.ceil((n + p + 1) / 2)  # todo with or without intercept?
-        else:
-            self._h_size = h_size
+        self._h_size = calculate_h_size(n, p, h_size)
 
         if index_subset is not None:
-            self._h_size = index_subset.shape[1]
+            self._h_size = np.asarray(index_subset).shape[1]
 
+        print('feasible : {}'.format(self._h_size))
         results = []
 
         # start measuring the time
@@ -228,8 +239,9 @@ class FSRegressor(AbstractRegression):
                     raise ValueError('param. calculation must be one fo the strings: ‘inv’ or ‘qr’')
 
         else:
-            for subs in range(index_subset):
-
+            for subs in index_subset:
+                # print('subs')
+                # print(subs)
                 # create index arrays
                 mask = np.ones(data.shape[0], np.bool)
                 mask[subs] = 0
@@ -296,7 +308,8 @@ class FSRegressor(AbstractRegression):
     def fit_exact(self, X, y,
                   h_size: 'default := (n + p + 1) / 2' = 'default',
                   use_intercept=True,
-                  algorithm: 'str, ‘exa’, ‘bab’ or ‘bsa’, default: ‘bab’' = 'bab'):
+                  algorithm: 'str, ‘exa’, ‘bab’ or ‘bsa’, default: ‘bab’' = 'bab',
+                  set_rss: 'smallest rss known on some h_subset, improves bsa performance' = None):
 
         self._alg = algorithm
 
@@ -313,10 +326,7 @@ class FSRegressor(AbstractRegression):
         # h size
         p = data.shape[1] - 1
         n = data.shape[0]
-        if h_size == 'default':
-            self._h_size = math.ceil((n + p + 1) / 2)  # todo with or without intercept?
-        else:
-            self._h_size = h_size
+        self._h_size = calculate_h_size(n, p, h_size)
 
         if h_size == 0 or h_size == 1:
             print('h_size must be at least 2')
@@ -337,7 +347,10 @@ class FSRegressor(AbstractRegression):
             # do the refinement process
             res = self.refinement_bab_lts()
         else:
-            res = self.refinement_bsa()
+            if set_rss is None:
+                res = self.refinement_bsa()
+            else:
+                res = self.refinement_bsa(set_rss + 0.00001)
 
         # store the result
         results.append(res)
@@ -1247,9 +1260,11 @@ class FSRegressor(AbstractRegression):
         self.bab_theta = None
         a = []
         b = list(range(self.J.shape[0]))
+        self.cuts = 0
         self.traverse_recursive(a, b, 0, None, None, None)
-        steps = 0
-        return self.Result(self.bab_theta, self.bab_indexes, self.bab_rss_min, steps)
+
+        self.bab_theta, _, _, _ = self.theta_qr(self.J[self.bab_indexes])
+        return self.Result(self.bab_theta, self.bab_indexes, self.bab_rss_min, self.cuts)
 
     def traverse_recursive(self, a, b, depth, rss, theta, inversion):
         # bottom of the tree
@@ -1263,8 +1278,8 @@ class FSRegressor(AbstractRegression):
                 self.bab_rss_min = rss_here
                 self.bab_indexes = np.copy(a)
 
-                # update theta and inversion
-                self.bab_theta, _ = self.theta_plus_inversion_plus(theta, inversion, self.J, a[-1])
+                # update theta and inversion - calculate at the end ...
+                # self.bab_theta, _ = self.theta_plus_inversion_plus(theta, inversion, self.J, a[-1])
             return
 
         # leaf, but cannot go deeper
@@ -1290,6 +1305,7 @@ class FSRegressor(AbstractRegression):
 
             # check bounding condition and eventually cut all the branches
             if rss_here >= self.bab_rss_min:
+                self.cuts += 1
                 return
 
             # update theta and inversion
@@ -1298,6 +1314,20 @@ class FSRegressor(AbstractRegression):
         # traverse tree deeper
         aa = a.copy()
         bb = b.copy()
+
+        # sort first --- we use set A to calculate h-subset
+        # lets calculate all partial increments for every element in B subset
+        # >>> do not leads to the speedup <<<
+        # if len(a) >= self.J.shape[1]:
+        #     gamma_list = []
+        #     for j in bb:
+        #         # calculate rss change after including row j
+        #         gamma_plus = self.gamma_plus_inv(self.J, j, inversion_here, theta_here)
+        #         gamma_list.append(gamma_plus)
+        #
+        #     # sort from lowest to highest (we traverse tree in LTR order)
+        #     bb = [elem for _, elem in sorted(zip(gamma_list, bb))]
+
         while len(bb) > 0:
             if len(aa) + len(bb) < self._h_size:  # not enough to produce h subset in ancestors
                 break
@@ -1318,11 +1348,16 @@ class FSRegressor(AbstractRegression):
     # ################################################################################
     # ############ E X A C T  -  B S A ###############################################
     # ################################################################################
-    def refinement_bsa(self):
-        rss_min = float('inf')
+    def refinement_bsa(self, rss=None):
+        if rss is None:
+            rss_min = float('inf')
+        else:
+            rss_min = rss
+
         theta_min = None
         h_subset_min = None
         p = self.J.shape[1] - 1
+        cuts = 0
 
         # Get all combinations of all_indexes
         # and length p + 1
@@ -1361,7 +1396,6 @@ class FSRegressor(AbstractRegression):
 
                 # check if solution is unique
                 if np.count_nonzero(r[-1, :]) == 0:  # if last row is zero ... not regular
-                    print('continue')
                     continue
 
                 #  calculate all residuals, square them and sort them
@@ -1377,12 +1411,16 @@ class FSRegressor(AbstractRegression):
                 res_h = all_residuals[sort_args[self._h_size - 1]]  # r_h residuum
                 res_h_1 = all_residuals[sort_args[self._h_size]]    # r_{h+1} residuum
 
-                if math.isclose(x1_res, res_h, rel_tol=1e-4):
-                    # print('yes')
+                if math.isclose(x1_res, res_h, rel_tol=1e-9):
 
                     # if r_h == r_{h+1} .. find all corresponding h subsets; #subsets ~ binom{p}{l+1}; max binom{p}{p/2}
-                    if math.isclose(res_h, res_h_1, rel_tol=1e-4):
-                        all_h_subsets = self.all_h_subsets_bsa(all_residuals, sort_args)
+                    if math.isclose(res_h, res_h_1, rel_tol=1e-9):
+                        p = self.J.shape[1] -1
+                        all_h_subsets = self.all_h_subsets_bsa(all_residuals, sort_args, p, rss_min)
+
+                        if all_h_subsets is None:  # BSA-BAB speedup
+                            cuts += 1
+                            continue
 
                     # else.. corresponding h subset is unique
                     else:
@@ -1399,10 +1437,9 @@ class FSRegressor(AbstractRegression):
                             theta_min = theta
                             h_subset_min = h_sub_indexes
 
-        steps = 0
-        return self.Result(theta_min, h_subset_min, rss_min, steps)
+        return self.Result(theta_min, h_subset_min, rss_min, cuts)
 
-    def all_h_subsets_bsa(self, residuals, sort_args):
+    def all_h_subsets_bsa(self, residuals, sort_args, p, rss_min):
 
         res_h = residuals[sort_args[self._h_size - 1]]  # r_h residuum
 
@@ -1417,10 +1454,19 @@ class FSRegressor(AbstractRegression):
         # find greatest index j; j >= h+1 ;  so that r_j = r_{h+1} ; [ h+1 because we know that r_h == r_{h+1} ]
         idx_j = self._h_size
         for j in range(self._h_size, residuals.shape[0]):
-            if math.isclose(residuals[sort_args[j]], res_h, rel_tol=1e-6):
+            if math.isclose(residuals[sort_args[j]], res_h, rel_tol=1e-9):
                 idx_j = j
             else:
                 break
+
+        # BSA-BAB speedup
+        cnt_unique = idx_i  # idx_1 - 1 + 1 (- because at idx_i is smallest r_i = r_h) (+ because it is index)
+        if cnt_unique >= p:
+            begin = sort_args[:idx_i]
+            theta, _, _, _ = self.theta_qr(self.J[begin])
+            rss = self.rss(self.J[begin], theta)
+            if rss >= rss_min:
+                return None
 
         # create list from those indexes [i, i+1, ... , j]
         idx_list = list(range(idx_i, idx_j+1))

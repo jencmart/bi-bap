@@ -1,4 +1,4 @@
-import lts.feasibleoe.feasible_solution_oe as feasible
+import lts.exact.exact as feasible
 from data.data_generator import generate_data_ND
 from scipy import spatial
 

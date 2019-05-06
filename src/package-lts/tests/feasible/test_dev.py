@@ -1,5 +1,6 @@
 import lts.feasible.feasible_solution as feasible
 from data.data_generator import generate_data_ND
+import lts.fastlts.fast_lts as fastlts
 from scipy import spatial
 import numpy as np
 
@@ -54,31 +55,94 @@ def test_numpy(n=100, p=2, algorithm='fsa', calculation='inv'):
     print('...test finished')
 
 
+def test_fast_and_feasible(n=100, p=2):
+    print('test started...')
+    x, y, x_clean, y_clean = generate_data_ND(n, p)
+
+    print(x.shape)
+    lts = fastlts.FLTSRegressorCPP()
+    lts.fit(x, y, use_intercept=True, num_starts=10)
+    # print data
+    print('rss: ', lts.rss_)
+    print('itr: ', lts.n_iter_)
+    print('sec: ', lts.time_total_)
+    h1 = lts.h_subset_
+    h1.sort()
+    h1 = np.asarray(h1)
+
+    print('........................')
+
+    lts = feasible.FSRegressor(num_starts=10, max_steps=50, use_intercept=True,
+                               algorithm='moea', calculation='qr')
+    lts.fit(x, y, h_size='default', index_subset=[h1])
+    # print data
+    print('rss: ', lts.rss_)
+    print('itr: ', lts.n_iter_)
+    print('sec: ', lts.time_total_)
+    h2 = lts.h_subset_
+    h2.sort()
+
+    print('........................')
+
+    mask = np.ones(x.shape[0], np.bool)
+    mask[h2] = 0
+    all_idx = np.arange(x.shape[0])
+    idx_ones = all_idx[h2]
+    idx_zeroes = all_idx[mask]
+    changed_idx = np.concatenate((idx_ones, idx_zeroes), axis=0)
+
+    x_first = x[idx_ones]
+    x_rest = x[idx_zeroes]
+    x = np.concatenate((x_first, x_rest), axis=0)
+
+    y_first = y[idx_ones]
+    y_rest = y[idx_zeroes]
+    y = np.concatenate((y_first, y_rest), axis=0)
+
+    lts.fit_exact(x, y, algorithm='bab', use_intercept=True)
+    # print data
+    print('rss: ', lts.rss_)
+    print('cut: ', lts.n_iter_)
+    print('sec: ', lts.time_total_)
+    h3 = lts.h_subset_
+    h3.sort()
+    true_idx = changed_idx[h3]
+    true_idx.sort()
+
+    print('........................')
+    print(h1)
+    print(h2)
+    print(true_idx)
+
+
 def test_numpy_exact(n=100, p=2, algorithm='exa', use_intercept=True):
     print('test started...')
     x, y, x_clean, y_clean = generate_data_ND(n, p)
     lts = feasible.FSRegressor(num_starts=10, max_steps=50, use_intercept=True,
                                algorithm=algorithm)
 
-    lts.fit_exact(x, y, algorithm=algorithm, use_intercept=use_intercept)
 
-    # lts
-    weights_lts = lts.coef_
-    h1 = lts.h_subset_
-    # print data
-    print('rss: ', lts.rss_)
-    print('itr: ', lts.n_iter_)
-    print('sec: ', lts.time_total_)
 
     # fit exact algorithm
     lts.fit_exact(x, y, algorithm='exa', use_intercept=use_intercept)
     weights_global_minimum = lts.coef_
     h2 = lts.h_subset_
     # cos similarity
-    result = 1 - spatial.distance.cosine(weights_lts, weights_global_minimum)
-    print('cos: ', result)
+    #result = 1 - spatial.distance.cosine(weights_lts, weights_global_minimum)
+    #print('cos: ', result)
+    print('exact: sec: ', lts.time_total_)
+    lts.fit_exact(x, y, algorithm=algorithm, use_intercept=use_intercept, set_rss=lts.rss_)
+
+    # lts
+    weights_lts = lts.coef_
+    h1 = lts.h_subset_
+    # print data
+    print('rss: ', lts.rss_)
+    print('cuts: ', lts.n_iter_)
+    print('bsa sec: ', lts.time_total_)
 
     lts.fit_exact(x, y, algorithm='bab', use_intercept=use_intercept)
+    print('bab sec: ', lts.time_total_)
     h3 = lts.h_subset_
     h1.sort()
     h2.sort()

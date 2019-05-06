@@ -23,7 +23,8 @@ def generate_data_2D_multi_variate(cnt, outlier_percentage=20):
     X = np.concatenate((X_original, outliers.T[0]), axis=0)
     y = np.concatenate((y_original, outliers.T[1]), axis=0)
 
-    return X,y
+    return X, y
+
 
 def generate_data_ND(cnt, dim, outlier_percentage=20, n_xij= (0,10), ei = (0,1), n_xi1_outlier = (100,10) ):
     N_clean = cnt - int(math.floor(cnt / 100 * outlier_percentage))
