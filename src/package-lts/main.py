@@ -27,7 +27,7 @@ def test_exact_numpy():
 
 # Feasible solution OE QR
 def test_exact_cpp():
-    exact_test.test_cpp(n=7, p=3, use_intercept=True)
+    exact_test.test_cpp(n=20, p=3, use_intercept=True)
     # p=2(+1)      32         33        40      50      55      60
     # cpp bab      2.5s       2.1       4.8     117     394
 

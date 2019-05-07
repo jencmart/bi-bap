@@ -2,27 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5818e2d1-7629-47ec-a2bd-d6037228392b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/experiments/speed_fast_lts.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/experiments/speed_fast_lts.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/run.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/runall.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/runall.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen/scripts/eigen_monitor_perf.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen/scripts/eigen_monitor_perf.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/lts/exact/cpp/.exact.cpp.cppimporthash" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lts/exact/cpp/.exact.cpp.cppimporthash" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/lts/exact/cpp/.rendered.exact.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lts/exact/cpp/.rendered.exact.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lts/exact/cpp/exact.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lts/exact/cpp/exact.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/lts/exact/cpp/exact.cpython-35m-x86_64-linux-gnu.so" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lts/exact/cpp/exact.cpython-35m-x86_64-linux-gnu.so" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lts/exact/exact.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lts/exact/exact.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/lts/fastlts/fast_lts.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lts/fastlts/fast_lts.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/lts/feasible/cpp/.feasible_solution.cpp.cppimporthash" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lts/feasible/cpp/.feasible_solution.cpp.cppimporthash" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/lts/feasible/cpp/.rendered.feasible_solution.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lts/feasible/cpp/.rendered.feasible_solution.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/lts/feasible/cpp/feasible_solution.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lts/feasible/cpp/feasible_solution.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/lts/feasible/cpp/feasible_solution.cpython-35m-x86_64-linux-gnu.so" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lts/feasible/cpp/feasible_solution.cpython-35m-x86_64-linux-gnu.so" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/lts/feasible/feasible_solution.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lts/feasible/feasible_solution.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/tests/fastlts/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/tests/test_exact.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/tests/fastlts/test_dev.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/tests/test_fast.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/tests/feasible/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/tests/feasible/test_dev.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/tests/test_feasible.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/tests/feasibleoe/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/tests/feasibleoe/test_dev.py" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -32,17 +21,17 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/src$feasible_solution_test_dev.coverage" NAME="feasible_solution_test_dev Coverage Results" MODIFIED="1552391023132" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/package-lts/ltsregression/feasiblesolution" />
-    <SUITE FILE_PATH="coverage/src$main.coverage" NAME="main Coverage Results" MODIFIED="1557184980434" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/package-lts" />
+    <SUITE FILE_PATH="coverage/src$main.coverage" NAME="main Coverage Results" MODIFIED="1557224094061" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/package-lts" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.43482906">
+    <splitter split-orientation="horizontal" split-proportion="0.50106835">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/package-lts/lts/exact/exact.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="356">
-                  <caret line="478" column="61" lean-forward="true" selection-start-line="478" selection-start-column="10" selection-end-line="478" selection-end-column="61" />
+                  <caret line="416" column="36" selection-start-line="416" selection-start-column="36" selection-end-line="416" selection-end-column="36" />
                 </state>
               </provider>
             </entry>
@@ -50,17 +39,17 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/package-lts/main.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state>
-                  <caret line="13" column="43" selection-start-line="13" selection-start-column="43" selection-end-line="13" selection-end-column="43" />
+                <state relative-caret-position="288">
+                  <caret line="29" column="28" selection-start-line="29" selection-start-column="28" selection-end-line="29" selection-end-column="28" />
                 </state>
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/package-lts/tests/test_exact.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="254">
-                  <caret line="56" column="80" selection-start-line="56" selection-start-column="80" selection-end-line="56" selection-end-column="80" />
+                <state relative-caret-position="95">
+                  <caret line="56" column="77" selection-start-line="56" selection-start-column="77" selection-end-line="56" selection-end-column="77" />
                 </state>
               </provider>
             </entry>
@@ -68,8 +57,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/package-lts/lts/feasible/cpp/feasible_solution.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="257">
-                  <caret line="683" column="49" lean-forward="true" selection-start-line="683" selection-start-column="49" selection-end-line="683" selection-end-column="49" />
+                <state relative-caret-position="460">
+                  <caret line="103" column="46" selection-start-line="103" selection-end-line="103" selection-end-column="46" />
                 </state>
               </provider>
             </entry>
@@ -81,8 +70,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/package-lts/lts/exact/cpp/exact.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="389">
-                  <caret line="371" lean-forward="true" selection-start-line="371" selection-end-line="371" />
+                <state relative-caret-position="330">
+                  <caret line="523" column="9" selection-start-line="523" selection-start-column="9" selection-end-line="523" selection-end-column="9" />
                 </state>
               </provider>
             </entry>
@@ -90,8 +79,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$USER_HOME$/fit/bi-bap/src/package-lts/lts/exact/cpp/.rendered.exact.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="185">
-                  <caret line="385" column="42" selection-start-line="385" selection-end-line="386" />
+                <state relative-caret-position="298">
+                  <caret line="205" column="23" selection-start-line="205" selection-start-column="20" selection-end-line="205" selection-end-column="23" />
                 </state>
               </provider>
             </entry>
@@ -109,12 +98,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>theta_and_inversion_plus</find>
-      <find>refinementBab</find>
-      <find>ResultFe</find>
-      <find>.colum</find>
-      <find>theta_and_inversion</find>
-      <find>break</find>
       <find>rss =</find>
       <find>ColP</find>
       <find>gamma_plus_inv</find>
@@ -136,9 +119,15 @@
       <find>x1_</find>
       <find>all_subsets</find>
       <find>size_t</find>
-      <find>rss_here</find>
-      <find>all_h_subsets_bsa</find>
       <find>Eigen::all</find>
+      <find>std::io</find>
+      <find>indexes</find>
+      <find>N</find>
+      <find>all_h_subsets_bsa</find>
+      <find>std::mk</find>
+      <find>dataY</find>
+      <find>rss_here</find>
+      <find>BAB speed</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -195,17 +184,17 @@
         <option value="$PROJECT_DIR$/package-lts/lts/feasible/feasible_solution.py" />
         <option value="$PROJECT_DIR$/package-lts/lts/feasible/cpp/feasible_solution.cpp" />
         <option value="$PROJECT_DIR$/package-lts/tests/test_exact.py" />
-        <option value="$PROJECT_DIR$/package-lts/main.py" />
         <option value="$PROJECT_DIR$/package-lts/lts/exact/exact.py" />
+        <option value="$PROJECT_DIR$/package-lts/main.py" />
         <option value="$PROJECT_DIR$/package-lts/lts/exact/cpp/exact.cpp" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-2" />
-    <option name="y" value="-18" />
-    <option name="width" value="1924" />
-    <option name="height" value="1100" />
+    <option name="x" value="-1" />
+    <option name="y" value="3" />
+    <option name="width" value="962" />
+    <option name="height" value="1078" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -395,15 +384,15 @@
       <workItem from="1557069501353" duration="10795000" />
       <workItem from="1557143438310" duration="14306000" />
       <workItem from="1557162482603" duration="5215000" />
-      <workItem from="1557168019725" duration="16948000" />
+      <workItem from="1557168019725" duration="24174000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="426898000" />
+    <option name="totallyTimeSpent" value="434124000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="3" width="1922" height="1078" extended-state="0" />
+    <frame x="-2" y="-18" width="1924" height="1100" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.19978632" />
@@ -411,7 +400,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3102041" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49946582" visible="true" weight="0.3841336" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49946582" visible="true" weight="0.30306122" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39979124" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -754,45 +743,45 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/tests/test_exact.py">
+    <entry file="file://$PROJECT_DIR$/package-lts/lts/feasible/cpp/feasible_solution.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="254">
-          <caret line="56" column="80" selection-start-line="56" selection-start-column="80" selection-end-line="56" selection-end-column="80" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="13" column="43" selection-start-line="13" selection-start-column="43" selection-end-line="13" selection-end-column="43" />
+        <state relative-caret-position="460">
+          <caret line="103" column="46" selection-start-line="103" selection-end-line="103" selection-end-column="46" />
         </state>
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/fit/bi-bap/src/package-lts/lts/exact/cpp/.rendered.exact.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="185">
-          <caret line="385" column="42" selection-start-line="385" selection-end-line="386" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/lts/feasible/cpp/feasible_solution.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="257">
-          <caret line="683" column="49" lean-forward="true" selection-start-line="683" selection-start-column="49" selection-end-line="683" selection-end-column="49" />
+        <state relative-caret-position="298">
+          <caret line="205" column="23" selection-start-line="205" selection-start-column="20" selection-end-line="205" selection-end-column="23" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/package-lts/lts/exact/exact.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="356">
-          <caret line="478" column="61" lean-forward="true" selection-start-line="478" selection-start-column="10" selection-end-line="478" selection-end-column="61" />
+          <caret line="416" column="36" selection-start-line="416" selection-start-column="36" selection-end-line="416" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package-lts/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="29" column="28" selection-start-line="29" selection-start-column="28" selection-end-line="29" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package-lts/tests/test_exact.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="56" column="77" selection-start-line="56" selection-start-column="77" selection-end-line="56" selection-end-column="77" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/package-lts/lts/exact/cpp/exact.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="389">
-          <caret line="371" lean-forward="true" selection-start-line="371" selection-end-line="371" />
+        <state relative-caret-position="330">
+          <caret line="523" column="9" selection-start-line="523" selection-start-column="9" selection-end-line="523" selection-end-column="9" />
         </state>
       </provider>
     </entry>

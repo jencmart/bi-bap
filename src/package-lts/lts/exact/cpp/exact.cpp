@@ -124,6 +124,22 @@ double gamma_plus_inv(const Eigen::MatrixXd & dataMX,
     return gamma_plus;
 }
 
+
+std::tuple<Eigen::MatrixXd, double> thetaAndRss(const Eigen::MatrixXd & X, const Eigen::MatrixXd & y, const std::vector<int> & indexes)
+{
+    // Create the sub-matrices
+    Eigen::MatrixXd dataX = X(indexes, Eigen::all);
+    Eigen::MatrixXd dataY = y(indexes, Eigen::all);
+
+    // solve OLS
+    Eigen::HouseholderQR<Eigen::MatrixXd> qr(dataX);
+    Eigen::MatrixXd theta = qr.solve(dataY);
+    Eigen::MatrixXd residuals = dataY - dataX * theta;
+    double rss = (residuals.transpose() * residuals )(0,0);
+
+    return  std::make_tuple(theta, rss);
+}
+
 template <typename T>
 std::vector<int> sort_indexes(const std::vector<T> &v) {
 
@@ -175,15 +191,10 @@ ResultExact * refinementExhaustive(const Eigen::MatrixXd & X, const Eigen::Matri
             if (bool_indexes[i])
                 indexes.push_back(i);
 
-        // Create the sub-matrices
-        Eigen::MatrixXd dataX = X(indexes, Eigen::all);
-        Eigen::MatrixXd dataY = y(indexes, Eigen::all);
-
-        // solve OLS
-        Eigen::HouseholderQR<Eigen::MatrixXd> qr(dataX);
-        Eigen::MatrixXd theta = qr.solve(dataY);
-        Eigen::MatrixXd residuals = dataY - dataX * theta;
-        double rss = (residuals.transpose() * residuals )(0,0);
+        // Solve OLS on the subset
+        Eigen::MatrixXd theta;
+        double rss;
+        std::tie(theta, rss) = thetaAndRss(X, y, indexes);
 
         // update if needed
         if(rss < rss_min){
@@ -193,15 +204,11 @@ ResultExact * refinementExhaustive(const Eigen::MatrixXd & X, const Eigen::Matri
 
     } while (std::prev_permutation(bool_indexes.begin(), bool_indexes.end()));
 
-    // Create the sub-matrices
-    Eigen::MatrixXd dataX = X(indexes_min, Eigen::all);
-    Eigen::MatrixXd dataY = y(indexes_min, Eigen::all);
 
     // solve OLS
-    Eigen::HouseholderQR<Eigen::MatrixXd> qr(dataX);
-    Eigen::MatrixXd theta_final = qr.solve(dataY);
-
-    return new ResultExact(indexes_min, theta_final, rss_min, 0);
+    Eigen::MatrixXd theta;
+    std::tie(theta, rss_min) = thetaAndRss(X, y, indexes_min);
+    return new ResultExact(indexes_min, theta, rss_min, 0);
 }
 
 
@@ -331,6 +338,11 @@ ResultExact * refinementBab(const Eigen::MatrixXd & X, const Eigen::MatrixXd & y
 
 
 
+
+
+
+
+
 // *********************************************************************************************************************
 // ************************   B O R D E R    S C A N N I N G   *********************************************************
 // *********************************************************************************************************************
@@ -340,50 +352,80 @@ void all_h_subsets_bsa(const std::vector<double> & vecResiduals,
                        int p,
                        double rss_min,
                        std::vector<std::vector<int>> & all_subsets,
-                       int hSize){
+                       int hSize,
+                       const Eigen::MatrixXd & X,
+                       const Eigen::MatrixXd & y,
+                       int & cuts){
 
     double res_h =  vecResiduals[sort_args[hSize- 1]];  // r_h residuum
 
     // find smallest index i; i <= h;  so that r_i = r_h
-
+    int idx_i = hSize - 1;
+    for(int i = idx_i; i >= 0 ; i-- )
+        if(relDif( vecResiduals[sort_args[i]], res_h) <= EPSILON)  // if at idx_i == res_h
+            idx_i = i;
 
     // find greatest index j; j >= h+1 ;  so that r_j = r_{h+1} ; [ h+1 because we know that r_h == r_{h+1} ]
-
+    int idx_j = hSize;
+    for(int j = hSize; j < (int)vecResiduals.size() ; j++ )
+        if(relDif( vecResiduals[sort_args[j]], res_h) <= EPSILON) // if at idx_i == res_h
+            idx_j = j;
 
     // BSA-BAB speedup
-
-
-    // create list from those indexes [i, i+1, ... , j]
-
+    int cntUnique =  idx_i; // idx_i - 1 + 1 (- because at idx_i is smallest r_i = r_h) (+ because it is index)
+    if(cntUnique >= p){
+        std::vector<int> begin(sort_args.begin(), sort_args.begin() + cntUnique);
+        // Solve OLS on the subset
+        Eigen::MatrixXd theta;
+        double rss;
+        std::tie(theta, rss) = thetaAndRss(X, y, begin);
+        if(rss >= rss_min){
+            cuts += 1;
+            return;
+        }
+    }
 
     // create all combinations of size:= self._h_size-1 - idx_i + 1
     // #equal residuals from i to h included (h-i+1)
     // we are using indexes so (h-1-i+1) ... h - idx_i where h is #resuidals
-
-
-    // store all corresponding subsets
-
-
-    // start with first i unique indexes [0, 1, ... i-1]
-
+    int length = idx_j - idx_i + 1;
+    std::vector<bool> bool_indexes(length);
+    std::fill(bool_indexes.begin(), bool_indexes.begin() + hSize - idx_i, true); // we want  hSize - idx_i subsets (ones)
 
     // and append rest of the indexes for each combination
+    do {
+        std::vector<int> indexes;
+
+        // Create index array --> create combinations
+        for (int i = 0; i < length; ++i)
+            if (bool_indexes[i])
+                indexes.push_back(i + idx_i); // we want combinations starting form idx_i
+
+        // start with first i unique indexes [0, 1, ... i-1]
+        std::vector<int> begin(sort_args.begin(), sort_args.begin() + cntUnique);
+
+        // append the rest of the begin with one combination
+        for(auto idx : indexes)
+            begin.push_back(sort_args[idx]);
+
+        // push it to the vector of all combs
+        all_subsets.push_back(begin);
+
+    } while (std::prev_permutation(bool_indexes.begin(), bool_indexes.end()));
 }
 
 
-ResultExact * refinementBsa(const Eigen::MatrixXd & X, const Eigen::MatrixXd & y, int hSize, double rss_tmp) {
-    std::cout << "ahoj" << std::endl;
+ResultExact * refinementBsa(const Eigen::MatrixXd & X, const Eigen::MatrixXd & y, int hSize, double set_rss) {
+
     // init variables
     double rss_min;
-    if(rss_tmp < 0)
+    if(set_rss < 0)
         rss_min = std::numeric_limits<double>::infinity();
     else
-        rss_min = rss_tmp;
+        rss_min = set_rss;
     std::vector<int> indexes_min;
     Eigen::MatrixXd theta_min;
     int cuts = 0;
-
-
 
     // bool vector for the combinations
     int p = X.cols();
@@ -403,7 +445,6 @@ ResultExact * refinementBsa(const Eigen::MatrixXd & X, const Eigen::MatrixXd & y
         indexes.pop_back();
         Eigen::MatrixXd x1 = X(first_idx, Eigen::all);
         Eigen::MatrixXd y1 = y(first_idx, Eigen::all);
-
 
 
         // for all sign counts
@@ -446,51 +487,41 @@ ResultExact * refinementBsa(const Eigen::MatrixXd & X, const Eigen::MatrixXd & y
                     std::vector<int> sort_args =  sort_indexes(vecResiduals);
 
 
-                    // calculate xi1 residuum
-                    double x1_res = (y1 - x1*theta)(0, 0);
-                    x1_res = std::pow(x1_res, 2);
-
-
-                    // if r_{x1} == r_h
+                    // calculate xi1 residuum, r_h and r_{h+1}
+                    double x1_res = std::pow( (y1 - x1*theta)(0, 0) , 2);
                     double res_h =  vecResiduals[sort_args[hSize - 1]];  // r_h residuum
                     double res_h_1 = vecResiduals[sort_args[hSize]];    // r_{h+1} residuum
 
 
+                    // Find all subsets in relation with theta
                     std::vector<std::vector<int>> all_subsets;
 
                     if(relDif(x1_res, res_h) <= EPSILON){
                         if(relDif(res_h, res_h_1) <=  EPSILON){
-                            all_h_subsets_bsa(vecResiduals, sort_args, p, rss_min, all_subsets, hSize);
+                            all_h_subsets_bsa(vecResiduals, sort_args, p, rss_min, all_subsets, hSize, X, y, cuts);
                         }else{
-                            sort_args.resize(50);
+                            sort_args.resize(hSize);
                             all_subsets.push_back(sort_args);
                         }
 
                         // for each subset calculate OLS and eventually update
                         for( auto subset : all_subsets){
-                            // Create the sub-matrices form (p) indexes
-                            Eigen::MatrixXd dataX_tmp = X(subset, Eigen::all);
-                            Eigen::MatrixXd dataY_tmp = y(subset, Eigen::all);
 
-                            // solve theta
-                            Eigen::HouseholderQR<Eigen::MatrixXd> qr_tmp(dataX_tmp);
-                            Eigen::MatrixXd theta_tmp = qr_tmp.solve(dataY_tmp);
-                            // calculate residuals
-                            Eigen::MatrixXd residuals_tmp = dataY_tmp - dataX_tmp * theta;
-                            double rss = (residuals_tmp.transpose() * residuals_tmp )(0,0);
+                            // Solve OLS on the subset
+                            Eigen::MatrixXd theta;
+                            double rss;
+                            std::tie(theta, rss) = thetaAndRss(X, y, subset);
 
                             if(rss < rss_min){
                                 rss_min = rss;
                                 indexes_min = subset;
-                                theta_min = theta_tmp;
+                                theta_min = theta;
                             }
                         }
                     }
                 }
             } while (std::prev_permutation(sign_indexes.begin(), sign_indexes.end()));
         }
-
-
     } while (std::prev_permutation(bool_indexes.begin(), bool_indexes.end()));
 
     return new ResultExact(indexes_min, theta_min, rss_min, cuts);

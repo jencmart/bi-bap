@@ -454,7 +454,7 @@ class LTSRegressorExact(AbstractRegression):
                 break
 
         # BSA-BAB speedup
-        cnt_unique = idx_i  # idx_1 - 1 + 1 (- because at idx_i is smallest r_i = r_h) (+ because it is index)
+        cnt_unique = idx_i  # idx_i - 1 + 1 (- because at idx_i is smallest r_i = r_h) (+ because it is index)
         if cnt_unique >= p:
             begin = sort_args[:idx_i]
             theta, _, _, _ = self.theta_qr(self.J[begin])
