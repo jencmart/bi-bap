@@ -54,7 +54,7 @@ def test_cpp(n=100, p=2, algorithm='bab', use_intercept=True, rss=None):
 
     # fit exact exhaustive algorithm
     x, y, x_clean, y_clean = generate_data_ND(n, p)
-    lts = exact.LTSRegressorExactCPP(use_intercept=use_intercept, algorithm='bsa', calculation='inv')
+    lts = exact.LTSRegressorExactCPP(use_intercept=use_intercept, algorithm=algorithm, calculation='inv')
     lts.fit(x, y, set_rss=rss)
     h1 = lts.h_subset_
     h1.sort()
@@ -65,11 +65,12 @@ def test_cpp(n=100, p=2, algorithm='bab', use_intercept=True, rss=None):
     print('sec: ', lts.time_total_)
 
     # fit exact bab algorithm [NUMPY - TESTING]
-    lts = exact.LTSRegressorExact(use_intercept=use_intercept, algorithm=algorithm, calculation='inv')
+    lts = exact.LTSRegressorExactCPP(use_intercept=use_intercept, algorithm='bab', calculation='inv')
     lts.fit(x, y, set_rss=rss)
     h3 = lts.h_subset_
     h3.sort()
-    print('numpy BAB:')
+    h3 = np.asarray(h3)
+    print('cpp BAB:')
     print('cuts: ', lts.n_iter_)
     print('rss: ', lts.rss_)
     print('sec: ', lts.time_total_)

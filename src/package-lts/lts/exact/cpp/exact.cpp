@@ -546,7 +546,6 @@ ResultExact* exact_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int hSize, int alg,
     }else {
         // exact border scanning algorithm
         result = refinementBsa(X, y, hSize, rss);
-        //std::cout << "ahoj" << std::endl;
     }
 
     // append result to result array

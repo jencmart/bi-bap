@@ -26,7 +26,8 @@ def generate_data_2D_multi_variate(cnt, outlier_percentage=20):
     return X, y
 
 
-def generate_data_ND(cnt, dim, outlier_percentage=20, n_xij= (0,10), ei = (0,1), n_xi1_outlier = (100,10) ):
+def generate_data_ND(n, p, outlier_percentage=20, )
+def generate_data_ND(cnt, dim, outlier_percentage=20, n_xij= (0,10), ei = (0, 1), n_xi1_outlier = (100,10) ):
     N_clean = cnt - int(math.floor(cnt / 100 * outlier_percentage))
     N_dirty = int(math.ceil(cnt / 100 * outlier_percentage))
 
@@ -50,7 +51,6 @@ def generate_data_ND(cnt, dim, outlier_percentage=20, n_xij= (0,10), ei = (0,1),
 
     X = np.concatenate((X_clean, X_outliers), axis=0)
     y = np.concatenate((y_clean, y_outliers), axis=0)
-
 
     y = np.reshape(y, [y.shape[0], 1])
     y_clean = np.reshape(y_clean, [y_clean.shape[0], 1])

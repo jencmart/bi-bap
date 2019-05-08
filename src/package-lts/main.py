@@ -27,10 +27,13 @@ def test_exact_numpy():
 
 # Feasible solution OE QR
 def test_exact_cpp():
-    exact_test.test_cpp(n=20, p=3, use_intercept=True)
+    exact_test.test_cpp(n=300, p=2, use_intercept=False, algorithm='bsa')
     # p=2(+1)      32         33        40      50      55      60
     # cpp bab      2.5s       2.1       4.8     117     394
 
+    # bsa 4s   (100x2)
+    # bsa 70s  (200x2)
+    # bsa 358s (300x2)
 
 # Fast LTS
 def test_fast_lts():
