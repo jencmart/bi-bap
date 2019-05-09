@@ -1138,51 +1138,130 @@ ResultFeasible * refinementProcessMmeaQr(std::vector<int> & indexesJ, std::vecto
 // *********************************************************************************************************************
 
 // Perform calculation of LTS estimate satisfying strong necessary condition (known as feasible solution)n
-ResultFeasible* fs_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int numStarts, int maxSteps, int hSize, int alg, int calc) {
+ResultFeasible* fs_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int numStarts, int maxSteps, int hSize, int alg, int calc,
+                    Eigen::MatrixXi index_subset) {
     std::vector<ResultFeasible*> subsetResults;
     clock_t t;
     t = clock();
 
     unsigned N = X.rows();
 
-    // for all stars
-    for (int i = 0; i < numStarts; ++i) {
-        // select initial random array of indexes |J| = p, |M|= n-p
-        std::vector<int> permutation(N);
-        std::iota(permutation.begin(), permutation.end(), 0);
-        std::random_shuffle ( permutation.begin(), permutation.end());
-        std::vector<int> indexesJ(permutation.begin(), permutation.begin() + hSize);
-        std::vector<int> indexesM(permutation.begin() + hSize, permutation.end() );
+    if(index_subset.rows() == 1 && index_subset.cols() == 1 && index_subset(0,0) < 0)
+    {
+        // for all stars
+        for (int i = 0; i < numStarts; ++i) {
+            // select initial random array of indexes |J| = p, |M|= n-p
+            std::vector<int> permutation(N);
+            std::iota(permutation.begin(), permutation.end(), 0);
+            std::random_shuffle ( permutation.begin(), permutation.end());
+            std::vector<int> indexesJ(permutation.begin(), permutation.begin() + hSize);
+            std::vector<int> indexesM(permutation.begin() + hSize, permutation.end() );
 
-        ResultFeasible * result;
+            ResultFeasible * result;
 
-        if( calc == 0){
-            if(alg == 0){
-                // do the refinement process on (indexes J, indexes M , X, Y)
-                result = refinementProcessFsaInv(indexesJ, indexesM, X, y, maxSteps);
-            }else if(alg == 1){
-                // do the refinement process on (indexes J, indexes M , X, Y)
-                result = refinementProcessMoeaInv(indexesJ, indexesM, X, y, maxSteps);
-            }else {
-                // do the refinement process on (indexes J, indexes M , X, Y)
-                result = refinementProcessMmeaInv(indexesJ, indexesM, X, y, maxSteps);
+            if( calc == 0){
+                if(alg == 0){
+                    // do the refinement process on (indexes J, indexes M , X, Y)
+                    result = refinementProcessFsaInv(indexesJ, indexesM, X, y, maxSteps);
+                }else if(alg == 1){
+                    // do the refinement process on (indexes J, indexes M , X, Y)
+                    result = refinementProcessMoeaInv(indexesJ, indexesM, X, y, maxSteps);
+                }else {
+                    // do the refinement process on (indexes J, indexes M , X, Y)
+                    result = refinementProcessMmeaInv(indexesJ, indexesM, X, y, maxSteps);
+                }
+            }else{
+                if(alg == 0){
+                    // do the refinement process on (indexes J, indexes M , X, Y)
+                    result = refinementProcessFsaQr(indexesJ, indexesM, X, y, maxSteps);
+                }else if(alg == 1){
+                    // do the refinement process on (indexes J, indexes M , X, Y)
+                    result = refinementProcessMoeaQr(indexesJ, indexesM, X, y, maxSteps);
+                }else {
+                    // do the refinement process on (indexes J, indexes M , X, Y)
+                    result = refinementProcessMmeaQr(indexesJ, indexesM, X, y, maxSteps);
+                }
             }
-        }else{
-            if(alg == 0){
-                // do the refinement process on (indexes J, indexes M , X, Y)
-                result = refinementProcessFsaQr(indexesJ, indexesM, X, y, maxSteps);
-            }else if(alg == 1){
-                // do the refinement process on (indexes J, indexes M , X, Y)
-                result = refinementProcessMoeaQr(indexesJ, indexesM, X, y, maxSteps);
-            }else {
-                // do the refinement process on (indexes J, indexes M , X, Y)
-                result = refinementProcessMmeaQr(indexesJ, indexesM, X, y, maxSteps);
-            }
+
+            // append result to result array
+            subsetResults.push_back(result);
         }
-
-        // append result to result array
-        subsetResults.push_back(result);
     }
+
+
+     else{  // we have custom starting subsets
+        for(int i = 0; i < index_subset.rows() ; i++){  // for each subset
+            Eigen::MatrixXi row = index_subset(i, Eigen::all) ; // 1 x h
+            std::vector<int> indexesJ(row.data(), row.data() + row.cols());
+            std::sort(indexesJ.begin(), indexesJ.end());
+
+            // sliding window for creating M index subset
+            std::vector<int> indexesM ;
+            int pos = 0;
+            for(int j = 0 ; j < N ; ){
+
+                if(pos == indexesJ.size()) {
+                    indexesM.push_back(j);
+                    j++;
+                    continue;
+                }
+
+                if(indexesJ[pos] < j){
+                    for(int k = j ; k < indexesJ[pos] ; k++){
+                        indexesM.push_back(k);
+                    }
+                    j = indexesJ[pos] + 1;
+                    pos +=1;
+                    continue;
+                }
+
+                if(indexesJ[pos] == j){
+                    pos++;
+                    j++;
+                    continue;
+                }
+
+                exit(1); // debug check
+            }
+
+
+
+            /// rest of the function is the same
+
+             ResultFeasible * result;
+
+            if( calc == 0){
+                if(alg == 0){
+                    // do the refinement process on (indexes J, indexes M , X, Y)
+                    result = refinementProcessFsaInv(indexesJ, indexesM, X, y, maxSteps);
+                }else if(alg == 1){
+                    // do the refinement process on (indexes J, indexes M , X, Y)
+                    result = refinementProcessMoeaInv(indexesJ, indexesM, X, y, maxSteps);
+                }else {
+                    // do the refinement process on (indexes J, indexes M , X, Y)
+                    result = refinementProcessMmeaInv(indexesJ, indexesM, X, y, maxSteps);
+                }
+            }else{
+                if(alg == 0){
+                    // do the refinement process on (indexes J, indexes M , X, Y)
+                    result = refinementProcessFsaQr(indexesJ, indexesM, X, y, maxSteps);
+                }else if(alg == 1){
+                    // do the refinement process on (indexes J, indexes M , X, Y)
+                    result = refinementProcessMoeaQr(indexesJ, indexesM, X, y, maxSteps);
+                }else {
+                    // do the refinement process on (indexes J, indexes M , X, Y)
+                    result = refinementProcessMmeaQr(indexesJ, indexesM, X, y, maxSteps);
+                }
+            }
+
+            // append result to result array
+            subsetResults.push_back(result);
+
+
+        }
+    }
+
+
 
     float time1 = ((float)(clock() - t))/CLOCKS_PER_SEC;
 

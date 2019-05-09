@@ -10,7 +10,9 @@ from scipy import linalg
 # 'FAST-LTS', 'FSA-I', 'FSA-QR', 'MOEA-I', 'MOEA-QR', 'MMEA-I', 'MMEA-QR'
 def get_algorithm(alg, max_steps, intercept):
     if alg == 'FAST-LTS':
-        return fastlts.LTSRegressorFastCPP()
+        return fastlts.LTSRegressorFastCPP(num_starts=500, num_initial_c_steps=2, num_starts_to_finish=10,
+                                           max_steps=50, threshold=1e-6,
+                                           use_intercept=intercept)
     if alg == 'FSA-I':
         return feasible.LTSRegressorFeasibleCPP(num_starts=1, max_steps=max_steps, use_intercept=intercept,
                                                 algorithm='fsa', calculation='inv')
@@ -36,16 +38,18 @@ def experiment_speed_probabilistic(output='./out/experiment_probabilistic.csv'):
                    (100, 3),
                    (100, 5),
                    (500, 2),
-                   (500, 5),
-                   (1000, 2),
-                   (1000, 5),
-                   (1000, 10),
-                   (1000, 20),
-                   (10000, 5),
-                   (10000, 10)
+                   (500, 5)
+                  # (1000, 2),
+                  # (1000, 5)
+    #              (1000, 10),   # taky moc pomale... az po tom co odeberu nake algo...
+    #              (1000, 20)
                    ]
 
-    data_sets = [(0.1, 0.0), (0.3, 0.0), (0.45, 0.0),
+    # data_sets = [ (0.45, 0.0),
+    #              (0.1, 1), (0.3, 1), (0.45, 1),
+    #              (0.1, 0.4), (0.3, 0.4), (0.45, 0.4)]
+    # (0.1, 0.0), (0.3, 0.0),
+    data_sets = [(0.45, 0.0),
                  (0.1, 1), (0.3, 1), (0.45, 1),
                  (0.1, 0.4), (0.3, 0.4), (0.45, 0.4)]
 

@@ -53,7 +53,7 @@ if __name__ == '__main__':
     # test_exact_numpy()
     # test_feasible_solution_numpy()
     # test_exact_cpp()
-    experiments_probabilistic.experiment_speed_probabilistic()
+    experiments_probabilistic.experiment_speed_probabilistic('./out/experiment_probabilistic_p3.csv')
 
     #feasible_test.test_fast_and_feasible(n=28, p=3)
     # test_feasible_solution_numpy()

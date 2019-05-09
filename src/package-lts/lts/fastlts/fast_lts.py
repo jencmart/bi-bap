@@ -16,7 +16,32 @@ import lts.fastlts.cpp.fastlts as cpp_solution
 
 
 class LTSRegressorFastCPP:
-    def __init__(self):
+    def __init__(self,
+                 num_starts: 'number of initial starts (H1)' = 500,
+                 num_initial_c_steps: 'number of initial C steps' = 2,
+                 num_starts_to_finish: 'number of H3 which`ll to finish' = 10,
+                 max_steps: 'self explanatory' = 50,
+                 threshold: 'stopping criterion Qold Qnew' = 1e-6,
+                 use_intercept=True):
+
+        # number of initial starts starts
+        self._num_starts = num_starts
+
+        # maximum number of iterations
+        self._max_steps = max_steps
+
+        # set using intercept
+        self._use_intercept = use_intercept
+
+        # number of initial steps
+        self._num_initial_c_steps = num_initial_c_steps
+
+        # num steps to finish
+        self._num_starts_to_finish = num_starts_to_finish
+
+        # threshold
+        self._threshold = threshold
+
         # public
         self.n_iter_ = None
         self.coef_ = None
@@ -83,16 +108,12 @@ class LTSRegressorFastCPP:
         return X, y
 
     def fit(self, X, y,
-            num_starts: 'number of initial starts (H1)' = 500,
-            num_start_c_steps: 'number of initial C steps' = 2,
-            num_starts_to_finish: 'number of H3 which`ll to finish' = 10,
-            max_c_steps: 'self explanatory' = 50,
-            h_size: 'default := (n + p + 1) / 2' = 'default',
-            use_intercept=True,
-            threshold: 'stopping criterion Qold Qnew' = 1e-6):
 
-        X, y = self._validate(X, y, h_size, num_start_c_steps, num_starts_to_finish, max_c_steps, threshold,
-                              use_intercept)
+            h_size: 'default := (n + p + 1) / 2' = 'default'):
+
+        X, y = self._validate(X, y, h_size, self._num_initial_c_steps, self._num_starts_to_finish,
+                              self._max_steps, self._threshold,
+                              self._use_intercept)
 
         p = X.shape[1]
         n = X.shape[0]
@@ -100,12 +121,14 @@ class LTSRegressorFastCPP:
 
         # _h_size = math.ceil((X.shape[0] + X.shape[1] + 1) / 2) if h_size == 'default' else h_size  # N + p + 1
         # print('fast-lts : {}'.format(_h_size))
-        eigen_result = cpp_solution.fast_lts(X, y, num_starts, num_start_c_steps, num_starts_to_finish, _h_size,
-                                             max_c_steps, threshold)
+        eigen_result = cpp_solution.fast_lts(X, y, self._num_starts, self._num_initial_c_steps,
+                                             self._num_starts_to_finish,
+                                             _h_size,
+                                             self._max_steps, self._threshold)
 
         # ... Store best result
         weights = eigen_result.get_theta()
-        if use_intercept:
+        if self._use_intercept:
             self.intercept_ = weights[-1, 0]  # last row first col
             self.coef_ = np.ravel(weights[:-1, 0])  # for all but last column,  only first col
         else:
@@ -122,7 +145,32 @@ class LTSRegressorFastCPP:
 
 
 class LTSRegressorFast:
-    def __init__(self):
+    def __init__(self,
+                 num_starts: 'number of initial starts (H1)' = 500,
+                 num_initial_c_steps: 'number of initial C steps' = 2,
+                 num_starts_to_finish: 'number of H3 which`ll to finish' = 10,
+                 max_steps: 'self explanatory' = 50,
+                 threshold: 'stopping criterion Qold Qnew' = 1e-6,
+                 use_intercept=True):
+
+        # number of initial starts starts
+        self._num_starts = num_starts
+
+        # maximum number of iterations
+        self._max_steps = max_steps
+
+        # set using intercept
+        self._use_intercept = use_intercept
+
+        # number of initial steps
+        self._num_initial_c_steps = num_initial_c_steps
+
+        # num steps to finish
+        self._num_starts_to_finish = num_starts_to_finish
+
+        # threshold
+        self._threshold = threshold
+
         # public
         self.n_iter_ = None
         self.coef_ = None
@@ -191,17 +239,13 @@ class LTSRegressorFast:
         return np.asmatrix(merged)
 
     def fit(self, X, y,
-            num_starts: 'number of initial starts (H1)' = 500,
-            num_start_c_steps: 'number of initial C steps' = 2,
-            num_starts_to_finish: 'number of H3 which`ll to finish' = 10,
-            max_c_steps: 'self explanatory' = 50,
-            h_size: 'default := (n + p + 1) / 2' = 'default',
-            use_intercept=True,
-            threshold: 'stopping criterion for Qold Qnew sum residuals in c-steps' = 1e-6):
+            h_size: 'default := (n + p + 1) / 2' = 'default'):
 
         # Init some properties
-        data = self._validate(X, y, h_size, num_start_c_steps, num_starts_to_finish, max_c_steps, threshold,
-                              use_intercept)
+        data = self._validate(X, y, h_size, self._num_initial_c_steps, self._num_starts_to_finish,
+                              self._max_steps,
+                              self._threshold,
+                              self._use_intercept)
 
         # h size
         p = data.shape[1] - 1
@@ -232,28 +276,29 @@ class LTSRegressorFast:
         # y = data[:, :1]
 
         time1 = time.process_time()
-        subset_results = self.create_all_h1_subsets(num_starts, _h_size, data)  # array of 500 Results (h1, thetha, inf)
+        subset_results = self.create_all_h1_subsets(self._num_starts, _h_size, data)  # array of 500 Results (h1, thetha, inf)
         self.time1_ = time.process_time() - time1
 
         time2 = time.process_time()
-        self.iterate_c_steps(data, _h_size, subset_results, num_starts, False, num_start_c_steps,
+        self.iterate_c_steps(data, _h_size, subset_results, self._num_starts, False, self._num_initial_c_steps,
                              0)  # few c steps on all 500 results, all happens inplace
         k_smallest_inplace(subset_results,
-                           num_starts_to_finish)  # arr results && indexes are sorted (sort first 10 from 500...)
+                           self._num_starts_to_finish)  # arr results && indexes are sorted (sort first 10 from 500...)
         self.time2_ = time.process_time() - time2
 
         # C-steps till convergence
         time3 = time.process_time()
-        self.iterate_c_steps(data, _h_size, subset_results, num_starts_to_finish, True, max_c_steps, threshold)
+        self.iterate_c_steps(data, _h_size, subset_results, self._num_starts_to_finish, True, self._max_steps,
+                             self._threshold)
         # select the best one
         best_result = subset_results[0]
-        for i in range(num_starts_to_finish):
+        for i in range(self._num_starts_to_finish):
             best_result = subset_results[i] if subset_results[i].rss < best_result.rss else best_result
         self.time3_ = time.process_time() - time3
         self.time_total_ = self.time1_ + self.time2_ + self.time3_
 
         # ... Store best result
-        if use_intercept:
+        if self._use_intercept:
             self.intercept_ = best_result.theta[-1, 0]  # last row first col
             self.coef_ = np.ravel(best_result.theta[:-1, 0])  # for all but last column,  only first col
         else:

@@ -86,11 +86,16 @@ class LTSRegressorFeasibleCPP(AbstractRegression):
             raise ValueError('param. calculation must be one fo the strings: ‘inv’ or ‘qr’')
 
         if index_subset is None:
-            result = cpp_solution.fs_lts(X, y, self._num_starts, self._max_steps, h_size, int_alg, int_calc)
-        else:
-            raise ValueError('todo')
 
-        # todo - recalculate theta
+            index_subset = np.ndarray(shape=(1, 1), dtype=np.intc)
+            result = cpp_solution.fs_lts(X, y, self._num_starts, self._max_steps, h_size, int_alg, int_calc,
+                                         index_subset)
+        else:
+            if index_subset.ndim == 1:  # create matrix 1 x h
+                index_subset = np.reshape(index_subset, [1, index_subset.shape[0]])
+                index_subset[0, 0] = -1
+            result = cpp_solution.fs_lts(X, y, self._num_starts, self._max_steps, h_size, int_alg, int_calc,
+                                         index_subset)
 
         # Store result - weights first
         weights = result.get_theta()
@@ -241,7 +246,14 @@ class LTSRegressorFeasible(AbstractRegression):
                     raise ValueError('param. calculation must be one fo the strings: ‘inv’ or ‘qr’')
 
         else:
-            for subs in index_subset:
+
+            if index_subset.ndim == 1:  # create matrix 1 x h
+                index_subset = np.reshape(index_subset, [1, index_subset.shape[0]])
+
+            for i in range(index_subset.shape[0]):
+
+                subs = index_subset[i, :]  # todo - overit spravnou funkcnost
+
                 # print('subs')
                 # print(subs)
                 # create index arrays

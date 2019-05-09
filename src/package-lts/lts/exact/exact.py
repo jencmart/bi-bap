@@ -25,8 +25,9 @@ class LTSRegressorExactCPP(AbstractRegression):
 
     def __init__(self,
                  use_intercept=True,
-                 algorithm: 'str, ‘exa’, ‘bab’ or ‘bsa’, default: ‘bab’' = 'bab',
-                 calculation: 'str, ‘inv’, ‘qr’, default: ‘qr’' = 'inv'):
+                 algorithm: 'str, ‘exa’, ‘bab’, ‘bsa’ or ‘rbsa’, default: ‘bab’' = 'bab',
+                 calculation: 'str, ‘inv’, ‘qr’, default: ‘qr’' = 'inv',
+                 num_starts: 'int, number of starting subsets in the case of rbsa algorithm, default: 10000' = 10000):
         super().__init__()
 
         # set using intercept
@@ -37,6 +38,9 @@ class LTSRegressorExactCPP(AbstractRegression):
         self._calculation = calculation
 
         self._h_size = 0
+
+        # max subsets
+        self._max_subsets = num_starts
 
         # public
         self.n_iter_ = None
@@ -53,7 +57,7 @@ class LTSRegressorExactCPP(AbstractRegression):
 
     def fit(self, X, y,
             h_size: 'int, default:(n + p + 1) / 2' = 'default',
-            set_rss: 'smallest rss known on some h_subset, improves bsa performance' = None):
+            index_subset: 'the best known indexes of h element subset of the LTS estimate - improves bab and bsa performance' = None):
 
         # Init some properties
         X, y = validate(X, y, h_size, self._use_intercept)
@@ -68,6 +72,8 @@ class LTSRegressorExactCPP(AbstractRegression):
             int_alg = 1
         elif self._alg == 'bsa':
             int_alg = 2
+        elif self._alg == 'rbsa':  # todo
+            int_alg = 3
         else:
             raise ValueError('param. algorithm must be one fo the strings: ‘exa’, ‘bab’ or ‘bsa’')
 
@@ -78,14 +84,83 @@ class LTSRegressorExactCPP(AbstractRegression):
         else:
             raise ValueError('param. calculation must be one fo the strings: ‘inv’ or ‘qr’')
 
-        if set_rss is None:
+        # todo -- add self._max_subsets (used with the rbsa)
+        if self._alg == 'exa' or self._alg == 'rbsa':  # exact and randomized bsa
             set_rss = -1
-        else:
-            set_rss += 0.0001
+            result = cpp_solution.exact_lts(X, y, h_size, int_alg, int_calc, set_rss)
 
-        result = cpp_solution.exact_lts(X, y, h_size, int_alg, int_calc, set_rss)
+        if index_subset is None:  # subset not present .. rss -1 and nothing else..
+            set_rss = -1
+            result = cpp_solution.exact_lts(X, y, h_size, int_alg, int_calc, set_rss)
 
-        # todo - recalculate theta
+        if index_subset is not None and self._alg == 'bsa':
+            # set the RSS
+            # Calculate the RSS on the subset ....
+            data = np.asmatrix(np.concatenate([y, X], axis=1))
+            theta_tmp, _, _, _ = self.theta_qr(data)
+            set_rss = LTSRegressorExactCPP.rss(data, theta_tmp)
+            # fit
+            result = cpp_solution.exact_lts(X, y, h_size, int_alg, int_calc, set_rss)
+
+        #  if subset and BAB
+        if index_subset is not None and self._alg == 'bab':  # todo
+            # set rss to -1, but reorder the data
+            set_rss = -1
+
+            # sort the indexes
+            index_subset = np.ravel(index_subset)
+            index_subset.sort()
+
+            # create mask for h subset complement
+            mask = np.ones(X.shape[0], np.bool)
+            mask[index_subset] = 0
+
+            # create different order of the data
+            all_idx = np.arange(index_subset.shape[0])
+            idx_ones = all_idx[index_subset]
+            idx_zeroes = all_idx[mask]
+            changed_idx = np.concatenate((idx_ones, idx_zeroes), axis=0)
+
+            x_first = X[idx_ones]
+            x_rest = X[idx_zeroes]
+            X2 = np.concatenate((x_rest, x_first), axis=0)  # h subset is on the far right (because we traverse RLT)
+
+            y_first = y[idx_ones]
+            y_rest = y[idx_zeroes]
+            y2 = np.concatenate((y_rest, y_first), axis=0)  # again, h subset on the end
+
+            #  set the self.J correctly
+            # concatenate to matrix
+            if type(X2) is not np.matrix:
+                X2 = np.asmatrix(X2)
+            if type(y) is not np.matrix:
+                y2 = np.asmatrix(y2)
+
+            # do the refinement process on the sorted data ....
+            result = cpp_solution.exact_lts(X2, y2, h_size, int_alg, int_calc, set_rss)
+
+            # set the indexes correctly
+            index_wrong = result.get_h_subset()
+            index_wrong.sort()
+            true_idx = changed_idx[index_wrong]
+            true_idx.sort()
+
+            # Store result - weights first
+            weights = result.get_theta()
+            if self._use_intercept:
+                self.intercept_ = weights[-1, 0]  # last row first col
+                self.coef_ = np.ravel(weights[:-1, 0])  # for all but last column,  only first col
+            else:
+                self.intercept_ = 0.0
+                self.coef_ = np.ravel(weights[:, 0])  # all rows, only first col
+
+            # Store rest of the attributes
+            self.h_subset_ = true_idx   # todo --- here is the change
+            self.rss_ = result.get_rss()
+            self.n_iter_ = result.get_n_inter()
+            self.time1_ = result.get_time_1()
+            self.time_total_ = self.time1_
+            return
 
         # Store result - weights first
         weights = result.get_theta()
@@ -103,6 +178,48 @@ class LTSRegressorExactCPP(AbstractRegression):
         self.time1_ = result.get_time_1()
         self.time_total_ = self.time1_
 
+    # calculate sum of squared residuals O(np)
+    @staticmethod
+    def rss(J, theta):
+        y_fin = J[:, [0]]
+        x_fin = J[:, 1:]
+        residuals = y_fin - x_fin * theta
+        rss = residuals.T * residuals
+        rss = rss[0, 0]
+        return rss
+
+    # Calculate theta using normal equation: R1 theta = Q1y
+    def theta_qr(self, J):
+        # Q ... n x n
+        # R ... n x p
+        q, r = linalg.qr(J[:, 1:])  # X = QR ; x.T x = R.T R ;
+
+        # Q.T *  ( x * w - y ) ^ 2
+        # Q.T * Q * R * w - Q.T * y
+        # R * w - Q.T * y
+        # R * w = Q.T * y
+        theta, r1 = self.theta_from_qr(q, r, J)
+
+        return theta, q, r, r1
+
+        # Update theta using normal equation: R1 theta = Q1y
+        # calculate theta from QR decomposition O(p^2)
+
+    @staticmethod
+    def theta_from_qr(q, r, J):
+        y = J[:, [0]]
+        p = r.shape[1]
+        # r1 p x p
+        r1 = r[:p, :]  # only first p rows
+        qt = q.T
+        q1 = qt[:p, :]  # only first p rows
+
+        # solve the equation x w = c for x, assuming a is a triangular matrix
+        theta = linalg.solve_triangular(r1, q1 * y)  # p x substitution
+        return theta, r1
+
+        # calculate gama plus  O(p^2)
+
 
 def calculate_h_size(n, p, h_size):
     if h_size == 'default':
@@ -117,8 +234,9 @@ class LTSRegressorExact(AbstractRegression):
 
     def __init__(self,
                  use_intercept=True,
-                 algorithm: 'str, ‘fsa’ or ‘mmea’, default: ‘fsa’' = 'fsa',
-                 calculation: 'str, ‘inv’, ‘qr’, default: ‘qr’' = 'inv'):
+                 algorithm: 'str, ‘exa’, ‘bab’, ‘bsa’ or ‘rbsa’, default: ‘bab’' = 'bab',
+                 calculation: 'str, ‘inv’, ‘qr’, default: ‘qr’' = 'inv',
+                 num_starts: 'int, number of starting subsets in the case of rbsa algorithm, default: 10000' = 10000):
         super().__init__()
 
         # set using intercept
@@ -130,6 +248,9 @@ class LTSRegressorExact(AbstractRegression):
 
         self._h_size = 0
 
+        # max subsets
+        self._max_subsets = num_starts
+
         # public
         self.n_iter_ = None
         self.coef_ = None
@@ -139,9 +260,8 @@ class LTSRegressorExact(AbstractRegression):
         self.time1_ = None
         self.time_total_ = None
 
-    def fit(self, X, y,
-                  h_size: 'default := (n + p + 1) / 2' = 'default',
-                  set_rss: 'smallest rss known on some h_subset, improves bsa performance' = None):
+    def fit(self, X, y, h_size: 'default := (n + p + 1) / 2' = 'default',
+            index_subset: 'the best known indexes of h element subset of the LTS estimate - improves bab and bsa performance' = None):
 
         # Init some properties
         X, y = validate(X, y, h_size, self._use_intercept)
@@ -173,14 +293,66 @@ class LTSRegressorExact(AbstractRegression):
             # do the refinement process
             res = self.refinement_exhaustive()
 
+        elif self._alg == 'rbsa':
+            res = self.refinement_bsa_probabilistic(max_subsets=self._max_subsets)
+
         elif self._alg == 'bab':
-            # do the refinement process
-            res = self.refinement_bab_lts()
+            if index_subset is None:
+                # do the refinement process
+                res = self.refinement_bab_lts()
+
+            else:
+                # sort the indexes
+                index_subset = np.ravel(index_subset)
+                index_subset.sort()
+
+                # create mask for h subset complement
+                mask = np.ones(X.shape[0], np.bool)
+                mask[index_subset] = 0
+
+                # create different order of the data
+                all_idx = np.arange(index_subset.shape[0])
+                idx_ones = all_idx[index_subset]
+                idx_zeroes = all_idx[mask]
+                changed_idx = np.concatenate((idx_ones, idx_zeroes), axis=0)
+
+                x_first = X[idx_ones]
+                x_rest = X[idx_zeroes]
+                X2 = np.concatenate((x_rest, x_first), axis=0)  # h subset is on the far right (because we traverse RLT)
+
+                y_first = y[idx_ones]
+                y_rest = y[idx_zeroes]
+                y2 = np.concatenate((y_rest, y_first), axis=0)  # again, h subset on the end
+
+                #  set the self.J correctly
+                # concatenate to matrix
+                if type(X2) is not np.matrix:
+                    X2 = np.asmatrix(X2)
+                if type(y) is not np.matrix:
+                    y2 = np.asmatrix(y2)
+                data = np.asmatrix(np.concatenate([y2, X2], axis=1))
+                self.J = np.matrix(data, copy=True)
+
+                # do the refinement process on the sorted data ....
+                res = self.refinement_bab_lts()
+
+                # set the indexes correctly
+                index_wrong = res.h_index
+                index_wrong.sort()
+                true_idx = changed_idx[index_wrong]
+                true_idx.sort()
+                res.h_index = true_idx
+
         else:
-            if set_rss is None:
+            if index_subset is None:
                 res = self.refinement_bsa()
             else:
-                res = self.refinement_bsa(set_rss + 0.00001)
+                # Calculate the RSS on the subset ....
+                theta_tmp, _, _, _ = self.theta_qr(self.J)
+                set_rss = LTSRegressorExact.rss(self.J, theta_tmp)
+
+                # do the refinement process
+                res = self.refinement_bsa(set_rss)
 
         # store the result
         results.append(res)
@@ -326,9 +498,9 @@ class LTSRegressorExact(AbstractRegression):
             if len(aa) + len(bb) < self._h_size:  # not enough to produce h subset in ancestors
                 break
 
-            # move index from from A to B
-            aa.append(bb[0])
-            del bb[0]
+            # move index from from A to B // from the end
+            aa.append(bb[-1])  # todo changed from 0 to -1
+            del bb[-1]         # todo changed from 0 to -1
 
             # go deeper
             self.traverse_recursive(aa, bb, depth + 1, rss_here, theta_here, inversion_here)
@@ -342,11 +514,104 @@ class LTSRegressorExact(AbstractRegression):
     # ################################################################################
     # ############ E X A C T  -  B S A ###############################################
     # ################################################################################
+    # todo
+    def refinement_bsa_probabilistic(self, rss=None, max_subsets = 10000):  # 10 000 starts
+        if rss is None:
+            rss_min = float('inf')
+        else:
+            rss_min = rss
+
+        theta_min = None
+        h_subset_min = None
+        p = self.J.shape[1] - 1
+        cuts = 0
+
+        # Get all combinations of all_indexes
+        # and length p + 1
+        all_indexes = np.arange(self.J.shape[0])
+        all_comb = combinations(all_indexes, p + 1)
+
+        for comb in list(all_comb):  # for all p+1 indexes ... \binom{n}{p+1}
+            indexes = list(comb)
+
+            # store first index
+            first = indexes[0]
+            del indexes[0]
+
+            x1 = self.J[first, 1:]  # 1 x p
+            y1 = self.J[first, [0]]  # 1 x 1
+
+            x_rest = np.copy(self.J[indexes, 1:])  # p x p
+            y_rest = np.copy(self.J[indexes, 0])  # p x 1
+
+            # for all 2^p signs {+,-}
+            all_sign_permut = list(map(list, product([0, 1], repeat=p)))  # (000)(001)(010)(011)(100)(101)(110)(111)
+            for signs in all_sign_permut:
+
+                # create equations
+                for i in range(p):
+                    if signs[i] == 1:
+                        x_rest[i] = x_rest[i] - x1
+                        y_rest[i] = y_rest[i] - y1
+                    else:
+                        x_rest[i] = x_rest[i] + x1
+                        y_rest[i] = y_rest[i] + y1
+
+                # solve theta
+                data = np.asmatrix(np.concatenate([y_rest, x_rest], axis=1))
+                theta_curr, q, r, r1 = self.theta_qr(data)
+
+                # check if solution is unique
+                if np.count_nonzero(r[-1, :]) == 0:  # if last row is zero ... not regular
+                    continue
+
+                #  calculate all residuals, square them and sort them
+                all_residuals = self.J[:, [0]] - self.J[:, 1:] * theta_curr
+                all_residuals = np.square(all_residuals)
+                all_residuals = np.ravel(all_residuals)
+                sort_args = np.argsort(all_residuals)  # only the argsort
+
+                # calculate xi1 residuum
+                x1_res = ((y1 - np.dot(x1, theta_curr))[0, 0]) ** 2
+
+                # if r_{x1} == r_h
+                res_h = all_residuals[sort_args[self._h_size - 1]]  # r_h residuum
+                res_h_1 = all_residuals[sort_args[self._h_size]]  # r_{h+1} residuum
+
+                if math.isclose(x1_res, res_h, rel_tol=1e-9):
+
+                    # if r_h == r_{h+1} .. find all corresponding h subsets; #subsets ~ binom{p}{l+1}; max binom{p}{p/2}
+                    if math.isclose(res_h, res_h_1, rel_tol=1e-9):
+                        p = self.J.shape[1] - 1
+                        all_h_subsets = self.all_h_subsets_bsa(all_residuals, sort_args, p, rss_min)
+
+                        if all_h_subsets is None:  # BSA-BAB speedup
+                            cuts += 1
+                            continue
+
+                    # else.. corresponding h subset is unique
+                    else:
+                        all_h_subsets = [sort_args[:self._h_size]]
+
+                    # for each h_subset in relation with theta calculate OLS estimate
+                    for h_sub_indexes in all_h_subsets:
+                        theta, _, _, _ = self.theta_qr(self.J[h_sub_indexes])
+                        rss = self.rss(self.J[h_sub_indexes], theta)
+
+                        # if current new minimum .. store it
+                        if rss < rss_min:
+                            rss_min = rss
+                            theta_min = theta
+                            h_subset_min = h_sub_indexes
+
+        return self.Result(theta_min, h_subset_min, rss_min, cuts)
+
     def refinement_bsa(self, rss=None):
         if rss is None:
             rss_min = float('inf')
         else:
             rss_min = rss
+        self.first_set = False
 
         theta_min = None
         h_subset_min = None
@@ -427,6 +692,7 @@ class LTSRegressorExact(AbstractRegression):
 
                         # if current new minimum .. store it
                         if rss < rss_min:
+                            self.first_set = True
                             rss_min = rss
                             theta_min = theta
                             h_subset_min = h_sub_indexes
@@ -459,7 +725,9 @@ class LTSRegressorExact(AbstractRegression):
             begin = sort_args[:idx_i]
             theta, _, _, _ = self.theta_qr(self.J[begin])
             rss = self.rss(self.J[begin], theta)
-            if rss >= rss_min:
+            if rss > rss_min:
+                return None
+            if math.isclose(rss, rss_min, rel_tol=1e-9) and self.first_set:
                 return None
 
         # create list from those indexes [i, i+1, ... , j]

@@ -114,3 +114,12 @@ def test_fast_and_feasible(n=100, p=2):
     print(h1)
     print(h2)
     print(true_idx)
+
+
+def fast_lts_to_feasible_solution():
+    return
+
+
+def fast_lts_to_feasible_to_bab():
+    return
+

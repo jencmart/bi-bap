@@ -355,7 +355,8 @@ void all_h_subsets_bsa(const std::vector<double> & vecResiduals,
                        int hSize,
                        const Eigen::MatrixXd & X,
                        const Eigen::MatrixXd & y,
-                       int & cuts){
+                       int & cuts,
+                       bool first_set){
 
     double res_h =  vecResiduals[sort_args[hSize- 1]];  // r_h residuum
 
@@ -379,10 +380,17 @@ void all_h_subsets_bsa(const std::vector<double> & vecResiduals,
         Eigen::MatrixXd theta;
         double rss;
         std::tie(theta, rss) = thetaAndRss(X, y, begin);
-        if(rss >= rss_min){
+
+        if(rss > rss_min){
             cuts += 1;
             return;
         }
+
+        if(relDif(rss, rss_min) <= EPSILON && first_set) {
+            cuts += 1;
+            return;
+        }
+
     }
 
     // create all combinations of size:= self._h_size-1 - idx_i + 1
@@ -423,6 +431,9 @@ ResultExact * refinementBsa(const Eigen::MatrixXd & X, const Eigen::MatrixXd & y
         rss_min = std::numeric_limits<double>::infinity();
     else
         rss_min = set_rss;
+
+    bool first_set = false;
+
     std::vector<int> indexes_min;
     Eigen::MatrixXd theta_min;
     int cuts = 0;
@@ -498,7 +509,7 @@ ResultExact * refinementBsa(const Eigen::MatrixXd & X, const Eigen::MatrixXd & y
 
                     if(relDif(x1_res, res_h) <= EPSILON){
                         if(relDif(res_h, res_h_1) <=  EPSILON){
-                            all_h_subsets_bsa(vecResiduals, sort_args, p, rss_min, all_subsets, hSize, X, y, cuts);
+                            all_h_subsets_bsa(vecResiduals, sort_args, p, rss_min, all_subsets, hSize, X, y, cuts, first_set);
                         }else{
                             sort_args.resize(hSize);
                             all_subsets.push_back(sort_args);
@@ -513,6 +524,7 @@ ResultExact * refinementBsa(const Eigen::MatrixXd & X, const Eigen::MatrixXd & y
                             std::tie(theta, rss) = thetaAndRss(X, y, subset);
 
                             if(rss < rss_min){
+                                first_set = true;
                                 rss_min = rss;
                                 indexes_min = subset;
                                 theta_min = theta;
