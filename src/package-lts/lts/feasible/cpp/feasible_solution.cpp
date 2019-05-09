@@ -1045,7 +1045,7 @@ ResultFeasible * refinementProcessMoeaQr(std::vector<int> & indexesJ, std::vecto
             swap_observations(dataJX, dataJy, dataMX, dataMy, iSwap, jSwap, indexesJ, indexesM);
 
             std::tie(theta, q, r, r1) = theta_qr(dataJX, dataJy);
-            std::cout << rss << std::endl;
+            // std::cout << rss << std::endl;
             // step ++
             steps += 1;
         }

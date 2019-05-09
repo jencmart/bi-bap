@@ -4,6 +4,7 @@ import lts.fastlts.fast_lts as fastlts
 from scipy import spatial
 import numpy as np
 
+from sklearn.linear_model import LinearRegression
 
 def test_cpp(n=100, p=2, algorithm='fsa', calculation='inv', num_starts=10, max_steps=50, intercept=True, h_size='default'):
     print('test started...')

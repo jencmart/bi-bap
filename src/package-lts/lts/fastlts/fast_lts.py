@@ -99,7 +99,7 @@ class LTSRegressorFastCPP:
         _h_size = calculate_h_size(n, p, h_size)
 
         # _h_size = math.ceil((X.shape[0] + X.shape[1] + 1) / 2) if h_size == 'default' else h_size  # N + p + 1
-        print('fast-lts : {}'.format(_h_size))
+        # print('fast-lts : {}'.format(_h_size))
         eigen_result = cpp_solution.fast_lts(X, y, num_starts, num_start_c_steps, num_starts_to_finish, _h_size,
                                              max_c_steps, threshold)
 

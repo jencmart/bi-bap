@@ -176,7 +176,7 @@ class LTSRegressorFeasible(AbstractRegression):
         if index_subset is not None:
             self._h_size = np.asarray(index_subset).shape[1]
 
-        print('feasible : {}'.format(self._h_size))
+        # print('feasible : {}'.format(self._h_size))
         results = []
 
         # start measuring the time

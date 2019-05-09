@@ -6,7 +6,7 @@ from tests import test_exact as exact_test
 
 from tests import test_fast as fast_lts_test
 from experiments import speed_fast_lts as lts_speed
-
+from experiments import experiments_probabilistic
 
 # Feasible solution
 def test_feasible_solution_numpy():
@@ -52,7 +52,9 @@ if __name__ == '__main__':
     # test_feasible_OE_solution_numpy()
     # test_exact_numpy()
     # test_feasible_solution_numpy()
-    test_exact_cpp()
+    # test_exact_cpp()
+    experiments_probabilistic.experiment_speed_probabilistic()
+
     #feasible_test.test_fast_and_feasible(n=28, p=3)
     # test_feasible_solution_numpy()
     #lts_speed.fast_lts_cpp_big()
