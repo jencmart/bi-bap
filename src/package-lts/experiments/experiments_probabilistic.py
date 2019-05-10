@@ -33,7 +33,7 @@ def get_algorithm(alg, max_steps, intercept):
                                                 algorithm='mmea', calculation='qr')
 
 
-def experiment_speed_probabilistic(output='./out/experiment_probabilistic.csv'):
+def experiment_speed_probabilistic(output='./out/experiment_probabilistic_p1.csv'):
     experiments = [(20, 2),
                    (100, 3),
                    (100, 5),

@@ -1183,6 +1183,20 @@ ResultFeasible* fs_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int numStarts, int 
                 }
             }
 
+            // recalculate RSS and theta - make it stable
+            // Create the sub-matrices
+            Eigen::MatrixXd dataJX = X(result->hSubset, Eigen::all);
+            Eigen::MatrixXd dataJy = y(result->hSubset, Eigen::all);
+
+            // calculate theta and QR decomposition  O(p^2n)
+            Eigen::MatrixXd theta, q, r, r1;
+            std::tie(theta, q, r, r1) = theta_qr(dataJX, dataJy);
+
+           result->theta = theta;
+
+            // calculate RSS O(np)
+            result->rss = calculateRSS(dataJX, dataJy, theta);
+
             // append result to result array
             subsetResults.push_back(result);
         }
@@ -1190,23 +1204,24 @@ ResultFeasible* fs_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int numStarts, int 
 
 
      else{  // we have custom starting subsets
+
         for(int i = 0; i < index_subset.rows() ; i++){  // for each subset
             Eigen::MatrixXi row = index_subset(i, Eigen::all) ; // 1 x h
             std::vector<int> indexesJ(row.data(), row.data() + row.cols());
-            std::sort(indexesJ.begin(), indexesJ.end());
+            std::sort(indexesJ.begin(), indexesJ.end()); // already sorted?
 
             // sliding window for creating M index subset
             std::vector<int> indexesM ;
             int pos = 0;
-            for(int j = 0 ; j < N ; ){
+            for(int j = 0 ; j < (int)N ; ){
 
-                if(pos == indexesJ.size()) {
+                if(pos == (int)indexesJ.size()) {
                     indexesM.push_back(j);
                     j++;
                     continue;
                 }
 
-                if(indexesJ[pos] < j){
+                if( j < indexesJ[pos]){
                     for(int k = j ; k < indexesJ[pos] ; k++){
                         indexesM.push_back(k);
                     }
@@ -1220,8 +1235,7 @@ ResultFeasible* fs_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int numStarts, int 
                     j++;
                     continue;
                 }
-
-                exit(1); // debug check
+                exit(97); // debug check
             }
 
 
@@ -1254,10 +1268,23 @@ ResultFeasible* fs_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int numStarts, int 
                 }
             }
 
+            // recalculate RSS and theta - make it stable
+
+            // Create the sub-matrices
+            Eigen::MatrixXd dataJX = X(result->hSubset, Eigen::all);
+            Eigen::MatrixXd dataJy = y(result->hSubset, Eigen::all);
+
+            // calculate theta and QR decomposition  O(p^2n)
+            Eigen::MatrixXd theta, q, r, r1;
+            std::tie(theta, q, r, r1) = theta_qr(dataJX, dataJy);
+
+            result->theta = theta;
+
+            // calculate RSS O(np)
+            result->rss = calculateRSS(dataJX, dataJy, theta);
+
             // append result to result array
             subsetResults.push_back(result);
-
-
         }
     }
 
@@ -1265,10 +1292,20 @@ ResultFeasible* fs_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int numStarts, int 
 
     float time1 = ((float)(clock() - t))/CLOCKS_PER_SEC;
 
+
     // find and return best result
     ResultFeasible* best = subsetResults[0];
-    for (int i = 0 ; i < numStarts; ++i)
-        best = subsetResults[i]->rss < best->rss ? subsetResults[i] : best;
+
+
+    if(index_subset.rows() == 1 && index_subset.cols() == 1 && index_subset(0,0) < 0)
+    {
+        for (int i = 0 ; i < numStarts; ++i)
+            best = subsetResults[i]->rss < best->rss ? subsetResults[i] : best;
+    } else {
+        for (int i = 0 ; i < index_subset.rows(); ++i)
+            best = subsetResults[i]->rss < best->rss ? subsetResults[i] : best;
+    }
+
 
     // save total time (performance statistics)
     best->time1 = time1;

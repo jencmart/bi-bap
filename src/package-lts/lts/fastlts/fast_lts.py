@@ -136,12 +136,17 @@ class LTSRegressorFastCPP:
             self.coef_ = np.ravel(weights[:, 0])  # all rows, only first col
 
         self.h_subset_ = eigen_result.get_h_subset()
+
         self.rss_ = eigen_result.get_rss()
         self.n_iter_ = eigen_result.get_n_inter()
         self.time1_ = eigen_result.get_time_1()
         self.time2_ = eigen_result.get_time_2()
         self.time3_ = eigen_result.get_time_3()
         self.time_total_ = self.time1_ + self.time2_ + self.time3_
+
+        self.rss_ = np.float64(self.rss_)
+        self.h_subset_ = np.asarray(self.h_subset_, dtype=np.intc)
+        self.h_subset_.sort()
 
 
 class LTSRegressorFast:
@@ -305,9 +310,14 @@ class LTSRegressorFast:
             self.intercept_ = 0.0
             self.coef_ = np.ravel(best_result.theta[:, 0])  # all rows, only first col
 
-        self.h_subset_ = best_result.h_subset.astype(int)
+        self.h_subset_ = best_result.h_subset
+
         self.rss_ = best_result.rss
+
         self.n_iter_ = best_result.n_iter
+
+        self.h_subset_ = np.asarray(self.h_subset_, dtype=np.intc)
+        self.h_subset_.sort()
 
     # Select initial H1
     # ONLY ONE H1 ( one array of indexes to data)

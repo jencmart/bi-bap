@@ -62,7 +62,6 @@ def generate_data_ND(cnt, dim, outlier_percentage=20, n_xij= (0,10), ei = (0, 1)
 def generate_y(X, mu, sigma, distribution='n'):
     # SD (s) := standard deviation := sigma := scale   Standard deviation (spread or “width”) of the distribution.
     # E := expected value ~ mean := mu      := loc     Mean (“centre”) of the distribution.
-
     if (distribution == 'n'):
         e = np.random.normal(mu, sigma, (X.shape[0], 1))
     elif (distribution == 'ln'):
@@ -73,6 +72,67 @@ def generate_y(X, mu, sigma, distribution='n'):
     y = np.concatenate((X, e), axis=1)
     y = np.sum(y, axis=1)
     return y
+
+
+def generate_dataset_simple(n, p, outlier_ratio=0.3):
+    # MODEL
+    # model X ~ N(m,s)
+    x_m = 0
+    x_s = 10
+
+    # errors e~N(m,s)
+    e_m = 0
+    e_s = np.random.randint(low=1, high=10)
+
+    # errors outliers e~N(m,s) or e~Exp(s)
+    e_out_m = np.random.randint(low=-50, high=50)
+    e_out_s = np.random.randint(low=50, high=200)
+
+    # leverage points
+    x_lav_m = np.random.randint(low=10, high=50)
+    x_lav_s = np.random.randint(low=10, high=50)
+
+    # SECOND MODEL
+    # second model X ~ N(m,s)
+    x2_m = np.random.randint(low=-10, high=10)
+    x2_s = 10
+
+    # second model errors e~N(m,s)
+    e2_m = 0
+    e2_s = np.random.randint(low=5, high=10)
+
+    coef_scale = np.random.randint(low=5, high=50)
+
+    if np.random.rand() >= 0.5:
+        e_out_dist = 'n'
+    else:
+        e_out_dist = 'e'
+
+    leverage_ratio = 0.2
+
+    outlier_second_model_ratio = 0.5
+
+    X, y, X_clean, y_clean = generate_dataset(n, p,  # n x p
+                                              outlier_ratio=outlier_ratio,
+                                              # ratio of the outliers in the whole data set
+                                              leverage_ratio=leverage_ratio,
+                                              # ratio of data outlying in x , in the whole dataset
+                                              x_ms=(x_m, x_s),  # not outlying x  ~ N(mean, sd)
+                                              x_lav_ms=(x_lav_m, x_lav_s),
+                                              # outlying x  ~ N(mean, sd)
+                                              e_ms=(e_m, e_s),  # not outlying y  e ~ N(mean, sd)
+                                              e_out_ms=(e_out_m, e_out_s),
+                                              # outlying y   e ~ N(mean, std)  or ~Exp(std) 'n''e'
+                                              e_out_dist=e_out_dist,
+                                              # n/ln/e distribution of e for outying y
+                                              outlier_secon_model_ratio=outlier_second_model_ratio,
+                                              # ratio of outlers which are not outling in (y) but instead are form comletely different model  (if 0, data only from one model)
+                                              coeff_scale=coef_scale,
+                                              # random vector of regression coefficients c \in { (-coeff_scale, coeff_cale)^p } \ 0  , so that yi = c xi.T + e
+                                              mod2_x_ms=(x2_m, x2_s),
+                                              mod2_e_ms=(e2_m, e2_s))
+
+    return X, y, X_clean, y_clean
 
 
 def generate_dataset(n, p,  # X \in R^{n x p}

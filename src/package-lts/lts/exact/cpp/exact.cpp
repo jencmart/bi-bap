@@ -423,6 +423,143 @@ void all_h_subsets_bsa(const std::vector<double> & vecResiduals,
 }
 
 
+
+// ***************************************************************************************************
+// ********************************* RANDOM BSA ******************************************************
+// ***************************************************************************************************
+
+ResultExact * refinementRandomBsa(const Eigen::MatrixXd & X, const Eigen::MatrixXd & y, int hSize, int max_subsets) {
+
+    // init variables
+    double rss_min = std::numeric_limits<double>::infinity();
+
+    bool first_set = false;
+
+    std::vector<int> indexes_min;
+    Eigen::MatrixXd theta_min;
+    int cuts = 0;
+
+    // bool vector for the combinations
+    int p = X.cols();
+    int N = X.rows();
+
+
+    // fit some naive start
+    std::vector<int> naive(hSize);
+    std::iota(naive.begin(), naive.end(), 0);
+    Eigen::MatrixXd naive_theta;
+    double naive_rss;
+    std::tie(naive_theta, naive_rss) = thetaAndRss(X, y, naive);
+    rss_min = naive_rss;
+    first_set = true;
+    indexes_min = naive;
+    theta_min = naive_theta;
+
+    for(int r = 0; r < max_subsets ; r++) {
+
+        // Generate random p+1 subset
+        std::vector<int> permutation(N);
+        std::iota(permutation.begin(), permutation.end(), 0);
+        std::random_shuffle(permutation.begin(), permutation.end());
+        //  and slice first p +1 elements of this permutation
+        std::vector<int> indexes(permutation.begin(), permutation.begin() + p+1);
+
+
+        // store one element by side
+        int first_idx = indexes.back();
+        indexes.pop_back();
+        Eigen::MatrixXd x1 = X(first_idx, Eigen::all);
+        Eigen::MatrixXd y1 = y(first_idx, Eigen::all);
+
+
+        // for all sign counts
+        for(int i = 1; i <= p; ++i){
+
+            // vectors of length p
+            std::vector<bool> sign_indexes(p);
+            // containing i ones an p-1 zeros  (1 represents +, 0 represents -
+            std::fill(sign_indexes.begin(), sign_indexes.begin() + i, true);
+            do {
+
+                for(int j= 0 ; j < (int)sign_indexes.size(); j++)
+                {
+                    // Create the sub-matrices form (p) indexes
+                    Eigen::MatrixXd dataX = X(indexes, Eigen::all);
+                    Eigen::MatrixXd dataY = y(indexes, Eigen::all);
+
+                    // create the equations
+                    for(int row_idx = 0; row_idx < dataX.rows() ; row_idx++){
+                        if(j){
+                            dataX(row_idx, Eigen::all) = x1 - dataX(row_idx, Eigen::all);
+                            dataY(row_idx, Eigen::all) = y1 - dataY(row_idx, Eigen::all);
+                        }else{
+                        dataX(row_idx, Eigen::all) = x1 + dataX(row_idx, Eigen::all);
+                        dataY(row_idx, Eigen::all) = y1 + dataY(row_idx, Eigen::all);
+                        }
+                    }
+
+                    // solve theta
+                    Eigen::HouseholderQR<Eigen::MatrixXd> qr(dataX);
+                    Eigen::MatrixXd theta = qr.solve(dataY);
+
+                    // calculate all residuals, square them and sort them
+                    Eigen::MatrixXd residuals = y - X * theta;
+                    residuals = residuals.transpose(); // squared 1 x n
+                    std::vector<double> vecResiduals(residuals.data(), residuals.data() + residuals.cols());
+                    for(unsigned k = 0; k < residuals.size(); k++)
+                        vecResiduals[k] = std::pow(vecResiduals[k], 2);
+
+                    std::vector<int> sort_args =  sort_indexes(vecResiduals);
+
+
+                    // calculate xi1 residuum, r_h and r_{h+1}
+                    double x1_res = std::pow( (y1 - x1*theta)(0, 0) , 2);
+                    double res_h =  vecResiduals[sort_args[hSize - 1]];  // r_h residuum
+                    double res_h_1 = vecResiduals[sort_args[hSize]];    // r_{h+1} residuum
+
+
+                    // Find all subsets in relation with theta
+                    std::vector<std::vector<int>> all_subsets;
+
+                    if(relDif(x1_res, res_h) <= EPSILON){
+                        if(relDif(res_h, res_h_1) <=  EPSILON){
+                            all_h_subsets_bsa(vecResiduals, sort_args, p, rss_min, all_subsets, hSize, X, y, cuts, first_set);
+                        }else{
+                            sort_args.resize(hSize);
+                            all_subsets.push_back(sort_args);
+                        }
+
+                        // for each subset calculate OLS and eventually update
+                        for( auto subset : all_subsets){
+
+                            // Solve OLS on the subset
+                            Eigen::MatrixXd theta;
+                            double rss;
+                            std::tie(theta, rss) = thetaAndRss(X, y, subset);
+
+                            if(rss < rss_min){
+                                first_set = true;
+                                rss_min = rss;
+                                indexes_min = subset;
+                                theta_min = theta;
+                            }
+                        }
+                    }
+                }
+            } while (std::prev_permutation(sign_indexes.begin(), sign_indexes.end()));
+        }
+    }
+
+    return new ResultExact(indexes_min, theta_min, rss_min, cuts);
+}
+
+
+
+
+
+// ***************************************************************************************************
+// *********************************  BSA  ***********************************************************
+// ***************************************************************************************************
 ResultExact * refinementBsa(const Eigen::MatrixXd & X, const Eigen::MatrixXd & y, int hSize, double set_rss) {
 
     // init variables
@@ -542,7 +679,8 @@ ResultExact * refinementBsa(const Eigen::MatrixXd & X, const Eigen::MatrixXd & y
 // *********************************************************************************************************************
 // *********************  E X A C T  -  S O L U T I O N   **************************************************************
 // *********************************************************************************************************************
-ResultExact* exact_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int hSize, int alg, int calc, double rss) {
+ResultExact* exact_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int hSize, int alg, int calc,
+                                  double rss, int max_subsets) {
     std::vector<ResultExact*> subsetResults;
     clock_t t;
     t = clock();
@@ -555,9 +693,11 @@ ResultExact* exact_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int hSize, int alg,
     }else if(alg == 1){
         // exact branch and bound algorithm
         result = refinementBab(X, y, hSize);
-    }else {
+    }else if (alg == 2) {
         // exact border scanning algorithm
         result = refinementBsa(X, y, hSize, rss);
+    }else{
+        result = refinementRandomBsa(X, y, hSize, max_subsets);
     }
 
     // append result to result array

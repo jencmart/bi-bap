@@ -6,8 +6,8 @@ from scipy import spatial
 def test_cpp(n=100, p=2):
     print('test started...')
     x, y, x_clean, y_clean = generate_data_ND(n, p)
-    lts = fastlts.LTSRegressorFastCPP()
-    lts.fit(x, y, use_intercept=True, num_starts=10)
+    lts = fastlts.LTSRegressorFastCPP(use_intercept=True, num_starts=10)
+    lts.fit(x, y)
 
     # lts
     weights_lts = lts.coef_
@@ -18,7 +18,9 @@ def test_cpp(n=100, p=2):
     print('sec: ', lts.time_total_)
 
     # OLS on the clean data
-    lts.fit(x_clean, y_clean, use_intercept=True, h_size=x_clean.shape[0])
+
+    lts = fastlts.LTSRegressorFastCPP(use_intercept=True, num_starts=10)
+    lts.fit(x_clean, y_clean, h_size=x_clean.shape[0])
     weights_global_minimum = lts.coef_
 
     # cos similarity
@@ -30,8 +32,8 @@ def test_cpp(n=100, p=2):
 def test_numpy(n=100, p=2):
     print('test started...')
     x, y, x_clean, y_clean = generate_data_ND(n, p)
-    lts = fastlts.LTSRegressorFast()
-    lts.fit(x, y, use_intercept=True, num_starts=10)
+    lts = fastlts.LTSRegressorFast(use_intercept=True, num_starts=10)
+    lts.fit(x, y)
 
     # lts
     weights_lts = lts.coef_
@@ -42,7 +44,8 @@ def test_numpy(n=100, p=2):
     print('sec: ', lts.time_total_)
 
     # OLS on the clean data
-    lts.fit(x_clean, y_clean, use_intercept=True, h_size=x_clean.shape[0])
+    lts = fastlts.LTSRegressorFast(use_intercept=True, num_starts=10)
+    lts.fit(x_clean, y_clean, h_size=x_clean.shape[0])
     weights_global_minimum = lts.coef_
 
     # cos similarity

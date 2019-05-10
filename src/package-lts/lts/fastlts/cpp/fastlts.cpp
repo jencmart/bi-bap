@@ -73,7 +73,6 @@ struct Result {
 // *********************************************************************************************************************
 // ************************   Q U I C K  -  S E L E C T   **************************************************************
 // *********************************************************************************************************************
-// todo - this was tested i belive it works ok
 void kth_smallest_recursive_inplace(Eigen::MatrixXd & arr, std::vector<int> & indexes, int left, int right, int k) {
     double pivot = arr(right,0);
     int pos = left;
@@ -159,7 +158,6 @@ void kth_smallest_recursive_inplace_NoIndex(std::vector<Result*> & subsetResults
 // *********************************************************************************************************************
 // *****************  GENERATE ALL H1  *********************************************************************************
 // *********************************************************************************************************************
-// todo - this is most probbably ok
 void generateSubsets(std::vector<Result*> & subsetResults, const Eigen::MatrixXd & X, const Eigen::MatrixXd & y, int numStarts, int hSize ) {
     unsigned p = X.cols();
     unsigned N = X.rows();
@@ -173,7 +171,7 @@ void generateSubsets(std::vector<Result*> & subsetResults, const Eigen::MatrixXd
          //  and slice first p elements of this permutation
          std::vector<int> ind(permutation.begin(), permutation.begin() + p);
 
-         // ColPivHouseholderQR, FullPivLU ... todo try JacobiRotations
+         // ColPivHouseholderQR, FullPivLU
          Eigen::ColPivHouseholderQR<Eigen::MatrixXd> qr_decomp(X(ind, Eigen::all));
          // and reveal rank from the decompositon
          auto rank = qr_decomp.rank();
@@ -181,7 +179,7 @@ void generateSubsets(std::vector<Result*> & subsetResults, const Eigen::MatrixXd
          // add samples till rank is equal p
          while(rank < p && ind.size() < N) {
             ind.push_back(permutation[ind.size()]);
-             qr_decomp = qr_decomp.compute(X(ind, Eigen::all)); // todo possible segfault
+             qr_decomp = qr_decomp.compute(X(ind, Eigen::all));
              rank = qr_decomp.rank();
          }
 
@@ -215,7 +213,6 @@ void generateSubsets(std::vector<Result*> & subsetResults, const Eigen::MatrixXd
 // *********************************************************************************************************************
 // ****************   PERFORM C STEPS   ********************************************************************************
 // *********************************************************************************************************************
-// todo - here I suspect problem - SOLVED
 void performCStepsInPlace(Result* result,  const Eigen::MatrixXd & X, const Eigen::MatrixXd & y, int hSize, int numSteps,  double threshold) {
 
     // come results may already converged

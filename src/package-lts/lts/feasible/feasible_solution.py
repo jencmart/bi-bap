@@ -86,14 +86,14 @@ class LTSRegressorFeasibleCPP(AbstractRegression):
             raise ValueError('param. calculation must be one fo the strings: ‘inv’ or ‘qr’')
 
         if index_subset is None:
-
             index_subset = np.ndarray(shape=(1, 1), dtype=np.intc)
+            index_subset[0, 0] = -1
             result = cpp_solution.fs_lts(X, y, self._num_starts, self._max_steps, h_size, int_alg, int_calc,
                                          index_subset)
         else:
             if index_subset.ndim == 1:  # create matrix 1 x h
                 index_subset = np.reshape(index_subset, [1, index_subset.shape[0]])
-                index_subset[0, 0] = -1
+
             result = cpp_solution.fs_lts(X, y, self._num_starts, self._max_steps, h_size, int_alg, int_calc,
                                          index_subset)
 
@@ -112,6 +112,10 @@ class LTSRegressorFeasibleCPP(AbstractRegression):
         self.n_iter_ = result.get_n_inter()
         self.time1_ = result.get_time_1()
         self.time_total_ = self.time1_
+
+        self.rss_ = np.float64(self.rss_)
+        self.h_subset_ = np.asarray(self.h_subset_, dtype=np.intc)
+        self.h_subset_.sort()
 
 
 def calculate_h_size(n, p, h_size):
@@ -179,6 +183,8 @@ class LTSRegressorFeasible(AbstractRegression):
         self._h_size = calculate_h_size(n, p, h_size)
 
         if index_subset is not None:
+            if index_subset.ndim == 1:  # create matrix 1 x h
+                index_subset = np.reshape(index_subset, [1, index_subset.shape[0]])
             self._h_size = np.asarray(index_subset).shape[1]
 
         # print('feasible : {}'.format(self._h_size))
@@ -246,16 +252,12 @@ class LTSRegressorFeasible(AbstractRegression):
                     raise ValueError('param. calculation must be one fo the strings: ‘inv’ or ‘qr’')
 
         else:
-
-            if index_subset.ndim == 1:  # create matrix 1 x h
-                index_subset = np.reshape(index_subset, [1, index_subset.shape[0]])
-
             for i in range(index_subset.shape[0]):
 
-                subs = index_subset[i, :]  # todo - overit spravnou funkcnost
+                # print(index_subset.shape)
+                # print(index_subset)
+                subs = index_subset[i, :]  # todo already fixed, works as expected
 
-                # print('subs')
-                # print(subs)
                 # create index arrays
                 mask = np.ones(data.shape[0], np.bool)
                 mask[subs] = 0
@@ -398,6 +400,10 @@ class LTSRegressorFeasible(AbstractRegression):
         self.n_iter_ = best_result.steps
 
         self.coef_ = np.ravel(self.coef_)  # RAVELED
+
+        self.rss_ = np.float64(self.rss_)
+        self.h_subset_ = np.asarray(self.h_subset_, dtype=np.intc)
+        self.h_subset_.sort()
 
     # ###########################################################################
     # ############### ALL PAIRS  FSA INV ########################################

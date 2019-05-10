@@ -5,6 +5,7 @@ import math
 import time
 from itertools import combinations
 from itertools import product
+from scipy.special import comb
 
 import cppimport.import_hook
 import lts.exact.cpp.exact as cpp_solution
@@ -72,7 +73,7 @@ class LTSRegressorExactCPP(AbstractRegression):
             int_alg = 1
         elif self._alg == 'bsa':
             int_alg = 2
-        elif self._alg == 'rbsa':  # todo
+        elif self._alg == 'rbsa':
             int_alg = 3
         else:
             raise ValueError('param. algorithm must be one fo the strings: ‘exa’, ‘bab’ or ‘bsa’')
@@ -87,23 +88,29 @@ class LTSRegressorExactCPP(AbstractRegression):
         # todo -- add self._max_subsets (used with the rbsa)
         if self._alg == 'exa' or self._alg == 'rbsa':  # exact and randomized bsa
             set_rss = -1
-            result = cpp_solution.exact_lts(X, y, h_size, int_alg, int_calc, set_rss)
 
-        if index_subset is None:  # subset not present .. rss -1 and nothing else..
+            # fix the maximum number of the combinations
+            p = X.shape[1]
+            N = X.shape[0]
+            cnt_combs = comb(N, p+1, exact=True)
+            self._max_subsets = min(cnt_combs, self._max_subsets)
+            result = cpp_solution.exact_lts(X, y, h_size, int_alg, int_calc, set_rss, self._max_subsets)
+
+        elif index_subset is None:  # subset not present .. rss -1 and nothing else..
             set_rss = -1
-            result = cpp_solution.exact_lts(X, y, h_size, int_alg, int_calc, set_rss)
+            result = cpp_solution.exact_lts(X, y, h_size, int_alg, int_calc, set_rss, self._max_subsets)
 
-        if index_subset is not None and self._alg == 'bsa':
+        elif index_subset is not None and self._alg == 'bsa':
             # set the RSS
             # Calculate the RSS on the subset ....
             data = np.asmatrix(np.concatenate([y, X], axis=1))
             theta_tmp, _, _, _ = self.theta_qr(data)
             set_rss = LTSRegressorExactCPP.rss(data, theta_tmp)
             # fit
-            result = cpp_solution.exact_lts(X, y, h_size, int_alg, int_calc, set_rss)
+            result = cpp_solution.exact_lts(X, y, h_size, int_alg, int_calc, set_rss, self._max_subsets)
 
         #  if subset and BAB
-        if index_subset is not None and self._alg == 'bab':  # todo
+        elif index_subset is not None and self._alg == 'bab':  # todo
             # set rss to -1, but reorder the data
             set_rss = -1
 
@@ -116,10 +123,10 @@ class LTSRegressorExactCPP(AbstractRegression):
             mask[index_subset] = 0
 
             # create different order of the data
-            all_idx = np.arange(index_subset.shape[0])
+            all_idx = np.arange(X.shape[0])
             idx_ones = all_idx[index_subset]
             idx_zeroes = all_idx[mask]
-            changed_idx = np.concatenate((idx_ones, idx_zeroes), axis=0)
+            changed_idx = np.concatenate((idx_zeroes, idx_ones), axis=0)  # ones to the end!
 
             x_first = X[idx_ones]
             x_rest = X[idx_zeroes]
@@ -137,7 +144,7 @@ class LTSRegressorExactCPP(AbstractRegression):
                 y2 = np.asmatrix(y2)
 
             # do the refinement process on the sorted data ....
-            result = cpp_solution.exact_lts(X2, y2, h_size, int_alg, int_calc, set_rss)
+            result = cpp_solution.exact_lts(X2, y2, h_size, int_alg, int_calc, set_rss, self._max_subsets)
 
             # set the indexes correctly
             index_wrong = result.get_h_subset()
@@ -160,6 +167,10 @@ class LTSRegressorExactCPP(AbstractRegression):
             self.n_iter_ = result.get_n_inter()
             self.time1_ = result.get_time_1()
             self.time_total_ = self.time1_
+
+            self.rss_ = np.float64(self.rss_)
+            self.h_subset_ = np.asarray(self.h_subset_, dtype=np.intc)
+            self.h_subset_.sort()
             return
 
         # Store result - weights first
@@ -177,6 +188,10 @@ class LTSRegressorExactCPP(AbstractRegression):
         self.n_iter_ = result.get_n_inter()
         self.time1_ = result.get_time_1()
         self.time_total_ = self.time1_
+
+        self.rss_ = np.float64(self.rss_)
+        self.h_subset_ = np.asarray(self.h_subset_, dtype=np.intc)
+        self.h_subset_.sort()
 
     # calculate sum of squared residuals O(np)
     @staticmethod
@@ -294,7 +309,12 @@ class LTSRegressorExact(AbstractRegression):
             res = self.refinement_exhaustive()
 
         elif self._alg == 'rbsa':
-            res = self.refinement_bsa_probabilistic(max_subsets=self._max_subsets)
+            p = self.J.shape[1] - 1
+            N = self.J.shape[0]
+            cnt_combs = comb(N, p+1, exact=True)
+            self._max_subsets = min(cnt_combs, self._max_subsets)
+
+            res = self.refinement_random_bsa(max_subsets=self._max_subsets)
 
         elif self._alg == 'bab':
             if index_subset is None:
@@ -311,10 +331,12 @@ class LTSRegressorExact(AbstractRegression):
                 mask[index_subset] = 0
 
                 # create different order of the data
-                all_idx = np.arange(index_subset.shape[0])
+                # all_idx = np.arange(index_subset.shape[0]) todo
+
+                all_idx = np.arange(X.shape[0])
                 idx_ones = all_idx[index_subset]
                 idx_zeroes = all_idx[mask]
-                changed_idx = np.concatenate((idx_ones, idx_zeroes), axis=0)
+                changed_idx = np.concatenate((idx_zeroes, idx_ones), axis=0)
 
                 x_first = X[idx_ones]
                 x_rest = X[idx_zeroes]
@@ -386,6 +408,10 @@ class LTSRegressorExact(AbstractRegression):
         self.n_iter_ = best_result.steps
 
         self.coef_ = np.ravel(self.coef_)  # RAVELED
+
+        self.rss_ = np.float64(self.rss_)
+        self.h_subset_ = np.asarray(self.h_subset_, dtype=np.intc)
+        self.h_subset_.sort()
 
     # ################################################################################
     # ############ E X H A U S T I V E ###############################################
@@ -512,27 +538,31 @@ class LTSRegressorExact(AbstractRegression):
         return
 
     # ################################################################################
-    # ############ E X A C T  -  B S A ###############################################
+    # ############ E X A C T  -  B S A  - R A N D O M I Z E D  #######################
     # ################################################################################
-    # todo
-    def refinement_bsa_probabilistic(self, rss=None, max_subsets = 10000):  # 10 000 starts
-        if rss is None:
-            rss_min = float('inf')
-        else:
-            rss_min = rss
-
-        theta_min = None
-        h_subset_min = None
+    def refinement_random_bsa(self, max_subsets=10000):  # 10 000 starts
         p = self.J.shape[1] - 1
+        N = self.J.shape[0]
         cuts = 0
 
-        # Get all combinations of all_indexes
-        # and length p + 1
-        all_indexes = np.arange(self.J.shape[0])
-        all_comb = combinations(all_indexes, p + 1)
+        # fit some naive solution
+        indexes = np.arange(self._h_size)
+        data = self.J[indexes]
+        theta, inversion = self.theta_inv(data)
+        rss = self.rss(data, theta)
+        theta_min = theta
+        h_subset_min = indexes
+        rss_min = rss
 
-        for comb in list(all_comb):  # for all p+1 indexes ... \binom{n}{p+1}
-            indexes = list(comb)
+        # Generate some amount of random p+1 subsets
+        for r in range(max_subsets):  # for all p+1 indexes ... \binom{n}{p+1}
+
+            # generate random permutation of length N
+            idx_all = np.random.permutation(N)
+
+            # and cut first p+1 indexes...
+            indexes = idx_all[:p + 1]
+            indexes = indexes.tolist()
 
             # store first index
             first = indexes[0]
