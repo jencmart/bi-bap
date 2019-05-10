@@ -2,11 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5818e2d1-7629-47ec-a2bd-d6037228392b" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/experiments/experiments_probabilistic.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/experiments/experiments_probabilistic.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/run.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/runall.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/runall.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen/scripts/eigen_monitor_perf.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen/scripts/eigen_monitor_perf.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/out/experiment_probabilistic_big.csv" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/out/experiment_probabilistic_big.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/lts/exact/cpp/.exact.cpp.cppimporthash" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lts/exact/cpp/.exact.cpp.cppimporthash" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/lts/exact/cpp/.rendered.exact.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lts/exact/cpp/.rendered.exact.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/lts/exact/cpp/exact.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lts/exact/cpp/exact.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/lts/exact/cpp/exact.cpython-35m-x86_64-linux-gnu.so" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lts/exact/cpp/exact.cpython-35m-x86_64-linux-gnu.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,17 +22,17 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/src$feasible_solution_test_dev.coverage" NAME="feasible_solution_test_dev Coverage Results" MODIFIED="1552391023132" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/package-lts/ltsregression/feasiblesolution" />
-    <SUITE FILE_PATH="coverage/src$main.coverage" NAME="main Coverage Results" MODIFIED="1557521877476" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/package-lts" />
+    <SUITE FILE_PATH="coverage/src$main.coverage" NAME="main Coverage Results" MODIFIED="1557526011670" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/package-lts" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.48080438">
+    <splitter split-orientation="horizontal" split-proportion="0.6452164">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/package-lts/experiments/experiments_probabilistic.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-18">
-                  <caret line="197" column="17" selection-start-line="197" selection-start-column="17" selection-end-line="197" selection-end-column="17" />
+                <state relative-caret-position="-7302">
+                  <caret line="125" selection-start-line="125" selection-end-line="125" />
                   <folding>
                     <element signature="e#0#49#0" expanded="true" />
                   </folding>
@@ -35,10 +41,18 @@
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/package-lts/tests/test_feasible.py">
+            <entry file="file://$PROJECT_DIR$/package-lts/out/experiment_exact.csv">
+              <provider selected="true" editor-type-id="csv-text-editor" />
+              <provider editor-type-id="csv-table-editor">
+                <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$USER_HOME$/fit/bi-bap/src/package-lts/experiments/experiments_probabilistic.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="36">
-                  <caret line="2" column="23" selection-start-line="2" selection-end-line="3" />
+                <state relative-caret-position="119">
+                  <caret line="372" column="18" selection-start-line="372" selection-start-column="15" selection-end-line="372" selection-end-column="18" />
                 </state>
               </provider>
             </entry>
@@ -46,20 +60,11 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/package-lts/tests/test_exact.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1098">
-                  <caret line="66" selection-start-line="66" selection-end-line="66" />
+                <state relative-caret-position="540">
+                  <caret line="102" column="35" selection-start-line="83" selection-start-column="3" selection-end-line="102" selection-end-column="35" />
                   <folding>
                     <element signature="e#0#31#0" expanded="true" />
                   </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$USER_HOME$/fit/bi-bap/src/package-lts/lts/exact/cpp/.rendered.exact.cpp">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="9846">
-                  <caret line="547" selection-start-line="547" selection-end-line="547" />
                 </state>
               </provider>
             </entry>
@@ -79,8 +84,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/package-lts/lts/exact/cpp/exact.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="12564">
-                  <caret line="698" column="10" selection-start-line="698" selection-start-column="10" selection-end-line="698" selection-end-column="10" />
+                <state relative-caret-position="171">
+                  <caret line="690" column="37" selection-start-line="690" selection-start-column="37" selection-end-line="690" selection-end-column="37" />
                 </state>
               </provider>
             </entry>
@@ -88,8 +93,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/package-lts/lts/exact/exact.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="16020">
-                  <caret line="902" column="10" selection-start-line="902" selection-start-column="10" selection-end-line="902" selection-end-column="10" />
+                <state relative-caret-position="425">
+                  <caret line="96" column="35" selection-start-line="96" selection-start-column="35" selection-end-line="96" selection-end-column="35" />
                   <folding>
                     <element signature="e#0#48#0" expanded="true" />
                   </folding>
@@ -112,8 +117,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/package-lts/lts/feasible/cpp/feasible_solution.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="21420">
-                  <caret line="1190" column="10" selection-start-line="1190" selection-start-column="10" selection-end-line="1190" selection-end-column="10" />
+                <state relative-caret-position="189">
+                  <caret line="944" column="23" selection-start-line="944" selection-start-column="16" selection-end-line="944" selection-end-column="23" />
                 </state>
               </provider>
             </entry>
@@ -134,8 +139,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/package-lts/main.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="456">
-                  <caret line="72" column="103" selection-start-line="72" selection-start-column="103" selection-end-line="72" selection-end-column="103" />
+                <state relative-caret-position="514">
+                  <caret line="74" selection-start-line="74" selection-end-line="74" />
                   <folding>
                     <element signature="e#32#80#0" expanded="true" />
                   </folding>
@@ -156,12 +161,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>exit(2</find>
-      <find>resh</find>
-      <find>‘rbsa’</find>
-      <find>reshape</find>
-      <find>all_idx = np.arange(index_subset.shape[0])</find>
-      <find>all_idx = np.a</find>
       <find>hanged_idx = np.concatenate(</find>
       <find>all_h_subsets_bsa</find>
       <find>bab</find>
@@ -186,6 +185,12 @@
       <find>theta_inv</find>
       <find>min(</find>
       <find>comb(</find>
+      <find>h_size</find>
+      <find>exit(21</find>
+      <find>refinementExhaustive</find>
+      <find>std::c</find>
+      <find>coeff_sc</find>
+      <find>coef_sc</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -194,7 +199,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/package-lts/ltsregression/feasiblesolution/test_setup.py" />
         <option value="$PROJECT_DIR$/package-lts/ltsregression/feasiblesolution/src/feasible_solution_cpp.py" />
         <option value="$PROJECT_DIR$/package-lts/ltsregression/feasiblesolution/src/feasible_solution.py" />
         <option value="$PROJECT_DIR$/package-lts/ltsregression/feasiblesolution/src/cpp/feasible_solution.cpp" />
@@ -239,19 +243,20 @@
         <option value="$PROJECT_DIR$/package-lts/lts/feasible/feasible_solution.py" />
         <option value="$PROJECT_DIR$/package-lts/lts/fastlts/cpp/fastlts.cpp" />
         <option value="$PROJECT_DIR$/package-lts/tests/test_exact.py" />
-        <option value="$PROJECT_DIR$/package-lts/lts/exact/cpp/exact.cpp" />
         <option value="$PROJECT_DIR$/package-lts/lts/exact/exact.py" />
         <option value="$PROJECT_DIR$/package-lts/data/data_generator.py" />
-        <option value="$PROJECT_DIR$/package-lts/experiments/experiments_probabilistic.py" />
-        <option value="$PROJECT_DIR$/package-lts/main.py" />
         <option value="$PROJECT_DIR$/package-lts/out/experiment_probabilistic_big.csv" />
+        <option value="$PROJECT_DIR$/package-lts/main.py" />
+        <option value="$PROJECT_DIR$/package-lts/out/experiment_exact.csv" />
+        <option value="$PROJECT_DIR$/package-lts/lts/exact/cpp/exact.cpp" />
+        <option value="$PROJECT_DIR$/package-lts/experiments/experiments_probabilistic.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-1" />
     <option name="y" value="3" />
-    <option name="width" value="962" />
+    <option name="width" value="1922" />
     <option name="height" value="1078" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -479,23 +484,23 @@
       <workItem from="1557143438310" duration="14306000" />
       <workItem from="1557162482603" duration="5215000" />
       <workItem from="1557168019725" duration="109553000" />
-      <workItem from="1557521660400" duration="1162000" />
+      <workItem from="1557521660400" duration="3815000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="520665000" />
+    <option name="totallyTimeSpent" value="523318000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="3" width="962" height="1078" extended-state="0" />
+    <frame x="-1" y="3" width="1922" height="1078" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20374331" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.060897436" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.44183674" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4983957" visible="true" weight="0.24425887" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4983957" visible="true" weight="0.33877552" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3989796" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -503,7 +508,7 @@
       <window_info anchor="bottom" id="Docker" order="7" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.3361169" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50160426" side_tool="true" visible="true" weight="0.24425887" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50160426" side_tool="true" weight="0.24425887" />
       <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49946582" weight="0.4" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -557,7 +562,6 @@
     </option>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/package-lts/README_fast.md" />
     <entry file="file://$PROJECT_DIR$/package-lts/lts_cpp_vs_numpy_results" />
     <entry file="file://$PROJECT_DIR$/package-lts/lts_cpp_vs_numpy_results.csv" />
     <entry file="file://$PROJECT_DIR$/package-lts/setup.py">
@@ -691,13 +695,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/fit/bi-bap/src/package-lts/experiments/experiments_probabilistic.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="45" column="2" selection-start-line="45" selection-start-column="2" selection-end-line="48" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/package-lts/out/experiment_1/experiment_probabilistic_p1.csv">
       <provider selected="true" editor-type-id="csv-text-editor">
         <state>
@@ -813,16 +810,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/tests/test_exact.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1098">
-          <caret line="66" selection-start-line="66" selection-end-line="66" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/fit/bi-bap/src/package-lts/lts/exact/cpp/.rendered.exact.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="9846">
@@ -840,23 +827,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/lts/exact/cpp/exact.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="12564">
-          <caret line="698" column="10" selection-start-line="698" selection-start-column="10" selection-end-line="698" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/lts/exact/exact.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="16020">
-          <caret line="902" column="10" selection-start-line="902" selection-start-column="10" selection-end-line="902" selection-end-column="10" />
-          <folding>
-            <element signature="e#0#48#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/package-lts/data/data_generator.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3672">
@@ -864,13 +834,6 @@
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/lts/feasible/cpp/feasible_solution.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="21420">
-          <caret line="1190" column="10" selection-start-line="1190" selection-start-column="10" selection-end-line="1190" selection-end-column="10" />
         </state>
       </provider>
     </entry>
@@ -887,16 +850,6 @@
           <caret line="22" column="6" selection-start-line="22" selection-start-column="6" selection-end-line="22" selection-end-column="6" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/experiments/experiments_probabilistic.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-18">
-          <caret line="197" column="17" selection-start-line="197" selection-start-column="17" selection-end-line="197" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#49#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -931,12 +884,69 @@
         <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/package-lts/tests/test_exact.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="102" column="35" selection-start-line="83" selection-start-column="3" selection-end-line="102" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/package-lts/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
-          <caret line="72" column="103" selection-start-line="72" selection-start-column="103" selection-end-line="72" selection-end-column="103" />
+        <state relative-caret-position="514">
+          <caret line="74" selection-start-line="74" selection-end-line="74" />
           <folding>
             <element signature="e#32#80#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package-lts/lts/feasible/cpp/feasible_solution.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="944" column="23" selection-start-line="944" selection-start-column="16" selection-end-line="944" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/fit/bi-bap/src/package-lts/experiments/experiments_probabilistic.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="372" column="18" selection-start-line="372" selection-start-column="15" selection-end-line="372" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package-lts/lts/exact/exact.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="96" column="35" selection-start-line="96" selection-start-column="35" selection-end-line="96" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#48#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package-lts/lts/exact/cpp/exact.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="690" column="37" selection-start-line="690" selection-start-column="37" selection-end-line="690" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package-lts/out/experiment_exact.csv">
+      <provider selected="true" editor-type-id="csv-text-editor" />
+      <provider editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package-lts/experiments/experiments_probabilistic.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-7302">
+          <caret line="125" selection-start-line="125" selection-end-line="125" />
+          <folding>
+            <element signature="e#0#49#0" expanded="true" />
           </folding>
         </state>
       </provider>

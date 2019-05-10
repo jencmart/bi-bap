@@ -690,6 +690,7 @@ ResultExact* exact_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int hSize, int alg,
     if(alg == 0){
         // exact exhaustive algorithm
         result = refinementExhaustive(X, y, hSize);
+
     }else if(alg == 1){
         // exact branch and bound algorithm
         result = refinementBab(X, y, hSize);

@@ -1,6 +1,7 @@
 import lts.feasible.feasible_solution as feasible
 import data.data_generator as generator
 import lts.fastlts.fast_lts as fastlts
+import lts.exact.exact as exact
 import pandas as pd
 from scipy import spatial
 import numpy as np
@@ -39,10 +40,6 @@ def experiment_speed_probabilistic(output='./out/experiment_probabilistic_p1.csv
                    (100, 5),
                    (500, 2),
                    (500, 5)
-                  # (1000, 2),
-                  # (1000, 5)
-    #              (1000, 10),   # taky moc pomale... az po tom co odeberu nake algo...
-    #              (1000, 20)
                    ]
 
     data_sets = [(0.1, 0.0), (0.3, 0.0), (0.45, 0.0),
@@ -99,8 +96,6 @@ def experiment_speed_probabilistic(output='./out/experiment_probabilistic_p1.csv
                 e2_m = 0
                 e2_s = np.random.randint(low=5, high=10)
 
-                coef_scale = np.random.randint(low=5, high=50)
-
                 if np.random.rand() >= 0.5:
                     e_out_dist = 'n'
                 else:
@@ -122,17 +117,22 @@ def experiment_speed_probabilistic(output='./out/experiment_probabilistic_p1.csv
                                                                     e_out_ms=(e_out_m, e_out_s),
                                                                     # outlying y   e ~ N(mean, std)  or ~Exp(std) 'n''e'
                                                                     e_out_dist=e_out_dist,
-                                                                    # n/ln/e distribution of e for outying y
+                                                                    # n/ln/e distribution of e for outlying y
                                                                     outlier_secon_model_ratio=outlier_second_model_ratio,
-                                                                    # ratio of outlers which are not outling in (y) but instead are form comletely different model  (if 0, data only from one model)
+                                                                    # ratio of outliers which are not outlying in (y)
+                                                                    # but instead are form completely different model
+                                                                    # (if 0, data only from one model)
                                                                     # coeff_scale=coef_scale,
-                                                                    # random vector of regression coefficients c \in { (-coeff_scale, coeff_cale)^p } \ 0  , so that yi = c xi.T + e
+                                                                    # random vector of regression coefficients
+                                                                    # c \in { (-coeff_scale, coeff_cale)^p } \ 0  ,
+                                                                    # so that yi = c xi.T + e
                                                                     mod2_x_ms=(x2_m, x2_s),
                                                                     mod2_e_ms=(e2_m, e2_s))
 
                 for cnt_alg, alg in enumerate(algorithms):  # on each algorithm
                     print('running...dataset[{}/{}] experiment[{}/{}]({}x{}) algorithm[{}/{}] for[{}/{}] '.format(
-                        cnt_dataset + 1, cnt_data_sets, cnt_experiment + 1, cnt_experiments, n, p ,cnt_alg+1, cnt_algorithms,
+                        cnt_dataset + 1, cnt_data_sets, cnt_experiment + 1, cnt_experiments, n, p, cnt_alg + 1,
+                        cnt_algorithms,
                         i + 1, num_starts), end='')
 
                     # Construct the algorithm
@@ -184,18 +184,16 @@ def experiment_speed_probabilistic(output='./out/experiment_probabilistic_p1.csv
 
 def experiment_speed_probabilistic_big(output='./out/experiment_probabilistic_big.csv'):
     experiments = [
-                  (1000, 2),
-                  (1000, 5),
-                  (1000, 10),
-                  (1000, 20)
-                   ]
+        (1000, 2),
+        (1000, 5),
+        (1000, 10),
+        (1000, 20)
+    ]
 
-    # data_sets = [(0.1, 0.0), (0.3, 0.0), (0.45, 0.0),
-    #              (0.1, 1), (0.3, 1), (0.45, 1),
-    #              (0.1, 0.4), (0.3, 0.4), (0.45, 0.4)]
-    #
+    data_sets = [(0.1, 0.0), (0.3, 0.0), (0.45, 0.0),
+                 (0.1, 1), (0.3, 1), (0.45, 1),
+                 (0.1, 0.4), (0.3, 0.4), (0.45, 0.4)]
 
-    data_sets = [(0.45, 0.4)]
     algorithms = ['FAST-LTS', 'MOEA-I', 'MOEA-QR', 'MMEA-I', 'MMEA-QR']
 
     max_steps = 100
@@ -246,8 +244,6 @@ def experiment_speed_probabilistic_big(output='./out/experiment_probabilistic_bi
                 e2_m = 0
                 e2_s = np.random.randint(low=5, high=10)
 
-                coef_scale = np.random.randint(low=5, high=50)
-
                 if np.random.rand() >= 0.5:
                     e_out_dist = 'n'
                 else:
@@ -270,16 +266,22 @@ def experiment_speed_probabilistic_big(output='./out/experiment_probabilistic_bi
                                                                     # outlying y   e ~ N(mean, std)  or ~Exp(std) 'n''e'
                                                                     e_out_dist=e_out_dist,
                                                                     # n/ln/e distribution of e for outying y
-                                                                    outlier_secon_model_ratio=outlier_second_model_ratio,
-                                                                    # ratio of outlers which are not outling in (y) but instead are form comletely different model  (if 0, data only from one model)
+                                                                    outlier_secon_model_ratio=
+                                                                    outlier_second_model_ratio,
+                                                                    # ratio of outlers which are not outling in (y)
+                                                                    # but instead are form comletely different model
+                                                                    # (if 0, data only from one model)
                                                                     # coeff_scale=coef_scale,
-                                                                    # random vector of regression coefficients c \in { (-coeff_scale, coeff_cale)^p } \ 0  , so that yi = c xi.T + e
+                                                                    # random vector of regression coefficients
+                                                                    # c \in { (-coeff_scale, coeff_cale)^p } \ 0  ,
+                                                                    # so that yi = c xi.T + e
                                                                     mod2_x_ms=(x2_m, x2_s),
                                                                     mod2_e_ms=(e2_m, e2_s))
 
                 for cnt_alg, alg in enumerate(algorithms):  # on each algorithm
                     print('running...dataset[{}/{}] experiment[{}/{}]({}x{}) algorithm[{}/{}] for[{}/{}] '.format(
-                        cnt_dataset + 1, cnt_data_sets, cnt_experiment + 1, cnt_experiments, n, p ,cnt_alg+1, cnt_algorithms,
+                        cnt_dataset + 1, cnt_data_sets, cnt_experiment + 1, cnt_experiments, n, p, cnt_alg + 1,
+                        cnt_algorithms,
                         i + 1, num_starts), end='')
 
                     # Construct the algorithm
@@ -323,6 +325,181 @@ def experiment_speed_probabilistic_big(output='./out/experiment_probabilistic_bi
 
                     res = res.append(pd.Series([alg, n, p, outlier_ratio, outlier_second_model_ratio, rss, iters, time,
                                                 cos_sim, intercept_diff, l2_dist, global_min, intercept, lts_h_size,
+                                                max_steps, leverage_ratio], index=res.columns), ignore_index=True)
+
+                    # save experiments to file [prevent loosing data on failure]
+                    res.to_csv(output)
+
+
+# 'BAB', 'MOEA-QR-BAB', 'MOEA-QR-BSA', 'BSA', 'EXH']
+
+def fit_algorithm_exact(alg, intercept, X, y, h_size, num_starts=100, max_steps=500):
+    if alg == 'BAB':
+        # BAB
+        lts = exact.LTSRegressorExactCPP(use_intercept=intercept, algorithm='bab', calculation='inv')
+        lts.fit(X, y, h_size=h_size)
+        return lts
+
+    if alg == 'MOEA-QR-BAB':
+        # MOEA-QR
+        lts = feasible.LTSRegressorFeasibleCPP(num_starts=num_starts, max_steps=max_steps, use_intercept=intercept,
+                                               algorithm='moea', calculation='qr')
+        lts.fit(X, y, h_size=h_size)
+        index_subset = lts.h_subset_
+
+        # BAB
+        lts = exact.LTSRegressorExactCPP(use_intercept=intercept, algorithm='bab', calculation='inv')
+        lts.fit(X, y, index_subset=index_subset)
+        return lts
+
+    if alg == 'MOEA-QR-BSA':
+        # MOEA-QR
+        lts = feasible.LTSRegressorFeasibleCPP(num_starts=num_starts, max_steps=max_steps, use_intercept=intercept,
+                                               algorithm='moea', calculation='qr')
+        lts.fit(X, y, h_size=h_size)
+        index_subset = lts.h_subset_
+
+        # BSA
+        lts = exact.LTSRegressorExactCPP(use_intercept=intercept, algorithm='bsa', calculation='inv')
+        lts.fit(X, y, index_subset=index_subset, h_size=h_size)
+        return lts
+
+    if alg == 'BSA':
+        # BSA
+        lts = exact.LTSRegressorExactCPP(use_intercept=intercept, algorithm='bsa', calculation='inv')
+        lts.fit(X, y, h_size=h_size)
+        return lts
+
+    if alg == 'EXACT':
+        # EXH
+        lts = exact.LTSRegressorExactCPP(use_intercept=intercept, algorithm='exa', calculation='inv')
+        lts.fit(X, y, h_size=h_size)
+        return lts
+
+
+def experiment_speed_exact(output='./out/experiment_exact.csv'):
+    experiments = [
+        (15, 4),
+        (20, 3),
+        (20, 4),
+        (25, 3),
+        (30, 2),
+        (30, 3)
+    ]
+
+    data_sets = [(0.1, 0.0), (0.3, 0.0), (0.45, 0.0),
+                 (0.1, 1), (0.3, 1), (0.45, 1),
+                 (0.1, 0.4), (0.3, 0.4), (0.45, 0.4)]
+
+    algorithms = ['BAB', 'MOEA-QR-BAB', 'MOEA-QR-BSA', 'BSA', 'EXACT']
+
+    probabilistic_starts = 500
+    probabilistic_steps = 500
+
+    max_steps = 100
+    intercept = True
+    cnt_experiments = len(experiments)
+    cnt_data_sets = len(data_sets)
+    cnt_algorithms = len(algorithms)
+    num_starts = 100
+    h_size = 'default'
+    leverage_ratio = 0.2
+
+    res = pd.DataFrame(columns=['algorithm', 'n', 'p', 'out', 'out_2model',
+                                'rss', 'iter', 'time', 'intercept', 'h_size', 'max_steps',
+                                'leverage_ratio'])
+
+    print('starting experiments [{}] ...'.format(cnt_experiments))
+
+    for cnt_experiment, experiment in enumerate(experiments):  # run all experiments
+
+        for cnt_dataset, dataset in enumerate(data_sets):  # for all data sets
+
+            for i in range(num_starts):  # generate the data 100 times
+
+                # MODEL
+                # model X ~ N(m,s)
+                x_m = 0
+                x_s = 10
+
+                # errors e~N(m,s)
+                e_m = 0
+                e_s = np.random.randint(low=1, high=10)
+
+                # errors outliers e~N(m,s) or e~Exp(s)
+                e_out_m = np.random.randint(low=-50, high=50)
+                e_out_s = np.random.randint(low=50, high=200)
+
+                # leverage points
+                x_lav_m = np.random.randint(low=10, high=50)
+                x_lav_s = np.random.randint(low=10, high=50)
+
+                # SECOND MODEL
+                # second model X ~ N(m,s)
+                x2_m = np.random.randint(low=-10, high=10)
+                x2_s = 10
+
+                # second model errors e~N(m,s)
+                e2_m = 0
+                e2_s = np.random.randint(low=5, high=10)
+
+                if np.random.rand() >= 0.5:
+                    e_out_dist = 'n'
+                else:
+                    e_out_dist = 'e'
+
+                outlier_ratio, outlier_second_model_ratio = dataset
+
+                n, p = experiment
+
+                X, y, X_clean, y_clean = generator.generate_dataset(n, p,  # n x p
+                                                                    outlier_ratio=outlier_ratio,
+                                                                    # ratio of the outliers in the whole data set
+                                                                    leverage_ratio=leverage_ratio,
+                                                                    # ratio of data outlying in x , in the whole dataset
+                                                                    x_ms=(x_m, x_s),  # not outlying x  ~ N(mean, sd)
+                                                                    x_lav_ms=(x_lav_m, x_lav_s),
+                                                                    # outlying x  ~ N(mean, sd)
+                                                                    e_ms=(e_m, e_s),  # not outlying y  e ~ N(mean, sd)
+                                                                    e_out_ms=(e_out_m, e_out_s),
+                                                                    # outlying y   e ~ N(mean, std)  or ~Exp(std) 'n''e'
+                                                                    e_out_dist=e_out_dist,
+                                                                    # n/ln/e distribution of e for outlying y
+                                                                    outlier_secon_model_ratio=outlier_second_model_ratio,
+                                                                    # ratio of outliers which are not outlying in (y)
+                                                                    # but instead are form completely different model
+                                                                    # (if 0, data only from one model)
+                                                                    # coeff_scale=coef_scale,
+                                                                    # random vector of regression coefficients
+                                                                    # c \in { (-coeff_scale, coeff_cale)^p } \ 0,
+                                                                    # so that yi = c xi.T + e
+                                                                    mod2_x_ms=(x2_m, x2_s),
+                                                                    mod2_e_ms=(e2_m, e2_s))
+
+                for cnt_alg, alg in enumerate(algorithms):  # on each algorithm
+                    print('running...dataset[{}/{}] experiment[{}/{}]({}x{}) algorithm[{}/{}] for[{}/{}] '.format(
+                        cnt_dataset + 1, cnt_data_sets, cnt_experiment + 1, cnt_experiments, n, p, cnt_alg + 1,
+                        cnt_algorithms,
+                        i + 1, num_starts), end='')
+
+                    # Construct the algorithm
+                    lts = fit_algorithm_exact(alg, intercept=intercept, X=X, y=y, h_size=h_size,
+                                              num_starts=probabilistic_starts,
+                                              max_steps=probabilistic_steps)
+
+                    iters = lts.n_iter_
+                    time = lts.time_total_
+                    rss = lts.rss_
+                    subset = lts.h_subset_
+                    subset.sort()
+                    subset = np.asarray(subset)
+
+                    lts_h_size = subset.shape[0]
+
+                    print('t: {0:.2f}'.format(time))
+
+                    res = res.append(pd.Series([alg, n, p, outlier_ratio, outlier_second_model_ratio, rss, iters, time,
+                                                intercept, lts_h_size,
                                                 max_steps, leverage_ratio], index=res.columns), ignore_index=True)
 
                     # save experiments to file [prevent loosing data on failure]
