@@ -127,7 +127,7 @@ def generate_dataset_simple(n, p, outlier_ratio=0.3):
                                               # n/ln/e distribution of e for outying y
                                               outlier_secon_model_ratio=outlier_second_model_ratio,
                                               # ratio of outlers which are not outling in (y) but instead are form comletely different model  (if 0, data only from one model)
-                                              coeff_scale=coef_scale,
+                                              # coeff_scale=coef_scale,
                                               # random vector of regression coefficients c \in { (-coeff_scale, coeff_cale)^p } \ 0  , so that yi = c xi.T + e
                                               mod2_x_ms=(x2_m, x2_s),
                                               mod2_e_ms=(e2_m, e2_s))
@@ -144,7 +144,7 @@ def generate_dataset(n, p,  # X \in R^{n x p}
                      e_out_ms=(-1, 400),  # outlying y   e ~ N(mean, std)  or  ~Exp(std)   'n'   'e'
                      e_out_dist='n',  # n/ln/e distribution of e for outying y
                      outlier_secon_model_ratio=0.5, # ratio of outlers which are not outling in (y) but instead are form comletely different model  (if 0, data only from one model)
-                     coeff_scale=50, # random vector of regression coefficients c \in { (-coeff_scale, coeff_cale)^p } \ 0  , so that yi = c xi.T + e
+                     # coeff_scale=50, # random vector of regression coefficients c \in { (-coeff_scale, coeff_cale)^p } \ 0  , so that yi = c xi.T + e
                      mod2_x_ms=(0, 10),  # second model  x~N(m,s)
                      mod2_e_ms=(0, 1)):  # second model e~N(m,s)
 
@@ -205,10 +205,12 @@ def generate_dataset(n, p,  # X \in R^{n x p}
     # Create the outliers of 1st type (second model)  (( this can be easily modified to create d different models ... )))
 
     # first, generate random coefficients
-    coefficients = np.random.randint(low=1, high=coeff_scale, size=p)
-    for i in coefficients.shape:
+    coefficients = np.random.rand(p)
+    for i in range(coefficients.shape[0]):
+        if coefficients[i] < 0.001:
+            coefficients[i] = coefficients[i] + 0.1
         if np.random.rand() >= 0.5:
-            coefficients[i - 1] = -1 * coefficients[i - 1]
+            coefficients[i] = -1 * coefficients[i]
 
     # second, multiply columns of X with those coefficients
     X_dirty_model2_tmp = np.multiply(coefficients, X_dirty_model2)

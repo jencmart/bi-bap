@@ -69,7 +69,9 @@ if __name__ == '__main__':
     # experiments_probabilistic.experiment_speed_probabilistic('./out/experiment_probabilistic_p3.csv')
     # test_feasible_solution_numpy_starting_subset()
     # test_feasible_solution_cpp()
-    test_exact_numpy()
+    # test_exact_numpy()
+    experiments_probabilistic.experiment_speed_probabilistic_big('./out/experiment_probabilistic_big_p2.csv')
+
     #feasible_test.test_fast_and_feasible(n=28, p=3)
     # test_feasible_solution_numpy()
     #lts_speed.fast_lts_cpp_big()
