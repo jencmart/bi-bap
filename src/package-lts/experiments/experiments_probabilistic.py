@@ -387,6 +387,8 @@ def experiment_speed_exact(output='./out/experiment_exact.csv'):
         (30, 3)
     ]
 
+    # konec - experiment[4/6](25x3) dataset[3/9]  algorithm[3/5] for[75/100] t: 6.15
+    # tj. zacal jsem na desktopu od 25x3
     data_sets = [(0.1, 0.0), (0.3, 0.0), (0.45, 0.0),
                  (0.1, 1), (0.3, 1), (0.45, 1),
                  (0.1, 0.4), (0.3, 0.4), (0.45, 0.4)]

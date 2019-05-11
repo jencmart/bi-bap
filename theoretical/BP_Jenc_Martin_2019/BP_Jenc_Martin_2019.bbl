@@ -7,11 +7,18 @@
   \urlstyle{rm}\Url}\fi
 \providecommand{\eprint}[2][]{\biburl{#2}}
 
+\bibitem{mccullagh2018generalized}
+McCullagh, P. \emph{Generalized linear models}. Routledge, 2018.
+
 \bibitem{rouss:1990}
 Rousseeuw, P.; C.~van Zomeren, B. Unmasking Multivariate Outliers and Leverage
   Points. \emph{Journal of The American Statistical Association - J AMER
   STATIST ASSN}, volume~85, 06 1990: pp. 633--639,
   \doi{10.1080/01621459.1990.10474920}.
+
+\bibitem{hampel1986robust}
+Hampel, F.~R.; Ronchetti, E.~M.; et al. \emph{Robust statistics}. Wiley Online
+  Library, 1986.
 
 \bibitem{rouss:1986}
 Massart, D.~L.; Kaufman, L.; et al. Least median of squares: a robust method
@@ -73,6 +80,11 @@ Anderson, E.; Bai, Z.; et al. \emph{{LAPACK} Users' Guide}. Philadelphia, PA:
 Krishnamoorthy, A.; Menon, D. Matrix inversion using Cholesky decomposition. In
   \emph{2013 Signal Processing: Algorithms, Architectures, Arrangements, and
   Applications (SPA)}, IEEE, 2013, pp. 70--72.
+
+\bibitem{businger1965linear}
+Businger, P.; Golub, G.~H. Linear least squares solutions by Householder
+  transformations. \emph{Numerische Mathematik}, volume~7, no.~3, 1965: pp.
+  269--276.
 
 \bibitem{hammarling2008updatingqr}
 Hammarling, S.; Lucas, C. Updating the QR factorization and the least squares

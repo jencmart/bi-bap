@@ -1,60 +1,50 @@
 \chapter{Algorithms}
 
-In the previous chapter, we cover the theoretical background required to implement algorithms that are in this chapter. We introduced the discrete version of the LTS objective function which minimum is equivalent to the continuous one. Finding the minimum of this function requires to find the correct $h$ subset and then calculate the estimate of regression coefficients $\vec{w}$. To achieve this, we need to examine all $h$ subsets. The exhaustive approach fails due to the exponential size of $Q^{(n,h)}$. So what are the possibilities? 
+In the previous chapter, we have covered the theoretical background required to implement algorithms that are presented in this chapter. We have introduced the discrete version of the LTS objective function whose minimum is equivalent to the continuous one. Finding the minimum of this function requires to find the particular $h$-element subset and then calculate the estimate of the corresponding regression coefficients $\vec{w}$. To achieve this, we need to examine all $h$-element subsets. The exhaustive approach fails due to the exponential size of $Q^{(n,h)}$.
 
 \subsection{First attempts}
-Initial algorithms were based on iterative removal data samples whose residuum had the highest value based on OLS fit on the whole dataset. Such attempts are known to be flawed \cite{hawkins:1994} because the initial OLS fit can be already profoundly affected by outliers and we may remove data samples which represent the actual model.
+First known algorithms were based on iterative removal data samples whose residuum had the highest value based on the OLS estimate on the whole dataset. Such attempts are known to be flawed~\cite{hawkins:1994} because the initial OLS fit can be already profoundly affected by outliers and the algorithm may remove data samples which represent the actual model.
 
-Other algorithms were based purely on a random approach. On such algorithm is Random solution algorithm \cite{bai2003random} which randomly selects $l$ of $h$ subsets and subsequently compute OLS fit on each of them and chooses fit with a minimum value of the objective function.  Such approach is straightforward, but the probability of selecting at least one subset from $l$ subsets which don't contain outliers thus has a chance of producing good result tends to zero for an increasing number of data samples $n$ as we'll describe in detail in section~\ref{section:random:h:samples}.
+Other algorithms were based purely on a random approach. One such algorithm is the Random solution algorithm~\cite{bai2003random} which randomly selects $k$ $h$-element subsets and subsequently compute the OLS estimate on each of them and chooses the estimate with a minimum value of the objective function.  Such approach is straightforward, but the probability of selecting at least one $h$-element out of $k$ subsets which does not contain outliers thus has a chance of producing good result tends to zero for an increasing number of data samples $n$ as we describe in detail in Section~\ref{section:random:h:samples}.
 
-Another very similar algorithm called Resampling algorithm introduced in \cite{rousseeuw1987robust}. It selects vectors from $Q^{(n,p+1)}$ instead of $Q^{(n, h)}$. This minor tweak has a higher chance to succeed. Mainly because the probability of selecting $l$ subsets of size $p+1$ thus it is independent of $n$ gives the nonzero probability of selecting at least one subset such that it does not include outliers (see section~\ref{section:random:p:samples} for more details). Besides that the number of vectors in this set is significantly lower than in $Q^{(n, h)}$ (at least if $h$ is conservatively chosen so that $h = [(n/2] + [(p+1)/2]$).
+Another very similar algorithm called Resampling algorithm introduced in~\cite{rousseeuw1987robust}. It selects vectors from $Q^{(n,p+1)}$ instead of $Q^{(n, h)}$. This minor tweak has a higher chance to succeed. Mainly because the probability of selecting $k$ $h$-element subsets of size $p+1$ gives the nonzero probability of selecting at least one $h$-element subset not containing outliers (see Section~\ref{section:random:p:samples} for more details). Besides that, the number of vectors in this set is significantly lower than in $Q^{(n, h)}$ (at least if $h$ is conservatively chosen so that $h = [(n/2] + [(p+1)/2]$).
  
 \subsection{Strong and weak necessary conditions}
-Generating all possible $h$ subsets is computationally exhaustive and relying on randomly generating  ``good'' $h$-element subsets does not lead to reliable results. So what are our options? In \cite{hawkins1999improved} two criteria called \defterm{weak necessary conditions} and \defterm{strong necessary conditions} are introduced. They state necessary properties which some $h$ subset must satisfy to be subset which leads to the global optimum of the LTS objective function. Let us introduce those two necessary conditions. For that, it is convenient not only to label a $h$ subset of \defterm{non-trimmed} observations but also the complementary subset of not used observations. We'll refer to this complementary subset as to \defterm{trimmed} subset.
+Generating all possible $h$-element subsets is computationally exhaustive and relying on randomly selecting  ``good'' $h$-element subsets does not lead to reliable results. So what are our options? In~\cite{hawkins1999improved} two criteria called a \defterm{weak necessary condition} and a \defterm{strong necessary condition} are introduced. They state necessary properties which some $h$-element subset must satisfy to be a subset which leads to the global optimum of the LTS objective function. Let us introduce those two necessary conditions. For that, it is convenient not only to label a $h$-element subset of \defterm{non-trimmed} observations but also the complementary subset of trimmed observations. We refer to this complementary subset as to \defterm{trimmed} subset.
 
 %%%%%%%%%%% STRONG CONDITION %%%%%%%%%%%%%
 \begin{definition} \label{strong_condition}
- A $h$-element subset corresponding to $\vec{m} \in Q^{(n, h)}$ satisfies  the \defterm{strong necessary condition} if for any vector $\vec{m_{swap}}$ which differs from $\vec{m}$ only by swapping an $1$ with one $0$, we get  $\oflts(\vec{m}) \leq \oflts(\vec{m_{swap}})$. Thus the value of discrete LTS objective function cannot be reduced by swapping one non-trimmed observation with one trimmed observation.
+ A $h$-element subset corresponding to $\vec{m} \in Q^{(n, h)}$ satisfies  the \defterm{strong necessary condition} if for any vector $\vec{m_{swap}}$ which differs from $\vec{m}$ only by swapping one $1$ with one $0$, we get  $\oflts(\vec{m}) \leq \oflts(\vec{m_{swap}})$. In words, the value of the discrete LTS objective function cannot be reduced by swapping one non-trimmed observation with one trimmed observation.
 \end{definition}
 
-Based on this fact an algorithm can be created. We'll discuss it in detail in section~\ref{section_feasible_solution}.
+Based on this fact an algorithm can be created. We'll discuss it in detail in Section~\ref{section_feasible_solution}.
 
 %%%%%%%%%%% WEAK CONDITION %%%%%%%%%%%%%
-The second necessary condition is named \defterm{weak necessary condition} 
-
 \begin{definition}
-A $h$-element subset corresponding to $\vec{m} \in Q^{(n, h)}$ satisfies  the \defterm{strong necessary condition} if 
-$r_i^2(\vec{\hat{w}^{(OLS, \vec{M}\vec{X, \vec{M}\vec{y})} } })$ for all trimmed observation is greater of equal to the greatest non-trimmed squared residuum $r_j^2(\vec{\hat{w}^{(OLS, \vec{M}\vec{X, \vec{M}\vec{y})} }})$.
+An $h$-element subset corresponding to $\vec{m} \in Q^{(n, h)}$ satisfies the \defterm{weak necessary condition} if 
+$r_i^2(\vec{\hat{w}^{(OLS, \vec{M}\vec{X, \vec{M}\vec{y})} } })$ for all trimmed observation is greater or equal to the greatest non-trimmed squared residuum $r_j^2(\vec{\hat{w}^{(OLS, \vec{M}\vec{X, \vec{M}\vec{y})} }})$.
 \end{definition}    
-Again, based on this criteria an algorithm can be created. The corollary of this criteria together with proof can be found in  section~\ref{section_fast_lts}. 
-
-% %%%%%%    WEAK AND STRONG CONDITIONS LEMMA    %%%%%%%%%
-The interesting consequence which we'll use later gives us the following lemma.
+Again, based on this criteria an algorithm can be created. Interesting consequence which we use later gives us the following lemma.
 
 \begin{lemma} \label{lemma_conditions}
-    The strong necessary condition is not satisfied unless the weak necessary condition is satisfied. Thus if a strong condition is satisfied then weak is also. 
+    The strong necessary condition is not satisfied unless the weak necessary condition is satisfied. Thus, if a strong condition is satisfied then weak is too. 
 \end{lemma}
 
 \begin{proof}
-		We make proof by contradiction. Let us assume that we have $\vec{\hat{w}^{(OLS, \vec{M}\vec{X, \vec{M}\vec{y})} }}$ where $\vec{m} \in Q^{(n, h)}$ for which strong necessary condition is satisfied, but the weak necessary condition is not. That means there exists $\vec{x_i}$ with $y_i$ from non-trimmed subset and $\vec{x_j}$ and $y_j$ from trimmed subset such that
+		Let us assume that we have some $\vec{\hat{w}^{(OLS, \vec{M}\vec{X, \vec{M}\vec{y})} }}$ with $\vec{m} \in Q^{(n, h)}$ for which the strong necessary condition is satisfied, but the weak necessary condition is not. That means there exists $\vec{x_i}$ with $y_i$ from the non-trimmed subset and $\vec{x_j}$ and $y_j$ from the trimmed subset such that
 		\begin{equation*} 
 			r_j^2(\vec{\hat{w}^{(OLS, \vec{M}\vec{X, \vec{M}\vec{y})} }}) < r_i^2(\vec{\hat{w}^{(OLS, \vec{M}\vec{X, \vec{M}\vec{y})} }}).
 	\end{equation*}
 		 Thus 
     \begin{equation} 
-        \oflts(\vec{m}) > \oflts(\vec{m}) + r_j^2 - r_i^2  
+        \oflts(\vec{m}) > \oflts(\vec{m}) + r_j^2(\vec{\hat{w}^{(OLS, \vec{M}\vec{X, \vec{M}\vec{y})} }}) - r_i^2(\vec{\hat{w}^{(OLS, \vec{M}\vec{X, \vec{M}\vec{y})} }})  
     \end{equation}
-Now we need to show that $\vec{m_{swap}}$ vector that is created by swapping $j$th observation from trimmed subset with $i$th observation from non-trimmed subset leads to 
+Now we need to show that $\vec{m_{swap}}$ vector that is created by swapping $j$th observation from the trimmed subset with $i$th observation from the non-trimmed subset leads to 
     \begin{equation} 
-      \oflts(\vec{m}) + r_j^2 - r_i^2  \geq \oflts(\vec{m_{swap}}).
+      \oflts(\vec{m}) + r_j^2(\vec{\hat{w}^{(OLS, \vec{M}\vec{X, \vec{M}\vec{y})} }}) - r_i^2(\vec{\hat{w}^{(OLS, \vec{M}\vec{X, \vec{M}\vec{y})} }})  \geq \oflts(\vec{m_{swap}}).
     \end{equation}
-That is true because the value of $\oflts(\vec{m_{swap}})$  is minimum on the given subset of observations. That is, of course, contradiction with our assumption which says that strong necessary condition is already satisfied. 
+That is true because the value of $\oflts(\vec{m_{swap}})$ is the minimum on the given subset of observations. That is, of course, a contradiction with our assumption which says that the strong necessary condition is satisfied. 
 \end{proof}
-
-Now we have covered all the necessary theoretical background, and it is time to introduce currently known algorithms for computing the LTS estimate.
-
-
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -64,20 +54,20 @@ Now we have covered all the necessary theoretical background, and it is time to 
 \section{Computing OLS}
 In this section, we describe a few of many methods that can be used to obtain  $\vec{\hat{w}}^{(OLS,n)}$. Those methods are parts of the algorithms used to calculate the LTS estimate. 
 
-In the following algorithms, we describe its time complexity. Because matrix multiplication is the fundamental part of all the following algorithms, it is, therefore, appropriate to mention a few facts about the time complexity of matrix multiplication. 
+In the following algorithms, we describe its time complexity. Because the matrix multiplication is the fundamental part of all the following algorithms, it is, therefore, appropriate to mention a few facts about the time complexity of the matrix multiplication. 
 
-There are multiple algorithms for matrix multiplication, for example:
+There are multiple algorithms for the multiplication of $n \times n$ matrices, for example:
 \begin{itemize}
   \item Naive algorithm; its time complexity is $\mathcal{O}(n^{3})$.
-  \item Strassen algorithm; its time complexity is $\mathcal{O} (n^{2.8074})$ \cite{strassen1969gaussian}. 
-  \item Coppersmith-Winograd; its time complexity is $\mathcal {O}(n^{2.375477}) \cite{coppersmith1990matrix}$
+  \item Strassen algorithm; its time complexity is $\mathcal{O} (n^{2.8074})$~\cite{strassen1969gaussian}. 
+  \item Coppersmith-Winograd; its time complexity is $\mathcal {O}(n^{2.375477})~\cite{coppersmith1990matrix}$
 \end{itemize}
 
-In practice, however, the naive algorithm is usually used. Even though some of those algorithms have been efficiently implemented and are known to be numerically stable (primarily variations of Strassen algorithm), their error bound is weaker than in case of the naive algorithm. For this reason, they are not used even when they might improve performance \cite{ballard2015improving}.
+In practice, however, the naive algorithm is usually used. Even though some of those algorithms have been efficiently implemented and are known to be numerically stable (primarily variations of Strassen algorithm), their error bound is weaker than in the case of the naive algorithm~\cite{ballard2015improving}. For this reason, they are not used even when they might improve performance.
 
-Moreover current implementations of the linear algebra namely LAPACK and more importantly BLAS level 3 routines implementing matrix-matrix multiplication which are widely used in such linear algebra software implement naive matrix-matrix multiplication \cite{laug}. 
+Moreover, currently widely used linear algebra software libraries such as LAPACK uses Basic Linear Algebra Subprograms (BLAS) low-level routines which implement naive matrix-matrix multiplication~\cite{laug}.
 
-For that reason we assume in this work that matrix multiplication is  $\mathcal{O}(n^{3})$. For not square matrices $ \vec{A} \in \mathbb{R}^{m \times n}, \vec{B} \in \mathbb{R}^{n\times p}$ it is then$ \mathcal{O}(mnp)$.
+For that reason we assume in this work that the matrix multiplication is  $\mathcal{O}(n^{3})$. For not square matrices $ \vec{A} \in \mathbb{R}^{m \times n}, \vec{B} \in \mathbb{R}^{n\times p}$ it is then $\mathcal{O}(mnp)$.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -85,35 +75,35 @@ For that reason we assume in this work that matrix multiplication is  $\mathcal{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Computation using a matrix inversion}
-Solving OLS using matrix inversion can be done as follows:
+Calculating the OLS estimate using the matrix inversion can be done as follows:
 
 \begin{enumerate}
  \item Compute  $\vec{A} = \vec{X}^T\vec{X}$ and $\vec{B} = \vec{X}\vec{y}$.
-  \item Find inversion of $\vec{A}$.
+  \item Find the inversion of $\vec{A}$.
   \item Multiply $\vec{A}^{-1}\vec{B}$.
 \end{enumerate}
 
 \begin{observation} \label{time:complexity:ols:inversion}
-    Time complexity of computing the OLS  estimate on $\vec{X} \in \mathbb{R}^{n \times p}$ and $\vec{y}  \in \mathbb{R}^{n \times 1}$ using matrix inversion is $O(p^2n)$ .
+    Time complexity of computing the OLS  estimate on $\vec{X} \in \mathbb{R}^{n \times p}$ and $\vec{y}  \in \mathbb{R}^{n \times 1}$ using the matrix inversion is $O(p^2n)$ .
 \end{observation}
 
 \begin{proof}
-First, we compute 
+First, we compute the
 $\vec{A} = \vec{X^T}\vec{X}$  and
 $\vec{B} = \vec{X^T}\vec{y}$. 
 That gives us $\mathcal{O}(p^2n + pn)$.
-Next, we compute inversion  $\m{C} = \m{A}^{-1}$ which gives us $\mathcal{O}(p^3)$.
+Next, we compute inversion $\m{C} = \m{A}^{-1}$ which gives us $\mathcal{O}(p^3)$.
 Finally, we compute
 $ \vec{\hat{w}}^{(OLS,n)} = \m{C}\m{B}$ which is $\mathcal{O}(p^2)$. 
-Together we get $ \mathcal{O}(p^2n + pn + p^3 + p^2)$.
+Altogether, we get $ \mathcal{O}(p^2n + pn + p^3 + p^2)$;
 $p^2n$ and $p^3$ asymptotically dominates over the rest so 
 \begin{equation}
 \mathcal{O}(p^2n + pn + p^3 + p^2) \sim \mathcal{O}(p^2n + p^3).
 \end{equation}
-Moreover if we assume that $n \ge p$ and usually even $n \gg p$  we get $\mathcal{O}(p^2n + p^3) \sim \mathcal{O}(p^2n)$.
+Moreover, if we assume that $n \ge p$, we get $\mathcal{O}(p^2n + p^3) \sim \mathcal{O}(p^2n)$.
 \end{proof}
 
-Computing OLS estimate using matrix inversion is possible, however in most cases not used in practice because of the low numerical stability computing matrix inversion.
+% Computing OLS estimate using matrix inversion is possible, however in most cases not used in practice because of the low numerical stability computing matrix inversion.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -122,15 +112,13 @@ Computing OLS estimate using matrix inversion is possible, however in most cases
 
 \subsection{Computation using the Cholesky decomposition}
 
-\begin{definition}
-    Let $\vec{A} \in \mathbb{R}^{n \times n}$ be an symmetric positive definite matrix. Then it is possible to find lower triangular matrix $L$ so that 
-    \begin{equation}
-        \vec{A} = \vec{L}\vec{L^T}
-    \end{equation}
-    We call this decomposition as \defterm{Cholesky factorization} (sometimes also  \defterm{Cholesky decomposition})
-\end{definition}
+Let $\vec{A} \in \mathbb{R}^{n \times n}$ be a symmetric positive definite matrix. Then it is possible to find lower triangular matrix $L$ so that 
+\begin{equation}
+    \vec{A} = \vec{L}\vec{L^T}
+\end{equation}
+We call this decomposition \defterm{Cholesky factorization} (sometimes also  \defterm{Cholesky decomposition})
     
-If we look at our problem of finding a solution to 
+If we look at our problem of finding a solution of 
 \begin{equation}
     \vec{X}^T\vec{X}\vec{w} = \vec{X}^T\vec{y},
 \end{equation}
@@ -138,13 +126,13 @@ we can easily rewrite it as
 \begin{equation}
     \vec{Z}\vec{w} = \vec{b}
 \end{equation}
-where $\vec{Z} = \vec{X}^T\vec{X}$ is symmetric positive definite matrix and $\vec{b} = \vec{X}^T\vec{y} $. Because $\vec{Z}$ can be factorized as $\vec{L}\vec{L^T}$ the solution can be found easily by substitution
+where $\vec{Z} = \vec{X}^T\vec{X}$ is a symmetric positive definite matrix and $\vec{b} = \vec{X}^T\vec{y} $. Because $\vec{Z}$ can be factorized as $\vec{L}\vec{L^T}$ the solution can be found easily by substitution
 
 \begin{align}
     \vec{L}\vec{d} = \vec{b} \\
     \vec{L}^T\vec{w} = \vec{d},
 \end{align}
-where $\vec{d}$ is solved by forward substitution and $\vec{w}$ is then solved by backward substitution which ten represents $\vec{\hat{w}}^{(OLS,n)}$ estimate.
+where $\vec{d}$ and $\vec{w}$ can be obtained by forward and backward substitution. Solution of $\vec{w}$ then represents $\vec{\hat{w}}^{(OLS,n)}$ estimate.
 
 %%%%%%% C H O L E S K Y     A L G O R I T H M %%%%%%%%%%%%%%
 
@@ -162,15 +150,15 @@ So the algorithm for solving OLS using Cholesky factorization goes as follows:
 
 \begin{proof}
     First step requires two matrix multiplication $\vec{X}^T\vec{X}$ which is $\mathcal{O}(np^2)$ and  $\vec{X}^T\vec{y}$ which is $\mathcal{O}(np)$.
-    Second step represents computing Cholesky factorization. This can be done in $\mathcal{O}(\frac{1}{3}p^3)$ \cite{krishnamoorthy2013matrix}
-    In the third and fourth step, we are solving triangular systems both of them require  $\mathcal{O}(\frac{1}{2}p^2)$, so together $\mathcal{O}(p^2)$.
+    Second step represents computing Cholesky factorization. This can be done in $\mathcal{O}(\frac{1}{3}p^3)$~\cite{krishnamoorthy2013matrix}.
+    In the third and fourth step, we are solving triangular linear systems; both of them require  $\mathcal{O}(\frac{1}{2}p^2)$.
 
-    Putting all steps together we get  
+    Putting all the steps together we get  
 
     \begin{equation} 
         \mathcal{O}(np^2 + np + \frac{1}{3}p^3 + p^2)
     \end{equation}
-    and because we assume $n \geq p$ and most usually  $n \gg p$ then multiplication $\vec{X}^T\vec{X}$ asymptotically dominates over the rest so we get $\mathcal{O}(p^2n)$.
+    and because we assume $n \geq p$ then the multiplication $\vec{X}^T\vec{X}$ asymptotically dominates over the rest so we get $\mathcal{O}(p^2n)$.
 \end{proof}
 
 % \begin{note}
@@ -180,7 +168,8 @@ So the algorithm for solving OLS using Cholesky factorization goes as follows:
 %     \end{equation}
 % \end{note}
 
-Computation OLS estimate using the Cholesky factorization is more numerically stable than using matrix inversion and time complexity is asymptotically similar. This approach is however not usually used in practice as well. 
+Computing the OLS estimate using the Cholesky factorization is more numerically stable than using matrix inversion and the time complexity is asymptotically similar. 
+% This approach is however not usually used in practice as well. 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -189,18 +178,18 @@ Computation OLS estimate using the Cholesky factorization is more numerically st
 
 \subsection{Computation using the QR decomposition}
 
-Let us now look on a similar method of computing OLS estimate and which does not require multiplying $\vec{X}^T\vec{X}$. 
+Let us now look on a similar method of computing the OLS estimate which does not require multiplying $\vec{X}^T\vec{X}$. 
 
-\begin{definition}
-    Let $\vec{A} \in \mathbb{R}^{n \times n}$ be any square matrix. Then it is possible to find matrices $\vec{Q}$ and $\vec{R}$ so that 
 
-    \begin{equation}
-        \vec{A} = \vec{Q}\vec{R},
-    \end{equation}
-    where $\vec{Q} \in \mathbb{R}^{n \times n}$ is orthogonal matrix and $\vec{R} \in \mathbb{R}^{n \times n}$ is upper triangular matrix. 
+Let $\vec{A} \in \mathbb{R}^{n \times n}$ be square matrix. Then exists matrices $\vec{Q}$ and $\vec{R}$ so that 
+
+\begin{equation}
+    \vec{A} = \vec{Q}\vec{R},
+\end{equation}
+where $\vec{Q} \in \mathbb{R}^{n \times n}$ is an orthogonal matrix and $\vec{R} \in \mathbb{R}^{n \times n}$ is an upper triangular matrix. 
 This decomposition is known as \defterm{QR decomposition}.
-\end{definition}
-If matrix $\vec{A} \in \mathbb{R}^{m \times n}$ thus is not square, then decomposition can be found as
+
+If matrix $\vec{A} \in \mathbb{R}^{m \times n}$ is not square, then decomposition can be found as
 
 \begin{equation} \label{matrixq1r1}
     \vec{A} = \vec{Q}\vec{R} = \vec{Q} \begin{bmatrix}
@@ -215,29 +204,33 @@ If matrix $\vec{A} \in \mathbb{R}^{m \times n}$ thus is not square, then decompo
     \end{bmatrix} 
     = \vec{Q_1} \vec{R_1}
 \end{equation}
-    Where $\vec{Q} \in \mathbb{R}^{m \times m}$ is orthogonal matrix, $\vec{R_1} \in \mathbb{R}^{n \times n} $ is upper triangular matrix, $\vec{0} \in \mathbb{R}^{ (m-n) \times n} $  is zero matrix,  $\vec{Q_1} \in \mathbb{R}^{n \times n}$ is matrix with orthogonal columns and  $\vec{Q_2} \in \mathbb{R}^{(m-n) \times n}$ is also matrix with orthogonal columns.
+    Where $\vec{Q} \in \mathbb{R}^{m \times m}$ is an orthogonal matrix, $\vec{R_1} \in \mathbb{R}^{n \times n} $ is upper an triangular matrix, $\vec{0} \in \mathbb{R}^{ (m-n) \times n} $  is a zero matrix and $\vec{Q_1} \in \mathbb{R}^{n \times n}$  and $\vec{Q_2} \in \mathbb{R}^{(m-n) \times n}$ are matrices with orthogonal columns.
     
-That means that  $\vec{X}$ can be factorized as
+Given a QR decomposition of $\vec{X}$
 \begin{equation}
-    \vec{X} = \vec{Q}\vec{R}.
+    \vec{X} = \vec{Q}\vec{R}
 \end{equation}
-Then
+we get
 \begin{equation}
     \vec{X}^T\vec{X} = (\vec{Q}\vec{R})^T \vec{Q}\vec{R} = \vec{R}^T\vec{Q}^T\vec{Q}\vec{R}
 \end{equation}
-and because $\vec{Q}$ is orthogonal, then $\vec{Q}^T\vec{Q} = \vec{I}$ so that
+and because $\vec{Q}$ is orthogonal, $\vec{Q}^T\vec{Q} = \vec{I}$ and so
 \begin{equation}
     \vec{X}^T\vec{X} = \vec{R}^T\vec{R}.
 \end{equation}
-Because $\vec{X} \in  \mathbb{R}^{n \times p}$ is not square matrix then as we shown $\vec{R} = \begin{bmatrix}
+Because $\vec{X} \in  \mathbb{R}^{n \times p}$ is not a square matrix then 
+$
+\vec{R} = 
+\begin{bmatrix}
     \vec{R_1} \\
     \vec{0}
-\end{bmatrix}$
-so that 
+\end{bmatrix}
+$
+and
 \begin{equation}
-    \vec{X}^T\vec{X} = \vec{R_1}^T\vec{R_1}.
+    \vec{X}^T\vec{X} = \vec{R_1}^T\vec{R_1},
 \end{equation}
- Where $\vec{R_1^T}$ is lower triangular matrix. 
+ where $\vec{R_1^T}$ is a lower triangular matrix. 
 
 Solution to
 \begin{equation}
@@ -245,62 +238,62 @@ Solution to
 \end{equation}
 is then given by 
 \begin{equation}
-    \vec{R_1}^T\vec{R_1}\vec{w} = \vec{R_1}^T\vec{Q_1}^T \vec{y}
+    \vec{R_1}^T\vec{R_1}\vec{w} = \vec{R_1}^T\vec{Q_1}^T \vec{y}.
 \end{equation}
-and because we assume $\vec{X}$ have full column rank, thus is invertible, we can simplify it to
+If we assume $\vec{X}$ have full column rank, $\vec{R_1}$ must be invertible and this equation can be simplified to
 \begin{equation}
     \vec{R_1}\vec{w} = \vec{b_1}
 \end{equation}
-where $ \vec{b_1} = \vec{Q_1}^T \vec{y}$. Because $\vec{R_1}$ is upper triangular matrix, solution of $\vec{w}$ is trivial using backward substitution.  $\vec{w}$ then represents our OLS estimate $\vec{\hat{w}}^{(OLS,n)}$.
+where $ \vec{b_1} = \vec{Q_1}^T \vec{y}$. Because $\vec{R_1}$ is upper an triangular matrix, finding the is trivial using the backward substitution. Resulting $\vec{w}$ is then the OLS estimate $\vec{\hat{w}}^{(OLS,n)}$.
 
 \begin{note}
-        We can see that Cholesky factorization  $\vec{X}^T\vec{X} = \vec{L}\vec{L}^T$ is closely connected to the QR decomposition $\vec{X} = \vec{Q_1}\vec{R_1}$ so that  
+        We can see that Cholesky factorization  $\vec{X}^T\vec{X} = \vec{L}\vec{L}^T$ is closely connected to the QR decomposition $\vec{X} = \vec{Q_1}\vec{R_1}$. Indeed, putting   
         \begin{equation} \label{qrcholesky}
-                \vec{R_1^T} = \vec{L}
+                \vec{L} = \vec{R_1^T}
             \end{equation}
+        we can get Cholesky decomposition directly from the QR decomposition.
 \end{note}
 
 %%%%%%      Q R    A L G O R I T H M      %%%%%%%%%%%%
 
-So the algorithm for solving OLS using QR decomposition can go as follows:
+The algorithm for solving the OLS using QR decomposition can go as follows:
 \begin{enumerate}
-  \item Calculate QR decomposition $\vec{X} = \vec{Q}\vec{R}^T = \vec{Q_1}\vec{R_1}^T$.
+  \item Calculate a QR decomposition $\vec{X} = \vec{Q}\vec{R}^T = \vec{Q_1}\vec{R_1}^T$.
   \item Calculate $\vec{b_1} = \vec{Q_1}^T \vec{y}$.
-  \item Solve upper triangular system $\vec{R_1}\vec{w} = \vec{b_1}$ for $\vec{w}$.
+  \item Solve upper triangular system $\vec{R_1}\vec{w} = \vec{b_1}$.
 \end{enumerate}
 
-QR factorization can be calculated in multiple ways. The most basic method is applying the Gram-Schmidt process
-to columns of matrix $\vec{X}$. This approach is not numerically stable so in practice is not used as much as two other methods. Those are \defterm{Householder transformations} and \defterm{Givens rotations}.
-The time complexity of both algorithms is similar. QR decomposition of matrix $\vec{X} \in \mathbb{R}^{n \times p}$ is 
+The QR factorization can be calculated in multiple ways. The most basic method is applying the Gram-Schmidt process to columns of the matrix $\vec{X}$. This approach is not numerically stable so in practice it is not used as much as two following methods: \defterm{Householder transformations} and \defterm{Givens rotations}.
+The time complexity of both algorithms is similar. QR decomposition of a matrix $\vec{X} \in \mathbb{R}^{n \times p}$ is~\cite{businger1965linear}
 
 \begin{equation} \label{qrtimewhat}
     \mathcal{O}(2p^2n - \frac{2}{3}p^3) \sim {O}(p^2n).
 \end{equation}
-\todo{find citation}
 On the other hand, using Givens rotation for QR decomposition of the same matrix is 
 \begin{equation} \label{givenstimenoproof}
-    \mathcal{O}(3np^2 - p^3) \sim \sim {O}(p^2n).
+    \mathcal{O}(3np^2 - p^3) \sim {O}(p^2n).
 \end{equation}
-so although Householder transformations are about $50\%$ faster, both have asymptotically same time complexity. Moreover Givens rotations are more numerically stable. 
-We speak about Givens rotations in detail in section \ref{givensrotation} where we also make proof of the \eqref{givenstimenoproof}. Moreover, Givens rotations and are suitable for sparse matrices. This property of Givens rotations we use in section \ref{differentcomputation}. 
 
-For now, let us look at time complexity of solving OLS using Householder transformations. 
+Although Householder transformations are about $50\%$ faster, both have asymptotically equal time complexity. Moreover Givens rotations are more numerically stable. 
+We speak about Givens rotations in detail in Section~\ref{givensrotation} where we also make proof of the \eqref{givenstimenoproof}. Moreover, Givens rotations and are suitable for sparse matrices. We use this property of Givens rotations in Section~\ref{differentcomputation}. 
+
+For now, let us look at the time complexity of solving the OLS using Householder transformations. 
 \begin{observation}
-    The time complexity of solving OLS estimate using QR decomposition by Householder transformations is $\mathcal{O}(2p^2n - \frac{2}{3}p^3) \sim \mathcal{O}(p^2n) $
+    The time complexity of finding the OLS estimate using the QR decomposition by Householder transformations is $\mathcal{O}(2p^2n - \frac{2}{3}p^3) \sim \mathcal{O}(p^2n)$.
 \end{observation}
 
 \begin{proof}
-    In the first step, we calculate QR decomposition. Householder transformations can be done in $\mathcal{O}(2np^2 - \frac{2}{3}p^3)$.
-    Second step consist of matrix multiplication $\vec{Q_1}^T \vec{y}$ which is $\mathcal{O}(np)$.  In the last step we are solving upper triangular systems which is $\mathcal{O}(\frac{1}{2}p^2)$.
+    In the first step, we calculate a QR decomposition. Householder transformations can be done in $\mathcal{O}(2np^2 - \frac{2}{3}p^3)$.
+    The second step consists of the matrix multiplication $\vec{Q_1}^T \vec{y}$ which is $\mathcal{O}(np)$.  In the last step we solve upper triangular linear system which is $\mathcal{O}(\frac{1}{2}p^2)$.
     Putting all steps together we get  
 
     \begin{equation} \label{time:complexity:ols:qr:householder}
         \mathcal{O}(2np^2 - \frac{2}{3}p^3 + np + \frac{1}{2}p^2)
     \end{equation}
-    We can see that $p^2n$ asymptotically dominates (this is the same in case we use Givens rotations).
+    We can see that $p^2n$ asymptotically dominates (this is the same as in the case of Givens rotations).
 \end{proof}
 
-The QR decomposition is considered as a standard way of computing OLS estimate because of its high numerical stability. Let us mention that a little slower, but a more stable method of computing OLS estimate exists, and that is the singular value decomposition (SVD). On the other hand, the QR decomposition is sufficiently stable for most cases so describing SVD decomposition is out of the scope of this work. 
+The QR decomposition is considered as a standard way of computing OLS estimate because of its high numerical stability. Let us mention that a little slower, but a more stable method of computing the OLS estimate exists, and that is the one using the singular value decomposition (SVD). On the other hand, the QR decomposition is sufficiently stable for most cases so describing SVD decomposition is out of the scope of this work. 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -308,18 +301,18 @@ The QR decomposition is considered as a standard way of computing OLS estimate b
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsubsection*{Givens Rotation} \label{givensrotation}
-In this section, we describe Givens rotations in detail. Moreover, we also show how to update QR decomposition in terms of including and excluding row from factorized matrix $\vec{X}$ which we use in the algorithm described in section \ref{differentcomputation}.
+In this section, we describe Givens rotations in detail. Moreover, we also show how to update QR decomposition when adding or deleting a from the matrix $\vec{X}$. We use this in the algorithm described in Section~\ref{differentcomputation}.
 
-We compute the QR factorization of $\vec{A} \in \mathbb{R}^{m \times n}$ which has full column rank so that we apply orthogonal transformation by a matrix $\vec{Q}^T$ as \cite{hammarling2008updatingqr}
+As described in~\cite{hammarling2008updatingqr}, we compute the QR factorization of $\vec{A} \in \mathbb{R}^{m \times n}$ so that we apply an orthogonal transformation using a matrix $\vec{Q}^T$ as 
 
 \begin{equation}
     \vec{Q}^T\vec{A} = \vec{R}
 \end{equation}
  
-where $\vec{Q}$ is product of orthogonal matrices. One such example of orthogonal matrix can be:
+where $\vec{Q}$ is a product of orthogonal matrices. These matrices have the following matrix as sub-matrix:
 
 \begin{equation} \label{givensmatrix}
-\vec{Q} = 
+\vec{Q}_\varphi = 
 \begin{bmatrix} 
 \cos(\varphi) & \sin(\varphi) \\
 - \sin(\varphi) & \cos(\varphi)
@@ -327,7 +320,7 @@ where $\vec{Q}$ is product of orthogonal matrices. One such example of orthogona
 \end{equation}
 This matrix is indeed orthogonal since 
 \begin{equation} 
-\vec{Q}\vec{Q}^T = \vec{Q}^T\vec{Q} = \vec{I}
+\vec{Q}_\varphi\vec{Q}_\varphi^T = \vec{Q}_\varphi^T\vec{Q}_\varphi = \vec{I}.
 \end{equation}
  
 % \begin{equation*}
@@ -338,16 +331,16 @@ This matrix is indeed orthogonal since
 %    \numberthis
 % \end{equation*}
 
-Moreover, if we multiply this orthogonal matrix with some column vector $\vec{x} \in \mathbb{R}^{2 \times 1}$ thus $\vec{Q}\vec{x}$; as a result, we get a vector of the same length but which is rotated clockwise by  $\varphi$ radians. When we say that vector has the same length we mean that $L^2$ norm of such vector stays the same. This is an important property of all orthogonal matrices (operations that preserve $L^2$ norm are known as \defterm{unitary transformations}). Let us verify this claim. Let us have an orthogonal matrix $\vec{Q} \in \mathbb{R}^{m \times m}$ and any column vector $\vec{x} \in  \mathbb{R}^{m \times 1}$ then
+Moreover, if we multiply this orthogonal matrix with some vector $\vec{x} \in \mathbb{R}^{2}$, as a result $\vec{Q}\vec{x}$ we get a vector of the same length as $\vec{x}$ which is rotated clockwise by the angle $\varphi$. When we say that vector has the same length we mean that $L^2$ norm of such vector stays the same. This is an important property of all orthogonal matrices (operations that preserve $L^2$ norm are known as \defterm{unitary transformations}). Let us verify this claim. Let us have an orthogonal matrix $\vec{Q} \in \mathbb{R}^{m \times m}$ and any vector $\vec{x} \in  \mathbb{R}^{m}$ then
 
 \begin{equation}
     \norm{\vec{Q}\vec{x}}^2 = (\vec{Q}\vec{x})^T (\vec{Q}\vec{x}) = \vec{x}^T\vec{Q}^T\vec{Q}\vec{x} = 
     \vec{x}^T\vec{I}\vec{x} = \vec{x}^T\vec{x} = \norm{\vec{x}}^2.
 \end{equation}
 
-So as we said,  the idea is to create a series of orthogonal matrices which gradually rotates column vectors of $\vec{A}$, so we obtain zeros under diagonal. One such method - \defterm{Givens rotation} uses \defterm{Givens matricies} that zero one element under diagonal at a time.
+So as we said,  the idea is to create a series of orthogonal matrices which gradually rotates two-element column sub-vectors of $\vec{A}$, so that we obtain zeros under diagonal. One such method - \defterm{Givens rotation} uses \defterm{Givens matrices} that erase one element under diagonal at a time.
 
-The example of \eqref{givensmatrix} is not random. Let us look at this orthogonal matrix one more time and let us multiply this matrix with some vector.
+The example of \eqref{givensmatrix} is not random. Let us look at the orthogonal matrix  $\vec{Q}_\varphi$ one more time and let us multiply this matrix with some vector.
 
 \begin{equation}
     \begin{bmatrix} 
@@ -361,37 +354,26 @@ The example of \eqref{givensmatrix} is not random. Let us look at this orthogona
             \begin{bmatrix} 
                 r \\
                 z
-                \end{bmatrix}
+                \end{bmatrix}.
 \end{equation}
 
-To introduce this zeroing effect, we need to rotate this vector so that it is parallel to $
-\begin{bmatrix} 
-    1 \\
-    0
-\end{bmatrix}
-$. So we only need to find  $\cos(\varphi) a + \sin(\varphi) = r $.
-As we know rotation with $\vec{Q}$ preserve $L^2$ norm. That means if we want to $z = 0$  then $r$ must be equal to $L^2$ norm of the vector  
-$
-\begin{bmatrix} 
-    a \\
-    b
-\end{bmatrix}
-$;  thus $r = \sqrt{a^2 + b^2}$. 
-Then the solution is trivial. We do not even need to calculate $\varphi$ because if we put
+To obtain the zeroing effect, we need to rotate this vector so that it is parallel to $(1, 0)^T$. So we only need to find $\varphi$ so that $\cos(\varphi) a + \sin(\varphi)b = r $.
+As we know, rotation with $\vec{Q}_\varphi$ preserves $L^2$ norm. Hence if we want $z = 0$, then $r$ must be equal to $L^2$ norm of the vector $(a, b)^T$ i.e. $r = \sqrt{a^2 + b^2}$. 
+This leads to the solution
 \begin{equation} \label{givens_cos}
     \cos(\varphi) = \frac{a}{\sqrt{a^2 + b^2}} 
 \end{equation}
 and   
 \begin{equation} \label{givens_sin}
-    \sin(\varphi) = \frac{b}{\sqrt{a^2 + b^2}} 
+    \sin(\varphi) = \frac{b}{\sqrt{a^2 + b^2}}. 
 \end{equation}
-then 
-\begin{align}
-    r &= \frac{a^2}{\sqrt{a^2 + b^2}} + \frac{b^2}{\sqrt{a^2 + b^2}} = \sqrt{a^2 + b^2} \\
-    z &= \frac{-ab}{\sqrt{a^2 + b^2}} +  \frac{ab}{\sqrt{a^2 + b^2}} = 0.
-\end{align}
+% then 
+% \begin{align}
+%     r &= \frac{a^2}{\sqrt{a^2 + b^2}} + \frac{b^2}{\sqrt{a^2 + b^2}} = \sqrt{a^2 + b^2} \\
+%     z &= \frac{-ab}{\sqrt{a^2 + b^2}} +  \frac{ab}{\sqrt{a^2 + b^2}} = 0.
+% \end{align}
 
-Practically used algorithm of computing $\cos{\varphi}$ and  $\sin{\varphi}$ is slightly different because we want to prevent overflow. This algorithm is described by the following pseudocode:
+In practice, the algorithm of computing $\cos(\varphi)$ and  $\sin(\varphi)$ is slightly different because we want to prevent arithmetic overflow. This algorithm is described by the following pseudocode:
 
 \begin{algorithm}[H]
     \label{alg:givens}
@@ -419,11 +401,11 @@ Practically used algorithm of computing $\cos{\varphi}$ and  $\sin{\varphi}$ is 
     \Return{ $cos$\,, $sin$ }\;
 \end{algorithm}
 
-We can scale this same idea to higher dimensions. Let us denote matrix $\vec{Q}(i, j) \in \mathbb{R}^{m \times m}$ defined as 
+We can scale the same idea to higher dimensions. Let us denote matrix $\vec{Q}_\varphi(i, j) \in \mathbb{R}^{m \times m}$ defined as 
 \renewcommand{\kbldelim}{[}% Left delimiter
 \renewcommand{\kbrdelim}{]}% Right delimiter
 \[
-  \vec{Q}(i, j) = \kbordermatrix{
+  \vec{Q}_\varphi(i, j) = \kbordermatrix{
     &   &       & i &       & j &      &  \\
     & 1 & \dots & 0 & \dots & 0 &\dots & 0 \\
     & \vdots & \ddots & \vdots & & \vdots & & \vdots \\
@@ -435,11 +417,11 @@ We can scale this same idea to higher dimensions. Let us denote matrix $\vec{Q}(
   }
 \]
 
-where $c =     \cos(\varphi) $ and $ s = \sin(\varphi)$ for some $\varphi$. That means this matrix is orthogonal. Now if we have some column vector $\vec{x} \in \mathbb{R}^{m \times 1}$ and we calculate $c$ and $s$ by means of \ref{givens_cos} and \ref{givens_sin} for $a := x_i $ and $b := x_j$. 
-Finally if we multiply $\vec{Q}(i, j) \vec{x} = \vec{p}$ we can see that $\vec{p}$ is same as vector $\vec{x}$ except $p_i$ and $p_j$ so that:
+where $c = \cos(\varphi) $ and $ s = \sin(\varphi)$ for some $\varphi$. That means this matrix is orthogonal. Now if we have some column vector $\vec{x} \in \mathbb{R}^{m \times 1}$ and we calculate $c$ and $s$ by means of~\ref{givens_cos} and~\ref{givens_sin} for $a := x_i $ and $b := x_j$. 
+Finally if we multiply $\vec{Q}_\varphi(i, j) \vec{x} = \vec{p}$ we can see that $\vec{p}$ is same as vector $\vec{x}$ except $p_i$ and $p_j$ so that:
 
 \[
-    \vec{Q}(i, j) \vec{x} = \vec{Q}(i,j) 
+    \vec{Q}_\varphi(i, j) \vec{x} = \vec{Q}_\varphi(i,j) 
     \kbordermatrix{
     &   \\
     & x_1 \\
@@ -462,21 +444,21 @@ Finally if we multiply $\vec{Q}(i, j) \vec{x} = \vec{p}$ we can see that $\vec{p
   }
 \]
 
-where $r = \sqrt{x_i^2 + x_j^2}$. If we have matrix $\vec{A} \in \mathbb{R}^{n \times p}$ instead of only one column $\vec{x}$ it works the same way. So if we have such matrix we need to create matrix $    \vec{Q}(i, j)$ for each $a_{ij}$ under the diagonal in order to create upper triangular matrix. Usually we are zeroing columns so that we start with $a_{12}$ then $a_{13} \ldots a_{1_n}$.
+where $r = \sqrt{x_i^2 + x_j^2}$. If we have matrix $\vec{A} \in \mathbb{R}^{n \times p}$ instead of only one column $\vec{x}$ it works the same way. So if we have such matrix we need to create matrix $    \vec{Q}_\varphi(i, j)$ for each $a_{ij}$ under the diagonal in order to create upper triangular matrix. Usually we are zeroing columns so that we start with $a_{12}$ then $a_{13} \ldots a_{1_n}$.
 Then we start with second column $a_{23}$ and so on. That means we need to create in total
-$e = \frac{p^2 - p}{2} + np - p^2$ matrices $\vec{Q}(i, j)$. We can denote this sequence of matrices as $\vec{Q_1},  \vec{Q_2}, \ldots \vec{Q_e}$.
+$e = \frac{p^2 - p}{2} + np - p^2$ matrices $\vec{Q}_\varphi(i, j)$. We can denote this sequence of matrices as $\vec{Q}_{\varphi_1},  \vec{Q}_{\varphi_2}, \ldots \vec{Q}_{\varphi_e}$.
 The QR decomposition then looks like
 
 \begin{equation}
-    \vec{Q_e}\ldots\vec{Q_2}\vec{Q_1}\vec{A} = \vec{R}
+    \vec{Q}_{\varphi_e}\ldots\vec{Q}_{\varphi_2}\vec{Q}_{\varphi_q}\vec{A} = \vec{R}
 \end{equation}
-where $\vec{Q_e}\ldots\vec{Q_2}\vec{Q_1}$ is actually $\vec{Q}^T$. So $\vec{Q}$ is obtained by 
+where $\vec{Q}_{\varphi_e}\ldots\vec{Q}_{\varphi_2}\vec{Q}_{\varphi_1}$ is actually $\vec{Q}^T$. So $\vec{Q}$ is obtained by 
 
 \begin{equation}
- \vec{Q} = \vec{Q_1^T}\vec{Q_2^T}\ldots\vec{Q_e^T}.
+ \vec{Q} = \vec{Q^T}_{\varphi_1}\vec{Q^T}_{\varphi_2}\ldots\vec{Q^T}_{\varphi_e}.
 \end{equation}
 
-We can see that for each row of the matrix, we need one additional matrix $\vec{Q_i}$, and with such matrix, we are multiplying only two rows. Moreover, the rows are getting shorter after each finished column. So the total number of operations can be expressed as
+We can see that for the each row of the matrix, we need one additional matrix $\vec{Q}_{\varphi_i}$, and with such matrix, we are multiply only two rows. Moreover, the rows are getting shorter after each finished column. So the total number of operations can be expressed as
 
 \begin{equation}
     \sum\limits_{i=1}^n  \sum\limits_{j=i+1}^p 6(n-i+1) \approx 6np^2 - 3np^2 - 3p^3 + 2p^3 = 3np^2 - p^3.
@@ -524,7 +506,7 @@ Let us put $L_0 = \sum\limits_{i=1}^n m^{(0)}_i r_{i}^2(\vec{w_0})$ where $r_{i}
 Let us take $\hat{n} = \{{1,2,\ldots,n\}}$ and mark
 $\pi: \hat{n} \rightarrow \hat{n}$ permutation of $\hat{n}$ such that $|r_0({\pi(1)})| \leq |r_0({\pi(2)})| \leq \ldots \leq |r_0({\pi(n)})|$
 and mark   $\vec{m_1} \in Q^{(n,h)}$  such that $m^1_i = 1$ for $i \in \{{\pi(1)\,, \pi(2)\,,... \pi(h)\}}$ and  $m^1_i = 0$  otherwise. 
-This means that  $\vec{m_1}$ corresponds to $h$ subset with smallest absolute residuals $r_{i}^2(\vec{w_0})$.
+This means that  $\vec{m_1}$ corresponds to $h$-element subset with smallest absolute residuals $r_{i}^2(\vec{w_0})$.
 
 Finally, take
 $\of^{(OLS,\vec{M_1}\vec{X},  \vec{M_1}\vec{y} )} (\vec{w})$ least squares fit on $m_1$ subset of observations and its corresponding 
@@ -590,7 +572,7 @@ $
     \Return{ $\what{{new}}\,, m_{new}$ }\;
 \end{algorithm}
 
-One step of algorithm C-step is visualized on figure~\ref{figure:one:c:step}.
+One step of algorithm C-step is visualized on Figure~\ref{figure:one:c:step}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -605,7 +587,7 @@ One step of algorithm C-step is visualized on figure~\ref{figure:one:c:step}.
     In C-step we must compute $n$ absolute residuals. Computation of one absolute residual consists of
     matrix multiplication of shapes $1 \times p$ and $p \times 1$ that gives us $\mathcal{O}(p)$. So time of computation $n$ residuals is $\mathcal{O}(np)$.
     Next, we must select a set of $h$ smallest residuals which can be done in $\mathcal{O}(n)$ using a modification of algorithm QuickSelect \cite{hoare1961algorithm}.
-    Finally, we must compute $\hat{w}$ OLS estimate on a $h$ subset of data. Because $h$ is linearly dependent on $n$, we can say that it is $\mathcal{O}(p^2n + p^3)$ which is asymptotically dominant against previous steps which are $\mathcal{O}(np + n)$. Because we assume$n \ge p$ then $\mathcal{O}(p^2n + p^3) \sim \mathcal{O}(p^2n) $
+    Finally, we must compute $\hat{w}$ OLS estimate on a $h$-element subset of data. Because $h$ is linearly dependent on $n$, we can say that it is $\mathcal{O}(p^2n + p^3)$ which is asymptotically dominant against previous steps which are $\mathcal{O}(np + n)$. Because we assume$n \ge p$ then $\mathcal{O}(p^2n + p^3) \sim \mathcal{O}(p^2n) $
 \end{proof}
 
 As we stated above, repeating C-step leads to sequence of $\what{1}, \what{2} \ldots$ 
@@ -658,7 +640,7 @@ The theorem gives us a clue to create algorithm described by the following pseud
     \Return{ $\what{{new}}$, $\vec{m_{new}}$ }\;
 \end{algorithm}
 
-It is important to note, that although the maximum number of steps of this algorithm is ${n \choose h}$ in practice, it is shallow, most often under $20$ steps as can be seen on figure~\ref{figure:repeat:c:steps:cnt:converge}.
+It is important to note, that although the maximum number of steps of this algorithm is ${n \choose h}$ in practice, it is shallow, most often under $20$ steps as can be seen on Figure~\ref{figure:repeat:c:steps:cnt:converge}.
 
 \begin{figure}[h]
 \centering
@@ -692,7 +674,7 @@ Most basic way of creating $\vec{m_1}$ subset is simply to choose random $\vec{m
 \end{observation}
 
 \begin{proof}
-    Consider dataset of $n$ containing $\epsilon > 0$ relative amount of outliers. Let $h$ be chosen conservatively so that $h = [(n/2] + [(p+1)/2]$ and $k$ is the number of selections random $h$ subsets. Then
+    Consider dataset of $n$ containing $\epsilon > 0$ relative amount of outliers. Let $h$ be chosen conservatively so that $h = [(n/2] + [(p+1)/2]$ and $k$ is the number of selections random $h$-element subsets. Then
     \begin{align*}
         P(one~random~data~sample~not~outliers) &= (1-\epsilon) \\
         P(one~subset~without~outliers) &= (1-\epsilon)^h \\
@@ -837,10 +819,10 @@ $\oflts(\what{{i}}) = \oflts(\what{{i+1}})$ . When we put all together, we get \
 
 \section{Feasible solution} \label{section_feasible_solution}
 In this section we introduce feasible solution algorithm from \cite{hawkins:1994}.
-It is based on the strong necessary condition described at definition \ref{strong_condition}. 
+It is based on the strong necessary condition described at Definition~\ref{strong_condition}. 
 The basic idea can be described as follows.
 
-Let us consider that we have some $\vec{m} \in Q^{(n,h)}$ and denote $O_m = \{{i \in  \set{ 1,2,\ldots , n } ;w_i = 1\}}$ and $Z_m = \{{j \in  \set{ 1,2,\ldots , n } ;w_j = 0\}}$ thus sets of indexes of positions where is $0$ respectively $1$ in vector $\vec{m}$. We can think about it as indexes of observations in $h$ set and $g$ set respectively. Then we can mark $\vec{m}^{(i,j)}$ as a vector which is constructed by swap of its ith and jth element where $i \in O$ and $j \in Z$. Such vector corresponds to vector $\vec{m_{swap}}$ which we marked at definition \ref{strong_condition}.
+Let us consider that we have some $\vec{m} \in Q^{(n,h)}$ and denote $O_m = \{{i \in  \set{ 1,2,\ldots , n } ;w_i = 1\}}$ and $Z_m = \{{j \in  \set{ 1,2,\ldots , n } ;w_j = 0\}}$ thus sets of indexes of positions where is $0$ respectively $1$ in vector $\vec{m}$. We can think about it as indexes of observations in $h$ set and $g$ set respectively. Then we can mark $\vec{m}^{(i,j)}$ as a vector which is constructed by swap of its ith and jth element where $i \in O$ and $j \in Z$. Such vector corresponds to vector $\vec{m_{swap}}$ which we marked at Definition~\ref{strong_condition}.
 
 With this in mind, let us mark 
 \begin{equation}
@@ -866,7 +848,7 @@ then by equation introduced in \cite{atkinson1991simulated} we get
     {(1-d_{i,i})(1+d_{j,j}) + d_{i,j}^2}.
 \end{equation}
 
-Let us now describe the core of the algorithm. It is similar to the FAST-LTS algorithm in the sense of iterative refinement of a $h$ subset. So let us assume that we have some vector  $\vec{m} \in Q^{(n,h)}$. No we compute  $\Delta S^{(\vec{m})}_{i,j}$ for all $i \in O$ and $j \in Z$. This may lead to several different outcomes:
+Let us now describe the core of the algorithm. It is similar to the FAST-LTS algorithm in the sense of iterative refinement of a $h$-element subset. So let us assume that we have some vector  $\vec{m} \in Q^{(n,h)}$. No we compute  $\Delta S^{(\vec{m})}_{i,j}$ for all $i \in O$ and $j \in Z$. This may lead to several different outcomes:
 \begin{enumerate}
     \item all $S^{(\vec{m})}_{i,j}$ are non-negative
     \item one $S^{(\vec{m})}_{i,j}$ is negative
@@ -886,7 +868,7 @@ In terms of complexity, all three options give the same results, because to find
 So if there negative  $S^{(\vec{m})}_{i,j}$, we choose the one with the lowest value, make the swap and repeat the process.  
 
 The algorithm ends when there is no possible improvement, i.e., when all $S^{(\vec{m})}_{i,j}$ are non-negative.
-The number of iterations needed till algorithm stops is usually quite low, but for practical usage, it is still convenient to use some parameter $i_{max}$ after which algorithm stops without finding $h$ subset satisfying the strong necessary condition. 
+The number of iterations needed till algorithm stops is usually quite low, but for practical usage, it is still convenient to use some parameter $i_{max}$ after which algorithm stops without finding $h$-element subset satisfying the strong necessary condition. 
 One step of this algorithm we call optimal swap additive algorithm (OSAA) is described by the following pseudocode.
 
 \begin{algorithm}[H]
@@ -921,7 +903,7 @@ One step of this algorithm we call optimal swap additive algorithm (OSAA) is des
 
 
 \begin{observation} 
-     The time complexity of the OSAA \ref{alg:optimal:improvement} is $\mathcal{O}(n^2p^2)$
+     The time complexity of the OSAA~\ref{alg:optimal:improvement} is $\mathcal{O}(n^2p^2)$
 \end{observation} 
 
 
@@ -939,8 +921,8 @@ $\mathcal{O}(np^2 + n^2p^2) \sim \mathcal{O}(n^2p^2)$.
 One run of this iteration process leads to some local optimum, i.e., set satisfying the strong necessary condition. In \cite{hawkins:1994} they refer to to this set as to \defterm{feasible set}.
 This because it is not global optima the algorithm needs to be run multiple times say $t$ times. A $h$  subset with the smallest value of the objective function is chosen as the final solution.
 
-Discussion about how to find the initial $h$ subset resp. initial $\vec{m}$ was already discussed when describing FAST-LTS algorithm.
-More importantly, as we already suggested $h$ subset satisfying weak necessary condition do not need to satisfy strong necessary condition so passing such a $h$ subset as input to this algorithm is another option and we discuss it in detail later. We now describe a feasible solution algorithm (FSA) with pseudocode, and we assume that we already have some function that generates for us $h$ subsets, e.g., random one. 
+Discussion about how to find the initial $h$-element subset resp. initial $\vec{m}$ was already discussed when describing FAST-LTS algorithm.
+More importantly, as we already suggested $h$-element subset satisfying weak necessary condition do not need to satisfy strong necessary condition so passing such a $h$-element subset as input to this algorithm is another option and we discuss it in detail later. We now describe a feasible solution algorithm (FSA) with pseudocode, and we assume that we already have some function that generates for us $h$-element subsets, e.g., random one. 
 
 \newcommand\mycommfont[1]{\footnotesize\ttfamily\textcolor{blue}{#1}}
 \SetCommentSty{mycommfont}
@@ -993,7 +975,7 @@ More importantly, as we already suggested $h$ subset satisfying weak necessary c
 
 
 \begin{observation}  \label{time:complexity:fsa}
-In the main loop beside running OSAA which time complexity is $\mathcal{O}(n^2p^2)$ we need to recalculate $\vec{\hat{w}}$ using the matrix inversion which time complexity is $\mathcal{O}(p^2n)$ (see observation \ref{time:complexity:ols:inversion}).
+In the main loop beside running OSAA which time complexity is $\mathcal{O}(n^2p^2)$ we need to recalculate $\vec{\hat{w}}$ using the matrix inversion which time complexity is $\mathcal{O}(p^2n)$ (see Observation~\ref{time:complexity:ols:inversion}).
 Main loop of the FSA runs up to $l$ iterations for each start $t$. So the time complexity of whole algorithm is  $\mathcal{O}( lt(n^2p^2 + p^2n)  )$. Because $l$ and $t$ are usually quite low, we can see that the FSA time complexity is dominated by the OSAA. 
 \end{observation} 
 
@@ -1012,10 +994,9 @@ In this section, we've described the FSA algorithm. In the next section, we intr
 \section{OEA, MOEA, MMEA} \label{oeamoeammea}
 %three exchanging algorithms from Agulló, 2000
 
-In the FSA algorithm, we assumed that after each cycle of OSAA 
-\ref{alg:optimal:improvement} we need to recalculate inversion $(\vec{X}^T\vec{X})$ together with $\vec{\hat{w}}$. In this section, we introduce a different approach described in \cite{agullo2001new} so that we can update it instead of recalculating. Moreover, these ideas lead to bounding condition of FSA which not only improves the speed but also gives options to construct different algorithms. 
+In the FSA algorithm, we assumed that after each cycle of OSAA~\ref{alg:optimal:improvement} we need to recalculate inversion $(\vec{X}^T\vec{X})$ together with $\vec{\hat{w}}$. In this section, we introduce a different approach described in \cite{agullo2001new} so that we can update it instead of recalculating. Moreover, these ideas lead to bounding condition of FSA which not only improves the speed but also gives options to construct different algorithms. 
 
-In section \ref{section_feasible_solution} we introduce additive formula \ref{hawkins:rovnice} which corresponds to $\oflts(\vec{m}^{(i,j)}) - \oflts(\vec{m})$. Let us now try to obtain similar formula but with the focus on how the individual elements in our current algorithm change namely the inversion $\vec{Z^{-1}}$ and $\vec{\hat{w}}$. We also split the idea of swap the $i, j$ into the insertion of $j$ and remove of $i$. Thus we describe how individual elements are affected after adding one row and also removing one row. Moreover, during this derivation, we obtain two different approaches to calculate it. Both are important, and we recapitulate them after.
+In Section~\ref{section_feasible_solution} we introduce additive formula~\eqref{hawkins:rovnice} which corresponds to $\oflts(\vec{m}^{(i,j)}) - \oflts(\vec{m})$. Let us now try to obtain similar formula but with the focus on how the individual elements in our current algorithm change namely the inversion $\vec{Z^{-1}}$ and $\vec{\hat{w}}$. We also split the idea of swap the $i, j$ into the insertion of $j$ and remove of $i$. Thus we describe how individual elements are affected after adding one row and also removing one row. Moreover, during this derivation, we obtain two different approaches to calculate it. Both are important, and we recapitulate them after.
 
 
 
@@ -1136,7 +1117,7 @@ This can be simplified so that we get
 \begin{equation} \label{thetaplus}
     \vec{\overline{\hat{w}}} = \vec{\hat{w}} - (y_i - \vec{x_i}\vec{\hat{w}})b\vec{u}.
 \end{equation}
-Least but not last we want to express updated $RSS$ which we denote as $\overline{RSS}$. This can be done easily from \ref{rssdeterminant} and \ref{udpateddeterminant} as 
+Least but not last we want to express updated $RSS$ which we denote as $\overline{RSS}$. This can be done easily from~\eqref{rssdeterminant} and~\eqref{udpateddeterminant} as 
 
 \begin{equation}
     \overline{RSS} =  RSS + \dfrac{(y_i - \vec{x_i}\vec{\hat{w})^2}}{(1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T})}.
@@ -1188,7 +1169,7 @@ Using the same approach as before we can denote express down-dated estimate whic
     \vec{\overline{\overline{\hat{w}}}} =  +\vec{\overline{\hat{w}}} (y_j - \vec{x_j}\vec{\overline{\hat{w}}}) \overline{b} \vec{\overline{u}}.
 \end{equation}
 
-Finally lets also express updated $\overline{RSS}$ which we denote as $\overline{\overline{RSS}}$. This can be done easily from \ref{rssdeterminant} and \ref{udpateddeterminant} and \eqref{updatedinversion2} as 
+Finally lets also express updated $\overline{RSS}$ which we denote as $\overline{\overline{RSS}}$. This can be done easily from~\eqref{rssdeterminant} and~\eqref{udpateddeterminant} and~\eqref{updatedinversion2} as 
 
 \begin{equation}
     \overline{\overline{RSS}} =  \overline{RSS} - \dfrac{(y_j - \vec{x_j}\vec{\overline{\hat{w}})^2}}{(1 - \vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T})}.
@@ -1253,11 +1234,11 @@ We are now able to modify the FSA so that we do not need to recompute $\vec{\hat
 %%%%%%%%%%     O E A    A L G O R I TH M        %%%%%%%%%%%%%
 
 \subsection{The OEA and its properties}
-We can apply theory from the previous section to the FSA. Sets $O_m$ and $Z_m$ (see section \ref{section_feasible_solution}) contains indexes of observations to exclude and include respectively.
+We can apply theory from the previous section to the FSA. Sets $O_m$ and $Z_m$ (see Section~\ref{section_feasible_solution}) contains indexes of observations to exclude and include respectively.
 The matrix $\vec{Z_M}$ can be used instead of the matrix $\vec{Z}$ and
  $\vec{X_M}$ with $\vec{y_M}$ to calculate $\vec{\hat{w}}$. 
 
-In terms of the FSA \ref{alg:feasible_solution} we first need to change the OSAA.  There are only minor tweaks. First, we need to pass one more argument, and that is $RSS$. Second, We want to find minimal $\rho(\vec{c_i}, \vec{c_j})$ calculated by \eqref{agullo:rovnice} so that $0 < \rho(\vec{c_i}, \vec{c_j}) < 1 $. Other parts of the algorithm remains the same. Time complexity thus remains the same.
+In terms of the FSA~\ref{alg:feasible_solution} we first need to change the OSAA.  There are only minor tweaks. First, we need to pass one more argument, and that is $RSS$. Second, We want to find minimal $\rho(\vec{c_i}, \vec{c_j})$ calculated by \eqref{agullo:rovnice} so that $0 < \rho(\vec{c_i}, \vec{c_j}) < 1 $. Other parts of the algorithm remains the same. Time complexity thus remains the same.
 
 This algorithm produces $\rho(\vec{c_i}$, and indexes  $i_{swap} \in O_m$ and $j_{swap} \in Z_m$ of observations we want to swap. Given that, we can update the $RSS$ by \eqref{updaterss}, $\vec{Z_M^{-1}}$ by \eqref{inversionplus} and \eqref{updatedinversion2} and finally update $\vec{\hat{w}}$ by \eqref{thetaplus} and \eqref{thetaminus}.
 
@@ -1269,7 +1250,7 @@ When an improvement is found, thus when $0 < \rho(\vec{c_i}, \vec{c_j}) < 1 $, t
 \begin{observation} \label{updatinginversionobservation}
 Time complexity of updating all the quantities is 
 $\mathcal{O}(8p^2 + 2p^2 + p) \sim \mathcal{O}(p^2)$.
-That is quite an improvement if we compare it to time complexity $\mathcal{O}(p^2n)$ of updating those quantities in the FSA (see observation~\ref{time:complexity:fsa}).
+That is quite an improvement if we compare it to time complexity $\mathcal{O}(p^2n)$ of updating those quantities in the FSA (see Observation~\ref{time:complexity:fsa}).
 \end{observation}
 
 
