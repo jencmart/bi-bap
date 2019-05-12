@@ -559,16 +559,125 @@ $L_{1} \leq L_{2} \leq \ldots$. One step, called the \defterm{C-step}, of this p
     \Return{ $\what{{new}}\,, \vec{m_{new}}$ }\;
 \end{algorithm}
 
-One step of the C-step algorithm is visualized on Figure~\ref{figure:one:c:step}.
+C-step algorithm is visualized on Figure~\ref{figure:one:c:step} where we start with $h$-element subset $\vec{m_1}$ and corresponding $\vec{\hat{w}_1}$ OLS fit on the $\vec{m_1}$ subset and $L_1 = \oflts(\vec{m_1})$. By sorting absolute the residuals and selecting $h$ smallest we obtain $\vec{m_2}$ $h$-element subset. Its value $\of^{(OLS,\vec{M_2}\vec{X},  \vec{M_2}\vec{y})} (\vec{\hat{w}_1})$ is highlighted with red dot. Finally we calculate OLS fit on $\vec{m_2}$ and obtain $\vec{\hat{w}_2}$ estimate. 
 
+\pgfplotsset{
+    every axis/.append style={
+            axis x line=middle,
+            axis y line=middle,
+            xlabel={$x$},
+            ylabel={$y$},
+            axis line style={->},
+        },
+    marya/.style={color=green,thick,mark=none},
+    soldot/.style={color=green,only marks,mark=*},
+    holdot/.style={color=green,fill=white,only marks,mark=*},
+    grid style={dotted,gray},
+}
 
 \begin{figure}[h]
     \centering
-    \missingfigure{Image visualizing  one C-step}
-    \caption{todo caption}
+    
+% even more fun
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel={$\vec{w}$},
+        ylabel={$L$},
+        xmin=0,
+        xmax=5,
+        ymin=0,
+        ymax=6,
+        xtick = {0},
+        %xticklabels = {$\vec{\hat{w}_1}$}, 
+        ytick = {0}, 
+        domain = 0:4.5,
+        axis lines = middle,
+        clip=false,
+        every extra x tick/.style={grid=none, xticklabel
+      style={anchor=north, color=red}},
+    extra x ticks ={1.416, 2},
+    extra x tick labels={$\vec{\hat{w}_2}$,$\vec{\hat{w}_1}$},
+      ]
+      
+      % M1 
+      \addplot [thick, domain = -0.5:4.5] {0.5*x^2 - 2*x  + 5.5} node [right] 
+      {$\of^{(OLS,\vec{M_1}\vec{X},  \vec{M_1}\vec{y} )} (\vec{w})$};
+
+      % OFD(M1)
+      \addplot[soldot,black]coordinates {(2, 3.5)} node [anchor=north east,text=black] {$(1)$};
+      % {$\oflts(\vec{m_1})$};
+
+
+      % M2
+      \addplot [thick, domain = -0.5:4.5] {0.6*x^2 - 1.7*x  + 3.5} node [left] 
+      {$\of^{(OLS,\vec{M_2}\vec{X},  \vec{M_2}\vec{y} )} (\vec{w})$};
+      
+      % OFD(M2)
+      \addplot[soldot, black]coordinates {(1.416,2.295)} node [anchor=north east,text=black]  {$(3)$};
+      %{$\oflts(\vec{m_2})$};
+      
+        % sorted on W1
+      \addplot[soldot, red]coordinates {(2, 2.5)} node [anchor=north west,text=black]  {$(2)$};
+
+      % red dashed line for W1
+      \draw [red, dashed](axis cs: 2, 0) -- (axis cs: 2, 3.5) node [pos=0.5,anchor=north east]{};
+
+      % red dashed line for W1
+      \draw [red, dashed](axis cs: 1.416, 0) -- (axis cs: 1.416, 2.295) node [pos=0.5,anchor=north east]{};
+      %\addplot [dashed, domain = -0.5:2] {2.5 - 2*x} node [left] {$f(x) + t \nabla f(x)^T\Delta x $};
+      %\addplot [dashed, domain = -0.5:4.5] {2.5 - 0.65*x} node [below right] {$f(x) + \alpha t \nabla f(x)^T\Delta x $};
+      % \draw [dotted, gray] (-4,-6) grid (5,5);
+
+      % \node [blue] at (3,-2.5) {$\circ$};
+      
+    \end{axis}
+
+    % \draw[latex-latex, thin, draw=gray] (-4,0)--(4,0) node [right] {$x$}; % l'axe des abscisses
+    %   \draw[latex-latex, thin, draw=gray] (0,-5)--(0,5) node [above] {$y$}; % l'axe des ordonnées
+    %   \draw[thick] (-3,-2)--(3,4); % l'axe des abscisses
+
+ 
+\end{tikzpicture}
+
+
+
+
+
+    \caption{Illustration of the C-step algorithm. $(1)$ represents the value of $\of^{(OLS,\vec{M_1}\vec{X},  \vec{M_1}\vec{y} )} (\vec{\hat{w}_1})$ (which is equal to the value $\oflts(\vec{m_1})$ ). $(2)$~represents  the value of $\of^{(OLS,\vec{M_2}\vec{X},  \vec{M_2}\vec{y} )} (\vec{\hat{w}_1})$ and $(3)$ represents the value of $\of^{(OLS,\vec{M_2}\vec{X},  \vec{M_2}\vec{y} )} (\vec{\hat{w}_2})$ (which is equal to the value $\oflts(\vec{m_2})$) }
     \label{figure:one:c:step}
 \end{figure}
     
+% \begin{figure}[h] 
+%     \label{Backtracking illustration}
+%     {\centering
+    
+%     \par}
+%     \caption{Backtracking illustration.}
+% \end{figure}
+
+
+% \begin{tikzpicture}
+%     \begin{axis}
+%         [   xlabel={$t$},
+%             xmin=-0,
+%             xmax=5,
+%             ymin=-1,
+%             ymax=5,
+%             xtick = {2.708},
+%             xticklabels = {$t_0$}, 
+%             ytick = {0}, 
+%             domain = 0:4.5,
+%             axis lines = middle,
+%             clip=false
+%         ]
+%         \addplot [thick, domain = -0.5:4.5] {0.5*x^2 - 2*x  + 2.5} node [left] {$f(x + t \Delta x )$};
+%         \addplot [dashed, domain = -0.5:2] {2.5 - 2*x} node [left] {$f(x) + t\nabla f(x)^T\Delta x $};
+%         \addplot [dashed, domain = -0.5:4.5] {2.5 - 0.65*x} node [below right] {$f(x) + \alpha t \nabla f(x)^T\Delta x $};
+%     \end{axis}
+% \end{tikzpicture}     
+
+% axis style
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%    C-STEP time complexity    %%%%%%%%%%%%%
