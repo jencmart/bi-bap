@@ -20,28 +20,28 @@
 \contentsline {subsection}{\numberline {2.1.2}Computation using the Cholesky decomposition}{16}{subsection.2.1.2}
 \contentsline {subsection}{\numberline {2.1.3}Computation using the QR decomposition}{17}{subsection.2.1.3}
 \contentsline {section}{\numberline {2.2}FAST-LTS}{22}{section.2.2}
-\contentsline {subsection}{\numberline {2.2.1}C-step}{23}{subsection.2.2.1}
-\contentsline {subsection}{\numberline {2.2.2}Choosing initial $\boldsymbol {m_1}$subset}{26}{subsection.2.2.2}
+\contentsline {subsection}{\numberline {2.2.1}C-step}{22}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2.2}Choosing an initial $\boldsymbol {m_1}$ subset}{26}{subsection.2.2.2}
 \contentsline {subsection}{\numberline {2.2.3}Speed-up of the algorithm}{27}{subsection.2.2.3}
 \contentsline {subsection}{\numberline {2.2.4}Putting all together}{28}{subsection.2.2.4}
-\contentsline {section}{\numberline {2.3}Feasible solution}{30}{section.2.3}
-\contentsline {section}{\numberline {2.4}OEA, MOEA, MMEA}{34}{section.2.4}
-\contentsline {subsection}{\numberline {2.4.1}Multiplicative formula}{34}{subsection.2.4.1}
-\contentsline {subsection}{\numberline {2.4.2}The OEA and its properties}{38}{subsection.2.4.2}
-\contentsline {subsection}{\numberline {2.4.3}Minimum-maximum exchange algorithm}{40}{subsection.2.4.3}
-\contentsline {subsection}{\numberline {2.4.4}Different method of computation}{41}{subsection.2.4.4}
-\contentsline {section}{\numberline {2.5}Combined algorithm}{46}{section.2.5}
-\contentsline {section}{\numberline {2.6}BAB algorithm}{46}{section.2.6}
-\contentsline {subsection}{\numberline {2.6.1}Improvements}{48}{subsection.2.6.1}
-\contentsline {section}{\numberline {2.7}BSA algorithm}{48}{section.2.7}
-\contentsline {subsubsection}{\numberline {2.7.0.1}Domain of OF-LTS}{49}{subsubsection.2.7.0.1}
-\contentsline {subsection}{\numberline {2.7.1} One-dimensional version of the algorithm}{51}{subsection.2.7.1}
-\contentsline {subsection}{\numberline {2.7.2}Multidimensional BSA}{52}{subsection.2.7.2}
-\contentsline {chapter}{\chapternumberline {3}Experiments}{55}{chapter.3}
-\contentsline {section}{\numberline {3.1}Data}{55}{section.3.1}
-\contentsline {section}{\numberline {3.2}Results}{55}{section.3.2}
-\contentsline {section}{\numberline {3.3}Outlier detection}{55}{section.3.3}
-\contentsline {chapter}{Conclusion}{57}{chapter*.25}
-\contentsline {chapter}{Bibliography}{59}{section*.27}
-\contentsline {appendix}{\chapternumberline {A}Data sets}{63}{appendix.A}
-\contentsline {appendix}{\chapternumberline {B}Contents of enclosed CD}{65}{appendix.B}
+\contentsline {section}{\numberline {2.3}Feasible solution}{28}{section.2.3}
+\contentsline {section}{\numberline {2.4}OEA, MOEA, MMEA}{33}{section.2.4}
+\contentsline {subsection}{\numberline {2.4.1}Multiplicative formula}{33}{subsection.2.4.1}
+\contentsline {subsection}{\numberline {2.4.2}The OEA and its properties}{37}{subsection.2.4.2}
+\contentsline {subsection}{\numberline {2.4.3}Minimum-maximum exchange algorithm}{39}{subsection.2.4.3}
+\contentsline {subsection}{\numberline {2.4.4}Different method of computation}{40}{subsection.2.4.4}
+\contentsline {section}{\numberline {2.5}Combined algorithm}{45}{section.2.5}
+\contentsline {section}{\numberline {2.6}BAB algorithm}{45}{section.2.6}
+\contentsline {subsection}{\numberline {2.6.1}Improvements}{47}{subsection.2.6.1}
+\contentsline {section}{\numberline {2.7}BSA algorithm}{47}{section.2.7}
+\contentsline {subsubsection}{\numberline {2.7.0.1}Domain of OF-LTS}{48}{subsubsection.2.7.0.1}
+\contentsline {subsection}{\numberline {2.7.1} One-dimensional version of the algorithm}{50}{subsection.2.7.1}
+\contentsline {subsection}{\numberline {2.7.2}Multidimensional BSA}{51}{subsection.2.7.2}
+\contentsline {chapter}{\chapternumberline {3}Experiments}{53}{chapter.3}
+\contentsline {section}{\numberline {3.1}Data}{53}{section.3.1}
+\contentsline {section}{\numberline {3.2}Results}{53}{section.3.2}
+\contentsline {section}{\numberline {3.3}Outlier detection}{53}{section.3.3}
+\contentsline {chapter}{Conclusion}{55}{chapter*.25}
+\contentsline {chapter}{Bibliography}{57}{section*.27}
+\contentsline {appendix}{\chapternumberline {A}Data sets}{61}{appendix.A}
+\contentsline {appendix}{\chapternumberline {B}Contents of enclosed CD}{63}{appendix.B}

@@ -60,7 +60,7 @@ There are multiple algorithms for the multiplication of $n \times n$ matrices, f
 \begin{itemize}
   \item Naive algorithm; its time complexity is $\mathcal{O}(n^{3})$.
   \item Strassen algorithm; its time complexity is $\mathcal{O} (n^{2.8074})$~\cite{strassen1969gaussian}. 
-  \item Coppersmith-Winograd; its time complexity is $\mathcal {O}(n^{2.375477})~\cite{coppersmith1990matrix}$
+  \item Coppersmith-Winograd; its time complexity is $\mathcal {O}(n^{2.375477})$~\cite{coppersmith1990matrix}
 \end{itemize}
 
 In practice, however, the naive algorithm is usually used. Even though some of those algorithms have been efficiently implemented and are known to be numerically stable (primarily variations of Strassen algorithm), their error bound is weaker than in the case of the naive algorithm~\cite{ballard2015improving}. For this reason, they are not used even when they might improve performance.
@@ -275,7 +275,7 @@ On the other hand, using Givens rotation for QR decomposition of the same matrix
 \end{equation}
 
 Although Householder transformations are about $50\%$ faster, both have asymptotically equal time complexity. Moreover Givens rotations are more numerically stable. 
-We speak about Givens rotations in detail in Section~\ref{givensrotation} where we also make proof of the \eqref{givenstimenoproof}. Moreover, Givens rotations and are suitable for sparse matrices. We use this property of Givens rotations in Section~\ref{differentcomputation}. 
+We speak about Givens rotations in detail in Section~\ref{givensrotation} where we also make proof of the~\eqref{givenstimenoproof}. Moreover, Givens rotations and are suitable for sparse matrices. We use this property of Givens rotations in Section~\ref{differentcomputation}. 
 
 For now, let us look at the time complexity of solving the OLS using Householder transformations. 
 \begin{observation}
@@ -340,7 +340,7 @@ Moreover, if we multiply this orthogonal matrix with some vector $\vec{x} \in \m
 
 So as we said,  the idea is to create a series of orthogonal matrices which gradually rotates two-element column sub-vectors of $\vec{A}$, so that we obtain zeros under diagonal. One such method - \defterm{Givens rotation} uses \defterm{Givens matrices} that erase one element under diagonal at a time.
 
-The example of \eqref{givensmatrix} is not random. Let us look at the orthogonal matrix  $\vec{Q}_\varphi$ one more time and let us multiply this matrix with some vector.
+The example of~\eqref{givensmatrix} is not random. Let us look at the orthogonal matrix  $\vec{Q}_\varphi$ one more time and let us multiply this matrix with some vector.
 
 \begin{equation}
     \begin{bmatrix} 
@@ -416,57 +416,50 @@ We can scale the same idea to higher dimensions. Let us denote matrix $\vec{Q}_\
      & 0 & \dots & 0 & \dots & 0 &\dots & 1 \\
   }
 \]
-
-where $c = \cos(\varphi) $ and $ s = \sin(\varphi)$ for some $\varphi$. That means this matrix is orthogonal. Now if we have some column vector $\vec{x} \in \mathbb{R}^{m \times 1}$ and we calculate $c$ and $s$ by means of~\ref{givens_cos} and~\ref{givens_sin} for $a := x_i $ and $b := x_j$. 
-Finally if we multiply $\vec{Q}_\varphi(i, j) \vec{x} = \vec{p}$ we can see that $\vec{p}$ is same as vector $\vec{x}$ except $p_i$ and $p_j$ so that:
+where $c = \cos(\varphi) $ and $ s = \sin(\varphi)$ for some $\varphi$. That means this matrix is orthogonal. Now if we have some column vector $\vec{x} \in \mathbb{R}^{m \times 1}$ and we calculate $c$ and $s$ by~\eqref{givens_cos} and~\eqref{givens_sin} for $a := x_i $ and $b := x_j$. 
+Finally if we multiply $\vec{Q}_\varphi(i, j) \vec{x} = \vec{p}$ we can see that $\vec{p}$ is the same vector as $\vec{x}$ except for $p_i$ and $p_j$ so that:
 
 \[
     \vec{Q}_\varphi(i, j) \vec{x} = \vec{Q}_\varphi(i,j) 
-    \kbordermatrix{
-    &   \\
-    & x_1 \\
-    & \vdots \\
-   i  & x_i  \\
-     & \vdots \\
-     j  & x_j  \\
-     & \vdots \\
-     & x_m \\
-  }
-    =  \vec{p} = \kbordermatrix{
-    &   \\
-    & x_1 \\
-    & \vdots \\
-   i  & r  \\
-     & \vdots \\
-     j  & 0  \\
-     & \vdots \\
-     & x_m \\
-  }
+    \begin{bmatrix} 
+         x_1 \\
+         \vdots \\
+         x_i  \\
+         \vdots \\
+         x_j  \\
+         \vdots \\
+         x_m \\
+    \end{bmatrix}
+    =  \vec{p} = 
+    \begin{bmatrix} 
+        x_1 \\
+        \vdots \\
+        r  \\
+        \vdots \\
+        0  \\
+        \vdots \\
+        x_m \\
+   \end{bmatrix}
 \]
-
-where $r = \sqrt{x_i^2 + x_j^2}$. If we have matrix $\vec{A} \in \mathbb{R}^{n \times p}$ instead of only one column $\vec{x}$ it works the same way. So if we have such matrix we need to create matrix $    \vec{Q}_\varphi(i, j)$ for each $a_{ij}$ under the diagonal in order to create upper triangular matrix. Usually we are zeroing columns so that we start with $a_{12}$ then $a_{13} \ldots a_{1_n}$.
-Then we start with second column $a_{23}$ and so on. That means we need to create in total
+where $r = \sqrt{x_i^2 + x_j^2}$. If we have matrix $\vec{A} \in \mathbb{R}^{n \times p}$ instead of only one column $\vec{x}$, it works the same way. We need to create matrix $\vec{Q}_\varphi(i, j)$ for each $a_{ij}$ under the diagonal in order to create upper triangular matrix. Usually we are zeroing columns so that we start with $a_{12}$ and continue with $a_{13} \ldots a_{1_n}$.
+Then we start with the second column with element $a_{23}$ and so on. That means we need to create in total
 $e = \frac{p^2 - p}{2} + np - p^2$ matrices $\vec{Q}_\varphi(i, j)$. We can denote this sequence of matrices as $\vec{Q}_{\varphi_1},  \vec{Q}_{\varphi_2}, \ldots \vec{Q}_{\varphi_e}$.
 The QR decomposition then looks like
 
 \begin{equation}
-    \vec{Q}_{\varphi_e}\ldots\vec{Q}_{\varphi_2}\vec{Q}_{\varphi_q}\vec{A} = \vec{R}
+    \vec{Q}_{\varphi_e}\ldots\vec{Q}_{\varphi_2}\vec{Q}_{\varphi_1}\vec{A} = \vec{R}
 \end{equation}
-where $\vec{Q}_{\varphi_e}\ldots\vec{Q}_{\varphi_2}\vec{Q}_{\varphi_1}$ is actually $\vec{Q}^T$. So $\vec{Q}$ is obtained by 
+where $\vec{Q}_{\varphi_e}\ldots\vec{Q}_{\varphi_2}\vec{Q}_{\varphi_1}$ is actually $\vec{Q}^T$ and $\vec{Q}$ is obtained by 
 
 \begin{equation}
  \vec{Q} = \vec{Q^T}_{\varphi_1}\vec{Q^T}_{\varphi_2}\ldots\vec{Q^T}_{\varphi_e}.
 \end{equation}
 
-We can see that for the each row of the matrix, we need one additional matrix $\vec{Q}_{\varphi_i}$, and with such matrix, we are multiply only two rows. Moreover, the rows are getting shorter after each finished column. So the total number of operations can be expressed as
+We can see that for the each non-zero under diagonal element of the matrix $\vec{A}$, we need one additional matrix $\vec{Q}_{\varphi_i}$, and with such matrix, we are multiply only two rows. Moreover, the rows are getting shorter after each finished column. Hence the total number of operations is at most
 
 \begin{equation}
     \sum\limits_{i=1}^n  \sum\limits_{j=i+1}^p 6(n-i+1) \approx 6np^2 - 3np^2 - 3p^3 + 2p^3 = 3np^2 - p^3.
 \end{equation}
-
-
-
-
 
 
 
@@ -488,11 +481,11 @@ We can see that for the each row of the matrix, we need one additional matrix $\
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{FAST-LTS} \label{section_fast_lts}
-In this section, we introduce the FAST-LTS algorithm\cite{rouss:2000}. 
-It is, as well as other algorithms we introduce, iterative algorithm. We discuss all main components of the algorithm starting with its core idea called a concentration step which authors call a \defterm{C-step}.
+In this section, we introduce the FAST-LTS algorithm from~\cite{rouss:2000}. 
+It is, as well as other algorithms we introduce an iterative algorithm. We discuss all main components of the algorithm starting with its core idea called a concentration step which authors call a \defterm{C-step}.
 
 \subsection{C-step}
-We show that from an existing LTS estimate $\boldsymbol{\hat{w}}$ we can construct a new LTS estimate $\boldsymbol{\hat{w}_{new}}$ so that value the objective function at $\boldsymbol{\hat{w}_{new}}$ is less or equal to the value at $\boldsymbol{\hat{w}}$. Based on this property, the algorithm creates a sequence of LTS estimates which leading to better results.
+We show that from an existing LTS estimate $\boldsymbol{\hat{w}}$ we can construct a new LTS estimate $\boldsymbol{\hat{w}_{new}}$ so that value the objective function at $\boldsymbol{\hat{w}_{new}}$ is less or equal to the value at $\boldsymbol{\hat{w}}$. Based on this property, the algorithm creates a sequence of LTS estimates leading to better results.
 
 
 %%%%%%%%%     C-STEP theorem       %%%%%%%%%%%%
@@ -501,98 +494,100 @@ We show that from an existing LTS estimate $\boldsymbol{\hat{w}}$ we can constru
 Consider 
 $\vec{X} \in \mathbb{R}^{n \times p}$ and 
 $\vec{y} \in \mathbb{R}^{n \times 1}$.  
-Let us also have $\vec{w_0}\in\mathbb{R}^p$ and $\vec{m_0} \in Q^{(n,h)}$. 
-Let us put $L_0 = \sum\limits_{i=1}^n m^{(0)}_i r_{i}^2(\vec{w_0})$ where $r_{i}^2(\vec{w_0}) = y_i - (w_1^0x^i_1 + w_2^0x^i_2 +\ldots+ w_p^0x^i_p$).
-Let us take $\hat{n} = \{{1,2,\ldots,n\}}$ and mark
-$\pi: \hat{n} \rightarrow \hat{n}$ permutation of $\hat{n}$ such that $|r_0({\pi(1)})| \leq |r_0({\pi(2)})| \leq \ldots \leq |r_0({\pi(n)})|$
-and mark   $\vec{m_1} \in Q^{(n,h)}$  such that $m^1_i = 1$ for $i \in \{{\pi(1)\,, \pi(2)\,,... \pi(h)\}}$ and  $m^1_i = 0$  otherwise. 
-This means that  $\vec{m_1}$ corresponds to $h$-element subset with smallest absolute residuals $r_{i}^2(\vec{w_0})$.
+Let us also have $\vec{w_0} = (m^{(0)}_1, \ldots, m^{(0)}_n)\in\mathbb{R}^p$ and $\vec{m_0} \in Q^{(n,h)}$. 
+Let us put $L_0 = \sum\limits_{i=1}^n m^{(0)}_i r_{i}^2(\vec{w_0})$.
+Let $\pi: \hat{n} \rightarrow \hat{n}$ be permutation of $\hat{n}$ such that 
+\begin{equation}
+    |r_{\pi(1)}(\vec{w_0})| \leq \ldots \leq |r_{\pi(n)}(\vec{w_0})|    
+\end{equation}
 
-Finally, take
-$\of^{(OLS,\vec{M_1}\vec{X},  \vec{M_1}\vec{y} )} (\vec{w})$ least squares fit on $m_1$ subset of observations and its corresponding 
-$L_1 = \sum\limits_{i=1}^n m^{(1)}_i r_{i}^2(\vec{w_1})$. Then
+and mark   $\vec{m_1} \in Q^{(n,h)}$  such that $m^{(1)}_i = 1$ for $i \in \{{\pi(1)\,, \pi(2)\,,... \pi(h)\}}$ and  $m^{(1)}_i = 0$  otherwise. 
+This means that  $\vec{m_1}$ corresponds to $h$-element subset with smallest squared residuals $r_{i}^2(\vec{w_0})$.
+
+Finally let $\vec{w_1}$ be the least squares fit on the $\vec{m_1}$ $h$-element subset of observations and $L_1 = \sum\limits_{i=1}^n m^{(1)}_i r_{i}^2(\vec{w_1})$, then
 \begin{equation} 
-    L_1  \leq L_0
+    L_1  \leq L_0.
 \end{equation}
 \end{theorem}
 
 \begin{proof}
-    Because we take $h$ observations with smallest absolute residuals $r_{i}^2(\vec{w_0})$, then for sure
+    Because $\vec{m_1}$ represents $h$ observations with the smallest squared residuals $r_{i}^2(\vec{w_0})$ at point $\vec{w_0}$ , then
 $\sum\limits_{i=1}^n m^{(1)}_i r_{i}^2(\vec{w_0})
 \leq
 \sum\limits_{i=1}^n m^{(0)}_i r_{i}^2(\vec{w_0}) =  L_0
 $.
-When we take into account that the OLS estimate minimizes the objective function of $\vec{m_1}$ subset of observations, then for sure  
-$L_1 =  \sum\limits_{i=1}^n m^{(1)}_i r_{i}^2(\vec{w_1})
- \leq 
-\sum\limits_{i=1}^n m^{(1)}_i r_{i}^2(\vec{w_0})$.
+When we take into account that the OLS estimate minimizes the sum of squared residuals for the $\vec{m_1}$ subset of observations, then  
 
+\begin{equation}
+    L_1 =  \sum\limits_{i=1}^n m^{(1)}_i r_{i}^2(\vec{w_1})
+    \leq 
+   \sum\limits_{i=1}^n m^{(1)}_i r_{i}^2(\vec{w_0}).    
+\end{equation}
 Together we get 
-$
+\begin{equation}
 L_1 = \sum\limits_{i=1}^n m^{(1)}_i r_{i}^2(\vec{w_1})
 \leq
 \sum\limits_{i=1}^n m^{(1)}_i r_{i}^2(\vec{w_0})
 \leq
 \sum\limits_{i=1}^n m^{(0)}_i r_{i}^2(\vec{w_0}) =  L_0
-$
+\end{equation}
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%    C-STEP algorithm    %%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{corollary} 
-    Based on the previous theorem, using some $\vec{\hat{w}_{old}^{OLS(h, n)}}$  of $\vec{m_{old}}$ subset of observations we can construct $\vec{m_{new}}$ subset with corresponding $\vec{\hat{w}_{new}^{OLS(H_{new})}}$ such that $L_{new} \leq L_{old}$. 
-    Applying the theorem repetitively leads to the iterative sequence of
-    $L_{1} \leq L_{2} \leq \ldots$. One step, called \defterm{C-step} of this process is described by the following pseudocode. Note that for C-step we  need only $\vec{\hat{w}}$ 
-     without the need of passing  $\vec{m}$.
-\end{corollary}
+Let us denote $\vec{\hat{w}_{old}^{(LTS, h, n)}} = \oflts(\vec{m_{old}})$ and 
+$L_{old} = \sum\limits_{i=1}^n m^{(1)}_i r_{i}^2(\vec{w_{old}})$ for some vector $\vec{m_{old}}$. Then based on the previous theorem, using some $\vec{m_{old}}$ with corresponding $\vec{\hat{w}_{old}^{(LTS, h, n)}}$ we can construct $\vec{m_{new}}$ with corresponding $\vec{\hat{w}_{new}^{(LTS, h, n)}}$ such that $L_{new} \leq L_{old}$. 
 
-\begin{figure}[h]
-\centering
-\missingfigure{Image visualizing  one C-step}
-\caption{todo caption}
-\label{figure:one:c:step}
-\end{figure}
+Applying the theorem repetitively leads to the iterative sequence of
+$L_{1} \leq L_{2} \leq \ldots$. One step, called the \defterm{C-step}, of this process is described by the following pseudocode.
 
 \begin{algorithm}[H]
     \label{alg:Cstep}
     % \SetKwInOut{Input}{input}
     % \SetKwInOut{Output}{output}
     \KwIn{dataset consiting of $\boldsymbol{X} \in \mathbb{R}^{n \times p}$ and $\boldsymbol{y} \in \mathbb{R}^{n \times 1}$,  $\what{{old}} \in \mathbb{R}^{p \times 1}$}
-    \KwOut{ $\what{{new}}$, $m_{new}$ }
+    \KwOut{ $\what{{new}}$, $\vec{m_{new}}$ }
     \caption{C-step}
-    
     $R \gets \emptyset$\;
     \For{$i \gets 1$ \textbf{to} $n$}{  
         $R \gets R \cup \{ |y_i - \what{{old}} \vec{x_i}^T |\}$\;
     }
-    $m_{new} \gets $ select set of $h$ smallest absolute residuals from $R$\;
-    $\vec{\hat{w_{new}}} \gets$ OLS fit on $m_{new}$ subset;
-    \Return{ $\what{{new}}\,, m_{new}$ }\;
+    $\vec{m_{new}} \gets $ select set of $h$ smallest absolute residuals from $R$\;
+    $\what{{new}} \gets$ OLS fit the on $\vec{m_{new}}$ subset\;
+    \Return{ $\what{{new}}\,, \vec{m_{new}}$ }\;
 \end{algorithm}
 
-One step of algorithm C-step is visualized on Figure~\ref{figure:one:c:step}.
+One step of the C-step algorithm is visualized on Figure~\ref{figure:one:c:step}.
 
+
+\begin{figure}[h]
+    \centering
+    \missingfigure{Image visualizing  one C-step}
+    \caption{todo caption}
+    \label{figure:one:c:step}
+\end{figure}
+    
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%    C-STEP time complexity    %%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{observation} \label{csteptimecomplexity}
-    The time complexity of algorithm C-step~\ref{alg:Cstep} is asymptotically similar to the time complexity as OLS fit. Thus $O(p^2n)$.
+    The time complexity of the C-step~\ref{alg:Cstep} algorithm is asymptotically similar to the time complexity of the computation of the OLS fit, namely $O(p^2n)$.
 \end{observation} 
 
 \begin{proof}
-    In C-step we must compute $n$ absolute residuals. Computation of one absolute residual consists of
-    matrix multiplication of shapes $1 \times p$ and $p \times 1$ that gives us $\mathcal{O}(p)$. So time of computation $n$ residuals is $\mathcal{O}(np)$.
-    Next, we must select a set of $h$ smallest residuals which can be done in $\mathcal{O}(n)$ using a modification of algorithm QuickSelect \cite{hoare1961algorithm}.
-    Finally, we must compute $\hat{w}$ OLS estimate on a $h$-element subset of data. Because $h$ is linearly dependent on $n$, we can say that it is $\mathcal{O}(p^2n + p^3)$ which is asymptotically dominant against previous steps which are $\mathcal{O}(np + n)$. Because we assume$n \ge p$ then $\mathcal{O}(p^2n + p^3) \sim \mathcal{O}(p^2n) $
+    In the C-step we must compute $n$ absolute residuals. Computation of one absolute residual consists of
+    matrix multiplication of shapes $1 \times p$ and $p \times 1$ that gives us $\mathcal{O}(p)$. Hence, the time of computing $n$ residuals is $\mathcal{O}(np)$.
+    Next, we must select a set of $h$ smallest residuals which can be done in $\mathcal{O}(n)$ using a modification of the QuickSelect algorithm~\cite{hoare1961algorithm}.
+    Finally, we must compute the $\what{{new}}$ OLS estimate on an $h$-element subset of the data. Because $h$ is proportional to $n$, we can say that this is $\mathcal{O}(p^2n + p^3)$ which is asymptotically dominant over the previous steps which are $\mathcal{O}(np + n)$. Because we assume $n \ge p$, we get $\mathcal{O}(p^2n + p^3) \sim \mathcal{O}(p^2n) $.
 \end{proof}
 
-As we stated above, repeating C-step leads to sequence of $\what{1}, \what{2} \ldots$ 
-on subsets $\vec{m_1}, \vec{m_2} \ldots$ with corresponding 
-$L_1 \geq L_2\geq \ldots$. One could ask if this sequence converges, so that $L_i == L_{i+1}$. 
+As we stated above, repeating C-step leads to a sequence of $\what{1}, \what{2} \ldots$ 
+on subsets $\vec{m_1}, \vec{m_2} \ldots$ with corresponding sum of squared residuals 
+$L_1 \geq L_2\geq \ldots$ One could ask if this sequence converges, so that $L_i == L_{i+1}$. 
 Answer to this question is presented by the following theorem.
 
 
@@ -600,15 +595,11 @@ Answer to this question is presented by the following theorem.
 %%%%%%%%       C-STEP  converges        %%%%%%%%%%%%%%%
 
 \begin{theorem}
-    Sequence of C-step converges to $\what{{k}}$ after maximum of $k = {n \choose h}$ so that
-\begin{equation}
-    L_k = L_i \,, \forall i \geq k.
-\end{equation}
+    The sequence of the estimates $\what{1}, \what{2} \ldots$ obtained by the C-step becomes constant after at most $k = {n \choose h}$, i.e. $\what{k} = \vec{\hat{w_{k+1}}}$.
 \end{theorem}
 
 \begin{proof}
-    Since  $\oflts(\what{{i}})$ is non-negative and $\oflts(\what{{i}}) \leq \oflts(\what{{i+i}})$ the sequence  converges. $\what{{i}}$  is computed out of subset 
-    $\vec{m_i} \in Q^{(n, h)}$. Since $Q^{(n, h)}$ is finite,  namely its size is ${n \choose h}$, the sequence converges at the latest after this number of steps.
+    $\what{{i}}$  is uniquely given by  the $h$-element subset $\vec{m_i} \in Q^{(n, h)}$ and since $Q^{(n, h)}$ is finite,  namely its size is ${n \choose h}$, the sequence becomes constant at the latest after this number of steps.
 \end{proof}
 
 
@@ -629,9 +620,9 @@ The theorem gives us a clue to create algorithm described by the following pseud
 
     \While{$True$}{
         $L_{old} \gets \oflts(\what{{old}})$\;
-        $\what{{new}}$\,, $H_{new} \gets $ C-step$(\boldsymbol{X}\,, \boldsymbol{y}\,, \what{{old}})$\;
+        $\what{{new}}$\,, $\vec{m_{new}} \gets $ C-step$(\boldsymbol{X}\,, \boldsymbol{y}\,, \what{{old}})$\;
         $L_{new} \gets \oflts(\what{{new}})$\;
-        \If{$L{old} == L{new}$}{
+        \If{$L_{old} == L_{new}$}{
             \Break
           }
         $\what{{old}} \gets \what{{new}}$
@@ -640,7 +631,7 @@ The theorem gives us a clue to create algorithm described by the following pseud
     \Return{ $\what{{new}}$, $\vec{m_{new}}$ }\;
 \end{algorithm}
 
-It is important to note, that although the maximum number of steps of this algorithm is ${n \choose h}$ in practice, it is shallow, most often under $20$ steps as can be seen on Figure~\ref{figure:repeat:c:steps:cnt:converge}.
+It is important to note that although the maximum number of steps of this algorithm is ${n \choose h}$, in practice, it is most often under $20$ steps as can be seen on Figure~\ref{figure:repeat:c:steps:cnt:converge}.
 
 \begin{figure}[h]
 \centering
@@ -649,62 +640,66 @@ It is important to note, that although the maximum number of steps of this algor
 \label{figure:repeat:c:steps:cnt:converge}
 \end{figure}
 
-That is not enough for the algorithm Repeat-C-step to converge to the global minimum. That gives us an idea of how to create the final algorithm. \cite{rouss:2000}
+Now we can describe the final algorithm from~\cite{rouss:2000}: Choose a lot of initial subsets $\vec{m_1}$ and for each of them apply the Repeat-C-step algorithm. From all resulting subsets with the corresponding $\vec{\hat{w}}$ estimates choose the one with the least value of $\oflts(\vec{\hat{w}})$. 
 
-Choose a lot of initial subsets $\vec{m_1}$ and on each of them apply algorithm Repeat-C-step. From all converged subsets with corresponding $\vec{\hat{w}}$ estimates choose the one with the lowest value of $\oflts(\hat{w})$. 
-
-Before we can construct final the algorithm, we must decide how to choose initial subset $\vec{m_1}$ and how many of them mean ``\emph{a lot}''. First, let us focus on how to choose an initial subset $\vec{m_1}$.
+Before we can construct final the algorithm, we must decide how to choose the initial subset $\vec{m_1}$ and how many of them means ``\emph{a lot}''.
 
 
 
 %%%%%%%%      INITIAL M_1 SUBSET      %%%%%%%%%%%%%
 
-\subsection{Choosing initial $\vec{m_1}$subset}
+\subsection{Choosing an initial $\vec{m_1}$ subset}
 
-It is important to note, that when we choose $\vec{m_1}$ subset such that it contains outliers, then iteration of  C-steps usually does not converge to good results, so we should focus on methods with non zero probability of selecting $\vec{m_1}$ such that it does not contain outliers.
+It is important to note, that when we choose $\vec{m_1}$ subset such that it contains outliers, then iteration of  C-steps usually does not converge to a good results, so we should focus on methods with non zero probability of selecting $\vec{m_1}$ such that it does not contain outliers.
 There are many possibilities of how to create an initial $\vec{m_1}$ subset. Let us start with the most trivial one.
 
 
 %%%%%%%%      RANDOM SELECTION         %%%%%%%%%%%%%
 \subsubsection*{Random selection} \label{section:random:h:samples}
-Most basic way of creating $\vec{m_1}$ subset is simply to choose random $\vec{m_1} \in Q^{(n, h)}$. The following observation shows that it is not the best way.
+Most basic way of creating the $\vec{m_1}$ subset is simply to choose random $\vec{m_1} \in Q^{(n, h)}$. The following observation shows that it is not the best way.
 
 \begin{observation} \label{hrandomsamples}
-    With an increasing number of data samples, thus with increasing $n$, the probability of choosing among $k$ random selections of $\vec{m_{1_1}}, \ldots ,\vec{m_{1_k}}$ the probability of selecting at least one $\vec{m_{1_i}}$ such that its corresponding data samples does not contains outliers, goes to $0$.
+    % With an increasing number of data samples, thus with increasing $n$, the probability of choosing among $k$ random selections of $\vec{m_{1_1}}, \ldots ,\vec{m_{1_k}}$ the probability of selecting at least one $\vec{m_{1_i}}$ such that its corresponding data samples does not contains outliers, goes to $0$.
+
+    Assume that the $n$-element dataset contains outliers whose number is proportional to $\epsilon / n$ with $\epsilon > 0$. Let $\vec{m_{1_1}}, \ldots ,\vec{m_{1_k}}, \vec{m_{1_i}} \in Q^{(n, h)} $ be $k$ randomly selected $h$-element subset of data. Then the probability that at least one of these $h$-element subsets does not contain an outlier tends to $0$ as $n$ goes to infinity.
 \end{observation}
 
 \begin{proof}
-    Consider dataset of $n$ containing $\epsilon > 0$ relative amount of outliers. Let $h$ be chosen conservatively so that $h = [(n/2] + [(p+1)/2]$ and $k$ is the number of selections random $h$-element subsets. Then
+    It follows from observation above and the fact that $h > n/2$ that
+    % Consider dataset of $n$ containing $\epsilon > 0$ relative amount of outliers. Let $h$ be chosen conservatively so that $h = [(n/2] + [(p+1)/2]$ and $k$ is the number of selections random $h$-element subsets. Then
     \begin{align*}
-        P(one~random~data~sample~not~outliers) &= (1-\epsilon) \\
-        P(one~subset~without~outliers) &= (1-\epsilon)^h \\
+        P(one~random~data~sample~not~an~outliers) &= (1-\epsilon) \\
+        P(one~random~h~element~subset~without~outliers) &= (1-\epsilon)^h \\
         P(one~subset~with~at~least~one~outlier) &= 1-(1-\epsilon)^h \\
-        P(m~subsets~with~at~least~one~outlier~in~each) &= (1-(1-\epsilon)^h)^k \\
-        P(m~subsets~with~at~least~one~subset~without~outliers) &= 1-(1-(1-\epsilon)^h)^k \\
+        P(k~subsets~with~at~least~one~outlier~in~each) &= (1-(1-\epsilon)^h)^k \\
+        P(k~subsets~with~at~least~one~subset~without~outliers) &= 1-(1-(1-\epsilon)^h)^k \\
     \end{align*}
-
     Because
 $n \rightarrow \infty$, then    
-$ (1-\epsilon)^h  \rightarrow 0 $, then   
-$ 1- (1-\epsilon)^h  \rightarrow 1$, then
-$ (1-(1-\epsilon)^h)^m  \rightarrow 1$, then 
-$1- (1-(1-\epsilon)^h)^m  \rightarrow 0 $
+$ (1-\epsilon)^h  \rightarrow 0 $,    
+$ 1- (1-\epsilon)^h  \rightarrow 1$, 
+$ (1-(1-\epsilon)^h)^k  \rightarrow 1$, and 
+$1- (1-(1-\epsilon)^h)^k  \rightarrow 0 $
 \end{proof}
 
-That means that we should consider other options for selecting $\vec{m_1}$ subset. If we would like to continue with selecting some random subsets, previous observation gives us a clue, that we should choose it independent of $n$. Authors of the algorithm came with such a solution, and it goes as follows.
+That means that we should consider other options for selecting initial $\vec{m_1}$ subset.
+Authors of the algorithm came with the following solution.
 
 
 %%%%%%%%%%%     P - SELECTION %%%%%%%%%%%
 
 \subsubsection*{P-subset selection} \label{section:random:p:samples}
 
-Let us choose vector $\vec{c} \in Q^{(n, p)}$. 
-Next we compute rank of matrix $\vec{X}_{C} = \vec{C}\vec{X}$, where $C = diag(c)$. If $rank(\vec{X}_{C}) < p$ add randomly selected rows to $\vec{X}_{C}$ without repetition until $rank(\vec{X}_{C}) = p$. Let us from now on suppose that $rank(\vec{X}_{C}) = p$. Next let us mark $\what{0} = \oflts(c)$ and corresponding $r_1(\what{0}), r_2(\what{0}), \ldots ,r_n(\what{0})$ residuals.  Now mark $\hat{n} = \{{1,2,\ldots,n\}}$ and let
-$\pi: \hat{n} \rightarrow \hat{n}$ be permutation of $\hat{n}$ such that $|r({\pi(1)})| \leq |r({\pi(2)})| \leq \ldots \leq |r({\pi(n)})|$. 
- Finally, mark $\vec{m_1} \in Q^{(n,h)}$  such that $m^1_i = 1$ for $i \in \{{\pi(1)\,, \pi(2)\,,... \pi(h)\}}$ and  $m^1_i = 0$  otherwise.
+Let us choose a vector $\vec{c} \in Q^{(n, p)}$ and compute the rank of the matrix $\vec{X}_{C} = \vec{C}\vec{X}$, where $C = diag(\vec{c})$. If $rank(\vec{X}_{C}) < p$ add randomly selected rows of $\vec{X}$ to $\vec{X}_{C}$ without repetition until $rank(\vec{X}_{C}) = p$. 
+Next let us denote $\what{0} = \oflts(\vec{c})$. Let
+$\pi: \hat{n} \rightarrow \hat{n}$ be the permutation of $\hat{n}$ such that 
+$|r_{\pi(1)}(\vec{c})| \leq \ldots \leq |r_{\pi(n)}(\vec{c})|$.
 
+ Finally, let $\vec{m_1} \in Q^{(n,h)}$ be initial $h$-element subset such that $m^{(1)}_i = 1$ for $i \in \{{\pi(1)\,, \pi(2)\,,... \pi(h)\}}$ and  $m^{(1)}_i = 0$  otherwise.
 \begin{observation} \label{prandomsamples}
-    With the increasing number of data samples, thus with increasing $n$, the probability of choosing among $k$ random selections of $\vec{c_{1_1}}, \ldots, \vec{c_{1_k}}$ the probability of selecting at least one $\vec{c_{1_i}}$ such that its corresponding data samples do not contains outliers, goes to
+    % With the increasing number of data samples, the probability of choosing among $k$ random selections of $\vec{c_{1_1}}, \ldots, \vec{c_{1_k}}$ the probability of selecting at least one $\vec{c_{1_i}}$ such that its corresponding data samples do not contains outliers, goes to
+    Assume that the $n$-element dataset contains outliers whose number is proportional to $\epsilon / n$ with $\epsilon > 0$. Let $\vec{c_{1_1}}, \ldots ,\vec{c_{1_k}}, \vec{c_{1_i}} \in Q^{(n, p)} $ be $k$ randomly selected $p$-element subset of data. Then the probability that at least one of these $p$-element subsets does not contain an outlier tends to
+
 \begin{equation}
     1-(1-(1-\epsilon)^h)^k  > 0.
 \end{equation}
@@ -714,7 +709,7 @@ $\pi: \hat{n} \rightarrow \hat{n}$ be permutation of $\hat{n}$ such that $|r({\p
     Similarly as in previous observation.
 \end{proof}
 
-Last missing piece of the algorithm is determining the number of $k$ initial $\vec{m_1}$ subsets, which maximize the probability to at least one of them converges to correct solution. Simply put, the more, the better. So before we answer this question accurately, let us discuss some key observations about the algorithm.
+The last missing piece of the algorithm is determining the number $k$ of initial subsets $\vec{m_1}$, which maximize the probability to at least one of them leads to a sequence of estimates ending up in the global minimum. Simply put, the more, the better. So before we answer this question accurately, let us discuss some key observations about the algorithm.
 
 %%%%%%%%%%%     SPEED-UP      %%%%%%%%%%%
 
@@ -723,90 +718,92 @@ In this section, we describe essential observations which help us to formulate t
 
 %%%%%%%%%%%     SELECTIVE ITERATION      %%%%%%%%%%%
 \subsubsection*{Selective iteration}
-The most computationally demanding part of one C-step is computation of OLS fit on $\vec{m_i}$ subset and then the calculation of $n$ absolute residuals. How we stated above, convergence is usually achieved under 20 steps. So for fast algorithm run, we would like to repeat C-step as little as possible and at the same time do not lose the performance of the algorithm. 
+The most computationally demanding part of one C-step is computation of the OLS fit for the subset $\vec{m_i}$ and then the calculation of $n$ absolute residuals. As we stated above, convergence is usually achieved under 20 steps. So for fast algorithm run, we would like to repeat C-step as little as possible and at the same time do not lose the performance of the algorithm. 
 
-Due to that convergence of repeating C-step is very fast, it turns out, that we can distinguish between starts that leads to good solutions and those which does not, even after a small amount of the C-steps iterations. Based on empiric observation, we can distinguish good or bad solution already after two or three iterations of C-steps based on $\oflts(\what{3})$ or $oflts(\what{4})$ respectively. 
+Since the convergence of the Repeat-C-step algorithm is very fast, it turns out that we can distinguish between starts that leads to good solutions and those which does not after few C-steps iterations. Based on empiric observation, we can distinguish good or bad solution already after two or three iterations of C-steps based on the values $\oflts(\what{3})$ and $\oflts(\what{4})$ respectively. 
 
-So even though authors do not specify the size of $k$ explicitly, they propose that after a few C-steps we can choose (say~10) best solutions among all $\vec{m_1}$ starting subsets and continue iteration of the C-steps till convergence only on those best solutions.
-Authors refer to this process as to \defterm{selective iteration}.
+So even though authors do not specify the size of $k$ explicitly, they propose that after a few C-steps we can choose (say~10) best solutions among all $\vec{m_1}$ starting subsets and continue with iterating the C-steps only using the best solutions.
+Authors refer to this process as to the \defterm{selective iteration}.
 
 \subsubsection*{Nested extension}
-C-step computation is usually very fast for small $n$. Problem starts with very high $n$ say $n > 10^3$ because we need to compute OLS on $\vec{m_i}$ subset of size $h$ which is dependent on $n$. And then calculate $n$ absolute residuals.
+C-step computation is usually very fast for small $n$. It gets slow for very high $n$, say $n > 10^3$, because we need to compute the OLS estimate for the $\vec{m_i}$ subset of size $h$ which proportional to $n$ and then calculate $n$ absolute residuals.
 
-Authors came up with a solution they call \defterm{nested extension}. We describe it briefly now.
+Authors came up with a solution they call a \defterm{nested extension}. Let $k$ be number initial subsets $\vec{m_1}$. The we can describe the nested extension as follows.
+
 \begin{itemize}
-    \item If $n$ is greater than limit $l$, we create subset of data samples $L\,, |L| = l$ and divide this subset into $s$ disjunctive sets $P_1,P_2,\ldots,P_s\,, |P_i| = \frac{l}{s}\,, P_i\cap P_j  = \emptyset\,, \bigcup_{i=1}^{s} P_{i} = L$.
-    \item For every $P_i$ we set number of starts $m_{P_i} = \frac{m}{l}$. 
-    \item Next in every $P_i$ we create $m_{P_i}$ number of initial $H_{P_{i_1}}$ subsets and iterate C-steps for two iterations.
-    \item Then we choose $10$ best results from each subsets and merge them together. We get family of sets
-    $F_{merged}$ containing $10$ best $H_{P_{i_3}}$ subsets from each $P_i$.
-    \item On each subset from  $F_{merged}$ family of subsets we again iterate $2$ C-steps and then choose $10$ best results.
-    \item Finally we use these best $10$ subsets and use them to iterate C-steps till convergence.
-    \item As a result we choose best of those $10$ converged results.
+    \item If $n$ is greater than a given limit $l$, we create subset $L$ of data $|L| = l$, and divide this subset into $s$ disjoint sets $P_1, P_2,\ldots,P_s\,, |P_i| = \frac{l}{s}\,, P_i\cap P_j  = \emptyset\,, \bigcup_{i=1}^{s} P_{i} = L$.
+    \item For every $P_i$ we set the number of starts $k_{P_i} = \frac{k}{l}$. 
+    \item Next in every $P_i$ we create $k_{P_i}$ number of initial $\vec{m}_{P_{i_1}}$ subsets and apply C-steps few times for each of them.
+    \item Choose $10$ best results from each subsets and merge them together. We get family of sets
+    $F_{merged}$ containing $10$ best $\vec{m}_{P_{i_3}}$ subsets from each $P_i$.
+    \item On each subset from  $F_{merged}$ family of subsets we again apply $2$ C-steps twice and then choose $10$ best results.
+    \item Finally we use these $10$ best subsets and apply Repeat-C-step algorithm.
+    \item As a result we choose the best of those $10$ results.
 \end{itemize} 
 
 %%%%%%%%    PUTTING ALL TOGETHER    %%%%%%%%%%%
 
-
 \subsection{Putting all together}
-We described all major parts of the algorithm FAST-LTS. One last thing we need to mention is that even though C-steps iteration usually converges under $20$ steps, it is appropriate to introduce two parameters 
-$i_{max}$ and $t$ which limits the number of C-steps iterations in some rare cases when convergence is too slow. Parameter $i_{max}$ denotes the maximum number of iterations in final C-step iteration till convergence. Parameter $t$ denotes threshold stopping criterion such that $| \oflts(\what{{i}}) - \oflts(\what{{i+1}})| \leq t$ instead of 
-$\oflts(\what{{i}}) = \oflts(\what{{i+1}})$ . When we put all together, we get \defterm{FAST-LTS} algorithm which is described by the following pseudocode.
+We have described all major parts of the algorithm FAST-LTS. One last thing we need to mention is that even though C-steps iteration usually converges under $20$ steps, it is appropriate to introduce two parameters 
+$i_{max}$ and $r$ which limits the number of C-steps iterations in some rare cases when convergence is too slow. Parameter $i_{max}$ denotes the maximum number of iterations in the final Repeat-C-step iteration. Parameter $r$ denotes the threshold for the stopping criterion because of the rounding errors we use $| \oflts(\what{{i}}) - \oflts(\what{{i+1}})| \leq r$ instead of 
+$\oflts(\what{{i}}) = \oflts(\what{{i+1}})$ .
 
-\begin{algorithm}[H]
-    \label{alg:FAST-LTS}
-    \KwIn{$\boldsymbol{X} \in \mathbb{R}^{n \times p}, \boldsymbol{y} \in \mathbb{R}^{n \times 1}, m, l, s, i_{max}, t $}
-    \KwOut{ $\vec{\hat{w}_{final}}$, $\vec{m_{final}}$ }
-    \caption{FAST-LTS}
-    \SetKw{Break}{break}
-    $\what{{final}} \gets \emptyset$\;
-    $\vec{m_{final}} \gets \emptyset$\;
-    $F_{best} \gets \emptyset$\;
+% When we put all together, we get the \defterm{FAST-LTS} algorithm which is described by the following pseudocode.
 
-    \uIf{$n \geq l$}{
-        $F_{merged} \gets \emptyset$\;
-        % for each split
-        \For{$i \gets 0$ \textbf{to} $s$}{
-            % create xx number of starts
-            $F_{selected}  \gets \emptyset$\;
-            \For{$j \gets 0$ \textbf{to} $\frac{l}{s}$}{
-              $F_{initial} \gets Selective~iteration(\frac{m}{l})$\;
-              % on each starts iterate few c steps
-              \For{$\vec{m_i}$ \textbf{in} $F_{initial}$}{
-                $\vec{m_i} \gets Iterate~C~step~few~times(\vec{m_i})$\;
-                $F_{selected} \gets  F_{selected} \cup \{{ \vec{m_i} \}} $\;
-              }
-            }
-            % among all starts select 10 best and add it to merged set
-            $F_{merged} \gets F_{merged} \cup Select~10~best~subsets~from~F_{selected}$\;
-          }
+% \begin{algorithm}[H]
+%     \label{alg:FAST-LTS}
+%     \KwIn{$\boldsymbol{X} \in \mathbb{R}^{n \times p}, \boldsymbol{y} \in \mathbb{R}^{n \times 1}, m, l, s, i_{max}, t $}
+%     \KwOut{ $\vec{\hat{w}_{final}}$, $\vec{m_{final}}$ }
+%     \caption{FAST-LTS}
+%     \SetKw{Break}{break}
+%     $\what{{final}} \gets \emptyset$\;
+%     $\vec{m_{final}} \gets \emptyset$\;
+%     $F_{best} \gets \emptyset$\;
+
+%     \uIf{$n \geq l$}{
+%         $F_{merged} \gets \emptyset$\;
+%         % for each split
+%         \For{$i \gets 0$ \textbf{to} $s$}{
+%             % create xx number of starts
+%             $F_{selected}  \gets \emptyset$\;
+%             \For{$j \gets 0$ \textbf{to} $\frac{l}{s}$}{
+%               $F_{initial} \gets Selective~iteration(\frac{m}{l})$\;
+%               % on each starts iterate few c steps
+%               \For{$\vec{m_i}$ \textbf{in} $F_{initial}$}{
+%                 $\vec{m_i} \gets Iterate~C~step~few~times(\vec{m_i})$\;
+%                 $F_{selected} \gets  F_{selected} \cup \{{ \vec{m_i} \}} $\;
+%               }
+%             }
+%             % among all starts select 10 best and add it to merged set
+%             $F_{merged} \gets F_{merged} \cup Select~10~best~subsets~from~F_{selected}$\;
+%           }
         
-          % for each, say 50 best, iterate few and add it to best
-          \For{$\vec{m_i}$ \textbf{in} $F_{merged}$}{
-            $\vec{m_i} \gets Iterate~C~step~few~times(\vec{m_i})$\;
-            $F_{best} \gets F_{best} \cup \{{ \vec{m_i} \}} $\;
-          }
-          $F_{best} \gets  Select~10~best~subsets~from~F_{best} $\;
-    }
-    \Else{
-        $F_{initial} \gets Selective~iteration(m)$\;
-        $F_{best} \gets  Select~10~best~subsets~from~F_{initial} $\;
-    }
+%           % for each, say 50 best, iterate few and add it to best
+%           \For{$\vec{m_i}$ \textbf{in} $F_{merged}$}{
+%             $\vec{m_i} \gets Iterate~C~step~few~times(\vec{m_i})$\;
+%             $F_{best} \gets F_{best} \cup \{{ \vec{m_i} \}} $\;
+%           }
+%           $F_{best} \gets  Select~10~best~subsets~from~F_{best} $\;
+%     }
+%     \Else{
+%         $F_{initial} \gets Selective~iteration(m)$\;
+%         $F_{best} \gets  Select~10~best~subsets~from~F_{initial} $\;
+%     }
 
-    % iterate till convergence on few best final results
-    $F_{final} \gets \emptyset$\;
-    $W_{final} \gets \emptyset$\;
-    \For{$\vec{m_i}$ \textbf{in} $F_{best}$}{
-            $\vec{m_i}, \what{i} \gets Iterate~C~step~till~convergence(\vec{m_i}, i_{max}, t)$\;
-            $F_{final} \gets F_{final} \cup \{{ \vec{m_i} \}}$\;
-            $W_{final} \gets W_{final} \cup \{{ \what{i} \}}$\;
-    }
+%     % iterate till convergence on few best final results
+%     $F_{final} \gets \emptyset$\;
+%     $W_{final} \gets \emptyset$\;
+%     \For{$\vec{m_i}$ \textbf{in} $F_{best}$}{
+%             $\vec{m_i}, \what{i} \gets Iterate~C~step~till~convergence(\vec{m_i}, i_{max}, t)$\;
+%             $F_{final} \gets F_{final} \cup \{{ \vec{m_i} \}}$\;
+%             $W_{final} \gets W_{final} \cup \{{ \what{i} \}}$\;
+%     }
 
-    % select one best result
-    $\what{{final}}, \vec{m_{final}} \gets select~\vec{\hat{w_i}}~and~\vec{m_{i}}~with~smallest~\oflts(\vec{\hat{w_i}})~from~F_{final}$\;
+%     % select one best result
+%     $\what{{final}}, \vec{m_{final}} \gets select~\vec{\hat{w_i}}~and~\vec{m_{i}}~with~smallest~\oflts(\vec{\hat{w_i}})~from~F_{final}$\;
 
-    \Return{ $\what{{final}}, \vec{m_{final}}$  }\;
-\end{algorithm}
+%     \Return{ $\what{{final}}, \vec{m_{final}}$  }\;
+% \end{algorithm}
 
 
 
@@ -818,11 +815,11 @@ $\oflts(\what{{i}}) = \oflts(\what{{i+1}})$ . When we put all together, we get \
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Feasible solution} \label{section_feasible_solution}
-In this section we introduce feasible solution algorithm from \cite{hawkins:1994}.
+In this section we introduce feasible solution algorithm from~\cite{hawkins:1994}.
 It is based on the strong necessary condition described at Definition~\ref{strong_condition}. 
 The basic idea can be described as follows.
 
-Let us consider that we have some $\vec{m} \in Q^{(n,h)}$ and denote $O_m = \{{i \in  \set{ 1,2,\ldots , n } ;w_i = 1\}}$ and $Z_m = \{{j \in  \set{ 1,2,\ldots , n } ;w_j = 0\}}$ thus sets of indexes of positions where is $0$ respectively $1$ in vector $\vec{m}$. We can think about it as indexes of observations in $h$ set and $g$ set respectively. Then we can mark $\vec{m}^{(i,j)}$ as a vector which is constructed by swap of its ith and jth element where $i \in O$ and $j \in Z$. Such vector corresponds to vector $\vec{m_{swap}}$ which we marked at Definition~\ref{strong_condition}.
+Let us consider that we have some $\vec{m} \in Q^{(n,h)}$, then we can denote $O_m = \{{i \in  \set{ 1,2,\ldots , n } ;w_i = 1\}}$ and $Z_m = \{{j \in  \set{ 1,2,\ldots , n } ;w_j = 0\}}$ thus sets of indexes of positions where is $0$ respectively $1$ in vector $\vec{m}$. We can think about it as indexes of observations in $h$ set and $g$ set respectively. Then we can mark $\vec{m}^{(i,j)}$ as a vector which is constructed by swap of its ith and jth element where $i \in O$ and $j \in Z$. Such vector corresponds to vector $\vec{m_{swap}}$ which we marked at Definition~\ref{strong_condition}.
 
 With this in mind, let us mark 
 \begin{equation}
@@ -840,7 +837,7 @@ We now want to calculate $\Delta S^{(\vec{m})}_{i,j}$.
 Let us mark vector of residuals 
 $\vec{r}^{(\vec{m})} = \vec{Y} - \vec{X} \vec{\hat{w}} $
 and also $d_{r,s} = \vec{x_r} \vec{Z_M}^{-1}  \vec{x_s} $
-then by equation introduced in \cite{atkinson1991simulated} we get
+then by equation introduced in~\cite{atkinson1991simulated} we get
 
 \begin{equation} \label{hawkins:rovnice}
     \Delta S^{(\vec{m})}_{i,j} = 
@@ -918,7 +915,7 @@ $\mathcal{O}(np^2 + n^2p^2) \sim \mathcal{O}(n^2p^2)$.
 \end{proof}
 
 
-One run of this iteration process leads to some local optimum, i.e., set satisfying the strong necessary condition. In \cite{hawkins:1994} they refer to to this set as to \defterm{feasible set}.
+One run of this iteration process leads to some local optimum, i.e., set satisfying the strong necessary condition. In~\cite{hawkins:1994} they refer to to this set as to \defterm{feasible set}.
 This because it is not global optima the algorithm needs to be run multiple times say $t$ times. A $h$  subset with the smallest value of the objective function is chosen as the final solution.
 
 Discussion about how to find the initial $h$-element subset resp. initial $\vec{m}$ was already discussed when describing FAST-LTS algorithm.
@@ -994,7 +991,7 @@ In this section, we've described the FSA algorithm. In the next section, we intr
 \section{OEA, MOEA, MMEA} \label{oeamoeammea}
 %three exchanging algorithms from Agulló, 2000
 
-In the FSA algorithm, we assumed that after each cycle of OSAA~\ref{alg:optimal:improvement} we need to recalculate inversion $(\vec{X}^T\vec{X})$ together with $\vec{\hat{w}}$. In this section, we introduce a different approach described in \cite{agullo2001new} so that we can update it instead of recalculating. Moreover, these ideas lead to bounding condition of FSA which not only improves the speed but also gives options to construct different algorithms. 
+In the FSA algorithm, we assumed that after each cycle of OSAA~\ref{alg:optimal:improvement} we need to recalculate inversion $(\vec{X}^T\vec{X})$ together with $\vec{\hat{w}}$. In this section, we introduce a different approach described in~\cite{agullo2001new} so that we can update it instead of recalculating. Moreover, these ideas lead to bounding condition of FSA which not only improves the speed but also gives options to construct different algorithms. 
 
 In Section~\ref{section_feasible_solution} we introduce additive formula~\eqref{hawkins:rovnice} which corresponds to $\oflts(\vec{m}^{(i,j)}) - \oflts(\vec{m})$. Let us now try to obtain similar formula but with the focus on how the individual elements in our current algorithm change namely the inversion $\vec{Z^{-1}}$ and $\vec{\hat{w}}$. We also split the idea of swap the $i, j$ into the insertion of $j$ and remove of $i$. Thus we describe how individual elements are affected after adding one row and also removing one row. Moreover, during this derivation, we obtain two different approaches to calculate it. Both are important, and we recapitulate them after.
 
@@ -1089,7 +1086,7 @@ so determinant with appended row changes as
 \begin{equation} \label{udpateddeterminant}
     \det(\vec{Z} + \vec{x_i^T}\vec{x_i}) = det(\vec{Z})(1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}).
 \end{equation}
-Finally the inversion $\vec{Z}^{-1}$ can be obtained using Sherman-Morrison formula \cite{bartlett1951inverse} so that 
+Finally the inversion $\vec{Z}^{-1}$ can be obtained using Sherman-Morrison formula~\cite{bartlett1951inverse} so that 
 \begin{equation} \label{shermanmorris}
     (\vec{Z} + \vec{x_i^T}\vec{x_i})^{-1} = \vec{Z}^{-1} - \dfrac{\vec{Z}^{-1}\vec{x_i^T}\vec{x_i}\vec{Z}^{-1}}{1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}}
 \end{equation}
@@ -1103,12 +1100,12 @@ and
     \vec{u} = \vec{Z}^{-1}\vec{x_i^T},      \vec{u} \in \mathbb{R}^{p \times 1}.
 \end{equation}
 
-Then \eqref{shermanmorris} can be written as
+Then~\eqref{shermanmorris} can be written as
 \begin{equation} \label{inversionplus}
     (\vec{Z} + \vec{x_i^T}\vec{x_i})^{-1} = \vec{Z}^{-1} + b\vec{u}\vec{u^T}.
 \end{equation}
 
-Given that last missing piece to express updated $\vec{\hat{w}}$ is appended $\vec{X}^T\vec{y}$ by one row, which can be simply expressed by same idea as \eqref{addedrow} so that updated $\vec{\hat{w}}$ which we denote as $\vec{\overline{\hat{w}}}$ is 
+Given that last missing piece to express updated $\vec{\hat{w}}$ is appended $\vec{X}^T\vec{y}$ by one row, which can be simply expressed by same idea as~\eqref{addedrow} so that updated $\vec{\hat{w}}$ which we denote as $\vec{\overline{\hat{w}}}$ is 
 \begin{equation}
     \vec{\overline{\hat{w}}} = (\vec{Z}^{-1} + b\vec{u}\vec{u^T})(\vec{X^T}\vec{y} + y_i\vec{x_i^T}).
 \end{equation}
@@ -1191,7 +1188,7 @@ so that
 
 \subsubsection*{Swapping two observations}
 
-Let us now express the equation for including and excluding observation at once. First, notice that from \eqref{updatedinversion2} we can express 
+Let us now express the equation for including and excluding observation at once. First, notice that from~\eqref{updatedinversion2} we can express 
 
 \begin{equation} \label{xjoverlinez}
     \vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T}) =  \vec{x_j}\vec{Z}^{-1}\vec{x_j^T}) - 
@@ -1222,7 +1219,7 @@ where
 \end{equation}
 where $e_i = y_i - x_i\vec{\hat{w}}$ and $e_j = y_j - x_j\vec{\hat{w}}$.
 
-We can see that this formula is similar to the \eqref{hawkins:rovnice} but here the $\rho(\vec{c_i}, \vec{c_j})$ represents multiplicative increment. Moreover $0 < \rho(\vec{c_i}, \vec{c_j}) $ and if $0 < \rho(\vec{c_i}, \vec{c_j})< 1$ then the swap leads to improvement in terms of feasible solution.
+We can see that this formula is similar to the~\eqref{hawkins:rovnice} but here the $\rho(\vec{c_i}, \vec{c_j})$ represents multiplicative increment. Moreover $0 < \rho(\vec{c_i}, \vec{c_j}) $ and if $0 < \rho(\vec{c_i}, \vec{c_j})< 1$ then the swap leads to improvement in terms of feasible solution.
 
 We are now able to modify the FSA so that we do not need to recompute $\vec{\hat{w}}$ and inversion $(\vec{X}^T \vec{X})^{-1}$ but we can update it. Authors call this algorithm optimal exchange algorithm (OEA)
 
@@ -1238,14 +1235,13 @@ We can apply theory from the previous section to the FSA. Sets $O_m$ and $Z_m$ (
 The matrix $\vec{Z_M}$ can be used instead of the matrix $\vec{Z}$ and
  $\vec{X_M}$ with $\vec{y_M}$ to calculate $\vec{\hat{w}}$. 
 
-In terms of the FSA~\ref{alg:feasible_solution} we first need to change the OSAA.  There are only minor tweaks. First, we need to pass one more argument, and that is $RSS$. Second, We want to find minimal $\rho(\vec{c_i}, \vec{c_j})$ calculated by \eqref{agullo:rovnice} so that $0 < \rho(\vec{c_i}, \vec{c_j}) < 1 $. Other parts of the algorithm remains the same. Time complexity thus remains the same.
+In terms of the FSA~\ref{alg:feasible_solution} we first need to change the OSAA.  There are only minor tweaks. First, we need to pass one more argument, and that is $RSS$. Second, We want to find minimal $\rho(\vec{c_i}, \vec{c_j})$ calculated by~\eqref{agullo:rovnice} so that $0 < \rho(\vec{c_i}, \vec{c_j}) < 1 $. Other parts of the algorithm remains the same. Time complexity thus remains the same.
 
-This algorithm produces $\rho(\vec{c_i}$, and indexes  $i_{swap} \in O_m$ and $j_{swap} \in Z_m$ of observations we want to swap. Given that, we can update the $RSS$ by \eqref{updaterss}, $\vec{Z_M^{-1}}$ by \eqref{inversionplus} and \eqref{updatedinversion2} and finally update $\vec{\hat{w}}$ by \eqref{thetaplus} and \eqref{thetaminus}.
+This algorithm produces $\rho(\vec{c_i}$, and indexes  $i_{swap} \in O_m$ and $j_{swap} \in Z_m$ of observations we want to swap. Given that, we can update the $RSS$ by~\eqref{updaterss}, $\vec{Z_M^{-1}}$ by~\eqref{inversionplus} and~\eqref{updatedinversion2} and finally update $\vec{\hat{w}}$ by~\eqref{thetaplus} and~\eqref{thetaminus}.
 
 Let us now talk about the time complexity of such a solution. As we said, the time complexity of modifies OSAA is $\mathcal{O}( n^2 p^2)$. Thus there is no asymptotic improvement. On the other hand, there are some significant constants outside the OSAA so let us look at how they improve.
 
-When an improvement is found, thus when $0 < \rho(\vec{c_i}, \vec{c_j}) < 1 $, then we update $RSS$, which is constant. Next we update inversion by
-\eqref{inversionplus} which is $\mathcal{O}(4p^2)$ and \eqref{updatedinversion2} which is also $\mathcal{O}(4p^2)$.  Finally we need to update $\vec{\hat{w}}$ by \eqref{thetaplus} and \eqref{thetaminus} which are both $\mathcal{O}(p^2 +p)$. 
+When an improvement is found, thus when $0 < \rho(\vec{c_i}, \vec{c_j}) < 1 $, then we update $RSS$, which is constant. Next we update inversion by~\eqref{inversionplus} which is $\mathcal{O}(4p^2)$ and~\eqref{updatedinversion2} which is also $\mathcal{O}(4p^2)$.  Finally we need to update $\vec{\hat{w}}$ by~\eqref{thetaplus} and~\eqref{thetaminus} which are both $\mathcal{O}(p^2 +p)$. 
 
 \begin{observation} \label{updatinginversionobservation}
 Time complexity of updating all the quantities is 
@@ -1254,9 +1250,9 @@ That is quite an improvement if we compare it to time complexity $\mathcal{O}(p^
 \end{observation}
 
 
-Note that right now it actually does not matter if we use additive formula \eqref{hawkins:rovnice} with the stopping criterion $\Delta S^{(\vec{m})}_{i,j} \geq 0$---thus unmodified OSAA---or multiplicative formula \eqref{agullo:rovnice} with the stopping criterion $\rho(\vec{c_i}, \vec{c_j}) \geq 1 $. Both results we can update $RSS$ and other quantities can be used to calculate both formulas. 
+Note that right now it actually does not matter if we use additive formula~\eqref{hawkins:rovnice} with the stopping criterion $\Delta S^{(\vec{m})}_{i,j} \geq 0$---thus unmodified OSAA---or multiplicative formula~\eqref{agullo:rovnice} with the stopping criterion $\rho(\vec{c_i}, \vec{c_j}) \geq 1 $. Both results we can update $RSS$ and other quantities can be used to calculate both formulas. 
 
-However, the advantage of the multiplicative formula \ref{agullo:rovnice} is that we can use the following bounding condition to improve the performance of the modified OSAA.
+However, the advantage of the multiplicative formula~\eqref{agullo:rovnice} is that we can use the following bounding condition to improve the performance of the modified OSAA.
 
 
 %%%%%       B O U N D I N G   C O N D I T I ON    S P E E D U P       %%%%%
@@ -1304,7 +1300,7 @@ If $\rho_b(\vec{c_i}, \vec{c_j})$ is less that  $\rho_{min}$ we actually compute
 
 That means in the double loop which time complexity is $\mathcal{n^2}$  we do not always need to calculate $\rho(\vec{c_i}, \vec{c_j})$ which time complexity is $\mathcal{n^2}$. This does not improve the asymptotic time complexity, but (as can be seen in the table \todo{create experiment}) it can improve the speed of the algorithm. 
 
-Finally, let us note that \cite{agullo2001new} calls this algorithm with bounding condition as \defterm{modified optimal exchange algorithm} (MOEA).
+Finally, let us note that in~\cite{agullo2001new} authors call this algorithm with bounding condition as \defterm{modified optimal exchange algorithm} (MOEA).
 
 
 
@@ -1316,18 +1312,17 @@ Finally, let us note that \cite{agullo2001new} calls this algorithm with boundin
 The minimum-maximum exchange algorithm (MMEA) is very similar to the FSA respectively to its modified version the OEA. The main difference is the greediness of this algorithm. What we mean by that is that this algorithm does not find the optimal swap, but rather first find the $\vec{c_j}$  which increase the $RSS$ by the minimum value and include this observation.
 Next, it finds $\vec{c_j}$ such that in decrease $RSS$ by maximum and exclude this observation.
 
-The minimum increase can be found by calculating $\gamma^{+}(\vec{c_i}) $ by \ref{gamma:plus} for each trimmed observation in  $Z_m$.
+The minimum increase can be found by calculating $\gamma^{+}(\vec{c_i}) $ by~\eqref{gamma:plus} for each trimmed observation in  $Z_m$.
 
 Next, this observation is included, so we get $h+1$ untrimmed observations. We update 
-$\vec{Z_M^{-1}}$ to  $\vec{\overline{Z_M}}^{-1}$ by \eqref{inversionplus} and  and $\vec{\hat{w}}$ to $\vec{\overline{\hat{w}}}$ by \eqref{thetaplus}.
+$\vec{Z_M^{-1}}$ to  $\vec{\overline{Z_M}}^{-1}$ by~\eqref{inversionplus} and  and $\vec{\hat{w}}$ to $\vec{\overline{\hat{w}}}$ by~\eqref{thetaplus}.
 
-Then we can find maximum  $\gamma^{-}(\vec{c_j})$ by \eqref{gamma:minus} among $O_m^{(i)}$ where $m^{(i)}$ denotes included observation $c_i$.
+Then we can find maximum  $\gamma^{-}(\vec{c_j})$ by~\eqref{gamma:minus} among $O_m^{(i)}$ where $m^{(i)}$ denotes included observation $c_i$.
 
-Next, we can update $\vec{\overline{Z_M}}^{-1}$ to the   $\vec{\overline{\overline{Z_M}}}^{-1}$ by \eqref{updatedinversion2} and 
-$\vec{\overline{\hat{w}}}$ to $\vec{\overline{\overline{\hat{w}}}}$ by 
-\eqref{thetaminus}.
+Next, we can update $\vec{\overline{Z_M}}^{-1}$ to the   $\vec{\overline{\overline{Z_M}}}^{-1}$ by~\eqref{updatedinversion2} and 
+$\vec{\overline{\hat{w}}}$ to $\vec{\overline{\overline{\hat{w}}}}$ by~\eqref{thetaminus}.
 
-Finally, we can update $RSS$ to $\overline{\overline{RSS}}$ by \ref{rssplus} and  \ref{rssminus}. We can repeat this process until $\gamma^{-}(\vec{c_j}) > \gamma^{+}(\vec{c_i})$.
+Finally, we can update $RSS$ to $\overline{\overline{RSS}}$ by~\eqref{rssplus} and~\eqref{rssminus}. We can repeat this process until $\gamma^{-}(\vec{c_j}) > \gamma^{+}(\vec{c_i})$.
 
 \begin{observation} \label{timecomplexitymmea}
     One step of the algorithm MMEA has time complexity $O(p^2n)$. So the whole algorithm has time complexity $\mathcal{O}(tlp^2n)$ where $t$ is number of the starts and $l$ is maximum number of iterations of each start.
@@ -1428,12 +1423,12 @@ We have loop over $p$ $\vec{Q}(i,j)$ Givens matrices. We do not need to create t
 \end{proof}
 
 \begin{note}
-This process can also be done in case we are using an economic version of matrices $\vec{R}$ and $\vec{Q}$  thus matrices $\vec{R_1}$ and $\vec{Q_1}$ (see \eqref{matrixq1r1}). In such a case
+This process can also be done in case we are using an economic version of matrices $\vec{R}$ and $\vec{Q}$  thus matrices $\vec{R_1}$ and $\vec{Q_1}$ (see~\eqref{matrixq1r1}). In such a case
 $\vec{Q_1} \in \mathbb{R}^{p \times p}$ thus then updating $\vec{Q_1}$ to $\vec{Q_1}^{(+)}$ is only $\mathcal{O}(p^2)$.
 \end{note}
 
 \begin{note} \label{qnotrequired}
-The matrix $\vec{\overline{R}}$  can be updated to $\vec{R}^{(+)}$  without the presence of matrix $\vec{Q}$. We use this observation  in the algorithm described in \ref{sectionbab}.
+The matrix $\vec{\overline{R}}$  can be updated to $\vec{R}^{(+)}$  without the presence of matrix $\vec{Q}$. We use this observation  in the algorithm described in Section~\ref{sectionbab}.
 \end{note}
 
 
@@ -1443,7 +1438,7 @@ The matrix $\vec{\overline{R}}$  can be updated to $\vec{R}^{(+)}$  without the 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsubsection*{QR delete}
-When we extract the row $\vec{x_i}$ from matrix $\vec{A}$ we can use following trick \cite{hammarling2008updatingqr}. First, we move such row as the first row of the matrix $\vec{A}$ so ve create permutation matrix $\vec{P}$ so that 
+When we extract the row $\vec{x_i}$ from matrix $\vec{A}$ we can use following trick~\cite{hammarling2008updatingqr}. First, we move such row as the first row of the matrix $\vec{A}$ so ve create permutation matrix $\vec{P}$ so that 
 \begin{equation}
     \vec{P}\vec{A} = \begin{bmatrix}
         \vec{x_i} \\
@@ -1493,14 +1488,14 @@ so that
     \vec{A^{(-)}} = \vec{Q^{(-)}}\vec{R^{(-)}}
 \end{equation}
 
-Pseudocode is very similar to the QR Insert algorithm \ref{addingrowqr} so it is not necessary to provide it here.
+Pseudocode is very similar to the algorithm QR Insert~\ref{addingrowqr} so it is not necessary to provide it here.
 
 \begin{observation} \label{qrdeletetime}
 Time complexity of QR delete is   $\mathcal{O}(n^2)$.
 \end{observation}
 
 \begin{proof}
-We need to create $n-1$ Givens matrices, and with each of this we need to multiply $\vec{Q^{(-)}}$ and $\vec{R^{(-)}}$. As we stated in \ref{qrinsertproof} this can be node in $\mathcal{O}(n)$ for each matrix.
+We need to create $n-1$ Givens matrices, and with each of this we need to multiply $\vec{Q^{(-)}}$ and $\vec{R^{(-)}}$. As we stated in Observation~\ref{qrinserttime} this can be node in $\mathcal{O}(n)$ for each matrix.
 So together we get $\mathcal{O}(n^2)$.
 \end{proof}
 
@@ -1518,7 +1513,7 @@ In case of QR delete, it is not possible to use the economic version of matrices
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsubsection*{Calculation of OEA using QR decomposition}
-Given all the required theory above, let us describe the computation. Let us start with \eqref{agullo:rovnice}. Here we need inversion to calculate 
+Given all the required theory above, let us describe the computation. Let us start with~\eqref{agullo:rovnice}. Here we need inversion to calculate 
 $\vec{x_i}\vec{Z}^{-1}\vec{x_i^T}$, $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$ and $\vec{x_i}\vec{Z}^{-1}\vec{x_j^T}$. But this can also be done without inversion, only using the decomposition. We can write this equation
 \begin{equation} \label{solveimi}
     \vec{x_i}\vec{Z}^{-1}\vec{x_i^T} = \vec{v}^T\vec{v}     \iff \vec{x_i}(\vec{R}^T\vec{R})^{-1}\vec{x_i^T} = \vec{v}^T\vec{v}
@@ -1532,7 +1527,7 @@ $\vec{x_i}\vec{Z}^{-1}\vec{x_j^T}$. We can write this
 \begin{equation}
     \vec{x_i}\vec{Z}^{-1}\vec{x_j^T} = \vec{x_j}\vec{u}     \iff \vec{x_i}(\vec{R}^T\vec{R})^{-1}\vec{x_j^T} = \vec{x_j}^T\vec{u},
 \end{equation} 
-where column vector $\vec{u}$ is defined by \eqref{agullo_u}. We can see that 
+where column vector $\vec{u}$ is defined by~\eqref{agullo_u}. We can see that 
 
 \begin{equation}
     \vec{u} = \vec{Z}^{-1}\vec{x_i^T}     \iff (\vec{R}^T\vec{R})^{-1}\vec{x_i^T} = \vec{u}
@@ -1541,7 +1536,7 @@ so that $\vec{u}$ can be obtained by solving the upper triangular system
 \begin{equation} \label{solve_u_qr}
     \vec{R}\vec{u} = \vec{v},
 \end{equation}
-where $\vec{v}$ is solution of \eqref{vsolution}. Other quantities of \eqref{agullo:rovnice} does not require $\vec{Z}^{-1}$.
+where $\vec{v}$ is solution of~\eqref{vsolution}. Other quantities of~\eqref{agullo:rovnice} does not require $\vec{Z}^{-1}$.
 
 \begin{observation}
 We can see that time complexity of all these calculations is the same as in case of calculating with inversion thus $\mathcal{O}(p^2)$.
@@ -1552,23 +1547,23 @@ Indeed, in the case of the inversion, we are multiplying quantities such as $\ve
 In the case of decomposition, we solve this problem by solving the triangular system of $p$ equations. This can also be done in $\mathcal{O}(p^2)$.
 \end{proof}
 
-When optimal exchange $\vec{c_i}, \vec{c_j}$ is found then we need to update $RSS$ which can be done same way by \eqref{updaterss}. Updating $\vec{\hat{w}}$ to  $\vec{\overline{\hat{w}}}$ by \eqref{thetaplus} requires
-$\vec{u}$  which in this case we calculate by \eqref{solve_u_qr} and $b$ which requires  $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$. This can be done in the same manner as \eqref{solveimi}. Analogous operations can be used to update $\vec{\overline{\hat{w}}}$ to $\vec{\overline{\overline{\hat{w}}}}$  by means of \eqref{thetaminus}. Only thing wee need to realize that we can express \eqref{xjoverlinez} as $\vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T} = \vec{x_i}\vec{{{Z}}}^{-1}\vec{x_i^T} + b(\vec{u}\vec{x_j}^2)$.
+When optimal exchange $\vec{c_i}, \vec{c_j}$ is found then we need to update $RSS$ which can be done same way by~\eqref{updaterss}. Updating $\vec{\hat{w}}$ to  $\vec{\overline{\hat{w}}}$ by~\eqref{thetaplus} requires
+$\vec{u}$  which in this case we calculate by~\eqref{solve_u_qr} and $b$ which requires  $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$. This can be done in the same manner as~\eqref{solveimi}. Analogous operations can be used to update $\vec{\overline{\hat{w}}}$ to $\vec{\overline{\overline{\hat{w}}}}$  by means of~\eqref{thetaminus}. Only thing wee need to realize that we can express~\eqref{xjoverlinez} as $\vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T} = \vec{x_i}\vec{{{Z}}}^{-1}\vec{x_i^T} + b(\vec{u}\vec{x_j}^2)$.
 
-On the other hand, we cannot use equation \eqref{inversionplus} and \eqref{updatedinversion2} for updating the inversion, because we do not have one. So we need to update our QR decomposition somehow. 
-We describe algorithms for updating the QR decomposition in the section \ref{differentcomputation}. 
+On the other hand, we cannot use equation~\eqref{inversionplus} and~\eqref{updatedinversion2} for updating the inversion, because we do not have one. So we need to update our QR decomposition somehow. 
+We describe algorithms for updating the QR decomposition in Section~\ref{differentcomputation}. 
 First, we can use the QR Insert algorithm to add row $\vec{x_j}$ to the decomposition and consequently QR delete to extract $\vec{x_j}$  from the decomposition. 
 
 \begin{observation}
-This approach is slower than updating inversion directly. On the other hand, this solution is numerically stable. Updating inversion can be done in $\mathcal{p^2}$ (see observation \ref{updatinginversionobservation})  while QR insert has $\mathcal{O}(np)$ (see observation \ref{qrinserttime}) and time complexity and QR delete even $\mathcal{O}(n^2)$ (see observation \ref{qrdeletetime}).
+This approach is slower than updating inversion directly. On the other hand, this solution is numerically stable. Updating inversion can be done in $\mathcal{p^2}$ (see Observation~\ref{updatinginversionobservation})  while QR insert has $\mathcal{O}(np)$ (see Observation~\ref{qrinserttime}) and time complexity and QR delete even $\mathcal{O}(n^2)$ (see Observation~\ref{qrdeletetime}).
 \end{observation}
 
 \begin{note}
-Because time complexity of the QR delete is $\mathcal{O}(n^2)$, it is up to consideration if instead of recycling QR decomposition is not worth it to recalculate it from scratch which takes $\mathcal{O}(p^2n)$ (see \eqref{qrtimewhat}).
+Because time complexity of the QR delete is $\mathcal{O}(n^2)$, it is up to consideration if instead of recycling QR decomposition is not worth it to recalculate it from scratch which takes $\mathcal{O}(p^2n)$ (see~\eqref{qrtimewhat}).
 \end{note}
 
 
-Finally let us talk about matrix $\vec{\tilde{Z}}$ \eqref{matrixZ} which we used for derivation of our equations. If we use \ref{qrcholesky} observation then we realize that if we make QR factorization of $\vec{A} = (\vec{X}, \vec{y})$ then
+Finally let us talk about matrix $\vec{\tilde{Z}}$~\eqref{matrixZ} which we used for derivation of our equations. If we use Observation~\ref{qrcholesky} then we realize that if we make QR factorization of $\vec{A} = (\vec{X}, \vec{y})$ then
 
 \begin{equation}
     \vec{\tilde{Z}} = 
@@ -1634,9 +1629,9 @@ Now we have described both versions of calculation the algorithm OEA. As we alre
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Combined algorithm} \label{sectioncombined}
-In this section, we shortly describe how we can utilize lemma \ref{lemma_conditions}; thus that strong necessary condition is not satisfied unless the weak necessary condition is satisfied.
+In this section, we shortly describe how we can utilize Lemma~\ref{lemma_conditions}; thus that strong necessary condition is not satisfied unless the weak necessary condition is satisfied.
 
-Algorithm FAST-LTS outputs $h$ element subset satisfying the weak necessary condition. One step of this algorithm has time complexity $\mathcal{O}(p^2n)$ (see observation \ref{csteptimecomplexity}). The iteration of this step is quite low and moreover usually limited by parameter. 
+Algorithm FAST-LTS outputs $h$ element subset satisfying the weak necessary condition. One step of this algorithm has time complexity $\mathcal{O}(p^2n)$ (see Observation~\ref{csteptimecomplexity}). The iteration of this step is quite low and moreover usually limited by parameter. 
 
 On the other hand, algorithms for finding strong necessary condition FSA, OEA and MOEA have time complexity of one step $\mathcal{O}(p^2n^2)$ (we now don't take into account eager version MMEA, because we have no proof that it finds $h$ element subset satisfying strong necessary condition). 
 
@@ -1651,7 +1646,7 @@ z
 
 On the large data sets, where even one step of the MOEA is too exhausting, we can use the eager MMEA which time complexity of one step is lower than in the case of MOEA.
 
-In chapter \ref{chapterexperiments} we show the experimental results of various combinations of these algorithms.
+In Chapter~\ref{chapterexperiments} we show the experimental results of various combinations of these algorithms.
 
 
 
@@ -1661,9 +1656,9 @@ In chapter \ref{chapterexperiments} we show the experimental results of various 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{BAB algorithm} \label{sectionbab}
-In this section, we describe the algorithm from \cite{agullo2001new}.Very similar algorithm can also be found in \cite{hofmann2010matrix}.
+In this section, we describe the algorithm from~\cite{agullo2001new}.Very similar algorithm can also be found in~\cite{hofmann2010matrix}.
 
-Unlike previous algorithms, this one is exact. As we discussed in section \ref{sectionofltsdiscrete}, exact algorithm calculate OLS fit on all of the $\binom{n}{h}$ $h$ element subsets. For larger data sets this approach is computationally prohibitive.
+Unlike previous algorithms, this one is exact. As we discussed in Section~\ref{sectionofltsdiscrete}, exact algorithm calculate OLS fit on all of the $\binom{n}{h}$ $h$ element subsets. For larger data sets this approach is computationally prohibitive.
 
 This version of the exact algorithm is based on the branch and bound design paradigm; thus it tries to avoid exhaustive computation on all $h$ element subsets. First, let us describe how the combination tree is built. 
 
@@ -1673,7 +1668,7 @@ $\vec{ X_{J_k} }$ and $\vec{ Y_{J_k} }$ matrices created from $\vec{X}$
 and $\vec{Y}$ so that all rows that are not indexed by $J_k$ are removed.
 We can see that the number of subsets is given by $\binom{n}{k}$.
 
-Let us now consider tree such that at level $k$ is $\binom{n}{k}$ nodes representing all $J_k$ subsets. The depth of the tree is $h$, so this tree has $\binom{n}{h}$ leaves representing all $h$ index subsets. Example of such a tree we can see at figure \ref{figure:full:tree}.
+Let us now consider tree such that at level $k$ is $\binom{n}{k}$ nodes representing all $J_k$ subsets. The depth of the tree is $h$, so this tree has $\binom{n}{h}$ leaves representing all $h$ index subsets. Example of such a tree we can see at Figure~\ref{figure:full:tree}.
 
 \begin{figure}[h]
 \centering
@@ -1702,16 +1697,16 @@ We can describe the algorithm as follows:
 During the traversal of the tree, we only need to know the path back to the root. Thus the whole tree does not have to be in the memory. 
 
 \begin{remark}
-If we calculated $\oflts(m_{k})$ than we do not need to calculate $\oflts(m_{k+1})$ from scratch. In section \ref{oeamoeammea} we described the way how to update it when a row is added using the matrix inversion any we can apply it here. In section \ref{differentcomputation} we described the way of doing this using the matrix decomposition which is another option. 
+If we calculated $\oflts(m_{k})$ than we do not need to calculate $\oflts(m_{k+1})$ from scratch. In Section~\ref{oeamoeammea} we described the way how to update it when a row is added using the matrix inversion any we can apply it here. In Section~\ref{differentcomputation} we described the way of doing this using the matrix decomposition which is another option. 
 
-Moreover, we described that if rows are not extracted and only inserted, then matrix $\vec{Q}$ do not have to be present and only matrix $\vec{R}$ can be updated. We can use this in our favor because we can keep all the decompositions on the path from the root in the memory.  If we use matrix $\vec{\tilde{Z}}$ and $\vec{\tilde{R}}$ we can  (see remark \ref{qnotrequiredspeedupremark} ) calculate all the quantities required for the update only using the matrix $\vec{\tilde{R}}$. This means that both versions of updating are possible and both can be done in $\mathcal{O}(p^2)$. Thus we recommend using the matrix decomposition version of the updating because it can provide higher numerical stability at the same speed.
+Moreover, we described that if rows are not extracted and only inserted, then matrix $\vec{Q}$ do not have to be present and only matrix $\vec{R}$ can be updated. We can use this in our favor because we can keep all the decompositions on the path from the root in the memory.  If we use matrix $\vec{\tilde{Z}}$ and $\vec{\tilde{R}}$ we can  (see Remark~\ref{qnotrequiredspeedupremark} ) calculate all the quantities required for the update only using the matrix $\vec{\tilde{R}}$. This means that both versions of updating are possible and both can be done in $\mathcal{O}(p^2)$. Thus we recommend using the matrix decomposition version of the updating because it can provide higher numerical stability at the same speed.
 \end{remark}
 
 \subsection{Improvements}
-Because the tree is pruned based on the smallest value $RSS^*$, it would be convenient if we were able to obtain small value $RSS^*$ early in the traversal. We can obtain this value by calculating an approximative LTS estimate. This can be done using any probabilistic algorithm described in the previous sections of this chapter. An ideal candidate may be some combined algorithm described in section \ref{sectioncombined}. When we find such small value, it is then also convenient to permutate the observations based on its absolute residuals based on this LTS estimate in the decreasing order.
+Because the tree is pruned based on the smallest value $RSS^*$, it would be convenient if we were able to obtain small value $RSS^*$ early in the traversal. We can obtain this value by calculating an approximative LTS estimate. This can be done using any probabilistic algorithm described in the previous sections of this chapter. An ideal candidate may be some combined algorithm described in Section~\ref{sectioncombined}. When we find such small value, it is then also convenient to permutate the observations based on its absolute residuals based on this LTS estimate in the decreasing order.
 
 Another improvement can be made using the following sorting rule \defterm{sorting rule}: If we are at the level $k$ ( we assume that $k > p$ )
-in the node $J_k$ and this node has $s$ siblings indexed as $s_1 \ldots s_s$ then we can change the order of those siblings first by calculating partial increment \eqref{gamma:plus} for each sibling and consequently ordered them in the descending order from left to right. This means we visit siblings with a lowest partial increment first. Trimming can then be done in the same manner. Moreover, if we calculate $RSS$ in one of those siblings we and realize that $RSS > RSS^*$, then we can on the top of trimming all siblings of this sibling trim also all brothers left to this sibling. That means we can trim parent node $J_k$ because all of his siblings have already been explored or can be trimmed. We can see such a procedure at figure \ref{figure:sorting:rule}.
+in the node $J_k$ and this node has $s$ siblings indexed as $s_1 \ldots s_s$ then we can change the order of those siblings first by calculating partial increment~\eqref{gamma:plus} for each sibling and consequently ordered them in the descending order from left to right. This means we visit siblings with a lowest partial increment first. Trimming can then be done in the same manner. Moreover, if we calculate $RSS$ in one of those siblings we and realize that $RSS > RSS^*$, then we can on the top of trimming all siblings of this sibling trim also all brothers left to this sibling. That means we can trim parent node $J_k$ because all of his siblings have already been explored or can be trimmed. We can see such a procedure at Figure~\ref{figure:sorting:rule}.
 
 \begin{figure}[h]
 \centering
@@ -1740,7 +1735,7 @@ We also know that
 $\minim_{\vec{w} \in \mathbb{R}^p} \of^{(LTS, h, n)}(\vec{w})  =  \minim_{\vec{m} \in Q^{(n,h)}} \oflts(\vec{m})$.
 
 % Let us now extend this relationship.
- (see \eqref{kloudaodvozeni}) Let us now talk about the non-discrete version and introduce some new feature.
+ (see~\eqref{kloudaodvozeni}) Let us now talk about the non-discrete version and introduce some new feature.
 
 \begin{definition}
     Let $Z \subset \mathbb{R}^p \times  Q^{(n,h)}$ be an relation defined as
@@ -1767,7 +1762,7 @@ Let's now describe some properties based on which $\vec{w}$ is in $\mathcal{U}$ 
 \end{proof}
 
 \begin{corollary}
-    Complement of vectors $\vec{w}$ from theorem \ref{klouda1} are vectors such that 
+    Complement of vectors $\vec{w}$ from Theorem~\ref{klouda1} are vectors such that 
     \begin{equation}
         r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w})
     \end{equation}
@@ -1791,9 +1786,9 @@ Let's now describe some properties based on which $\vec{w}$ is in $\mathcal{U}$ 
     For $\vec{X} \in \mathbb{R}^{n \times p}$ let as assume that for all $i,j, \in \{{1,2 \ldots, n \}}$  if $ i \neq j$ then $\vec{x_i} \neq \pm \vec{x_j}$ and $\norm{\vec{x_i}} \neq 0$.
 \end{assumption}
 
-If assumption \ref{klouda:asump:1} is fulfilled then $ y_i \pm y_j + (\vec{x_i} \pm \vec{x_j})  \vec{w} = 0$ represents a hyperplane. 
+If Assumption~\ref{klouda:asump:1} is fulfilled then $ y_i \pm y_j + (\vec{x_i} \pm \vec{x_j})  \vec{w} = 0$ represents a hyperplane. 
 
-It's easy to show that set $\mathcal{U}$ is an open and Lebesgue measure of $\mathcal{H}$  is $0$ \cite{klouda2015exact}. Moreover $\mathcal{H}$ splits $\mathbb{R}^{p}$ into finite number of $m$ open disjoint subsets of $\mathcal{U}$. 
+It's easy to show that set $\mathcal{U}$ is an open and Lebesgue measure of $\mathcal{H}$  is $0$~\cite{klouda2015exact}. Moreover $\mathcal{H}$ splits $\mathbb{R}^{p}$ into finite number of $m$ open disjoint subsets of $\mathcal{U}$. 
 
 \begin{definition}
     Let's define set of $m \in \mathbb{N}$ sets $\mathcal{U}^{(set)} = \{{ U_i\}}_{i=1}^{m}$ so that
@@ -1817,11 +1812,11 @@ We say that matrix $\vec{X} \in \mathbb{R}^{n \times p}$ has \defterm{$h$-full} 
     If the matrix $\vec{X}$ has $h$-full rank then for every local minima at point satisfying weak-necessary condition $\vec{w_{0}}$ of the OF-LTS function, then there exists a vector $\vec{m} \in Q^{(n,h)}$ such that $(\vec{w_{0}}, \vec{m}) \in Z$.
 \end{theorem}
 
-Proof can be found in \cite[Theorem~7]{klouda2015exact}. 
+Proof can be found in~\cite[Theorem~7]{klouda2015exact}. 
 
 \subsection{ One-dimensional version of the algorithm}
 
-Based on the theorem~\ref{minimas:in:relation} we can see that
+Based on the Theorem~\ref{minimas:in:relation} we can see that
 \begin{equation}
     \minim_{\vec{m} \in Q^{(n,h)}} \of^{(OLS, \vec{M}\vec{X}, \vec{M}\vec{Y})} (\vec{w}) =
     \minim_{m \in M^{(min)}} \of^{(OLS, \vec{m^i}\vec{X}, \vec{m^i}\vec{Y})} (\vec{w})
@@ -1829,7 +1824,7 @@ Based on the theorem~\ref{minimas:in:relation} we can see that
 
 where $\vec{M} = diag(\vec{m})$, $\vec{m^i} = diag(m)$. Set $M^{(min)}$ is very useful because we can iterate only through this set and not through whole $Q^{(n,h)}$.
 
-Then minimizing objective function $\oflts(\vec{m})$ from \ref{oflts_discrete} can be reformulated as 
+Then minimizing objective function $\oflts(\vec{m})$~\eqref{oflts_discrete} can be reformulated as 
 \begin{equation} \label{mminqnh}
     \minim_{\vec{m} \in Q^{(n,h)}}  \oflts(\vec{m}) = \minim_{m \in M^{(min)}} \oflts(m)
 \end{equation}
@@ -1868,7 +1863,7 @@ Because for each $m \in M^{(min)}$ exists at least one $\vec{w} \in \mathcal{H}$
 \end{algorithm}
 
 
-Finally we need to find all elements of $\mathcal{H}$. As we know for all elements $\vec{w} \in \mathcal{H}$ $r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w})$. So if we find all $\vec{w}$ that solve this, then we found $\mathcal{H}$. The problem is that residuals are sorted. To overcome this issue by finding some candidates which would possible be equal $(h:n)$th and $(h+1:n)$th squared residuals. In \cite{klouda2015exact} we are provided necessary condition for such a candidates.
+Finally we need to find all elements of $\mathcal{H}$. As we know for all elements $\vec{w} \in \mathcal{H}$ $r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w})$. So if we find all $\vec{w}$ that solve this, then we found $\mathcal{H}$. The problem is that residuals are sorted. To overcome this issue by finding some candidates which would possible be equal $(h:n)$th and $(h+1:n)$th squared residuals. In~\cite{klouda2015exact} we are provided necessary condition for such a candidates.
 
 \begin{definition}
     If $\vec{w} \in \mathcal{H}$ then there exists $i,j, i \neq j$ so that
@@ -1884,7 +1879,7 @@ Note that $|H| \leq 2 \choose{n}{p+1}$. So in  the case of the one dimensional c
 
 Finding all elements of $H$ is then equal for for solving $\choose{n}{p+1}$ equations. Moreover, because equations are quadratic, we can have up to two solutions for each equation.
 
-So idea of the whole algorithm is to find all elements of $H$ (by solving quadratic equations), consequently finding which of them are part of $\mathcal{H}$ (by ordering squared residuals and checking if $r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w}$) and finally for each $\vec{w} \in \mathcal{H}$ find $\vec{m}$ that are in relation. All of those $\vec{m}$ vectors form $M^{(min)}$ set. Finally we can use $\vec{m} \in M^{(min)}$ for minimizing $\oflts(\vec{m})$ by the terms of \eqref{mminqnh}. The whole algorithm, which authors call Border Scanning Algorithm (BSA) is described by the following pseudocode:
+So idea of the whole algorithm is to find all elements of $H$ (by solving quadratic equations), consequently finding which of them are part of $\mathcal{H}$ (by ordering squared residuals and checking if $r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w}$) and finally for each $\vec{w} \in \mathcal{H}$ find $\vec{m}$ that are in relation. All of those $\vec{m}$ vectors form $M^{(min)}$ set. Finally we can use $\vec{m} \in M^{(min)}$ for minimizing $\oflts(\vec{m})$ by the terms of~\eqref{mminqnh}. The whole algorithm, which authors call Border Scanning Algorithm (BSA) is described by the following pseudocode:
 
 \todo{write the pseudocode}
 \begin{algorithm}[H]
@@ -1940,9 +1935,9 @@ Moreover total number of $(p+1)$-element subsets out of $n$ is $\binom{n}{p+1}$.
 This means that the total number of solutions can be up to $\binom{n}{p+1} 2^p$. 
 We denote set of all these solutions $H_p$.
 
-So if set $H_p$ satisfies \ref{hp:set:condition} then it can be used for finding $\mathcal{H}_p$ subset, thus we would be able to use this set for the multidimensional version of the algorithm.
+So if set $H_p$ satisfies~\eqref{hp:set:condition} then it can be used for finding $\mathcal{H}_p$ subset, thus we would be able to use this set for the multidimensional version of the algorithm.
 
-Let $\circ \in {+, -}$ be either operation $+$ or $-$. Then system of quadratic equations \eqref{p:plus:one:equations} is equivalent to $2^p$ linear systems
+Let $\circ \in {+, -}$ be either operation $+$ or $-$. Then system of quadratic equations~\eqref{p:plus:one:equations} is equivalent to $2^p$ linear systems
 
 \begin{align} 
     (\vec{x}_{i_1} \circ_1 \vec {x}_{i_2} )^T \vec{w} &= y_{i_1} \circ_1 y_{i_2} \label{p:plus:one:equations:linear}   \\
@@ -1950,7 +1945,7 @@ Let $\circ \in {+, -}$ be either operation $+$ or $-$. Then system of quadratic 
     (\vec{x}_{i_p} \circ_p \vec {x}_{i_{p+1}} )^T \vec{w} &= y_{i_p} \circ_p y_{i_{p+1}}. \nonumber 
 \end{align}
 
-Moreover \eqref{p:plus:one:equations:linear} is equivalent to the set of equations
+Moreover~\eqref{p:plus:one:equations:linear} is equivalent to the set of equations
 
 
 \begin{align} 
@@ -1961,7 +1956,7 @@ Moreover \eqref{p:plus:one:equations:linear} is equivalent to the set of equatio
 Elements of set $\mathcal{H_p}$ then satisfies $r_{i_1^2}(\vec{w}) = r_{(h:n))}(\vec{w}) = r_{(h+1:n))}(\vec{w})$.
 
 
-Set $H_p$ was proven to be suitable for finding $\mathcal{H_p}$ in \cite{klouda2015exact} thus that set $\mathcal{H_p}$ satisfies \eqref{hp:set:condition} if following assumptions are satisfied (we already assume that \ref{klouda:asump:1} holds). First is that for all $\vec{w}$ $r_{(h:n))}(\vec{w}) > 0$, second , for all 
+Set $H_p$ was proven to be suitable for finding $\mathcal{H_p}$ in~\cite{klouda2015exact} thus that set $\mathcal{H_p}$ satisfies~\eqref{hp:set:condition} if following assumptions are satisfied (we already assume that Assumption~\ref{klouda:asump:1} holds). First is that for all $\vec{w}$ $r_{(h:n))}(\vec{w}) > 0$, second , for all 
 $(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -}$ the matrix system of $n-1$ equations
 
 \begin{align} 
@@ -1969,10 +1964,9 @@ $(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -}$ the matrix sy
     \vdots \ \ \  & \ \ \ \  \ \vdots  \nonumber \\ 
     (\vec{x}_{i_1} \circ_{n-1} \vec {x}_{i_{n}} )^T \vec{w} &= y_{i_1} \circ_p y_{i_{n}}. \nonumber.
 \end{align}
-The seconds assumption prevents the set $\mathcal{H_p}$ to be empty thus the case where all systems 
-\ref{p:plus:one:equations:linear:simple} are dependent. 
+The seconds assumption prevents the set $\mathcal{H_p}$ to be empty thus the case where all systems~\eqref{p:plus:one:equations:linear:simple} are dependent. 
 
-This assumption can cause problem because when we assume model with the intercept, thus for all rows $\vec{x_i}$ of matrix $\vec{X}$ is $x_{i1} = 1$ then in the case  $\circ_1,\circ_2 \ldots,  \circ_{n-1} = -$, first column of matrix $\vec{X}$ only contains zeroes. We can modify this assumption so that instead of using $(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -}$ we use only $(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -} \setminus {(-, \ldots, -)}$ \cite{klouda2015exact}. 
+This assumption can cause problem because when we assume model with the intercept, thus for all rows $\vec{x_i}$ of matrix $\vec{X}$ is $x_{i1} = 1$ then in the case  $\circ_1,\circ_2 \ldots,  \circ_{n-1} = -$, first column of matrix $\vec{X}$ only contains zeroes. We can modify this assumption so that instead of using $(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -}$ we use only $(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -} \setminus {(-, \ldots, -)}$~\cite{klouda2015exact}. 
 
 Given that we now know that set $H_p$ and $\mathcal{H}_p$ are suitable for our algorithm and we also know how to calculate them, so let us describe the multidimensional version of the algorithm.
 

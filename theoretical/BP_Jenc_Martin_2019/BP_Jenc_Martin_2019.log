@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2019.3.5)  12 MAY 2019 00:23
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2019.3.5)  12 MAY 2019 19:17
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1093,382 +1093,359 @@ Package hyperref Warning: Difference (2) between bookmark levels is greater
 [13] [14] [15] [16] [17] [18] [19] [20]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [21] [22]
-Overfull \hbox (0.95508pt too wide) in paragraph at lines 530--538
-[]\OT1/lmr/m/n/10.95 Together we get $\OML/lmm/m/it/10.95 L[] \OT1/lmr/m/n/10.95 = [] \OML/lmm/m/it/10.95 m[]r[]\OT1/lmr/m/n/10.95 ([]) \OMS/lmsy/m/n/10.95 ^^T [] \OML/lmm/m/it/10.95 m[]r[]\OT1/lmr/m/n/10.95 ([]) \OMS/lmsy/m/n/10.95 ^^T [] \OML/lmm/m/it/10.95 m[]r[]\OT1/lmr/m/n/10.95 ([]) =
- []
+ [21] [22] [23]
+Package hyperref Info: bookmark level for unknown todo defaults to 0 on input line 567.
 
-Package hyperref Info: bookmark level for unknown todo defaults to 0 on input line 553.
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[23]
 
 Package amsmath Warning: Foreign command \atopwithdelims;
 (amsmath)                \frac or \genfrac should be used instead
-(amsmath)                 on input line 603.
+(amsmath)                 on input line 598.
 
-
-Underfull \vbox (badness 1735) has occurred while \output is active []
-
- [24]
+[24] [25]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 662.
+(Font)              <12> on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 662.
+(hyperref)                removing `math shift' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\begingroup' on input line 662.
+(hyperref)                removing `\begingroup' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\<let>-command' on input line 662.
+(hyperref)                removing `\<let>-command' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\@nomath' on input line 662.
+(hyperref)                removing `\@nomath' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\begingroup' on input line 662.
+(hyperref)                removing `\begingroup' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\setbox' on input line 662.
+(hyperref)                removing `\setbox' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\z@' on input line 662.
+(hyperref)                removing `\z@' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\hbox' on input line 662.
+(hyperref)                removing `\hbox' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\thinmuskip' on input line 662.
+(hyperref)                removing `\thinmuskip' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\medmuskip' on input line 662.
+(hyperref)                removing `\medmuskip' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\m@ne' on input line 662.
+(hyperref)                removing `\m@ne' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\thickmuskip' on input line 662.
+(hyperref)                removing `\thickmuskip' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\@ne' on input line 662.
+(hyperref)                removing `\@ne' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\setbox' on input line 662.
+(hyperref)                removing `\setbox' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\tw@' on input line 662.
+(hyperref)                removing `\tw@' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\hbox' on input line 662.
+(hyperref)                removing `\hbox' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 662.
+(hyperref)                removing `math shift' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 662.
+(hyperref)                removing `subscript' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\mathsurround' on input line 662.
+(hyperref)                removing `\mathsurround' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\z@' on input line 662.
+(hyperref)                removing `\z@' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 662.
+(hyperref)                removing `math shift' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 662.
+(hyperref)                removing `math shift' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 662.
+(hyperref)                removing `subscript' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\mathsurround' on input line 662.
+(hyperref)                removing `\mathsurround' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\z@' on input line 662.
+(hyperref)                removing `\z@' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 662.
+(hyperref)                removing `math shift' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\<def>-command' on input line 662.
+(hyperref)                removing `\<def>-command' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\@tempa' on input line 662.
+(hyperref)                removing `\@tempa' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\mathchoice' on input line 662.
+(hyperref)                removing `\mathchoice' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\hbox' on input line 662.
+(hyperref)                removing `\hbox' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 662.
+(hyperref)                removing `math shift' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\mathsurround' on input line 662.
+(hyperref)                removing `\mathsurround' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\z@' on input line 662.
+(hyperref)                removing `\z@' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\displaystyle' on input line 662.
+(hyperref)                removing `\displaystyle' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 662.
+(hyperref)                removing `subscript' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 662.
+(hyperref)                removing `math shift' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\hbox' on input line 662.
+(hyperref)                removing `\hbox' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 662.
+(hyperref)                removing `math shift' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\mathsurround' on input line 662.
+(hyperref)                removing `\mathsurround' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\z@' on input line 662.
+(hyperref)                removing `\z@' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\textstyle' on input line 662.
+(hyperref)                removing `\textstyle' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 662.
+(hyperref)                removing `subscript' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 662.
+(hyperref)                removing `math shift' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\hbox' on input line 662.
+(hyperref)                removing `\hbox' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 662.
+(hyperref)                removing `math shift' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\mathsurround' on input line 662.
+(hyperref)                removing `\mathsurround' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\z@' on input line 662.
+(hyperref)                removing `\z@' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\scriptstyle' on input line 662.
+(hyperref)                removing `\scriptstyle' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 662.
+(hyperref)                removing `subscript' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 662.
+(hyperref)                removing `math shift' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\hbox' on input line 662.
+(hyperref)                removing `\hbox' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 662.
+(hyperref)                removing `math shift' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\mathsurround' on input line 662.
+(hyperref)                removing `\mathsurround' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\z@' on input line 662.
+(hyperref)                removing `\z@' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\scriptscriptstyle' on input line 662.
+(hyperref)                removing `\scriptscriptstyle' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 662.
+(hyperref)                removing `subscript' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 662.
+(hyperref)                removing `math shift' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\endgroup' on input line 662.
+(hyperref)                removing `\endgroup' on input line 651.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 662.
-
-[25]
-Overfull \hbox (18.47841pt too wide) in paragraph at lines 673--674
-\OT1/lmr/m/n/10.95 creas-ing $\OML/lmm/m/it/10.95 n$\OT1/lmr/m/n/10.95 , the prob-a-bil-ity of choos-ing among $\OML/lmm/m/it/10.95 k$ \OT1/lmr/m/n/10.95 ran-dom se-lec-tions of $[]\OML/lmm/m/it/10.95 ; [] ; []$
- []
+(hyperref)                removing `math shift' on input line 651.
 
 
-Overfull \hbox (4.08546pt too wide) in paragraph at lines 684--684
+Overfull \hbox (0.51654pt too wide) in paragraph at lines 676--676
 [] 
  []
 
-[26]
-Overfull \hbox (7.11275pt too wide) in paragraph at lines 707--708
-\OT1/lmr/m/n/10.95 creas-ing $\OML/lmm/m/it/10.95 n$\OT1/lmr/m/n/10.95 , the prob-a-bil-ity of choos-ing among $\OML/lmm/m/it/10.95 k$ \OT1/lmr/m/n/10.95 ran-dom se-lec-tions of $[]\OML/lmm/m/it/10.95 ; [] ; []$
- []
-
-[27]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [28]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [29]
-Overfull \hbox (70.72842pt too wide) in paragraph at lines 825--826
-[]\OT1/lmr/m/n/10.95 Let us con-sider that we have some $[] \OMS/lmsy/m/n/10.95 2 \OML/lmm/m/it/10.95 Q[]$ \OT1/lmr/m/n/10.95 and de-note $\OML/lmm/m/it/10.95 O[] \OT1/lmr/m/n/10.95 = \OMS/lmsy/m/n/10.95 f[]$
- []
-
-
-Overfull \hbox (26.46158pt too wide) in paragraph at lines 833--844
+[26] [27] [28]
+Overfull \hbox (26.46158pt too wide) in paragraph at lines 830--841
 \OT1/lmr/m/n/10.95 ([][][][][])$ For now let us as-sume that we also have $[][]$ and $[] = [][][][][][]$.
  []
 
-[30]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [31] [32]
-LaTeX Font Info:    Try loading font information for OT1+lmtt on input line 971.
+[29] [30]
+LaTeX Font Info:    Try loading font information for OT1+lmtt on input line 968.
  (/usr/share/texmf/tex/latex/lm/ot1lmtt.fd
 File: ot1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <9> on input line 971.
+(Font)              <9> on input line 968.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 971.
+(Font)              <5> on input line 968.
 
-Underfull \vbox (badness 5302) has occurred while \output is active []
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [33] [34]
-Overfull \hbox (2.00264pt too wide) detected at line 1087
+ [31]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [32]
+Underfull \vbox (badness 2894) has occurred while \output is active []
+
+ [33]
+Overfull \hbox (2.00264pt too wide) detected at line 1084
 [] [] \OT1/lmr/m/n/10.95 = [][][] + [][] = [] + [][]\OML/lmm/m/it/10.95 ;
  []
 
-[35] [36] [37]
-Overfull \hbox (25.76079pt too wide) detected at line 1222
+
+Overfull \hbox (3.38336pt too wide) in paragraph at lines 1088--1090
+\OT1/lmr/m/n/10.95 Finally the in-ver-sion $[][]$ can be ob-tained us-ing Sherman-Morrison for-mula [[]]
+ []
+
+[34] [35] [36]
+Overfull \hbox (25.76079pt too wide) detected at line 1219
 \OML/lmm/m/it/10.95 ^^Z\OT1/lmr/m/n/10.95 ([]\OML/lmm/m/it/10.95 ; []\OT1/lmr/m/n/10.95 ) = []\OML/lmm/m/it/10.95 ;
  []
 
 
-Overfull \hbox (11.40106pt too wide) in paragraph at lines 1225--1226
+Overfull \hbox (11.40106pt too wide) in paragraph at lines 1222--1223
 \OT1/lmr/m/n/10.95 rep-re-sents mul-ti-plica-tive in-cre-ment. More-over $0 \OML/lmm/m/it/10.95 < ^^Z\OT1/lmr/m/n/10.95 ([]\OML/lmm/m/it/10.95 ; []\OT1/lmr/m/n/10.95 )$ and if $0 \OML/lmm/m/it/10.95 < ^^Z\OT1/lmr/m/n/10.95 ([]\OML/lmm/m/it/10.95 ; []\OT1/lmr/m/n/10.95 ) \OML/lmm/m/it/10.95 <
  []
 
-[38] [39] [40] [41] [42]
-Overfull \hbox (27.08408pt too wide) detected at line 1490
+[37] [38] [39] [40] [41]
+Overfull \hbox (27.08408pt too wide) detected at line 1485
 [][] \OT1/lmr/m/n/10.95 = ([][][](\OML/lmm/m/it/10.95 n \OMS/lmsy/m/n/10.95 ^^@ \OT1/lmr/m/n/10.95 1\OML/lmm/m/it/10.95 ; n\OT1/lmr/m/n/10.95 ) [] [](1\OML/lmm/m/it/10.95 ; \OT1/lmr/m/n/10.95 2))([](1\OML/lmm/m/it/10.95 ; \OT1/lmr/m/n/10.95 2) [] [](\OML/lmm/m/it/10.95 n \OMS/lmsy/m/n/10.95 ^^@ \OT1/lmr/m/n/10.95 1\OML/lmm/m/it/10.95 ; n\OT1/lmr/m/n/10.95 )[])[]  = [] [] \OML/lmm/m/it/10.95 ;
  []
 
-[43] [44] [45] [46]
-Overfull \hbox (1.8023pt too wide) in paragraph at lines 1689--1691
+[42] [43] [44] [45]
+Overfull \hbox (1.8023pt too wide) in paragraph at lines 1684--1686
 []\OT1/lmr/m/n/10.95 If at any step (at any node) of the tree traver-sal we cal-cu-late the $[](\OML/lmm/m/it/10.95 m[]\OT1/lmr/m/n/10.95 )$
  []
 
-[47]
+[46]
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[48]
+[47]
 
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 1735.
+(hyperref)                than one, level fixed on input line 1730.
 
-[49] [50]
-Overfull \hbox (17.0pt too wide) in paragraph at lines 1845--1868
+[48] [49]
+Overfull \hbox (17.0pt too wide) in paragraph at lines 1840--1863
 [][][]$[]$ 
  []
 
 
-Overfull \hbox (17.0pt too wide) in paragraph at lines 1889--1912
+Overfull \hbox (17.0pt too wide) in paragraph at lines 1884--1907
 [][][]$[]$ 
  []
 
-[51] [52])
+[50] [51])
 
-LaTeX Warning: Marginpar on page 53 moved by 6.98636pt.
+LaTeX Warning: Marginpar on page 52 moved by 6.98636pt.
 
-[53]
+[52]
 \openout2 = `chapters/04_experiments.aux'.
 
- (./chapters/04_experiments.tex [54
+ (./chapters/04_experiments.tex) [53
 
 
 
-]) [55]
+]
 \openout2 = `chapters/99_conclusion.aux'.
 
- (./chapters/99_conclusion.tex [56
+ (./chapters/99_conclusion.tex [54
 
 
 
-]) [57] (./BP_Jenc_Martin_2019.bbl [58
+]) [55] (./BP_Jenc_Martin_2019.bbl [56
 
 
 ]
 bibitemlist
-[59] [60]) [61] [62
+[57] [58]) [59] [60
 
-] [63] [64
+] [61] [62
 
-] [65]
+] [63]
 \tf@toc=\write6
 \openout6 = `BP_Jenc_Martin_2019.toc'.
 
@@ -1481,7 +1458,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 197.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 197.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 197.
 Package rerunfilecheck Info: File `BP_Jenc_Martin_2019.out' has not changed.
-(rerunfilecheck)             Checksum: 591CBDCD45277253514389E7F51FECB6;7507.
+(rerunfilecheck)             Checksum: 857C1E98939C5BF29B1B154B4FB8319D;7533.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
@@ -1489,18 +1466,18 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 197.
  ) 
 Here is how much of TeX's memory you used:
- 26169 strings out of 494945
- 442070 string characters out of 6181033
- 562590 words of memory out of 5000000
- 28499 multiletter control sequences out of 15000+600000
+ 26132 strings out of 494945
+ 441627 string characters out of 6181033
+ 564900 words of memory out of 5000000
+ 28498 multiletter control sequences out of 15000+600000
  90076 words of font info for 85 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 68i,25n,78p,1159b,733s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 68i,22n,78p,1159b,733s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-rmtt.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rmsc.enc}</usr/share/texmf/fonts/type1/public/lm/lmbsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx6.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx8.pfb></usr/share/texmf/fonts/type1/public/lm/lmbxi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmcsc10.pfb></usr/share/texmf/fonts/type1/public/lm/lmex10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi6.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi8.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi9.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr6.pfb></usr/share/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmr9.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy9.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on BP_Jenc_Martin_2019.pdf (79 pages, 649704 bytes).
+Output written on BP_Jenc_Martin_2019.pdf (77 pages, 644724 bytes).
 PDF statistics:
- 1347 PDF objects out of 1440 (max. 8388607)
- 1223 compressed objects within 13 object streams
- 514 named destinations out of 1000 (max. 500000)
+ 1296 PDF objects out of 1440 (max. 8388607)
+ 1175 compressed objects within 12 object streams
+ 478 named destinations out of 1000 (max. 500000)
  383 words of extra memory for PDF output out of 10000 (max. 10000000)
 

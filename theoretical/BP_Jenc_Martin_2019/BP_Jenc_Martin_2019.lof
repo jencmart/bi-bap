@@ -2,12 +2,12 @@
 \select@language {english}
 \addvspace {10pt}
 \addvspace {10pt}
-\contentsline {figure}{\numberline {1.1}{\ignorespaces Change of the regression hyperplane when one of the four observations (highlighted with red color) starts to deviate from the linear pattern.}}{9}{figure.1.1}
+\contentsline {figure}{\numberline {1.1}{\ignorespaces Change of the regression hyperplane given by coefficients estimated with OLS method when one of the four observations (highlighted with red color) starts to deviate from the linear pattern.}}{9}{figure.1.1}
 \addvspace {10pt}
 \contentsline {figure}{\numberline {2.1}{\ignorespaces todo caption}}{24}{figure.2.1}
 \contentsline {figure}{\numberline {2.2}{\ignorespaces todo caption}}{25}{figure.2.2}
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Tree consisting of all index subsets for $n=4$ and $h=3$}}{47}{figure.2.3}
-\contentsline {figure}{\numberline {2.4}{\ignorespaces Step in the algorithms when due to the sorted siblings node $j_k$ can be trimmed}}{49}{figure.2.4}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Tree consisting of all index subsets for $n=4$ and $h=3$}}{46}{figure.2.3}
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Step in the algorithms when due to the sorted siblings node $j_k$ can be trimmed}}{48}{figure.2.4}
 \addvspace {10pt}
 \addvspace {10pt}
 \addvspace {10pt}
