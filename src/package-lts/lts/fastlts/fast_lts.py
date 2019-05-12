@@ -284,11 +284,11 @@ class LTSRegressorFast:
         subset_results = self.create_all_h1_subsets(self._num_starts, _h_size, data)  # array of 500 Results (h1, thetha, inf)
         self.time1_ = time.process_time() - time1
 
-        time2 = time.process_time()
-        self.iterate_c_steps(data, _h_size, subset_results, self._num_starts, False, self._num_initial_c_steps,
-                             0)  # few c steps on all 500 results, all happens inplace
-        k_smallest_inplace(subset_results,
-                           self._num_starts_to_finish)  # arr results && indexes are sorted (sort first 10 from 500...)
+        time2 = time.process_time() # todo - pouze pro tento experiment
+        # self.iterate_c_steps(data, _h_size, subset_results, self._num_starts, False, self._num_initial_c_steps,
+        #                     0)  # few c steps on all 500 results, all happens inplace
+        # k_smallest_inplace(subset_results,
+          #                 self._num_starts_to_finish)  # arr results && indexes are sorted (sort first 10 from 500...)
         self.time2_ = time.process_time() - time2
 
         # C-steps till convergence
@@ -377,6 +377,7 @@ class LTSRegressorFast:
     def iterate_c_steps(self, data, _h_size, results, length, stop_on_rss, cnt_steps, threshold):
 
         for i in range(length):  # only first X
+            self.shit = i
             theta, h_subset, rss_, n_iter = self._preform_c_steps(results[i].theta, data, stop_on_rss, results[i].rss,
                                                                   _h_size, cnt_steps, threshold)
             results[i].theta = theta
@@ -384,13 +385,18 @@ class LTSRegressorFast:
             results[i].rss = rss_
             results[i].n_iter += n_iter
 
-    @staticmethod
-    def _preform_c_steps(theta_old, data, use_sum, sum_old, h_size, max_steps, threshold):  # vola se 10x
+    # @staticmethod
+    def _preform_c_steps(self, theta_old, data, use_sum, sum_old, h_size, max_steps, threshold):  # vola se 10x
+        # todo - only experiment
+        import pandas as pd
 
         if max_steps == 0:
             exit(10)
 
         j = 0
+        # todo - only experiment
+        res = pd.DataFrame(columns=['cnt', 'rss', 'step'])
+
         for i in range(max_steps):
             # c step
             abs_residuals = abs_dist(data, theta_old)  # nested extension
@@ -400,6 +406,10 @@ class LTSRegressorFast:
 
             if use_sum:
                 sum_new = rss(data[h_new, :], theta_new)
+                # todo - only experiment
+                print(self.shit)
+                res = res.append(pd.Series([self.shit, sum_new[0, 0], i], index=res.columns), ignore_index=True)
+
                 if math.isclose(sum_old, sum_new, rel_tol=threshold):
                     j = i + 1  # include last step
                     break
@@ -411,6 +421,10 @@ class LTSRegressorFast:
 
         if j == 0:
             j = max_steps
+
+        # todo - only experiment
+        with open('my_csv.csv', 'a') as f:
+            res.to_csv(f, header=False)
 
         return theta_new, h_new, sum_new[0, 0], j
 

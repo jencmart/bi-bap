@@ -643,7 +643,7 @@ C-step algorithm is visualized on Figure~\ref{figure:one:c:step} where we start 
 
 
 
-    \caption{Illustration of the C-step algorithm. $(1)$ represents the value of $\of^{(OLS,\vec{M_1}\vec{X},  \vec{M_1}\vec{y} )} (\vec{\hat{w}_1})$ (which is equal to the value $\oflts(\vec{m_1})$ ). $(2)$~represents  the value of $\of^{(OLS,\vec{M_2}\vec{X},  \vec{M_2}\vec{y} )} (\vec{\hat{w}_1})$ and $(3)$ represents the value of $\of^{(OLS,\vec{M_2}\vec{X},  \vec{M_2}\vec{y} )} (\vec{\hat{w}_2})$ (which is equal to the value $\oflts(\vec{m_2})$) }
+    \caption{Illustration of the C-step algorithm. $(1)$ represents the value of $\of^{(OLS,\vec{M_1}\vec{X},  \vec{M_1}\vec{y} )} (\vec{\hat{w}_1})$ (which is equal to the value $\oflts(\vec{m_1})$ ). $(2)$~represents  the value of $\of^{(OLS,\vec{M_2}\vec{X},  \vec{M_2}\vec{y} )} (\vec{\hat{w}_1})$ and $(3)$ represents the value of $\of^{(OLS,\vec{M_2}\vec{X},  \vec{M_2}\vec{y} )} (\vec{\hat{w}_2})$ (which is equal to the value $\oflts(\vec{m_2})$). }
     \label{figure:one:c:step}
 \end{figure}
     
@@ -744,8 +744,9 @@ It is important to note that although the maximum number of steps of this algori
 
 \begin{figure}[h]
 \centering
-\missingfigure{Statistic graph visualizing  number of steps required to convergence of algorithm }
-\caption{todo caption}
+\includegraphics[width=12cm]{img/lts_convergence}
+% \missingfigure{Statistic graph visualizing  number of steps required to convergence of algorithm }
+\caption{Value of the residual sum of squares (normalized) based on the number of the step of C-step algorithm for 100 different starting subsets. Dataset D3 was used with configuration $n=500, p=20$ and $30\%$ of the the outliers (see Section~\ref{chapterexperiments} for more details about the dataset). }
 \label{figure:repeat:c:steps:cnt:converge}
 \end{figure}
 
@@ -829,7 +830,7 @@ In this section, we describe essential observations which help us to formulate t
 \subsubsection*{Selective iteration}
 The most computationally demanding part of one C-step is computation of the OLS fit for the subset $\vec{m_i}$ and then the calculation of $n$ absolute residuals. As we stated above, convergence is usually achieved under 20 steps. So for fast algorithm run, we would like to repeat C-step as little as possible and at the same time do not lose the performance of the algorithm. 
 
-Since the convergence of the Repeat-C-step algorithm is very fast, it turns out that we can distinguish between starts that leads to good solutions and those which does not after few C-steps iterations. Based on empiric observation, we can distinguish good or bad solution already after two or three iterations of C-steps based on the values $\oflts(\what{3})$ and $\oflts(\what{4})$ respectively. 
+Since the convergence of the Repeat-C-step algorithm is very fast, it turns out that we can distinguish between starts that leads to good solutions and those which does not after few C-steps iterations. Based on empiric observation, we can distinguish good or bad solution already after two or three iterations of C-steps based on the values $\oflts(\what{3})$ and $\oflts(\what{4})$ respectively (see Figure~\ref{figure:repeat:c:steps:cnt:converge}). 
 
 So even though authors do not specify the size of $k$ explicitly, they propose that after a few C-steps we can choose (say~10) best solutions among all $\vec{m_1}$ starting subsets and continue with iterating the C-steps only using the best solutions.
 Authors refer to this process as to the \defterm{selective iteration}.

@@ -22,7 +22,7 @@
 \contentsline {section}{\numberline {2.2}FAST-LTS}{22}{section.2.2}
 \contentsline {subsection}{\numberline {2.2.1}C-step}{22}{subsection.2.2.1}
 \contentsline {subsection}{\numberline {2.2.2}Choosing an initial $\boldsymbol {m_1}$ subset}{26}{subsection.2.2.2}
-\contentsline {subsection}{\numberline {2.2.3}Speed-up of the algorithm}{27}{subsection.2.2.3}
+\contentsline {subsection}{\numberline {2.2.3}Speed-up of the algorithm}{28}{subsection.2.2.3}
 \contentsline {subsection}{\numberline {2.2.4}Putting all together}{29}{subsection.2.2.4}
 \contentsline {section}{\numberline {2.3}Feasible solution}{29}{section.2.3}
 \contentsline {section}{\numberline {2.4}OEA, MOEA, MMEA}{33}{section.2.4}

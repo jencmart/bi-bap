@@ -557,3 +557,14 @@ def validate(X, y, use_intercept):
         X = np.concatenate([X, np.ones((X.shape[0], 1))], axis=1)
 
     return X, y
+
+
+def experiment_lts(output):
+    X, y, X_clean, y_clean= generator.generate_dataset_simple(200, 10, 0.3)
+
+    lts = fastlts.LTSRegressorFast(num_starts=500, num_initial_c_steps=1, num_starts_to_finish=500,
+                                max_steps=50, threshold=1e-6,
+                                use_intercept=True)
+    lts.fit(X, y)
+
+    return None
