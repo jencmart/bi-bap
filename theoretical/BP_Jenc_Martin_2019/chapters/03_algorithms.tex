@@ -745,7 +745,6 @@ It is important to note that although the maximum number of steps of this algori
 \begin{figure}[h]
 \centering
 \includegraphics[width=12cm]{img/lts_convergence}
-% \missingfigure{Statistic graph visualizing  number of steps required to convergence of algorithm }
 \caption{Value of the residual sum of squares (normalized) based on the number of the step of C-step algorithm for 100 different starting subsets. Dataset D3 was used with configuration $n=500, p=20$ and $30\%$ of the the outliers (see Section~\ref{chapterexperiments} for more details about the dataset). }
 \label{figure:repeat:c:steps:cnt:converge}
 \end{figure}
@@ -1408,7 +1407,7 @@ It is very useful because all quantities necessary for calculating $\rho_b(\vec{
 
 If $\rho_b(\vec{c_i}, \vec{c_j})$ is less that  $\rho_{min}$ we actually compute $\rho(\vec{c_i}, \vec{c_j})$ and set $\rho_{min} := \rho(\vec{c_i}, \vec{c_j})$.
 
-That means in the double loop which time complexity is $\mathcal{n^2}$  we do not always need to calculate $\rho(\vec{c_i}, \vec{c_j})$ which time complexity is $\mathcal{n^2}$. This does not improve the asymptotic time complexity, but (as can be seen in the table \todo{create experiment}) it can improve the speed of the algorithm. 
+That means in the double loop which time complexity is $\mathcal{O}(n^2)$  we do not always need to calculate $\rho(\vec{c_i}, \vec{c_j})$ which time complexity is $\mathcal{O}(n^2)$. This does not improve the asymptotic time complexity, but (as can be seen in the table \todo{create experiment}) it can improve the speed of the algorithm. 
 
 Finally, let us note that in~\cite{agullo2001new} authors call this algorithm with bounding condition as \defterm{modified optimal exchange algorithm} (MOEA).
 
@@ -1665,7 +1664,7 @@ We describe algorithms for updating the QR decomposition in Section~\ref{differe
 First, we can use the QR Insert algorithm to add row $\vec{x_j}$ to the decomposition and consequently QR delete to extract $\vec{x_j}$  from the decomposition. 
 
 \begin{observation}
-This approach is slower than updating inversion directly. On the other hand, this solution is numerically stable. Updating inversion can be done in $\mathcal{p^2}$ (see Observation~\ref{updatinginversionobservation})  while QR insert has $\mathcal{O}(np)$ (see Observation~\ref{qrinserttime}) and time complexity and QR delete even $\mathcal{O}(n^2)$ (see Observation~\ref{qrdeletetime}).
+This approach is slower than updating inversion directly. On the other hand, this solution is numerically stable. Updating inversion can be done in $\mathcal{O}(p^2)$ (see Observation~\ref{updatinginversionobservation})  while QR insert has $\mathcal{O}(np)$ (see Observation~\ref{qrinserttime}) and time complexity and QR delete even $\mathcal{O}(n^2)$ (see Observation~\ref{qrdeletetime}).
 \end{observation}
 
 \begin{note}
@@ -1782,10 +1781,41 @@ Let us now consider tree such that at level $k$ is $\binom{n}{k}$ nodes represen
 
 \begin{figure}[h]
 \centering
-\missingfigure{Tree with nodes that represents all $J_k$ subsets. }
-\caption{Tree consisting of all index subsets for $n=4$ and $h=3$}
+
+\begin{center}
+    \begin{tikzpicture}
+     \node [rectangle,draw]{$\emptyset$} [level distance=10mm,sibling distance=32mm]
+     % \node (rect) at (4,2) [draw,thick,minimum width=2cm,minimum height=2cm] {};
+
+    child { node [rectangle,draw]{1} [level distance=10mm ,sibling distance=18mm]
+        child {node [rectangle,draw] {1,2} [level distance=10mm ,sibling distance=12mm]
+            child {node [rectangle,draw=blue] {1,2,3}
+               }
+            child {node [rectangle,draw=blue]{1,2,4}}}
+        child {node [rectangle,draw] {1,3}
+            child {node [rectangle,draw=blue]{1,3,4}}}
+        child {node [rectangle,draw] {1,4}}
+    }
+    child {node [rectangle,draw] {2} [level distance=10mm ,sibling distance=10mm]
+        child {node [rectangle,draw] {2,3}
+            child {node [rectangle,draw=blue]{2,3,4}}}
+        child {node [rectangle,draw]{2, 4}}
+    }
+    child {node [rectangle,draw] {3}
+    child {node [rectangle,draw] {3,4}}
+    }
+    child {node [rectangle,draw] {4} 
+    }
+    ;
+    \end{tikzpicture}
+\end{center}
+
+
+\caption{Tree consisting of all element subsets for $n=4$ and $h=3$. Leaves with blue border color represents $h$-element subsets.}
 \label{figure:full:tree}
 \end{figure}
+
+
 
 In the case of the exhaustive approach, we can then traverse the tree starting in the root using the right to left (RTL) preorder traversal, and in each node, we can calculate the OLS fit on $\vec{ X_{J_k} }$ and $\vec{ Y_{J_k} }$. If we are in the level $k = h$, we calculate the fit on the $h$ element subset. This approach is exhaustive, so let us now describe how we can improve efficiency. 
 

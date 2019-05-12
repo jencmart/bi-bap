@@ -377,7 +377,7 @@ class LTSRegressorFast:
     def iterate_c_steps(self, data, _h_size, results, length, stop_on_rss, cnt_steps, threshold):
 
         for i in range(length):  # only first X
-            self.shit = i
+            # self.shit = i
             theta, h_subset, rss_, n_iter = self._preform_c_steps(results[i].theta, data, stop_on_rss, results[i].rss,
                                                                   _h_size, cnt_steps, threshold)
             results[i].theta = theta
@@ -387,15 +387,15 @@ class LTSRegressorFast:
 
     # @staticmethod
     def _preform_c_steps(self, theta_old, data, use_sum, sum_old, h_size, max_steps, threshold):  # vola se 10x
-        # todo - only experiment
-        import pandas as pd
+        #
+        # import pandas as pd
 
         if max_steps == 0:
             exit(10)
 
         j = 0
-        # todo - only experiment
-        res = pd.DataFrame(columns=['cnt', 'rss', 'step'])
+        #
+        # res = pd.DataFrame(columns=['cnt', 'rss', 'step'])
 
         for i in range(max_steps):
             # c step
@@ -406,9 +406,8 @@ class LTSRegressorFast:
 
             if use_sum:
                 sum_new = rss(data[h_new, :], theta_new)
-                # todo - only experiment
-                print(self.shit)
-                res = res.append(pd.Series([self.shit, sum_new[0, 0], i], index=res.columns), ignore_index=True)
+                #
+                # res = res.append(pd.Series([self.shit, sum_new[0, 0], i], index=res.columns), ignore_index=True)
 
                 if math.isclose(sum_old, sum_new, rel_tol=threshold):
                     j = i + 1  # include last step
@@ -422,9 +421,9 @@ class LTSRegressorFast:
         if j == 0:
             j = max_steps
 
-        # todo - only experiment
-        with open('my_csv.csv', 'a') as f:
-            res.to_csv(f, header=False)
+        #
+        # with open('my_csv.csv', 'a') as f:
+        #     res.to_csv(f, header=False)
 
         return theta_new, h_new, sum_new[0, 0], j
 
