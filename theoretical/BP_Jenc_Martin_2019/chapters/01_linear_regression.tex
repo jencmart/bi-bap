@@ -208,7 +208,7 @@ Standard statistics methods rely on multiple assumptions and fail if those assum
 
 Such assumptions about the OLS method are described in Section~\ref{ols:assumptions}. Before we explain what happens if those conditions are not met or met only partially let us describe one of the most common reasons why assumptions are false.
 
-\subsection{Outliers}
+\subsection{Outliers} \label{outliers:info}
 We stated many assumptions that are required for the OLS method to produce a acceptable estimate of $\vec{\hat{w}}$. Unfortunately, in real conditions, these assumptions are often false so that the ordinary least squares do not guarantee to return reasonable results. One of the most common reasons for the assumptions being not met are observations called outliers.
 
 Outliers are for instance erroneous measurements such as transmission errors or noise. Another common reason for outliers is that nowadays the data are automatically processed by computers. Sometimes we are also given data which are heterogeneous in the sense that they contain data from multiple regression models. In some sense outliers are inevitable. One would say that we should be able to eliminate them by precise examination, repair or removal of such data. That is possible in some cases, but often the data we are dealing with are too big and highly dimensional to check.

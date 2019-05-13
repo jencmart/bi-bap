@@ -75,5 +75,5 @@ if __name__ == '__main__':
 
     #feasible_test.test_fast_and_feasible(n=28, p=3)
     # test_feasible_solution_numpy()
-    #lts_speed.fast_lts_cpp_big()
+    lts_speed.fast_lts_cpp_big()
 

@@ -76,24 +76,24 @@ def experiment_speed_probabilistic(output='./out/experiment_probabilistic_p1.csv
                 x_s = 10
 
                 # errors e~N(m,s)
-                e_m = 0
-                e_s = np.random.randint(low=1, high=10)
+                e_m = np.random.randint(low=0, high=10)
+                e_s = np.random.randint(low=1, high=5)
 
                 # errors outliers e~N(m,s) or e~Exp(s)
                 e_out_m = np.random.randint(low=-50, high=50)
                 e_out_s = np.random.randint(low=50, high=200)
 
                 # leverage points
-                x_lav_m = np.random.randint(low=10, high=50)
-                x_lav_s = np.random.randint(low=10, high=50)
+                x_lav_m = np.random.randint(low=20, high=50)
+                x_lav_s = np.random.randint(low=10, high=20)
 
                 # SECOND MODEL
                 # second model X ~ N(m,s)
-                x2_m = np.random.randint(low=-10, high=10)
-                x2_s = 10
+                x2_m = np.random.randint(low=-30, high=30)
+                x2_s = np.random.randint(low=10, high=20)
 
                 # second model errors e~N(m,s)
-                e2_m = 0
+                e2_m = np.random.randint(low=-10, high=10)
                 e2_s = np.random.randint(low=5, high=10)
 
                 if np.random.rand() >= 0.5:

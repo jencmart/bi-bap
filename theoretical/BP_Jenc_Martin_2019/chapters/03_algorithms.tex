@@ -1359,7 +1359,7 @@ That is quite an improvement if we compare it to time complexity $\mathcal{O}(p^
 \end{observation}
 
 
-Note that right now it actually does not matter if we use additive formula~\eqref{hawkins:rovnice} with the stopping criterion $\Delta S^{(\vec{m})}_{i,j} \geq 0$---thus unmodified OSAA---or multiplicative formula~\eqref{agullo:rovnice} with the stopping criterion $\rho(\vec{c_i}, \vec{c_j}) \geq 1 $. Both results we can update $RSS$ and other quantities can be used to calculate both formulas. 
+Note that right now it actually does not matter if we use additive formula~\eqref{hawkins:rovnice} with the stopping criterion $\Delta S^{(\vec{m})}_{i,j} \geq 0$ --- thus unmodified OSAA --- or multiplicative formula~\eqref{agullo:rovnice} with the stopping criterion $\rho(\vec{c_i}, \vec{c_j}) \geq 1 $. Both results we can update $RSS$ and other quantities can be used to calculate both formulas. 
 
 However, the advantage of the multiplicative formula~\eqref{agullo:rovnice} is that we can use the following bounding condition to improve the performance of the modified OSAA.
 
@@ -1417,7 +1417,7 @@ Finally, let us note that in~\cite{agullo2001new} authors call this algorithm wi
 %%%%%%%%     M M E A        %%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Minimum-maximum exchange algorithm}
+\subsection{Minimum-maximum exchange algorithm} \label{mmeasection}
 The minimum-maximum exchange algorithm (MMEA) is very similar to the FSA respectively to its modified version the OEA. The main difference is the greediness of this algorithm. What we mean by that is that this algorithm does not find the optimal swap, but rather first find the $\vec{c_j}$  which increase the $RSS$ by the minimum value and include this observation.
 Next, it finds $\vec{c_j}$ such that in decrease $RSS$ by maximum and exclude this observation.
 
@@ -1862,7 +1862,7 @@ in the node $J_k$ and this node has $s$ siblings indexed as $s_1 \ldots s_s$ the
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\section{BSA algorithm}
+\section{BSA algorithm} \label{bsasection}
 In this section, we'll introduce another exact algorithm. It has a little different approach than previous algorithms. First of all, build a theoretical basis for this algorithm.
 
 
@@ -2093,10 +2093,10 @@ Moreover~\eqref{p:plus:one:equations:linear} is equivalent to the set of equatio
     \vdots \ \ \  & \ \ \ \  \ \vdots  \nonumber \\ 
     (\vec{x}_{i_1} \circ_p \vec {x}_{i_{p+1}} )^T \vec{w} &= y_{i_1} \circ_p y_{i_{p+1}}. \nonumber 
 \end{align}
-Elements of set $\mathcal{H_p}$ then satisfies $r_{i_1^2}(\vec{w}) = r_{(h:n))}(\vec{w}) = r_{(h+1:n))}(\vec{w})$.
+Elements of set $\mathcal{H}_p$ then satisfies $r_{i_1^2}(\vec{w}) = r_{(h:n))}(\vec{w}) = r_{(h+1:n))}(\vec{w})$.
 
 
-Set $H_p$ was proven to be suitable for finding $\mathcal{H_p}$ in~\cite{klouda2015exact} thus that set $\mathcal{H_p}$ satisfies~\eqref{hp:set:condition} if following assumptions are satisfied (we already assume that Assumption~\ref{klouda:asump:1} holds). First is that for all $\vec{w}$ $r_{(h:n))}(\vec{w}) > 0$, second , for all 
+Set $H_p$ was proven to be suitable for finding $\mathcal{H}_p$ in~\cite{klouda2015exact} thus that set $\mathcal{H}_p$ satisfies~\eqref{hp:set:condition} if following assumptions are satisfied (we already assume that Assumption~\ref{klouda:asump:1} holds). First is that for all $\vec{w}$ $r_{(h:n))}(\vec{w}) > 0$, second , for all 
 $(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -}$ the matrix system of $n-1$ equations
 
 \begin{align} 
@@ -2104,7 +2104,7 @@ $(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -}$ the matrix sy
     \vdots \ \ \  & \ \ \ \  \ \vdots  \nonumber \\ 
     (\vec{x}_{i_1} \circ_{n-1} \vec {x}_{i_{n}} )^T \vec{w} &= y_{i_1} \circ_p y_{i_{n}}. \nonumber.
 \end{align}
-The seconds assumption prevents the set $\mathcal{H_p}$ to be empty thus the case where all systems~\eqref{p:plus:one:equations:linear:simple} are dependent. 
+The seconds assumption prevents the set $\mathcal{H}_p$ to be empty thus the case where all systems~\eqref{p:plus:one:equations:linear:simple} are dependent. 
 
 This assumption can cause problem because when we assume model with the intercept, thus for all rows $\vec{x_i}$ of matrix $\vec{X}$ is $x_{i1} = 1$ then in the case  $\circ_1,\circ_2 \ldots,  \circ_{n-1} = -$, first column of matrix $\vec{X}$ only contains zeroes. We can modify this assumption so that instead of using $(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -}$ we use only $(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -} \setminus {(-, \ldots, -)}$~\cite{klouda2015exact}. 
 
