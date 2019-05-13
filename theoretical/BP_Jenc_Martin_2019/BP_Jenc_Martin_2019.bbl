@@ -121,4 +121,21 @@ Klouda, K. An exact polynomial time algorithm for computing the least trimmed
   squares estimate. \emph{Computational Statistics \& Data Analysis},
   volume~84, 2015: pp. 27--40.
 
+\bibitem{numpy}
+Oliphant, T. {NumPy}: A guide to {NumPy}. USA: Trelgol Publishing, 2006--,
+  [Online; accessed <today>].
+\urlprefix\biburl{http://www.numpy.org/}
+
+\bibitem{eigenweb}
+Guennebaud, G.; Jacob, B.; et al. Eigen v3. http://eigen.tuxfamily.org, 2010.
+
+\bibitem{pybind11}
+Jakob, W.; Rhinelander, J.; et al. pybind11 -- Seamless operability between
+  C++11 and Python. 2017, https://github.com/pybind/pybind11.
+
+\bibitem{scikit-learn}
+Pedregosa, F.; Varoquaux, G.; et al. {Scikit-learn: Machine Learning in Python
+  }. \emph{Journal of Machine Learning Research}, volume~12, 2011: pp.
+  2825--2830.
+
 \end{thebibliography}

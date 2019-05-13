@@ -1,6 +1,6 @@
 \chapter{Experiments} \label{chapterexperiments}
-In this chapter we describe experiments and its results for our implementation of all the algorithms described in the previous chapter.
-For testing performance of the algorithms we have implemented data set generator which provide wide variety of configuration options of generating the data.
+In this chapter we describe experiments and their results for our implementation of all algorithms described in the previous chapter.
+For testing performance of algorithms we have implemented data set generator which provide wide variety of configuration options of generating the data.
 
 \section{Data set generator}
 When we want to generate $n$ observations without outliers that satisfies linear regression model we can do it as follows:
@@ -18,10 +18,10 @@ When we want to generate $n$ observations without outliers that satisfies linear
 \end{algo}
 As a result we obtain $\vec{X}$ and $\vec{y}$. Regression coefficients can be set to arbitrary values, but if we do not want to have dummy explanatory variables, then they are supposed to be non-zero. All $\vec{x_i}$ should be generated independently and it is very common that we generate all $\vec{x_i}$ from normal distribution. 
 
-Another thing that needs to be considered is the intercept. In this work we assumed that our data already include intercept, so in that case $w_1$ is equal to intercept and all $x_{i_1}$ should be equal to $1$. Note that same result can be obtained by generating data without intercept and with $\varepsilon_i \sim \mathcal{N}(\mu,\,\sigma^{2})$. We can then extend matrix $\vec{X}$ so that we add first column that contains only $1$s. This approach is very common and software for estimating regression coefficients usually allows to set parameter which determines if intercept should be used --- if so, the column of $1$s is added. For that reason we generate our data sets using this approach. That means we generate $\varepsilon_i \sim \mathcal{N}(\mu,\,\sigma^{2})$ and column of $1$s is included only in case we set parameter for using intercept when fitting the data set. 
+Another thing that needs to be considered is the intercept. In this work we assumed that our data already include intercept, so in that case $w_1$ is equal to intercept and all $x_{i_1}$ should be equal to $1$. Note that same result can be obtained by generating data without intercept and with $\varepsilon_i \sim \mathcal{N}(\mu,\,\sigma^{2})$. We can then extend matrix $\vec{X}$ so that we add first column that contains only $1$s. This approach is very common and software for estimating regression coefficients usually allows to set parameter which determines if intercept should be used; if so, the column of $1$s is added. For that reason we generate our data sets using this approach. That means we generate $\varepsilon_i \sim \mathcal{N}(\mu,\,\sigma^{2})$ and column of $1$s is included only in case we set parameter for using intercept when fitting the data set. 
 
 \subsection{Generating outliers}
-As we already described in Section~\ref{outliers:info} we can describe different types of the outliers: vertical outliers and two types leverage points --- good leverage points and band leverage points. Those types of outliers are visualized on Figure~\ref{outliers:types:figure}. We can see that good leverage points, although they are distant observations, because they follow the linear pattern they are not deemed as an outliers here. 
+As we have already described in Section~\ref{outliers:info} we can describe different types of the outliers: vertical outliers and two types leverage points --- good leverage points and bad leverage points. Those types of outliers are visualized on Figure~\ref{outliers:types:figure}. We can see that good leverage points are not deemed as an outliers here, even if they are distant observations, because they follow the linear pattern. 
 
 \begin{figure}[h]
     \centering
@@ -78,19 +78,19 @@ As we already described in Section~\ref{outliers:info} we can describe different
     \label{outliers:types:figure}
 \end{figure}
 
-Beside that data set can contain multiple observations that satisfies linear regression model but with different regression coefficients. That means such data set can contain data from multiple different models.
+Moreover, the data set can contain multiple observations that satisfies linear regression model but with different regression coefficients. That means such data set can contain data from multiple different models.
 
 To generate the vertical outliers we only need to modify step $3$ of Algorithm~\ref{generate:linear:model}. We have multiple options:
 \begin{itemize}
     \item Generate $\varepsilon_i$ from $\mathcal{N}(\mu,\,\sigma^{2})$ but use different parameter  $\mu$ and $\sigma^{2}$ than which were used for generating regular observations.
-    \item Generate $\varepsilon_i$ from some heavy tailed or asymmetrical distribution like  Log-normal distribution or exponential distribution.
+    \item Generate $\varepsilon_i$ from some heavy tailed or asymmetrical distribution like  Log-normal or exponential distribution.
     \item Combine both above so that we randomly choose distribution and randomly generate parameters for such distribution.
 \end{itemize}
 The last option is the most versatile so we use this option. 
 
-Because we generate $\vec{x_i}$ from the normal distribution, we can generate leverage points just by changing $\mu$ parameter of this distribution. If we consequently generate $\varepsilon_i$ from the same distribution with same parameters as for the regular observations, we obtain good leverage points. On the other hand if we generate $\varepsilon_i$ as described above, we obtain bad leverage points.
+Because we generate $\vec{x_i}$ from the normal distribution, we can generate leverage points just by changing parameter $\mu$  of this distribution. If we consequently generate $\varepsilon_i$ from the same distribution with same parameters as for the regular observations, we obtain good leverage points. On the other hand if we generate $\varepsilon_i$ as described above, we obtain bad leverage points.
 
-If we want to generate outliers which corresponds to the different model we can just set the regression coefficients $\vec{w}$ differently. It is also possible to use different parameters of normal distribution for generating $\vec{x_i}$ and parameters for generating $\varepsilon_i$. theoretically we are able to introduce outliers even into this model, but when this model is ``outlier'' by itself relative to the original model, it is not needed. By this approach we would be able to generate the observations from arbitrary number of differ models, but for the sake of the simplicity we stay with only one different model. 
+If we want to generate outliers that correspond to the different model we can just set the regression coefficients $\vec{w}$ differently. It is also possible to use different parameters of normal distribution for generating $\vec{x_i}$ and parameters for generating $\varepsilon_i$. Theoretically we are able to introduce outliers even into this model, but when this model is ``outlier'' by itself relative to the original model, it is not needed. By this approach we would be able to generate the observations from arbitrary number of differ models, but for the sake of the simplicity we introduce only one different model. 
 
 \section{Data sets}
 We have implemented ideas from previous section to the data set generator with following parameters:
@@ -114,7 +114,7 @@ We used this generator to generate three data sets $D1$, $D2$ and $D3$ which dif
     \item $D3$ contain outliers of all described types. ($2m~ratio = 0.4$)
 \end{itemize}
 
-For all three data sets contain $20\%$ leverage points (thus $leverage~ratio = 0.2$) and non outlying $\vec{x_i}$ are generated from $\mathcal{N}(0,10)$ (thus $\mu_{\vec{x}} = 0, \sigma^{2}_{\vec{x}} = 10$). Other parameters are independently randomly generated from uniform distribution so that:
+All three data sets are set to contain $20\%$ leverage points (thus $leverage~ratio = 0.2$) and non outlying $\vec{x_i}$ are generated from $\mathcal{N}(0,10)$ (thus $\mu_{\vec{x}} = 0, \sigma^{2}_{\vec{x}} = 10$). Other parameters are independently randomly generated from uniform distribution so that:
 \begin{itemize}
     \item $\mu_{\vec{x_o}} \sim \mathcal{U}(20,\,60), \sigma^{2}_{\vec{x_o}} \sim \mathcal{U}(10,\,20)$
     \item $\mu_{\varepsilon} \sim \mathcal{U}(0,\,10), \sigma^{2}_{\varepsilon}  \sim \mathcal{U}(1,\,5)$ 
@@ -126,7 +126,7 @@ For all three data sets contain $20\%$ leverage points (thus $leverage~ratio = 0
 Finally parameters $n$, $p$ and $outlier~ratio$  are set depending on the experiment.
 
 \section{Implementation of the algorithms}
-We have implemented all of the described algorithms, moreover because algorithms for computing the feasible solution could be implemented both by calculating inversion and by calculating QR decomposition, we have implemented both version of those algorithms. Here is the list of all the implemented algorithm with acronyms we use for labeling them.
+We have implemented all described algorithms, moreover because algorithms for computing the feasible solution could be implemented both by calculating inversion and by calculating QR decomposition, we have implemented both version of those algorithms. Here is the list of all the implemented algorithm with their acronyms we use for labeling them:
 
 \begin{description}
     \item[FAST-LTS] from Section~\ref{section_fast_lts} with all described improvements
@@ -145,12 +145,54 @@ We have implemented all of the described algorithms, moreover because algorithms
     \item[P-BSA] probabilistic BSA using our idea from Section~\ref{bsasection}
 \end{description}
 
-These algorithms were first implemented in Python using the NumPy package. The performance was low, so we have implemented all of the algorithms in C++ using the Eigen library. On the other hand it is very popular today to use Python for data processing and manipulation; for that reason we have used pybind11 library, that exposes C++ types for Python and vice versa and written Python wrappers around the C++ implementation. 
+These algorithms were first implemented in Python using the NumPy package~\cite{numpy}. The performance was low, so we have implemented all of the algorithms in \CC \ using the Eigen library~\cite{eigenweb} for matrix manipulation. On the other hand it is very popular today to use Python for data processing and manipulation; for that reason we have used pybind11 library~\cite{pybind11}, that exposes \CC \ types for Python and vice versa and written Python wrappers around the \CC \ implementation. 
 
-Moreover pybind11 allows to bind Eigen types directly to the NumPy types (because both libraries are LAPACK compatible), so that it is possible to share pointers to the matrices between Eigen and NumPy so that the data does not have to copied when transferring between Python an C++.
+Moreover pybind11 allows to bind Eigen types directly to the NumPy types (because both libraries are LAPACK compatible), so that it is possible to share pointers to the matrices between Eigen and NumPy so that the data does not have to be copied when transferring between Python an \CC.
 
-That means the data generator, all the test and experiments are implemented in Python and the C++ code is called within the Python wrappers. It is also appropriate to mention that interface of the algorithms was created with regards to the popular $scikit-learn$ package -- the interface is almost identical, so all of the algorithms can be used the same way as $sklearn.linear_model$.
+That means that the data generator, all tests and experiments are implemented in Python; the \CC \  code is called only within the Python wrappers. It is also appropriate to mention that interface of the algorithms was created with regards to the popular scikit-learn package~\cite{scikit-learn}; the interface is almost identical, so all of the classes implementing the algorithms can be used in the same manner as classes from scikit-learn linear regression module.
 
 
 \section{Results}
-In two previous sections we have described in detail our setups for the experiments. 
+In two previous sections we have described our experimental setup. Here we report results of our experiments.
+
+In the first experiment we run multiple simulations where we compare speed and accuracy of the algorithm finding subsets satisfying strong necessary condition e.g. $h$-element feasible subsets. For each combination parameters $n$, $p$ and $outlier~ratio$ we generate we generate data sets  $D1$, $D2$ and $D3$ $100$ times (each time new data sets are generated) and run all algorithms on those data sets. Value of $h$ is conservatively chosen so that $h = [(n/2] + [(p+1)/2]$. For all runs we use the intercept, so value $p$ represents dimension of $\vec{x}$ including intercept. All algorithm are set to run at most for $50$ steps and each of them is starting only from $1$ randomly selected $h$-element subset.  The results are given in table \ref{table1} were average CPU time from $100$ runs for each algorithm. We also measure cosine similarity of a given solution compared to the OLS solution on the subset which does not contain outliers. For $n > 500$ cells for algorithm FSA-I and FSA-QR are empty. That is because times of the run of these algorithms were too slow and it would take weeks to finish all simulations.
+
+
+
+
+
+\begin{table}[h!]
+    \centering
+    
+
+    {\begin{adjustwidth}{-3cm}{0cm}
+
+        \scalebox{0.63}{
+        
+        \begin{tabular}{l|l|l|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+        \hline\hline
+          \\   &   & algorithm & 
+        \multicolumn{2}{l|}{FAST-LTS} & 
+        \multicolumn{2}{l|}{FSA-I} & 
+        \multicolumn{2}{l|}{FSA-QR} & 
+        \multicolumn{2}{l|}{MMEA-I} & 
+        \multicolumn{2}{l|}{MMEA-QR} &
+        \multicolumn{2}{l|}{MOEA-I} &
+        \multicolumn{2}{l|}{MOEA-QR} \\
+        \hline
+        
+         n  & p  & out &      time &       cos &      time &       cos &      time &       cos &      time &       cos &      time &       cos &      time &       cos &      time &       cos \\
+         \hline
+        20  & 2 & 0.10 &  0.004614 &  0.988359 &  0.000202 &  0.982532 &  0.006610 &  0.990883 &  0.000071 &  0.982120 &  0.000147 &  0.989808 &  0.000364 &  0.817895 &  0.000187 &  0.987816 \\    &   & 0.30 &  0.004291 &  0.985132 &  0.000213 &  0.986326 &  0.006309 &  0.963036 &  0.000068 &  0.814509 &  0.000152 &  0.993869 &  0.000370 &  0.656299 &  0.000202 &  0.972483 \\    &   & 0.45 &  0.004183 &  0.964252 &  0.000209 &  0.847824 &  0.004229 &  0.946639 &  0.000067 &  0.634588 &  0.000145 &  0.916261 &  0.000276 &  0.609704 &  0.000192 &  0.862572 \\100 & 3 & 0.10 &  0.010263 &  0.997496 &  0.019629 &  0.997817 &  0.178909 &  0.998082 &  0.000839 &  0.981119 &  0.002535 &  0.997572 &  0.002137 &  0.911982 &  0.006485 &  0.997943 \\    &   & 0.30 &  0.009968 &  0.998368 &  0.020972 &  0.998185 &  0.185812 &  0.998594 &  0.000854 &  0.924159 &  0.002704 &  0.996901 &  0.001721 &  0.877451 &  0.007001 &  0.998725 \\    &   & 0.45 &  0.009569 &  0.998725 &  0.020623 &  0.998749 &  0.150607 &  0.998839 &  0.000860 &  0.936188 &  0.002638 &  0.998588 &  0.001674 &  0.890495 &  0.006928 &  0.997922 \\    & 5 & 0.10 &  0.012194 &  0.996578 &  0.021666 &  0.996789 &  0.265649 &  0.997602 &  0.000884 &  0.990368 &  0.002995 &  0.997628 &  0.002414 &  0.885812 &  0.007262 &  0.997378 \\    &   & 0.30 &  0.012523 &  0.996829 &  0.024384 &  0.997198 &  0.286329 &  0.997886 &  0.000912 &  0.923997 &  0.003313 &  0.997691 &  0.002860 &  0.852555 &  0.007919 &  0.997339 \\    &   & 0.45 &  0.012282 &  0.997724 &  0.024928 &  0.996658 &  0.220120 &  0.994148 &  0.000933 &  0.891392 &  0.003232 &  0.997575 &  0.001798 &  0.865642 &  0.007690 &  0.993144 \\500 & 2 & 0.10 &  0.130725 &  0.999446 &  1.708373 &  0.999614 &  6.854093 &  0.999600 &  0.076088 &  0.999035 &  0.172415 &  0.999533 &  0.151864 &  0.998190 &  0.496092 &  0.999639 \\    &   & 0.30 &  0.134994 &  0.999591 &  1.661876 &  0.999801 &  6.661488 &  0.999791 &  0.075539 &  0.997468 &  0.173445 &  0.999742 &  0.157311 &  0.997426 &  0.488501 &  0.999702 \\    &   & 0.45 &  0.119165 &  0.999817 &  1.786019 &  0.999110 &  7.326588 &  0.999472 &  0.074628 &  0.998243 &  0.165817 &  0.999305 &  0.141019 &  0.998003 &  0.503233 &  0.999351 \\    & 5 & 0.10 &  0.100103 &  0.999442 &  2.013579 &  0.999605 &  8.534774 &  0.999680 &  0.076842 &  0.996679 &  0.161578 &  0.999745 &  0.111078 &  0.996261 &  0.480725 &  0.999641 \\    &   & 0.30 &  0.094455 &  0.999282 &  2.062271 &  0.999604 &  8.700532 &  0.999516 &  0.071619 &  0.994945 &  0.162314 &  0.999543 &  0.104943 &  0.994869 &  0.485604 &  0.999472 \\    &   & 0.45 &  0.091336 &  0.999652 &  2.077072 &  0.999163 &  8.865941 &  0.999343 &  0.067733 &  0.993651 &  0.152552 &  0.999013 &  0.103857 &  0.994371 &  0.484279 &  0.999033 
+        \\
+        \hline
+        \end{tabular}
+        }
+        
+        \end{adjustwidth}
+        }
+
+
+    \caption{Table to test captions and labels}
+    \label{table1}
+    \end{table}

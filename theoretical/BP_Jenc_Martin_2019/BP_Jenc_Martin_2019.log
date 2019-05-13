@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2019.3.5)  13 MAY 2019 20:19
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2019.3.5)  13 MAY 2019 23:16
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1379,6 +1379,8 @@ File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 
 ] [12
 
+] (./BP_Jenc_Martin_2019.lot) [13] [14
+
 ]
 \c__siunitx_mathsf_int=\count329
 \c__siunitx_mathtt_int=\count330
@@ -1395,7 +1397,6 @@ l.13
       [1
 
 
-
 ])pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
@@ -1410,7 +1411,7 @@ Underfull \vbox (badness 1137) has occurred while \output is active []
 
 
 
-] [4] [5] [6] [7] <img/outlier_regression.png, id=414, 936.49875pt x 307.1475pt>
+] [4] [5] [6] [7] <img/outlier_regression.png, id=424, 936.49875pt x 307.1475pt>
 File: img/outlier_regression.png Graphic file (type png)
  <use img/outlier_regression.png>
 Package pdftex.def Info: img/outlier_regression.png used on input line 248.
@@ -1445,7 +1446,7 @@ Package amsmath Warning: Foreign command \atopwithdelims;
 (amsmath)                \frac or \genfrac should be used instead
 (amsmath)                 on input line 707.
 
-<img/lts_convergence.png, id=642, 961.5925pt x 622.325pt>
+<img/lts_convergence.png, id=652, 961.5925pt x 622.325pt>
 File: img/lts_convergence.png Graphic file (type png)
  <use img/lts_convergence.png>
 Package pdftex.def Info: img/lts_convergence.png used on input line 747.
@@ -1779,19 +1780,29 @@ Underfull \hbox (badness 10000) in paragraph at lines 9--12
 
 
 
-] [54] [55] [56]
+] [54] [55]
+Overfull \hbox (19.27777pt too wide) in paragraph at lines 117--119
+[]\OT1/lmr/m/n/10.95 All three data sets are set to con-tain $20%$ lever-age points (thus $\OML/lmm/m/it/10.95 leverage ratio \OT1/lmr/m/n/10.95 =
+ []
+
+[56]
 Overfull \hbox (2.32431pt too wide) in paragraph at lines 142--143
 []\OT1/lmr/m/n/10.95 another com-bi-na-tion of al-go-rithm from Sec-tion []2.5[] 
  []
 
-) [57]
+[57]
+Overfull \hbox (91.22833pt too wide) in paragraph at lines 190--191
+[][] 
+ []
+
+) [58]
 \openout2 = `chapters/99_conclusion.aux'.
 
- (./chapters/99_conclusion.tex [58
+ (./chapters/99_conclusion.tex) [59
 
 
 
-]) [59] (./BP_Jenc_Martin_2019.bbl [60
+] (./BP_Jenc_Martin_2019.bbl [60
 
 
 ]
@@ -1807,6 +1818,9 @@ bibitemlist
 \tf@lof=\write7
 \openout7 = `BP_Jenc_Martin_2019.lof'.
 
+\tf@lot=\write8
+\openout8 = `BP_Jenc_Martin_2019.lot'.
+
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 207.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 207.
  (./BP_Jenc_Martin_2019.aux (./chapters/00_introduction.aux) (./chapters/01_linear_regression.aux) (./chapters/03_algorithms.aux) (./chapters/04_experiments.aux) (./chapters/99_conclusion.aux))
@@ -1821,18 +1835,18 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 207.
  ) 
 Here is how much of TeX's memory you used:
- 45891 strings out of 494945
- 1001006 string characters out of 6181033
- 1221103 words of memory out of 5000000
- 48056 multiletter control sequences out of 15000+600000
- 107664 words of font info for 95 fonts, out of 8000000 for 9000
+ 45912 strings out of 494945
+ 1001245 string characters out of 6181033
+ 1233464 words of memory out of 5000000
+ 48066 multiletter control sequences out of 15000+600000
+ 110603 words of font info for 96 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  75i,22n,102p,10424b,2138s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/lm/lm-rmtt.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rmsc.enc}</usr/share/texmf/fonts/type1/public/lm/lmbsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx6.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx8.pfb></usr/share/texmf/fonts/type1/public/lm/lmbxi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmcsc10.pfb></usr/share/texmf/fonts/type1/public/lm/lmex10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi6.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi8.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi9.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr6.pfb></usr/share/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmr9.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy9.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on BP_Jenc_Martin_2019.pdf (81 pages, 737333 bytes).
+{/usr/share/texmf/fonts/enc/dvips/lm/lm-rmtt.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rmsc.enc}</usr/share/texmf/fonts/type1/public/lm/lmbsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx6.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx8.pfb></usr/share/texmf/fonts/type1/public/lm/lmbxi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmcsc10.pfb></usr/share/texmf/fonts/type1/public/lm/lmex10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi6.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi8.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi9.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr6.pfb></usr/share/texmf/fonts/type1/public/lm/lmr7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmr9.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy9.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on BP_Jenc_Martin_2019.pdf (83 pages, 748112 bytes).
 PDF statistics:
- 1366 PDF objects out of 1440 (max. 8388607)
- 1237 compressed objects within 13 object streams
- 491 named destinations out of 1000 (max. 500000)
+ 1391 PDF objects out of 1440 (max. 8388607)
+ 1259 compressed objects within 13 object streams
+ 498 named destinations out of 1000 (max. 500000)
  404 words of extra memory for PDF output out of 10000 (max. 10000000)
 
