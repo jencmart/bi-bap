@@ -10,6 +10,7 @@
 \contentsline {figure}{\numberline {2.4}{\ignorespaces Step in the algorithms when due to the sorted siblings node $j_k$ can be trimmed}}{48}{figure.2.4}
 \addvspace {10pt}
 \contentsline {figure}{\numberline {3.1}{\ignorespaces Different types of outliers. }}{54}{figure.3.1}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Similarity of the solutions given by the algorithms finding $h$-element subsets satisfying strong necessary condition compared to the OLS solution on the subset of the data set that does not contain outliers. On the left are two box plots for all algorithms. Since visualization is influenced by the scale of MMEA-I and MOEA-I box plots, we provide two graphs without these two algorithms on the right.}}{59}{figure.3.2}
 \addvspace {10pt}
 \addvspace {10pt}
 \addvspace {10pt}

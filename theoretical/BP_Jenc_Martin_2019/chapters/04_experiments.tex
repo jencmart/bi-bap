@@ -130,16 +130,16 @@ We have implemented all described algorithms, moreover because algorithms for co
 
 \begin{description}
     \item[FAST-LTS] from Section~\ref{section_fast_lts} with all described improvements
-    \item[FSA-INV] from Section~\ref{section_feasible_solution}
+    \item[FSA-I] from Section~\ref{section_feasible_solution}
     \item[FSA-QR] FSA using theory from Section~\ref{oeamoeammea}
-    \item[MOEA-INV] from Section~\ref{oeamoeammea} it is the improved version of OEA
+    \item[MOEA-I] from Section~\ref{oeamoeammea} it is the improved version of OEA
     \item[MOEA-QR] MOEA using theory from Section~\ref{differentcomputation}
-    \item[MMEA-INV] from Section~\ref{mmeasection}
+    \item[MMEA-I] from Section~\ref{mmeasection}
     \item[MMEA-QR] MMEA using theory from Section~\ref{differentcomputation}
     \item[BAB] from Section~\ref{sectionbab}
     \item[BSA] is the implementation of improved BAB (BSABAB) from Section~\ref{bsasection}
-    \item[FAST-LTS-MMEA-INV] combination of algorithms from Section~\ref{sectioncombined}
-    \item[FAST-LTS-MOEA-INV] another combination of algorithm from Section~\ref{sectioncombined}
+    \item[FAST-LTS-MMEA-I] combination of algorithms from Section~\ref{sectioncombined}
+    \item[FAST-LTS-MOEA-I] another combination of algorithm from Section~\ref{sectioncombined}
     \item[MOEA-QR-BAB] BAB with sorting speedup as described in Section~\ref{sectionbab}
     \item[MOEA-QR-BSA] BSABAB using our idea from Section~\ref{bsasection}
     \item[P-BSA] probabilistic BSA using our idea from Section~\ref{bsasection}
@@ -155,47 +155,25 @@ That means that the data generator, all tests and experiments are implemented in
 \section{Results}
 In two previous sections we have described our experimental setup. Here we report results of our experiments.
 
-In the first experiment we run multiple simulations where we compare speed and accuracy of the algorithm finding subsets satisfying strong necessary condition e.g. $h$-element feasible subsets. For each combination parameters $n$, $p$ and $outlier~ratio$ we generate we generate data sets  $D1$, $D2$ and $D3$ $100$ times (each time new data sets are generated) and run all algorithms on those data sets. Value of $h$ is conservatively chosen so that $h = [(n/2] + [(p+1)/2]$. For all runs we use the intercept, so value $p$ represents dimension of $\vec{x}$ including intercept. All algorithm are set to run at most for $50$ steps and each of them is starting only from $1$ randomly selected $h$-element subset.  The results are given in table \ref{table1} were average CPU time from $100$ runs for each algorithm. We also measure cosine similarity of a given solution compared to the OLS solution on the subset which does not contain outliers. For $n > 500$ cells for algorithm FSA-I and FSA-QR are empty. That is because times of the run of these algorithms were too slow and it would take weeks to finish all simulations.
+\subsection{Algorithms for finding the strong necessary condition}
+In this section provide results of running multiple simulations, where we compare speed and accuracy of the algorithm finding subsets satisfying strong necessary condition e.g. $h$-element feasible subsets. For each combination parameters $n$, $p$ and $outlier~ratio$ ($out$) we generate data sets  $D1$, $D2$ and $D3$ $100$ times (each time new data sets are generated) and run all algorithms on those data sets. Value of $h$ is conservatively chosen so that $h = [(n/2] + [(p+1)/2]$. For all runs we use the intercept, so value $p$ represents dimension of $\vec{x}$ including intercept. All algorithm are set to run at most for $50$ steps and each of them is starting only from $1$ randomly selected $h$-element subset.  The results are given in Appendix [] in Tables~\ref{table1}, \ref{table2} and \ref{table3} for data sets $D1$, $D2$ and $D3$ respectively, were average CPU time from $100$ runs for each algorithm. We also measure cosine similarity and $L^2$ norm of a given solution compared to the regression coefficients given by the original model which does not contain outliers. For $n > 500$ cells for algorithm FSA-I and FSA-QR are empty. That is because times of the run of these algorithms were too slow and it would take weeks to finish all simulations.
+At Figure~\ref{all_distances} are given box plots showing cosine similarity and $L^2$ norms of the results. 
 
+As expected algorithms using QR decomposition provide slightly better results. Moreover the best results are given by the FSA-QR, because this algorithm does not use any equations for updating quantities and recalculate everything in the each step. On the other hand both FSA-I and FSA-QR are much slower because they does not use bounding condition as in the case MOEA-I and MOEA-QR. We can also see that MMEA-QR provides very similar results as the MOEA-QR even though this algorithm is much more eager. So in the case of algorithms finding strong necessary condition we would recommend using the FSA-QR for small data sets and for large ones the MMEA-QR. 
 
-
-
-
-\begin{table}[h!]
+\begin{figure}[h]
     \centering
+    \includegraphics[width=14cm]{img/all_distances_feasible}
+
+    \caption{Similarity of the solutions given by the algorithms finding $h$-element subsets satisfying strong necessary condition compared to the OLS solution on the subset of the data set that does not contain outliers. On the left are two box plots for all algorithms. Since visualization is influenced by the scale of MMEA-I and MOEA-I box plots, we provide two graphs without these two algorithms on the right.}
+    \label{all_distances}
+\end{figure}
+
+\subsection{Algorithms for finding exact solution}
+Here we provide results of the algorithms finding the exact solution. For the improved versions of the BAB and BSA algorithms, which can utilize results of appropriate solution we decided to use solutions given by the FSA-QR. This algorithm, as observed in previous section, provide the best results. FSA-QR is quite slow compared to the MOEA and MMEA variations, but because exact algorithms have much higher time complexity (thus can be used only on very small data sets), we do not sacrifice any speed performance.
+
+The setup for the simulations is the same as in previous section but we only compare speed this time, because all of the algorithms provide exact solution. 
+
+The results are given in Appendix~\ref{apendix:strong} in Tables~\ref{table1}, \ref{table2} and \ref{table3} for data sets $D1$, $D2$ and $D3$ respectively. 
     
-
-    {\begin{adjustwidth}{-3cm}{0cm}
-
-        \scalebox{0.63}{
-        
-        \begin{tabular}{l|l|l|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
-        \hline\hline
-          \\   &   & algorithm & 
-        \multicolumn{2}{l|}{FAST-LTS} & 
-        \multicolumn{2}{l|}{FSA-I} & 
-        \multicolumn{2}{l|}{FSA-QR} & 
-        \multicolumn{2}{l|}{MMEA-I} & 
-        \multicolumn{2}{l|}{MMEA-QR} &
-        \multicolumn{2}{l|}{MOEA-I} &
-        \multicolumn{2}{l|}{MOEA-QR} \\
-        \hline
-        
-         n  & p  & out &      time &       cos &      time &       cos &      time &       cos &      time &       cos &      time &       cos &      time &       cos &      time &       cos \\
-         \hline
-        20  & 2 & 0.10 &  0.004614 &  0.988359 &  0.000202 &  0.982532 &  0.006610 &  0.990883 &  0.000071 &  0.982120 &  0.000147 &  0.989808 &  0.000364 &  0.817895 &  0.000187 &  0.987816 \\    &   & 0.30 &  0.004291 &  0.985132 &  0.000213 &  0.986326 &  0.006309 &  0.963036 &  0.000068 &  0.814509 &  0.000152 &  0.993869 &  0.000370 &  0.656299 &  0.000202 &  0.972483 \\    &   & 0.45 &  0.004183 &  0.964252 &  0.000209 &  0.847824 &  0.004229 &  0.946639 &  0.000067 &  0.634588 &  0.000145 &  0.916261 &  0.000276 &  0.609704 &  0.000192 &  0.862572 \\100 & 3 & 0.10 &  0.010263 &  0.997496 &  0.019629 &  0.997817 &  0.178909 &  0.998082 &  0.000839 &  0.981119 &  0.002535 &  0.997572 &  0.002137 &  0.911982 &  0.006485 &  0.997943 \\    &   & 0.30 &  0.009968 &  0.998368 &  0.020972 &  0.998185 &  0.185812 &  0.998594 &  0.000854 &  0.924159 &  0.002704 &  0.996901 &  0.001721 &  0.877451 &  0.007001 &  0.998725 \\    &   & 0.45 &  0.009569 &  0.998725 &  0.020623 &  0.998749 &  0.150607 &  0.998839 &  0.000860 &  0.936188 &  0.002638 &  0.998588 &  0.001674 &  0.890495 &  0.006928 &  0.997922 \\    & 5 & 0.10 &  0.012194 &  0.996578 &  0.021666 &  0.996789 &  0.265649 &  0.997602 &  0.000884 &  0.990368 &  0.002995 &  0.997628 &  0.002414 &  0.885812 &  0.007262 &  0.997378 \\    &   & 0.30 &  0.012523 &  0.996829 &  0.024384 &  0.997198 &  0.286329 &  0.997886 &  0.000912 &  0.923997 &  0.003313 &  0.997691 &  0.002860 &  0.852555 &  0.007919 &  0.997339 \\    &   & 0.45 &  0.012282 &  0.997724 &  0.024928 &  0.996658 &  0.220120 &  0.994148 &  0.000933 &  0.891392 &  0.003232 &  0.997575 &  0.001798 &  0.865642 &  0.007690 &  0.993144 \\500 & 2 & 0.10 &  0.130725 &  0.999446 &  1.708373 &  0.999614 &  6.854093 &  0.999600 &  0.076088 &  0.999035 &  0.172415 &  0.999533 &  0.151864 &  0.998190 &  0.496092 &  0.999639 \\    &   & 0.30 &  0.134994 &  0.999591 &  1.661876 &  0.999801 &  6.661488 &  0.999791 &  0.075539 &  0.997468 &  0.173445 &  0.999742 &  0.157311 &  0.997426 &  0.488501 &  0.999702 \\    &   & 0.45 &  0.119165 &  0.999817 &  1.786019 &  0.999110 &  7.326588 &  0.999472 &  0.074628 &  0.998243 &  0.165817 &  0.999305 &  0.141019 &  0.998003 &  0.503233 &  0.999351 \\    & 5 & 0.10 &  0.100103 &  0.999442 &  2.013579 &  0.999605 &  8.534774 &  0.999680 &  0.076842 &  0.996679 &  0.161578 &  0.999745 &  0.111078 &  0.996261 &  0.480725 &  0.999641 \\    &   & 0.30 &  0.094455 &  0.999282 &  2.062271 &  0.999604 &  8.700532 &  0.999516 &  0.071619 &  0.994945 &  0.162314 &  0.999543 &  0.104943 &  0.994869 &  0.485604 &  0.999472 \\    &   & 0.45 &  0.091336 &  0.999652 &  2.077072 &  0.999163 &  8.865941 &  0.999343 &  0.067733 &  0.993651 &  0.152552 &  0.999013 &  0.103857 &  0.994371 &  0.484279 &  0.999033 
-        \\
-        \hline
-        \end{tabular}
-        }
-        
-        \end{adjustwidth}
-        }
-
-
-    \caption{Table to test captions and labels}
-    \label{table1}
-\end{table}
-
-
 We can see that 

@@ -43,7 +43,10 @@
 \contentsline {section}{\numberline {3.2}Data sets}{55}{section.3.2}
 \contentsline {section}{\numberline {3.3}Implementation of the algorithms}{56}{section.3.3}
 \contentsline {section}{\numberline {3.4}Results}{57}{section.3.4}
-\contentsline {chapter}{Conclusion}{59}{chapter*.25}
-\contentsline {chapter}{Bibliography}{61}{section*.27}
-\contentsline {appendix}{\chapternumberline {A}Data sets}{65}{appendix.A}
-\contentsline {appendix}{\chapternumberline {B}Contents of enclosed CD}{67}{appendix.B}
+\contentsline {subsection}{\numberline {3.4.1}Algorithms for finding the strong necessary condition}{58}{subsection.3.4.1}
+\contentsline {subsection}{\numberline {3.4.2}Algorithms for finding exact solution}{58}{subsection.3.4.2}
+\contentsline {chapter}{Conclusion}{61}{chapter*.25}
+\contentsline {chapter}{Bibliography}{63}{section*.27}
+\contentsline {appendix}{\chapternumberline {A}Results of the experiments}{67}{appendix.A}
+\contentsline {section}{\numberline {A.1}Strong necessary condition algorithms results}{67}{section.A.1}
+\contentsline {appendix}{\chapternumberline {B}Contents of enclosed CD}{71}{appendix.B}
