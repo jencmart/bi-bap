@@ -4,6 +4,7 @@
 \addvspace {10pt}
 \addvspace {10pt}
 \addvspace {10pt}
+\contentsline {table}{\numberline {3.1}{\ignorespaces Average, minimum and maximum CPU times of computation time for BSA for various combinations of parameters $n$ and $out$ for each dataset.}}{60}{table.3.1}
 \addvspace {10pt}
 \addvspace {10pt}
 \contentsline {table}{\numberline {A.1}{\ignorespaces Results of simulations for algorithms finding $h$-element subset satisfying the strong necessary condition for the data set $D1$ for various configurations of the parameters $n$, $p$ and $out$. Results include average time and cosine similarity and euclidean distance.}}{68}{table.A.1}

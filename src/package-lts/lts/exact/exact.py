@@ -26,9 +26,9 @@ class LTSRegressorExactCPP(AbstractRegression):
 
     def __init__(self,
                  use_intercept=True,
-                 algorithm: 'str, ‘exa’, ‘bab’, ‘bsa’ or ‘rbsa’, default: ‘bab’' = 'bab',
+                 algorithm: 'str, ‘exa’, ‘bab’, ‘bsa’ ‘rbsa’ or ‘random’  default: ‘bab’' = 'bab',
                  calculation: 'str, ‘inv’, ‘qr’, default: ‘qr’' = 'inv',
-                 num_starts: 'int, number of starting subsets in the case of rbsa algorithm, default: 10000' = 10000):
+                 num_starts: 'int, number of starting subsets in the case of rbsa or random algorithm, default: 10000' = 10000):
         super().__init__()
 
         # set using intercept
@@ -75,6 +75,8 @@ class LTSRegressorExactCPP(AbstractRegression):
             int_alg = 2
         elif self._alg == 'rbsa':
             int_alg = 3
+        elif self._alg == 'random':
+            int_alg = 4
         else:
             raise ValueError('param. algorithm must be one fo the strings: ‘exa’, ‘bab’ or ‘bsa’')
 
@@ -86,7 +88,7 @@ class LTSRegressorExactCPP(AbstractRegression):
             raise ValueError('param. calculation must be one fo the strings: ‘inv’ or ‘qr’')
 
         # todo -- add self._max_subsets (used with the rbsa)
-        if self._alg == 'exa' or self._alg == 'rbsa':  # exact and randomized bsa
+        if self._alg == 'exa' or self._alg == 'rbsa' or self._alg == 'random':  # exact and randomized bsa
             set_rss = -1
 
             # fix the maximum number of the combinations

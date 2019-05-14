@@ -45,6 +45,8 @@
 \contentsline {section}{\numberline {3.4}Results}{57}{section.3.4}
 \contentsline {subsection}{\numberline {3.4.1}Algorithms for finding the strong necessary condition}{58}{subsection.3.4.1}
 \contentsline {subsection}{\numberline {3.4.2}Algorithms for finding exact solution}{58}{subsection.3.4.2}
+\contentsline {subsection}{\numberline {3.4.3}FAST-LTS and combinations of the algorithms}{60}{subsection.3.4.3}
+\contentsline {subsection}{\numberline {3.4.4}Random algorithm and P-BSA}{60}{subsection.3.4.4}
 \contentsline {chapter}{Conclusion}{61}{chapter*.25}
 \contentsline {chapter}{Bibliography}{63}{section*.27}
 \contentsline {appendix}{\chapternumberline {A}Results of the experiments}{67}{appendix.A}

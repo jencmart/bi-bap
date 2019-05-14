@@ -676,6 +676,54 @@ ResultExact * refinementBsa(const Eigen::MatrixXd & X, const Eigen::MatrixXd & y
     return new ResultExact(indexes_min, theta_min, rss_min, cuts);
 }
 
+
+// ***********************************************************************************
+// ***************************  RANDOM EXHAUSTIVE   *******************************************************
+// *********************************************************************************
+
+
+ResultExact * refinementExhaustiveRandom(const Eigen::MatrixXd & X, const Eigen::MatrixXd & y, int hSize, int max_subsets ) {
+
+    double rss_min = std::numeric_limits<double>::infinity();
+    std::vector<int> indexes_min;
+
+
+   // bool vector for the combinations
+    // int p = X.cols();
+    int N = X.rows();
+
+    for(int r = 0; r < max_subsets ; r++) {
+
+            // Generate random p+1 subset
+            std::vector<int> permutation(N);
+            std::iota(permutation.begin(), permutation.end(), 0);
+            std::random_shuffle(permutation.begin(), permutation.end());
+            //  and slice first p +1 elements of this permutation
+            std::vector<int> indexes(permutation.begin(), permutation.begin() + hSize);
+
+
+        // Solve OLS on the subset
+        Eigen::MatrixXd theta;
+        double rss;
+        std::tie(theta, rss) = thetaAndRss(X, y, indexes);
+
+        // update if needed
+        if(rss < rss_min){
+            rss_min = rss;
+            indexes_min.swap(indexes);
+        }
+
+    }
+
+
+    // solve OLS
+    Eigen::MatrixXd theta;
+    std::tie(theta, rss_min) = thetaAndRss(X, y, indexes_min);
+    return new ResultExact(indexes_min, theta, rss_min, 0);
+}
+
+
+
 // *********************************************************************************************************************
 // *********************  E X A C T  -  S O L U T I O N   **************************************************************
 // *********************************************************************************************************************
@@ -697,8 +745,10 @@ ResultExact* exact_lts(Eigen::MatrixXd X, Eigen::MatrixXd y, int hSize, int alg,
     }else if (alg == 2) {
         // exact border scanning algorithm
         result = refinementBsa(X, y, hSize, rss);
-    }else{
+    }else if (alg == 3){
         result = refinementRandomBsa(X, y, hSize, max_subsets);
+    } else {
+        result = refinementExhaustiveRandom(X, y, hSize, max_subsets);
     }
 
     // append result to result array

@@ -140,8 +140,8 @@ We have implemented all described algorithms, moreover because algorithms for co
     \item[BSA] is the implementation of improved BAB (BSABAB) from Section~\ref{bsasection}
     \item[FAST-LTS-MMEA-I] combination of algorithms from Section~\ref{sectioncombined}
     \item[FAST-LTS-MOEA-I] another combination of algorithm from Section~\ref{sectioncombined}
-    \item[MOEA-QR-BAB] BAB with sorting speedup as described in Section~\ref{sectionbab}
-    \item[MOEA-QR-BSA] BSABAB using our idea from Section~\ref{bsasection}
+    \item[FSA-QR-BAB] BAB with sorting speedup as described in Section~\ref{sectionbab}
+    \item[FSA-QR-BSA] BSABAB using our idea from Section~\ref{bsasection}
     \item[P-BSA] probabilistic BSA using our idea from Section~\ref{bsasection}
 \end{description}
 
@@ -155,7 +155,7 @@ That means that the data generator, all tests and experiments are implemented in
 \section{Results}
 In two previous sections we have described our experimental setup. Here we report results of our experiments.
 
-\subsection{Algorithms for finding the strong necessary condition}
+\subsection{Algorithms for finding the strong necessary condition} \label{strong:experiments}
 In this section provide results of running multiple simulations, where we compare speed and accuracy of the algorithm finding subsets satisfying strong necessary condition e.g. $h$-element feasible subsets. For each combination parameters $n$, $p$ and $outlier~ratio$ ($out$) we generate data sets  $D1$, $D2$ and $D3$ $100$ times (each time new data sets are generated) and run all algorithms on those data sets. Value of $h$ is conservatively chosen so that $h = [(n/2] + [(p+1)/2]$. For all runs we use the intercept, so value $p$ represents dimension of $\vec{x}$ including intercept. All algorithm are set to run at most for $50$ steps and each of them is starting only from $1$ randomly selected $h$-element subset.  The results are given in Appendix [] in Tables~\ref{table1}, \ref{table2} and \ref{table3} for data sets $D1$, $D2$ and $D3$ respectively, were average CPU time from $100$ runs for each algorithm. We also measure cosine similarity and $L^2$ norm of a given solution compared to the regression coefficients given by the original model which does not contain outliers. For $n > 500$ cells for algorithm FSA-I and FSA-QR are empty. That is because times of the run of these algorithms were too slow and it would take weeks to finish all simulations.
 At Figure~\ref{all_distances} are given box plots showing cosine similarity and $L^2$ norms of the results. 
 
@@ -174,6 +174,55 @@ Here we provide results of the algorithms finding the exact solution. For the im
 
 The setup for the simulations is the same as in previous section but we only compare speed this time, because all of the algorithms provide exact solution. 
 
-The results are given in Appendix~\ref{apendix:strong} in Tables~\ref{table1}, \ref{table2} and \ref{table3} for data sets $D1$, $D2$ and $D3$ respectively. 
+The results are given in Appendix~\ref{apendix:chapter} in Tables~\ref{table1}, \ref{table2} and \ref{table3} for data sets $D1$, $D2$ and $D3$ respectively. 
     
-We can see that 
+Interesting observation is given by the Figure~\ref{exact:improvement} where is plotted how many times is the average time of the calculation improved if we use FSA-QR-BAB instead of BAB and FSA-QR-BSA instead of BSA. Meanwhile FSA-QR-BAB improves the time of the computation always in average, the FSA-QR-BSA does not leads to any time improvement at all, hence using FSA-QR solution for the BSA seems to be unnecessary.
+ 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=12cm]{img/exact_improvement}
+
+    \caption{For various combinations of parameters $n$ and $p$ is calculated average multiplicative improvement of the CPU time for running FSA-QR-BAB and FSA-QR-BSA instead of BAB and BSA.}
+    \label{exact:improvement}
+
+    
+\end{figure}
+
+
+We can observe from the results that BSA (as well as FSA-QR-BSA) is, as expected, sensitive for increasing the parameter $p$. On the other hand, when $p$ stays low, BSA outperforms both BAB and and FSA-QR-BAB. We have ran $10$ simulations for higher values of $n$ for each dataset $D1$, $D2$ and $D3$ for algorithm BSA, while preserving value of $p: p = 2$. In this simulation we have not used intercept. Results for average, minimum and maximum CPU times are given in Table~\ref{bsa:big:table}. For data sets $D2$ and $D3$ the simulation was not performed for $n = 400$, so the 
+respective cells are empty.
+
+
+\begin{table}[h!]
+    \centering
+
+\scalebox{0.63}{
+\begin{tabular}{l|l|l|r|r|r|r|r|r|r|r|r|} 
+\hline\hline
+&      & out & 
+\multicolumn{3}{l|}{$D1$} &
+\multicolumn{3}{l|}{$D2$} &
+\multicolumn{3}{l|}{$D3$} \\  
+\hline
+$n$ & $out$ & $h$ &     avg &       min &       max &      avg &      min &      max &      avg &      min &      max \\
+\hline
+      100 & 0.10 & 51  &     5.499 &     5.213 &     6.860 &    5.206 &    5.150 &    5.273 &    5.215 &    5.166 &    5.342 \\    & 0.30 & 51  &     5.598 &     5.125 &     6.852 &    5.345 &    5.129 &    6.707 &    5.198 &    5.142 &    5.309 \\    & 0.45 & 51  &     5.978 &     5.161 &     6.902 &    5.347 &    5.099 &    6.724 &    5.425 &    5.164 &    6.989 \\200 & 0.10 & 101 &    81.172 &    80.042 &    81.582 &   81.280 &   80.816 &   81.575 &   82.678 &   81.153 &   93.849 \\    & 0.30 & 101 &    80.992 &    80.416 &    81.396 &   82.482 &   80.789 &   94.172 &   81.250 &   80.008 &   81.921 \\    & 0.45 & 101 &    81.101 &    80.660 &    82.054 &   81.165 &   80.836 &   81.496 &   81.332 &   81.088 &   81.631 \\300 & 0.10 & 151 &   422.982 &   421.551 &   423.973 &  425.611 &  422.521 &  466.379 &  423.312 &  422.593 &  424.112 \\    & 0.30 & 151 &   426.895 &   421.704 &   465.063 &  423.236 &  421.937 &  424.155 &  427.746 &  422.930 &  466.564 \\    & 0.45 & 151 &   427.169 &   421.060 &   467.341 &  427.391 &  421.636 &  466.195 &  423.404 &  422.699 &  424.172 \\400 & 0.10 & 201 &  1390.836 &  1378.586 &  1483.780 &      $-$ &      $-$ &      $-$ &      $-$ &      $-$ &      $-$ \\    & 0.30 & 201 &  1389.465 &  1373.600 &  1483.066 &      $-$ &      $-$ &      $-$ &      $-$ &      $-$ &      $-$ \\    & 0.45 & 201 &  1380.151 &  1373.839 &  1383.228 &      $-$ &      $-$ &      $-$ &      $-$ &      $-$ &      $-$ \\
+\hline
+\end{tabular}
+% end table
+}
+
+\caption{Average, minimum and maximum CPU times of computation time for BSA for various combinations of parameters $n$ and $out$  for each dataset.}
+\label{bsa:big:table}
+
+\end{table}
+
+
+\subsection{FAST-LTS and combinations of the algorithms}
+In this section we provide results of the FAST-LTS algorithm compared to the MMEA-QR because as described in Section~\ref{strong:experiments} this algorithm seems to be very fast while providing reliable results. We also run simulations on the combination of those two algorithms as described in Section~\ref{sectioncombined}.
+
+
+It would also be very interesting 
+
+\subsection{Random algorithm and P-BSA}
+We proposed probabilistic version of BSA algorithm so let us compare it.
