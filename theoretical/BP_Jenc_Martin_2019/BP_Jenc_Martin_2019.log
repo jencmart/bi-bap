@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2019.3.5)  15 MAY 2019 00:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2019.3.5)  15 MAY 2019 20:30
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1412,13 +1412,42 @@ Overfull \hbox (0.9091pt too wide) in paragraph at lines 13--13
  [][] [][]\OT1/lmr/m/n/10.95 Similarity of the so-lu-tions given by the al-go-rithms find-ing $\OML/lmm/m/it/10.95 h$\OT1/lmr/m/n/10.95 -element 
  []
 
-) [11
 
-] [12
+Overfull \hbox (0.9091pt too wide) in paragraph at lines 15--15
+ [][] [][]\OT1/lmr/m/n/10.95 Similarity of the so-lu-tions given by the al-go-rithms find-ing $\OML/lmm/m/it/10.95 h$\OT1/lmr/m/n/10.95 -element 
+ []
 
-] (./BP_Jenc_Martin_2019.lot) [13] [14
+)
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [11
+
+] [12] (./BP_Jenc_Martin_2019.lot
+Overfull \hbox (12.91241pt too wide) in paragraph at lines 8--8
+ \OT1/lmr/m/n/10.95 did not sat-is-fied strong nec-es-sary con-di-tion, so the al-go-rithms MMEA- 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [13
 
 ]
+Overfull \hbox (3.7831pt too wide) in paragraph at lines 20--20
+ [][] [][]\OT1/lmr/m/n/10.95 Results of sim-u-la-tions for RAN-DOM and RBSA com-pared to FAST- 
+ []
+
+
+Overfull \hbox (3.7831pt too wide) in paragraph at lines 21--21
+ [][] [][]\OT1/lmr/m/n/10.95 Results of sim-u-la-tions for RAN-DOM and RBSA com-pared to FAST- 
+ []
+
+
+Overfull \hbox (3.7831pt too wide) in paragraph at lines 22--22
+ [][] [][]\OT1/lmr/m/n/10.95 Results of sim-u-la-tions for RAN-DOM and RBSA com-pared to FAST- 
+ []
+
+) [14]
 \c__siunitx_mathsf_int=\count331
 \c__siunitx_mathtt_int=\count332
 LaTeX Font Info:    Try loading font information for OT1+lmtt on input line 137.
@@ -1432,6 +1461,7 @@ File: ot1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
                    \relax 
 l.13 
       [1
+
 
 
 ])pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has been already used, duplicate ignored
@@ -1448,7 +1478,7 @@ Underfull \vbox (badness 1137) has occurred while \output is active []
 
 
 
-] [4] [5] [6] [7] <img/outlier_regression.png, id=485, 936.49875pt x 307.1475pt>
+] [4] [5] [6] [7] <img/outlier_regression.png, id=529, 936.49875pt x 307.1475pt>
 File: img/outlier_regression.png Graphic file (type png)
  <use img/outlier_regression.png>
 Package pdftex.def Info: img/outlier_regression.png used on input line 248.
@@ -1483,7 +1513,7 @@ Package amsmath Warning: Foreign command \atopwithdelims;
 (amsmath)                \frac or \genfrac should be used instead
 (amsmath)                 on input line 707.
 
-<img/lts_convergence.png, id=713, 961.5925pt x 622.325pt>
+<img/lts_convergence.png, id=757, 961.5925pt x 622.325pt>
 File: img/lts_convergence.png Graphic file (type png)
  <use img/lts_convergence.png>
 Package pdftex.def Info: img/lts_convergence.png used on input line 747.
@@ -1822,7 +1852,7 @@ Overfull \hbox (19.27777pt too wide) in paragraph at lines 117--119
 []\OT1/lmr/m/n/10.95 All three data sets are set to con-tain $20%$ lever-age points (thus $\OML/lmm/m/it/10.95 leverage ratio \OT1/lmr/m/n/10.95 =
  []
 
-[56] [57] <img/all_distances_feasible.png, id=1208, 995.72pt x 655.44875pt>
+[56] [57] <img/all_distances_feasible.png, id=1253, 995.72pt x 655.44875pt>
 File: img/all_distances_feasible.png Graphic file (type png)
  <use img/all_distances_feasible.png>
 Package pdftex.def Info: img/all_distances_feasible.png used on input line 166.
@@ -1835,7 +1865,7 @@ Overfull \hbox (29.33858pt too wide) in paragraph at lines 166--167
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[58] <img/exact_improvement.png, id=1218, 703.62875pt x 434.62375pt>
+[58] <img/exact_improvement.png, id=1263, 703.62875pt x 434.62375pt>
 File: img/exact_improvement.png Graphic file (type png)
  <use img/exact_improvement.png>
 Package pdftex.def Info: img/exact_improvement.png used on input line 183.
@@ -1850,19 +1880,28 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [59 <./img/all_distances_feasible.png>]) [60 <./img/exact_improvement.png>]
+ [59 <./img/all_distances_feasible.png>] [60 <./img/exact_improvement.png>] <img/random_box.png, id=1284, 945.5325pt x 355.3275pt>
+File: img/random_box.png Graphic file (type png)
+ <use img/random_box.png>
+Package pdftex.def Info: img/random_box.png used on input line 247.
+(pdftex.def)             Requested size: 341.43306pt x 128.30817pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) [61] [62 <./img/random_box.png>]
 \openout2 = `chapters/99_conclusion.aux'.
 
- (./chapters/99_conclusion.tex) [61
+ (./chapters/99_conclusion.tex) [63
 
 
 
-] (./BP_Jenc_Martin_2019.bbl [62
+] (./BP_Jenc_Martin_2019.bbl [64
 
 
 ]
 bibitemlist
-[63] [64]) [65] [66
+[65] [66]) [67] [68
 
 ]
 
@@ -1883,9 +1922,27 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[67] [68] [69] [70] [71] [72] [73] [74
 
-] [75]
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[69] [70] [71] [72] [73] [74] [75] [76] [77] [78] [79] [80] [81] [82
+
+] [83]
 \tf@toc=\write6
 \openout6 = `BP_Jenc_Martin_2019.toc'.
 
@@ -1895,32 +1952,32 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 \tf@lot=\write8
 \openout8 = `BP_Jenc_Martin_2019.lot'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 518.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 518.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 792.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 792.
  (./BP_Jenc_Martin_2019.aux (./chapters/00_introduction.aux) (./chapters/01_linear_regression.aux) (./chapters/03_algorithms.aux) (./chapters/04_experiments.aux) (./chapters/99_conclusion.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 518.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 518.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 792.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 792.
 Package rerunfilecheck Info: File `BP_Jenc_Martin_2019.out' has not changed.
-(rerunfilecheck)             Checksum: 61C6B40C0AB3ED36982F07E5C6908B82;9141.
+(rerunfilecheck)             Checksum: 83FDCB1D5098DE5265522B5B4F90AD2B;9136.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 518.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 792.
  ) 
 Here is how much of TeX's memory you used:
- 46487 strings out of 494945
- 1011027 string characters out of 6181033
- 1411603 words of memory out of 5000000
- 48595 multiletter control sequences out of 15000+600000
+ 46518 strings out of 494945
+ 1011446 string characters out of 6181033
+ 1521254 words of memory out of 5000000
+ 48609 multiletter control sequences out of 15000+600000
  110603 words of font info for 96 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  75i,22n,102p,10424b,2138s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-rmtt.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rmsc.enc}</usr/share/texmf/fonts/type1/public/lm/lmbsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx6.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx8.pfb></usr/share/texmf/fonts/type1/public/lm/lmbxi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmcsc10.pfb></usr/share/texmf/fonts/type1/public/lm/lmex10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi6.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi8.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi9.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr6.pfb></usr/share/texmf/fonts/type1/public/lm/lmr7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmr9.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy9.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on BP_Jenc_Martin_2019.pdf (91 pages, 843609 bytes).
+Output written on BP_Jenc_Martin_2019.pdf (99 pages, 891438 bytes).
 PDF statistics:
- 1506 PDF objects out of 1728 (max. 8388607)
- 1361 compressed objects within 14 object streams
- 518 named destinations out of 1000 (max. 500000)
- 446 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1597 PDF objects out of 1728 (max. 8388607)
+ 1441 compressed objects within 15 object streams
+ 534 named destinations out of 1000 (max. 500000)
+ 451 words of extra memory for PDF output out of 10000 (max. 10000000)
 

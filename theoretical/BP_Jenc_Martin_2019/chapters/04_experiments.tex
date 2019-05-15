@@ -142,7 +142,7 @@ We have implemented all described algorithms, moreover because algorithms for co
     \item[FAST-LTS-MOEA-I] another combination of algorithm from Section~\ref{sectioncombined}
     \item[FSA-QR-BAB] BAB with sorting speedup as described in Section~\ref{sectionbab}
     \item[FSA-QR-BSA] BSABAB using our idea from Section~\ref{bsasection}
-    \item[P-BSA] probabilistic BSA using our idea from Section~\ref{bsasection}
+    \item[RBSA] probabilistic BSA using our idea from Section~\ref{bsasection}
 \end{description}
 
 These algorithms were first implemented in Python using the NumPy package~\cite{numpy}. The performance was low, so we have implemented all of the algorithms in \CC \ using the Eigen library~\cite{eigenweb} for matrix manipulation. On the other hand it is very popular today to use Python for data processing and manipulation; for that reason we have used pybind11 library~\cite{pybind11}, that exposes \CC \ types for Python and vice versa and written Python wrappers around the \CC \ implementation. 
@@ -218,11 +218,38 @@ $n$ & $out$ & $h$ &     avg &       min &       max &      avg &      min &     
 \end{table}
 
 
-\subsection{FAST-LTS and combinations of the algorithms}
-In this section we provide results of the FAST-LTS algorithm compared to the MMEA-QR because as described in Section~\ref{strong:experiments} this algorithm seems to be very fast while providing reliable results. We also run simulations on the combination of those two algorithms as described in Section~\ref{sectioncombined}.
+\subsection{FAST-LTS and combinations of the algorithms} \label{results:combinations}
+In this section we provide results of the FAST-LTS algorithm compared to the MMEA-QR because as described in Section~\ref{strong:experiments} this algorithm seems to be very fast while providing reliable results. We also run simulations on the combination of those two algorithms as described in Section~\ref{sectioncombined}. All algorithms were set to start from $50$ randomly chosen subsets for each simulation and maximum number of inner cycles was set to $40$. We run simulations $100$ times for each combination of parameters $n$, $p$ and $out$ for each data set. In the Table~\ref{table:percentage:improvement} we can see that approximately in 30 $\%$ cases MOEA-QR and MMEA-QR were able to improve the solution in all three data sets. That means in those cases FAST-LTS algorithm have provided solutions that satisfied weak necessary condition but not the strong one.
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{l|r|r|r|}
+        \hline\hline
+         &    $D1$ &    $D2$ &    $D3$ \\
+         \hline
+         FAST-LTS-MMEA-QR &  30.33 $\%$ &  34.00 $\%$ &  33.00 $\%$ \\FAST-LTS-MOEA-QR &  30.33 $\%$ &  35.33 $\%$ &  33.33 $\%$  \\
+         \hline
+         
+    \end{tabular}
+
+    \caption{Percentage of the $h$-elements subsets provided by FAST-LTS which did not satisfied strong necessary condition, so the algorithms MMEA-QR and MOEA-QR were able to improve them.}
+    \label{table:percentage:improvement}
+\end{table}
+
+Let us note, that it would be interesting to exhaustively enumerate data sets and count number of $h$-element subsets which satisfies weak and strong necessary conditions. Moreover enumerate domains of each such $h$-element subsets in terms how many $h$-elements subsets leads to the particular $h$-element subset satisfying weak or strong necessary condition respectively.
 
 
-It would also be very interesting 
+\subsection{Random algorithm and RBSA}
+In Section~\ref{bsasection} we proposed probabilistic version of BSA. We compare it to the Random solution algorithm (RANDOM) described in Section~\ref{first:attempts} and also to the FAST-LTS and MMEA-QR algorithms which were observed to provide efficient solutions in previous sections. In this experiments we set RANDOM and RBSA algorithm to start from $1000$ randomly chosen $h$-element subsets. FSA-LTS was set to start from $100$ $p$-element subsets and MMEA-QR from $100$ $h$-element subsets. Both algorithms were set to the maximum of $50$ inner cycles. For each combination of parameters $n$, $p$ and $out$ we ran $10$ simulations. This was repeated for all three data sets. The results are given in Appendix~\ref{apendix:chapter} in Tables~\ref{table:randim:1}, \ref{table:randim:2} and \ref{table:randim:3} for data sets $D1$, $D2$ and $D3$ respectively and include average CPU times cosine similarity and euclidean distance.
 
-\subsection{Random algorithm and P-BSA}
-We proposed probabilistic version of BSA algorithm so let us compare it.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=12cm]{img/random_box}
+
+    \caption{Similarity of the solutions given by the algorithms finding $h$-element subsets satisfying strong necessary condition compared to the OLS solution on the subset of the data set that does not contain outliers. On the left are two box plots for all algorithms. Since visualization is influenced by the scale of MMEA-I and MOEA-I box plots, we provide two graphs without these two algorithms on the right.}
+    \label{randim:box}
+\end{figure}
+
+In Figure~\ref{randim:box} are given box plots describing the quality of the solution. Although $L^2$ the RBSA solution is in average closer to the the OLS solution on the data set subset not containing outliers, the cosine distance is worse. Moreover we can clearly see that MMEA-QR and FAST-LTS provide much more reliable results (moreover in shorter CPU time).
+
+There are many other possibilities for other experiments than what is provided in this chapter, especially experiments outlined in the Section~\ref{results:combinations} for exploring domains of $h$-element subsets satisfying weak and strong necessary conditions. These experiments are out of the scope of this work, because already provided simulations were quite exhaustive because of the lot of possible variations of the algorithms.  

@@ -1,14 +1,42 @@
+  
+  # DF 1
   # running...dataset[1/9] experiment[2/3](30x2) algorithm[4/5] for[72/100] t: 1.5
     # tj zkoncili jsme u 30x2 hned u  1. data setu ( exact moc pomaly  )
-    # ted rozjedu bez exact a pak nafakuju data pro 30x2 exact
+    # ted rozjedu bez exact a pak nafakuju data pro 30x2 exact -- nenafakuji !!!!   ------- do 25x2
 
 
+    # DF 2 --- pouze 25x3 --- vsechny algoritmy
+    # 0.1 0.3 0.4 3
+  
 
+    # 4500 pro 25x3  ... 5*9*100 (sedi)
+    # 30x2 ..... 359 ... i s exact 
+    
+    # ahaaa .. tj exact && exact from 25_3 dohromady obsahuji jen do 25x3 
+    # 30x2 uz bylo na exact asi moc pomale
+    
+    
+    # DF1 + DF2 .. VSE DO DO 25x3
+    
+    
+    # DF3 --- bez exact, 30x3 && 30x3
+    1080/9 = 120 /
+    
+    
+    # DF 3 --- 
     # running...dataset[1/9] experiment[4/4](50x2) algorithm[1/4] for[2/10] t: 18.59
     # takze to jsem stopnul tady
-    # konfigurace 'BAB', 'MOEA-QR-BAB', 'MOEA-QR-BSA', 'BSA'
-    #  (30, 2),    (40, 2),  (30, 3), (50, 2)
+    
 
+
+
+
+    # konfigurace 'BAB', 'MOEA-QR-BAB', 'MOEA-QR-BSA', 'BSA'
+    #  (30, 2),    (40, 2),  (30, 3), (50, 2) --- tedy 50x2 uz nepouzito   -------- 30x2, 40x2, 30x3, 50x2
+
+
+
+    # DF 4
     # ten bsa a moeaQRbsa jel nakonec jeste na
     # (100, 2),
     # (200, 2),

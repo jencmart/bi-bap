@@ -76,5 +76,5 @@ if __name__ == '__main__':
     #feasible_test.test_fast_and_feasible(n=28, p=3)
     # test_feasible_solution_numpy()
     #lts_speed.fast_lts_cpp_big()
-    experiments_probabilistic.experiment_random_algorithms('./out/experiment_random.csv')
-
+    # experiments_probabilistic.experiment_random_algorithms('./out/experiment_random.csv')
+    experiments_probabilistic.experiment_combined(output='./out/experiment_combined.csv')

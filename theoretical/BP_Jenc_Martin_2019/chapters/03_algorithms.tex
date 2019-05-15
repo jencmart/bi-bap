@@ -2,7 +2,7 @@
 
 In the previous chapter, we have covered the theoretical background required to implement algorithms that are presented in this chapter. We have introduced the discrete version of the LTS objective function whose minimum is equivalent to the continuous one. Finding the minimum of this function requires to find the particular $h$-element subset and then calculate the estimate of the corresponding regression coefficients $\vec{w}$. To achieve this, we need to examine all $h$-element subsets. The exhaustive approach fails due to the exponential size of $Q^{(n,h)}$.
 
-\subsection{First attempts}
+\subsection{First attempts} \label{first:attempts}
 First known algorithms were based on iterative removal data samples whose residuum had the highest value based on the OLS estimate on the whole dataset. Such attempts are known to be flawed~\cite{hawkins:1994} because the initial OLS fit can be already profoundly affected by outliers and the algorithm may remove data samples which represent the actual model.
 
 Other algorithms were based purely on a random approach. One such algorithm is the Random solution algorithm~\cite{bai2003random} which randomly selects $k$ $h$-element subsets and subsequently compute the OLS estimate on each of them and chooses the estimate with a minimum value of the objective function.  Such approach is straightforward, but the probability of selecting at least one $h$-element out of $k$ subsets which does not contain outliers thus has a chance of producing good result tends to zero for an increasing number of data samples $n$ as we describe in detail in Section~\ref{section:random:h:samples}.

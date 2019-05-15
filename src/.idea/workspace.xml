@@ -3,28 +3,29 @@
   <component name="ChangeListManager">
     <list default="true" id="5818e2d1-7629-47ec-a2bd-d6037228392b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notebooks/.ipynb_checkpoints/experiment-results-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/.ipynb_checkpoints/experiment-results-checkpoint.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notebooks/experiment-results.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/experiment-results.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notebooks/out/experiment_2/info_about_experiments.txt" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/out/experiment_2/info_about_experiments.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notebooks/out/experiment_random.csv" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/out/experiment_random.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/experiments/experiments_probabilistic.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/experiments/experiments_probabilistic.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/run.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/runall.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/runall.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen/scripts/eigen_monitor_perf.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen/scripts/eigen_monitor_perf.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/lts/exact/cpp/.exact.cpp.cppimporthash" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lts/exact/cpp/.exact.cpp.cppimporthash" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/lts/exact/cpp/.rendered.exact.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lts/exact/cpp/.rendered.exact.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/lts/exact/cpp/exact.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lts/exact/cpp/exact.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/lts/exact/cpp/exact.cpython-35m-x86_64-linux-gnu.so" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lts/exact/cpp/exact.cpython-35m-x86_64-linux-gnu.so" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/lts/exact/exact.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lts/exact/exact.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/out/experiment_probabilistic_big.csv" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/out/experiment_1/experiment_probabilistic_big.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/out/experiment_probabilistic_big_p2.csv" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/out/experiment_1/experiment_probabilistic_big_p2.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lts/out/experiment_random.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.aux" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.aux" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.lof" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.lof" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.log" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.lot" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.lot" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.out" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.out" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.pdf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.synctex.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.synctex.gz" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.tex" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.tex" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.toc" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/00_introduction.aux" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/00_introduction.aux" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/01_linear_regression.aux" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/01_linear_regression.aux" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/03_algorithms.aux" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/03_algorithms.aux" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/03_algorithms.tex" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/03_algorithms.tex" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/04_experiments.aux" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/04_experiments.aux" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/04_experiments.tex" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/04_experiments.tex" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/99_conclusion.aux" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/99_conclusion.aux" afterDir="false" />
@@ -37,148 +38,53 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/src$feasible_solution_test_dev.coverage" NAME="feasible_solution_test_dev Coverage Results" MODIFIED="1552391023132" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/package-lts/ltsregression/feasiblesolution" />
-    <SUITE FILE_PATH="coverage/src$main.coverage" NAME="main Coverage Results" MODIFIED="1557877066819" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/package-lts" />
+    <SUITE FILE_PATH="coverage/src$main.coverage" NAME="main Coverage Results" MODIFIED="1557907737153" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/package-lts" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.32622477">
-      <split-first>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/package-lts/tests/test_exact.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1746">
-                  <caret line="102" column="35" selection-start-line="83" selection-start-column="3" selection-end-line="102" selection-end-column="35" />
-                  <folding>
-                    <element signature="e#0#31#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/package-lts/lts/fastlts/fast_lts.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="6750">
-                  <caret line="379" column="14" selection-start-line="379" selection-start-column="14" selection-end-line="379" selection-end-column="14" />
-                  <folding>
-                    <element signature="e#0#18#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/package-lts/out/my_csv.csv">
-              <provider editor-type-id="csv-table-editor">
-                <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
-              </provider>
-              <provider selected="true" editor-type-id="csv-text-editor">
-                <state>
-                  <caret column="16" selection-start-column="16" selection-end-column="16" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/package-lts/lts/exact/cpp/exact.cpp">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="192">
-                  <caret line="691" column="7" selection-start-line="691" selection-start-column="7" selection-end-line="691" selection-end-column="7" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/package-lts/lts/exact/exact.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="168">
-                  <caret line="30" column="92" selection-start-line="30" selection-start-column="92" selection-end-line="30" selection-end-column="92" />
-                  <folding>
-                    <element signature="e#0#48#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/package-lts/data/data_generator.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="404">
-                  <caret line="40" selection-start-line="40" selection-end-line="41" />
-                  <folding>
-                    <element signature="e#0#18#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/package-lts/lts/feasible/cpp/feasible_solution.cpp">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="16992">
-                  <caret line="944" column="23" selection-start-line="944" selection-start-column="16" selection-end-line="944" selection-end-column="23" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/package-lts/lts/fastlts/cpp/fastlts.cpp">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="2862">
-                  <caret line="159" column="120" selection-start-line="159" selection-start-column="120" selection-end-line="159" selection-end-column="120" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/package-lts/main.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="409">
-                  <caret line="78" column="12" selection-start-line="78" selection-start-column="12" selection-end-line="78" selection-end-column="12" />
-                  <folding>
-                    <element signature="e#32#80#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$USER_HOME$/fit/bi-bap/src/package-lts/lts/exact/cpp/.rendered.exact.cpp">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-2026">
-                  <caret line="685" selection-start-line="685" selection-end-line="685" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/package-lts/experiments/experiments_probabilistic.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="257">
-                  <caret line="410" column="18" lean-forward="true" selection-start-line="410" selection-start-column="18" selection-end-line="410" selection-end-column="18" />
-                  <folding>
-                    <element signature="e#0#49#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$USER_HOME$/fit/bi-bap/src/package-lts/experiments/experiments_probabilistic.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="99">
-                  <caret line="506" column="45" selection-start-line="506" selection-start-column="45" selection-end-line="506" selection-end-column="45" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/package-lts/main.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1332">
+              <caret line="79" column="89" selection-start-line="79" selection-start-column="89" selection-end-line="79" selection-end-column="89" />
+              <folding>
+                <element signature="e#32#80#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/fit/bi-bap/src/package-lts/lts/exact/cpp/.rendered.exact.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="12330">
+              <caret line="685" selection-start-line="685" selection-end-line="685" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/package-lts/experiments/experiments_probabilistic.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1175">
+              <caret line="626" column="32" lean-forward="true" selection-start-line="623" selection-start-column="4" selection-end-line="626" selection-end-column="32" />
+              <folding>
+                <element signature="e#0#49#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/fit/bi-bap/src/package-lts/experiments/experiments_probabilistic.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="12780">
+              <caret line="717" column="45" selection-start-line="717" selection-start-column="45" selection-end-line="717" selection-end-column="45" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -189,8 +95,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>exact_lts</find>
-      <find>refinement_bsa</find>
       <find>refinementBsa</find>
       <find>set_rss</find>
       <find>generate</find>
@@ -219,6 +123,8 @@
       <find>std::vector&lt;int&gt; permutation(N);</find>
       <find>num_starts</find>
       <find>refinementRandomBsa</find>
+      <find>MOEA-QR-BAB</find>
+      <find>MOEA-QR-BS</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -275,14 +181,14 @@
         <option value="$PROJECT_DIR$/package-lts/my_csv.csv" />
         <option value="$PROJECT_DIR$/package-lts/lts/fastlts/fast_lts.py" />
         <option value="$PROJECT_DIR$/package-lts/lts/exact/exact.py" />
-        <option value="$PROJECT_DIR$/package-lts/main.py" />
         <option value="$PROJECT_DIR$/package-lts/lts/exact/cpp/exact.cpp" />
+        <option value="$PROJECT_DIR$/package-lts/main.py" />
         <option value="$PROJECT_DIR$/package-lts/experiments/experiments_probabilistic.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1" />
+    <option name="x" value="959" />
     <option name="y" value="3" />
     <option name="width" value="962" />
     <option name="height" value="1078" />
@@ -507,23 +413,24 @@
       <workItem from="1557168019725" duration="109553000" />
       <workItem from="1557521660400" duration="6993000" />
       <workItem from="1557692667634" duration="8558000" />
-      <workItem from="1557827210090" duration="10544000" />
+      <workItem from="1557827210090" duration="17316000" />
+      <workItem from="1557944540662" duration="244000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="545598000" />
+    <option name="totallyTimeSpent" value="552614000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="3" width="962" height="1078" extended-state="0" />
+    <frame x="959" y="3" width="962" height="1078" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.4989011" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.45274726" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.44183674" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4983957" visible="true" weight="0.35386223" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.4415449" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4983957" weight="0.39039665" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3989796" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -623,12 +530,12 @@
       <provider editor-type-id="csv-table-editor">
         <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
       </provider>
-      <provider selected="true" editor-type-id="csv-text-editor">
+      <provider editor-type-id="text-editor">
         <state relative-caret-position="18">
           <caret line="1" selection-start-line="1" selection-end-line="1" />
         </state>
       </provider>
-      <provider editor-type-id="text-editor">
+      <provider selected="true" editor-type-id="csv-text-editor">
         <state relative-caret-position="18">
           <caret line="1" selection-start-line="1" selection-end-line="1" />
         </state>
@@ -747,14 +654,14 @@
       <provider editor-type-id="csv-table-editor">
         <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
       </provider>
-      <provider selected="true" editor-type-id="csv-text-editor">
-        <state relative-caret-position="468">
-          <caret line="26" column="12" selection-start-line="26" selection-start-column="12" selection-end-line="26" selection-end-column="12" />
-        </state>
-      </provider>
       <provider editor-type-id="text-editor">
         <state relative-caret-position="432">
           <caret line="24" column="2" selection-start-line="24" selection-start-column="2" selection-end-line="24" selection-end-column="2" />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="csv-text-editor">
+        <state relative-caret-position="468">
+          <caret line="26" column="12" selection-start-line="26" selection-start-column="12" selection-end-line="26" selection-end-column="12" />
         </state>
       </provider>
     </entry>
@@ -762,14 +669,14 @@
       <provider editor-type-id="csv-table-editor">
         <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
       </provider>
-      <provider selected="true" editor-type-id="csv-text-editor">
-        <state relative-caret-position="522">
-          <caret line="29" selection-start-line="29" selection-end-line="29" />
-        </state>
-      </provider>
       <provider editor-type-id="text-editor">
         <state relative-caret-position="508">
           <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="csv-text-editor">
+        <state relative-caret-position="522">
+          <caret line="29" selection-start-line="29" selection-end-line="29" />
         </state>
       </provider>
     </entry>
@@ -877,19 +784,19 @@
       </provider>
       <provider selected="true" editor-type-id="csv-text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/tests/test_exact.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1746">
-          <caret line="102" column="35" selection-start-line="83" selection-start-column="3" selection-end-line="102" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
+    <entry file="file://$PROJECT_DIR$/package-lts/out/my_csv.csv">
+      <provider editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
+      </provider>
+      <provider selected="true" editor-type-id="csv-text-editor">
+        <state relative-caret-position="-2106">
+          <caret column="16" selection-start-column="16" selection-end-column="16" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/package-lts/lts/fastlts/fast_lts.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6750">
+        <state relative-caret-position="18">
           <caret line="379" column="14" selection-start-line="379" selection-start-column="14" selection-end-line="379" selection-end-column="14" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
@@ -897,27 +804,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/lts/feasible/cpp/feasible_solution.cpp">
+    <entry file="file://$PROJECT_DIR$/package-lts/tests/test_exact.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="16992">
-          <caret line="944" column="23" selection-start-line="944" selection-start-column="16" selection-end-line="944" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/lts/fastlts/cpp/fastlts.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2862">
-          <caret line="159" column="120" selection-start-line="159" selection-start-column="120" selection-end-line="159" selection-end-column="120" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/data/data_generator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="404">
-          <caret line="40" selection-start-line="40" selection-end-line="41" />
+        <state relative-caret-position="100">
+          <caret line="80" column="10" selection-start-line="80" selection-start-column="10" selection-end-line="80" selection-end-column="10" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#31#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package-lts/lts/exact/cpp/exact.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="691" column="7" selection-start-line="691" selection-start-column="7" selection-end-line="691" selection-end-column="7" />
         </state>
       </provider>
     </entry>
@@ -931,10 +831,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/package-lts/data/data_generator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="404">
+          <caret line="40" selection-start-line="40" selection-end-line="41" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package-lts/lts/feasible/cpp/feasible_solution.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="521">
+          <caret line="944" column="23" selection-start-line="944" selection-start-column="16" selection-end-line="944" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package-lts/lts/fastlts/cpp/fastlts.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="521">
+          <caret line="159" column="120" selection-start-line="159" selection-start-column="120" selection-end-line="159" selection-end-column="120" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/package-lts/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="409">
-          <caret line="78" column="12" selection-start-line="78" selection-start-column="12" selection-end-line="78" selection-end-column="12" />
+        <state relative-caret-position="1332">
+          <caret line="79" column="89" selection-start-line="79" selection-start-column="89" selection-end-line="79" selection-end-column="89" />
           <folding>
             <element signature="e#32#80#0" expanded="true" />
           </folding>
@@ -943,39 +867,22 @@
     </entry>
     <entry file="file://$USER_HOME$/fit/bi-bap/src/package-lts/lts/exact/cpp/.rendered.exact.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2026">
+        <state relative-caret-position="12330">
           <caret line="685" selection-start-line="685" selection-end-line="685" />
         </state>
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/fit/bi-bap/src/package-lts/experiments/experiments_probabilistic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="99">
-          <caret line="506" column="45" selection-start-line="506" selection-start-column="45" selection-end-line="506" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/lts/exact/cpp/exact.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="691" column="7" selection-start-line="691" selection-start-column="7" selection-end-line="691" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/out/my_csv.csv">
-      <provider editor-type-id="csv-table-editor">
-        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
-      </provider>
-      <provider selected="true" editor-type-id="csv-text-editor">
-        <state>
-          <caret column="16" selection-start-column="16" selection-end-column="16" />
+        <state relative-caret-position="12780">
+          <caret line="717" column="45" selection-start-line="717" selection-start-column="45" selection-end-line="717" selection-end-column="45" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/package-lts/experiments/experiments_probabilistic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="257">
-          <caret line="410" column="18" lean-forward="true" selection-start-line="410" selection-start-column="18" selection-end-line="410" selection-end-column="18" />
+        <state relative-caret-position="1175">
+          <caret line="626" column="32" lean-forward="true" selection-start-line="623" selection-start-column="4" selection-end-line="626" selection-end-column="32" />
           <folding>
             <element signature="e#0#49#0" expanded="true" />
           </folding>
