@@ -131,7 +131,7 @@ This is commonly know as residual sum of squares $RSS$
 \end{definition}
 The point of the minimum of this function 
 \begin{equation}
-\vec{\hat{w}^{(OLS, n)}}  = \argmin_{\vec{w} \in \mathbb{R}^p} \of^{(OLS,\vec{X}, \vec{y})}(\vec{w})
+\vec{\hat{w}}^{(OLS,\vec{X}, \vec{y})}  = \argmin_{\vec{w} \in \mathbb{R}^p} \of^{(OLS,\vec{X}, \vec{y})}(\vec{w})
 \end{equation}
 is a the ordinary least squares estimate of regression coefficients.
 
@@ -172,11 +172,11 @@ It is easy to prove that twice differentiable function is convex if and only if 
 Assuming that $\vec{X}^T\vec{X}$ is a regular matrix, its inverse exists, and the solution can be explicitly written as
 
 \begin{equation} \label{wols}
-    \vec{\hat{w}}^{(OLS,n)} = (\vec{X}^T\vec{X})^{-1}\vec{X}^T\vec{y}, 
+    \vec{\hat{w}}^{(OLS,\vec{X}, \vec{y})} = (\vec{X}^T\vec{X})^{-1}\vec{X}^T\vec{y}.
 \end{equation}
-where $(OLS,n)$ denotes that $\vec{\hat{w}}^{(OLS,n)}$ is the estimate of true regression coefficients given by the OLS method for $n$ observations. 
+%where $(OLS,n)$ denotes that $\vec{\hat{w}}^{(OLS,n)}$ is the estimate of true regression coefficients given by the OLS method for $n$ observations. 
 
-Moreover, we can see that if $\vec{X}^T\vec{X}$ is a regular matrix, then the hessian $\vec{H_{\of^{(OLS,\vec{X}, \vec{y})}}}$ is positive definite and $\of^{(OLS,\vec{X}, \vec{y})}$ is strictly convex and $\vec{\hat{w}}^{(OLS,n)}$ is the unique strict global minimum.
+Moreover, we can see that if $\vec{X}^T\vec{X}$ is a regular matrix, then the hessian $\vec{H_{\of^{(OLS,\vec{X}, \vec{y})}}}$ is positive definite and $\of^{(OLS,\vec{X}, \vec{y})}$ is strictly convex and $\vec{\hat{w}}^{(OLS,\vec{X}, \vec{y})}$ is the unique strict global minimum.
 
 % norms can be used to create distance as d(x,y) = || x - y ||
 % but not all distances have corresponding norm! trivial example. d(x,x) = 0, d(x,y) = 1
@@ -237,9 +237,9 @@ This definition is says that the breakdown point is the function of the minimal 
 
 Intuitively, a reasonable breakdown point should not be higher than~$0.5$~\cite{rouss:1986} ; if more than $50\%$ of the data is exchanged, the model of exchanged data should override the model of the original data. 
 
-In the case of the OLS estimator, one outlier is enough to increase the value of $\vec{\hat{w}}^{(OLS,n)}$ to any desired value~\cite{agullo2001new} thus 
+In the case of the OLS estimator, one outlier is enough to increase the value of $\vec{\hat{w}}^{(OLS,\vec{X}, \vec{y})}$ to any desired value~\cite{agullo2001new} thus 
 \begin{equation}
-    \bdpoint(\vec{\hat{w}}^{(OLS,n)},\vec{x_n} ) = \frac{1}{n}.
+    \bdpoint(\vec{\hat{w}}^{(OLS,\vec{X}, \vec{y})},\vec{x_n} ) = \frac{1}{n}.
 \end{equation}
 
 \begin{figure}[h]
@@ -256,7 +256,7 @@ Figure~\ref{figure:outlier:hyperplane} gives us an idea of how one outlier may c
 
     
 
-For an increasing number of the data samples $n$ the breakdown point of $\vec{\hat{w}}^{(OLS,n)}$ tends to zero. We can see that ordinary least squares estimator is not resistant to outliers at all. Due to this fact, multiple robust estimators alternatives to the OLS have been proposed.
+For an increasing number of the data samples $n$ the breakdown point of $\vec{\hat{w}}^{(OLS,\vec{X}, \vec{y})}$ tends to zero. We can see that ordinary least squares estimator is not resistant to outliers at all. Due to this fact, multiple robust estimators alternatives to the OLS have been proposed.
 
 
 
@@ -284,10 +284,10 @@ Even though that objective function of LTS seems similar to the OLS objective fu
 \subsection{Discrete objective function} \label{sectionofltsdiscrete}
 The LTS objective function from Definition~\ref{definition:of:lts:real} is not differentiable and not convex, so we are unable to use the same approach as with the OLS objective function. Let us transform this objective function to a discrete version which is easier to use by algorithms to minimize it.
 
-Let us assume for now that we know the vector $\vec{\hat{w}^{(LTS, h, n)}}$ of estimated regression coefficients minimizing the LTS objective function. Let $\pi$ be the permutation of $\hat{n} = \{{1,2,\ldots, n\}}$ such that 
+Let us assume for now that we know the vector $\vec{\hat{w}}^{(LTS,h, n)}$ of estimated regression coefficients minimizing the LTS objective function. Let $\pi$ be the permutation of $\hat{n} = \{{1,2,\ldots, n\}}$ such that 
 
 \begin{equation}
-    r_{i:n}(\vec{\hat{w}^{(LTS, h, n)}}) = r_{\pi(j)}(\vec{\hat{w}^{(LTS, h, n)}})\\, \ \ j \in \hat{n}.
+    r_{i:n}(\vec{\hat{w}}^{(LTS,h, n)}) = r_{\pi(j)}(\vec{\hat{w}}^{(LTS,h, n)})\\, \ \ j \in \hat{n}.
 \end{equation}
 Put
  \begin{equation}
@@ -296,26 +296,26 @@ Put
 which is simply the set of all vectors $\vec{m} \in \mathbb{R}^n$ which contain $h$ ones and $n-h$ zeros. Let $\vec{m}^{(LTS)} \in Q^{(n,h)}$  such that  $m^{(LTS)}_j = 1$ when $\pi(j) \leq h$ and $m^{(LTS)}_j = 0$ otherwise. Then
 
 \begin{equation} \label{ltshat}
-    \vec{\hat{w}^{(LTS, h, n)}} =  
+    \vec{\hat{w}}^{(LTS,h, n)} =  
   \argmin_{\vec{w} \in \mathbb{R}^p} \sum\limits_{i=1}^h r_{i:n}^2(\vec{w}) = 
   \argmin_{\vec{w} \in \mathbb{R}^p} \sum\limits_{i=1}^n m^{(LTS)}_i r_{i}^2(\vec{w}). 
 \end{equation}
 This means that if we know the vector $\vec{m}_{LTS}$ than we can compute the LTS estimate as the OLS estimate with $\vec{X}$ and $\vec{Y}$ multiplied by the diagonal matrix $\vec{M}_{LTS} = diag(\vec{m}^{(LTS)})$:
 
 \begin{equation}  \label{lts:discrete:objective}
-    \vec{\hat{w}^{(LTS, h, n)}} = (\vec{X}^T\vec{M}_{LTS}\vec{X})^{-1}\vec{X}^T\vec{M}_{LTS}\vec{y}.
+    \vec{\hat{w}}^{(LTS,h, n)} = (\vec{X}^T\vec{M}_{LTS}\vec{X})^{-1}\vec{X}^T\vec{M}_{LTS}\vec{y}.
 \end{equation}
 In other words, finding the minimum of the LTS objective function can be done by finding the OLS estimates~\eqref{lts:discrete:objective} for all vectors 
 $\vec{m} \in Q^{(n,h)}$. 
-Thus if we denote $\vec{X_{M}} = \vec{M}\vec{X} $ and $\vec{y_{M}} = \vec{M}\vec{y}$ which corresponds to the $h$-element subsets of $\vec{X}$ and $\vec{Y}$, then as described in~\cite{kloudaVyzkumnyUkol},
+Thus, as described in~\cite{kloudaVyzkumnyUkol},
 
 
-% \of^{(LTS,\vec{X_{M}}, \vec{y_{M}} }(\vec{m})
+% {(LTS,\vec{X_{M}}, \vec{y_{M}} }(\vec{m})
 
 
 \begin{align} \label{kloudaodvozeni}
 \minim_{\vec{w} \in \mathbb{R}^p} 
-    \of^{(LTS, h, n)}(\vec{w})  
+    \of^{(LTS,h, n)}(\vec{w})  
 &=\minim_{\vec{w} \in \mathbb{R}^p} 
     \sum\limits_{i=1}^h r_{i:n}^2(\vec{w})  \\
 &= \minim_{\vec{w} \in \mathbb{R}^p,\vec{m} \in Q^{(n,h)}} 
@@ -329,14 +329,13 @@ Thus if we denote $\vec{X_{M}} = \vec{M}\vec{X} $ and $\vec{y_{M}} = \vec{M}\vec
 \end{align}
 
 Substituting $\vec{w}$ with the OLS estimate as in~\eqref{ltshat} we get
-%% TODO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{align*}
-\vec{\hat{w}^{(LTS, h, n)}}
-&=  \minim_{\vec{m} \in Q^{(n,h)}} 
-    \Big( \norm{ \vec{M}\vec{y} -  \vec{M}\vec{X}(\vec{X}^T\vec{M}\vec{X})^{-1}\vec{X}^T\vec{M}\vec{y}  }^2 \Big)
-\end{align*}
-
-We get the discrete objective function with domain $\vec{m} \in Q^{(n,h)}$
+% %% TODO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{align*}
+% \vec{\hat{w}}^{(LTS,h, n)}
+% &=  \minim_{\vec{m} \in Q^{(n,h)}} 
+%     \Big( \norm{ \vec{M}\vec{y} -  \vec{M}\vec{X}(\vec{X}^T\vec{M}\vec{X})^{-1}\vec{X}^T\vec{M}\vec{y}  }^2 \Big)
+% \end{align*}
+the discrete objective function with domain $\vec{m} \in Q^{(n,h)}$
 
 \begin{equation} \label{oflts_discrete}
     \oflts(\vec{m}) =  \norm{ \vec{M}\vec{y} -  \vec{M}\vec{X}(\vec{X}^T\vec{M}\vec{X})^{-1}\vec{X}^T\vec{M}\vec{y}  }^2.

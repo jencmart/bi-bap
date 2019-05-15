@@ -2,33 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5818e2d1-7629-47ec-a2bd-d6037228392b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notebooks/.ipynb_checkpoints/experiment-results-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/.ipynb_checkpoints/experiment-results-checkpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notebooks/experiment-results.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/experiment-results.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notebooks/out/experiment_2/info_about_experiments.txt" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/out/experiment_2/info_about_experiments.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notebooks/out/experiment_random.csv" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/out/experiment_random.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/experiments/experiments_probabilistic.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/experiments/experiments_probabilistic.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/run.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/runall.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen/bench/perf_monitoring/runall.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lts/lib/eigen/scripts/eigen_monitor_perf.sh" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/lib/eigen/scripts/eigen_monitor_perf.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/package-lts/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lts/out/experiment_random.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.aux" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.aux" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.lof" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.lof" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.log" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.lot" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.lot" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.synctex.gz" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.synctex.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.tex" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.toc" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/BP_Jenc_Martin_2019.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/00_introduction.aux" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/00_introduction.aux" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/01_linear_regression.aux" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/01_linear_regression.aux" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/03_algorithms.aux" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/03_algorithms.aux" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/03_algorithms.tex" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/03_algorithms.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/04_experiments.aux" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/04_experiments.aux" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/04_experiments.tex" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/04_experiments.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/99_conclusion.aux" beforeDir="false" afterPath="$PROJECT_DIR$/../theoretical/BP_Jenc_Martin_2019/chapters/99_conclusion.aux" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -66,8 +43,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/package-lts/experiments/experiments_probabilistic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1175">
-              <caret line="626" column="32" lean-forward="true" selection-start-line="623" selection-start-column="4" selection-end-line="626" selection-end-column="32" />
+            <state relative-caret-position="317">
+              <caret line="463" column="13" selection-start-line="463" selection-start-column="13" selection-end-line="463" selection-end-column="13" />
               <folding>
                 <element signature="e#0#49#0" expanded="true" />
               </folding>
@@ -188,10 +165,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="959" />
-    <option name="y" value="3" />
-    <option name="width" value="962" />
-    <option name="height" value="1078" />
+    <option name="x" value="-2" />
+    <option name="y" value="-18" />
+    <option name="width" value="1924" />
+    <option name="height" value="1100" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -414,18 +391,18 @@
       <workItem from="1557521660400" duration="6993000" />
       <workItem from="1557692667634" duration="8558000" />
       <workItem from="1557827210090" duration="17316000" />
-      <workItem from="1557944540662" duration="244000" />
+      <workItem from="1557944540662" duration="955000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="552614000" />
+    <option name="totallyTimeSpent" value="553325000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="959" y="3" width="962" height="1078" extended-state="0" />
+    <frame x="-2" y="-18" width="1924" height="1100" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.45274726" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22008547" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -881,8 +858,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/package-lts/experiments/experiments_probabilistic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1175">
-          <caret line="626" column="32" lean-forward="true" selection-start-line="623" selection-start-column="4" selection-end-line="626" selection-end-column="32" />
+        <state relative-caret-position="317">
+          <caret line="463" column="13" selection-start-line="463" selection-start-column="13" selection-end-line="463" selection-end-column="13" />
           <folding>
             <element signature="e#0#49#0" expanded="true" />
           </folding>

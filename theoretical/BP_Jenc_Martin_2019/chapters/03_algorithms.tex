@@ -22,7 +22,7 @@ Based on this fact an algorithm can be created. We'll discuss it in detail in Se
 %%%%%%%%%%% WEAK CONDITION %%%%%%%%%%%%%
 \begin{definition}
 An $h$-element subset corresponding to $\vec{m} \in Q^{(n, h)}$ satisfies the \defterm{weak necessary condition} if 
-$r_i^2(\vec{\hat{w}^{(OLS, \vec{M}\vec{X, \vec{M}\vec{y})} } })$ for all trimmed observation is greater or equal to the greatest non-trimmed squared residuum $r_j^2(\vec{\hat{w}^{(OLS, \vec{M}\vec{X, \vec{M}\vec{y})} }})$.
+$r_i^2(\vec{\hat{w}}^{(OLS,\vec{M}\vec{X}, \vec{M}\vec{y})} )$ for all trimmed observation is greater or equal to the greatest non-trimmed squared residuum $r_j^2(\vec{\hat{w}}^{(OLS,\vec{M}\vec{X, \vec{M}\vec{y})} })$.
 \end{definition}    
 Again, based on this criteria an algorithm can be created. Interesting consequence which we use later gives us the following lemma.
 
@@ -31,17 +31,17 @@ Again, based on this criteria an algorithm can be created. Interesting consequen
 \end{lemma}
 
 \begin{proof}
-		Let us assume that we have some $\vec{\hat{w}^{(OLS, \vec{M}\vec{X, \vec{M}\vec{y})} }}$ with $\vec{m} \in Q^{(n, h)}$ for which the strong necessary condition is satisfied, but the weak necessary condition is not. That means there exists $\vec{x_i}$ with $y_i$ from the non-trimmed subset and $\vec{x_j}$ and $y_j$ from the trimmed subset such that
+		Let us assume that we have some $\vec{\hat{w}}^{(OLS,\vec{M}\vec{X, \vec{M}\vec{y})} }$ with $\vec{m} \in Q^{(n, h)}$ for which the strong necessary condition is satisfied, but the weak necessary condition is not. That means there exists $\vec{x_i}$ with $y_i$ from the non-trimmed subset and $\vec{x_j}$ and $y_j$ from the trimmed subset such that
 		\begin{equation*} 
-			r_j^2(\vec{\hat{w}^{(OLS, \vec{M}\vec{X, \vec{M}\vec{y})} }}) < r_i^2(\vec{\hat{w}^{(OLS, \vec{M}\vec{X, \vec{M}\vec{y})} }}).
+			r_j^2(\vec{\hat{w}}^{(OLS,\vec{M}\vec{X, \vec{M}\vec{y})} }) < r_i^2(\vec{\hat{w}}^{(OLS,\vec{M}\vec{X, \vec{M}\vec{y})} }).
 	\end{equation*}
 		 Thus 
     \begin{equation} 
-        \oflts(\vec{m}) > \oflts(\vec{m}) + r_j^2(\vec{\hat{w}^{(OLS, \vec{M}\vec{X, \vec{M}\vec{y})} }}) - r_i^2(\vec{\hat{w}^{(OLS, \vec{M}\vec{X, \vec{M}\vec{y})} }})  
+        \oflts(\vec{m}) > \oflts(\vec{m}) + r_j^2(\vec{\hat{w}}^{(OLS,\vec{M}\vec{X, \vec{M}\vec{y})} }) - r_i^2(\vec{\hat{w}}^{(OLS,\vec{M}\vec{X, \vec{M}\vec{y})} })  
     \end{equation}
 Now we need to show that $\vec{m_{swap}}$ vector that is created by swapping $j$th observation from the trimmed subset with $i$th observation from the non-trimmed subset leads to 
     \begin{equation} 
-      \oflts(\vec{m}) + r_j^2(\vec{\hat{w}^{(OLS, \vec{M}\vec{X, \vec{M}\vec{y})} }}) - r_i^2(\vec{\hat{w}^{(OLS, \vec{M}\vec{X, \vec{M}\vec{y})} }})  \geq \oflts(\vec{m_{swap}}).
+      \oflts(\vec{m}) + r_j^2(\vec{\hat{w}}^{(OLS,\vec{M}\vec{X, \vec{M}\vec{y})} }) - r_i^2(\vec{\hat{w}}^{(OLS,\vec{M}\vec{X, \vec{M}\vec{y})} })  \geq \oflts(\vec{m_{swap}}).
     \end{equation}
 That is true because the value of $\oflts(\vec{m_{swap}})$ is the minimum on the given subset of observations. That is, of course, a contradiction with our assumption which says that the strong necessary condition is satisfied. 
 \end{proof}
@@ -52,7 +52,7 @@ That is true because the value of $\oflts(\vec{m_{swap}})$ is the minimum on the
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Computing OLS}
-In this section, we describe a few of many methods that can be used to obtain  $\vec{\hat{w}}^{(OLS,n)}$. Those methods are parts of the algorithms used to calculate the LTS estimate. 
+In this section, we describe a few of many methods that can be used to obtain  $\vec{\hat{w}}^{(OLS,\vec{X}, \vec{y})}$. Those methods are parts of the algorithms used to calculate the LTS estimate. 
 
 In the following algorithms, we describe its time complexity. Because the matrix multiplication is the fundamental part of all the following algorithms, it is, therefore, appropriate to mention a few facts about the time complexity of the matrix multiplication. 
 
@@ -94,7 +94,7 @@ $\vec{B} = \vec{X^T}\vec{y}$.
 That gives us $\mathcal{O}(p^2n + pn)$.
 Next, we compute inversion $\m{C} = \m{A}^{-1}$ which gives us $\mathcal{O}(p^3)$.
 Finally, we compute
-$ \vec{\hat{w}}^{(OLS,n)} = \m{C}\m{B}$ which is $\mathcal{O}(p^2)$. 
+$ \vec{\hat{w}}^{(OLS,\vec{X}, \vec{y})} = \m{C}\m{B}$ which is $\mathcal{O}(p^2)$. 
 Altogether, we get $ \mathcal{O}(p^2n + pn + p^3 + p^2)$;
 $p^2n$ and $p^3$ asymptotically dominates over the rest so 
 \begin{equation}
@@ -132,7 +132,7 @@ where $\vec{Z} = \vec{X}^T\vec{X}$ is a symmetric positive definite matrix and $
     \vec{L}\vec{d} = \vec{b} \\
     \vec{L}^T\vec{w} = \vec{d},
 \end{align}
-where $\vec{d}$ and $\vec{w}$ can be obtained by forward and backward substitution. Solution of $\vec{w}$ then represents $\vec{\hat{w}}^{(OLS,n)}$ estimate.
+where $\vec{d}$ and $\vec{w}$ can be obtained by forward and backward substitution. Solution of $\vec{w}$ then represents $\vec{\hat{w}}^{(OLS,\vec{X}, \vec{y})}$ estimate.
 
 %%%%%%% C H O L E S K Y     A L G O R I T H M %%%%%%%%%%%%%%
 
@@ -244,7 +244,7 @@ If we assume $\vec{X}$ have full column rank, $\vec{R_1}$ must be invertible and
 \begin{equation}
     \vec{R_1}\vec{w} = \vec{b_1}
 \end{equation}
-where $ \vec{b_1} = \vec{Q_1}^T \vec{y}$. Because $\vec{R_1}$ is upper an triangular matrix, finding the is trivial using the backward substitution. Resulting $\vec{w}$ is then the OLS estimate $\vec{\hat{w}}^{(OLS,n)}$.
+where $ \vec{b_1} = \vec{Q_1}^T \vec{y}$. Because $\vec{R_1}$ is upper an triangular matrix, finding the is trivial using the backward substitution. Resulting $\vec{w}$ is then the OLS estimate $\vec{\hat{w}}^{(OLS,\vec{X}, \vec{y})}$.
 
 \begin{note}
         We can see that Cholesky factorization  $\vec{X}^T\vec{X} = \vec{L}\vec{L}^T$ is closely connected to the QR decomposition $\vec{X} = \vec{Q_1}\vec{R_1}$. Indeed, putting   
@@ -536,9 +536,11 @@ L_1 = \sum\limits_{i=1}^n m^{(1)}_i r_{i}^2(\vec{w_1})
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%    C-STEP algorithm    %%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-Let us denote $\vec{\hat{w}_{old}^{(LTS, h, n)}} = \oflts(\vec{m_{old}})$ and 
-$L_{old} = \sum\limits_{i=1}^n m^{(1)}_i r_{i}^2(\vec{w_{old}})$ for some vector $\vec{m_{old}}$. Then based on the previous theorem, using some $\vec{m_{old}}$ with corresponding $\vec{\hat{w}_{old}^{(LTS, h, n)}}$ we can construct $\vec{m_{new}}$ with corresponding $\vec{\hat{w}_{new}^{(LTS, h, n)}}$ such that $L_{new} \leq L_{old}$. 
+Based on the previous theorem, using some $\vec{m_{old}}$ with corresponding
+ $\vec{\hat{w}}^{(OLS,\vec{M}_{old}\vec{X}, \vec{M}_{old}\vec{y})}$ 
+ we can construct
+  $\vec{m_{new}}$ with corresponding $\vec{\hat{w}}^{(OLS,\vec{M}_{new}\vec{X}, \vec{M}_{new}\vec{y})}$ 
+  such that $L_{new} \leq L_{old}$. 
 
 Applying the theorem repetitively leads to the iterative sequence of
 $L_{1} \leq L_{2} \leq \ldots$. One step, called the \defterm{C-step}, of this process is described by the following pseudocode.
@@ -1125,7 +1127,7 @@ Let us denote $\vec{A} = (\vec{X}, \vec{y})$, a matrix $\vec{X}$ expanded by one
 Notice that $\vec{Z}$ is symmetric square matrix $\in \mathbb{R}^ {p \times p}$, moreover we suppose that $Z$ is regular. $\vec{X}^T\vec{y}$ is $p$ dimensional column vector, $\vec{y}^T\vec{X}$ is $p$ dimensional row vector and $\vec{y}^T\vec{y}$ is a scalar.
 OLS estimate $\vec{\hat{w}}$ is then given by
 \begin{equation}
-    \vec{\hat{w}^{(OLS, n)}} = \vec{Z}^{-1} \vec{X}^T\vec{y}
+    \vec{\hat{w}}^{(OLS,\vec{X}, \vec{y})} = \vec{Z}^{-1} \vec{X}^T\vec{y}
 \end{equation}
 and the RSS by 
 
@@ -1765,7 +1767,7 @@ In Chapter~\ref{chapterexperiments} we show the experimental results of various 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{BAB algorithm} \label{sectionbab}
-In this section, we describe the algorithm from~\cite{agullo2001new}.Very similar algorithm can also be found in~\cite{hofmann2010matrix}.
+In this section, we describe the algorithm from~\cite{agullo2001new}. Let us note that very similar algorithm can also be found in~\cite{hofmann2010matrix}.
 
 Unlike previous algorithms, this one is exact. As we discussed in Section~\ref{sectionofltsdiscrete}, exact algorithm calculate OLS fit on all of the $\binom{n}{h}$ $h$ element subsets. For larger data sets this approach is computationally prohibitive.
 
@@ -1801,10 +1803,10 @@ Let us now consider tree such that at level $k$ is $\binom{n}{k}$ nodes represen
             child {node [rectangle,draw=blue]{2,3,4}}}
         child {node [rectangle,draw]{2, 4}}
     }
-    child {node [rectangle,draw] {3}
+    child {node [rectangle,draw=red] {3}
     child {node [rectangle,draw] {3,4}}
     }
-    child {node [rectangle,draw] {4} 
+    child {node [rectangle,draw=red] {4} 
     }
     ;
     \end{tikzpicture}
@@ -1816,44 +1818,76 @@ Let us now consider tree such that at level $k$ is $\binom{n}{k}$ nodes represen
 \end{figure}
 
 
+In the case of the exhaustive approach, we can then traverse the tree starting in the root using the left to right (LTR) preorder traversal, and in each node, we can calculate the OLS fit on $\vec{ X_{J_k} }$ and $\vec{ Y_{J_k} }$. If we are in the level $k = h$, we calculate the fit on the $h$ element subset. This approach is exhaustive, so let us now describe how we can improve efficiency. 
 
-In the case of the exhaustive approach, we can then traverse the tree starting in the root using the right to left (RTL) preorder traversal, and in each node, we can calculate the OLS fit on $\vec{ X_{J_k} }$ and $\vec{ Y_{J_k} }$. If we are in the level $k = h$, we calculate the fit on the $h$ element subset. This approach is exhaustive, so let us now describe how we can improve efficiency. 
-
-First, it is not necessary to calculate fit on $k$th level of the tree in a case $k < p$ because this would mean that matrix $\vec{ X_{J_k} }$ is not regular. The main improvement can because we can skip parts of the tree (perform pruning) based on the following criteria. 
+First, it is not necessary to calculate fit on $k$th level of the tree in a case $k < p$ because this would mean that matrix $\vec{ X_{J_k} }$ is not regular. The main improvement can because we can skip parts of the tree (perform pruning) based on the following criteria. Moreover at some point of the traversal we encounter nodes from which we cannot get into the depth $h$ these nodes can also be skipped. On the Figure~\ref{figure:full:tree} these nodes are highlighted with red border color. 
 
 If at any step (at any node) of the tree traversal we calculate the
-$\oflts(m_k)$ where $m_{k_i} = 1$ when $k_i \in J_k$ and $m_{k_i} = 0$ and we find out that this value is higher than minimal value found for some $\oflts(m_h)$ thus value of OLS fit on some $h$ element subset, then we can discard all subsets which contain $J_k$. That means we can trim all descendants of the node which represent $J_k$ subset.
+$\oflts(m_k)$ where $m_{k_i} = 1$ when $k_i \in J_k$ and $m_{k_i} = 0$ and we find out that this value is higher than minimal value found for some $\oflts(m_h)$ thus value of OLS fit on some $h$-element subset, then we can discard all subsets which contain $J_k$. That means we can trim all descendants of the node which represent $J_k$ subset.
 
 We can describe the algorithm as follows:
 
 \begin{enumerate}
-    \item Set $RSS^* = \inf$. $m^*$
-    \item For each node in RTL preorder traversal calculate $\oflts(m_k)$
+    \item Set $RSS^* = \inf$, $m^* = \emptyset$, $\vec{{w}^*} = \emptyset$ 
+    \item For each node in LTR preorder traversal calculate $\oflts(m_k)$
     \item If $\oflts(m_k) > RSS^*$, skip all siblings of this node in the traversal.
-    \item If $\oflts(m_k) < RSS^* $ and $k = h$, then set $RSS^* = \oflts(m_k)$ and $m^*$ so that $m_{k_i} = 1$ when $k_i \in J_k$ and $m_{k_i} = 0$.
- \item After the traversal return $m^*$ and $\vec{\hat{w}}$
+    \item If $\oflts(m_k) < RSS^* $ and $k = h$, then set $RSS^* = \oflts(m_k)$, $m^*$ so that $m_{k_i} = 1$ when $k_i \in J_k$ and $m_{k_i} = 0$ and $\vec{{w}^*} = \vec{\hat{w}}^{(OLS,\vec{M}_{k}\vec{X}, \vec{M}_{k}\vec{y})}$.
+ \item After the traversal return $m^*$ and $\vec{\hat{w}^*}$
 \end{enumerate}
 
-During the traversal of the tree, we only need to know the path back to the root. Thus the whole tree does not have to be in the memory. 
+Note that during the traversal of the tree, we only need to know the path back to the root. Thus the whole tree does not have to be held in the memory. 
 
 \begin{remark}
 If we calculated $\oflts(m_{k})$ than we do not need to calculate $\oflts(m_{k+1})$ from scratch. In Section~\ref{oeamoeammea} we described the way how to update it when a row is added using the matrix inversion any we can apply it here. In Section~\ref{differentcomputation} we described the way of doing this using the matrix decomposition which is another option. 
 
-Moreover, we described that if rows are not extracted and only inserted, then matrix $\vec{Q}$ do not have to be present and only matrix $\vec{R}$ can be updated. We can use this in our favor because we can keep all the decompositions on the path from the root in the memory.  If we use matrix $\vec{\tilde{Z}}$ and $\vec{\tilde{R}}$ we can  (see Remark~\ref{qnotrequiredspeedupremark} ) calculate all the quantities required for the update only using the matrix $\vec{\tilde{R}}$. This means that both versions of updating are possible and both can be done in $\mathcal{O}(p^2)$. Thus we recommend using the matrix decomposition version of the updating because it can provide higher numerical stability at the same speed.
+Moreover, we described that if rows are not extracted and only inserted, then matrix $\vec{Q}$ do not have to be present and only matrix $\vec{R}$ can be updated. We can use this in our favor because we can keep all the decompositions on the path from the root in the memory so we updated the decomposition only when inserting the rows to the matrix $\vec{X}$.  If we use matrix $\vec{\tilde{Z}}$ and $\vec{\tilde{R}}$ we can  (see Remark~\ref{qnotrequiredspeedupremark} ) calculate all the quantities required for the update only using the matrix $\vec{\tilde{R}}$. This means that both versions of updating are possible and both can be done in $\mathcal{O}(p^2)$.
 \end{remark}
 
 \subsection{Improvements}
-Because the tree is pruned based on the smallest value $RSS^*$, it would be convenient if we were able to obtain small value $RSS^*$ early in the traversal. We can obtain this value by calculating an approximative LTS estimate. This can be done using any probabilistic algorithm described in the previous sections of this chapter. An ideal candidate may be some combined algorithm described in Section~\ref{sectioncombined}. When we find such small value, it is then also convenient to permutate the observations based on its absolute residuals based on this LTS estimate in the decreasing order.
+Because the tree is pruned based on the smallest value $RSS^*$, it would be convenient if we were able to obtain small value $RSS^*$ early in the traversal. We can obtain this value by calculating an approximative LTS estimate. This can be done using any probabilistic algorithm described in the previous sections of this chapter. An ideal candidate may be some combined algorithm described in Section~\ref{sectioncombined}. When we find such small value, it is then also convenient to permutate the observations based on its absolute residuals based on this LTS estimate in the decreasing order. That means that during the traversal first $h$-element subset we encounter represents the best known sub-optimal solution given by the approximative algorithm.
 
 Another improvement can be made using the following sorting rule \defterm{sorting rule}: If we are at the level $k$ ( we assume that $k > p$ )
-in the node $J_k$ and this node has $s$ siblings indexed as $s_1 \ldots s_s$ then we can change the order of those siblings first by calculating partial increment~\eqref{gamma:plus} for each sibling and consequently ordered them in the descending order from left to right. This means we visit siblings with a lowest partial increment first. Trimming can then be done in the same manner. Moreover, if we calculate $RSS$ in one of those siblings we and realize that $RSS > RSS^*$, then we can on the top of trimming all siblings of this sibling trim also all brothers left to this sibling. That means we can trim parent node $J_k$ because all of his siblings have already been explored or can be trimmed. We can see such a procedure at Figure~\ref{figure:sorting:rule}.
+in the node $J_k$ and this node has $s$ siblings indexed as $s_1 \ldots s_s$ then we can change the order of those siblings first by calculating partial increment~\eqref{gamma:plus} for each sibling and consequently ordered them in the descending order from left to right. This means we visit siblings with a lowest partial increment first. Trimming can then be done in the same manner. Moreover, if we calculate $RSS$ in one of those siblings we and realize that $RSS > RSS^*$, then we can on the top of trimming all siblings of this sibling trim also all brothers left to this sibling. That means we can trim parent node $J_k$ because all of his siblings have already been explored or can be trimmed.
 
-\begin{figure}[h]
-\centering
-\missingfigure{Visualisation of sorting rule }
-\caption{Step in the algorithms when due to the sorted siblings node $j_k$ can be trimmed}
-\label{figure:sorting:rule}
-\end{figure}
+% We can see such a procedure at Figure~\ref{figure:sorting:rule}.
+
+% \begin{figure}[h]
+% \centering
+
+% \begin{center}
+%     \begin{tikzpicture}
+%      \node [rectangle,draw]{$\emptyset$} [level distance=10mm,sibling distance=32mm]
+%      % \node (rect) at (4,2) [draw,thick,minimum width=2cm,minimum height=2cm] {};
+
+%     child { node [rectangle,draw]{1} [level distance=10mm ,sibling distance=10mm]
+%         % child {node [rectangle,draw] {1,2} [level distance=10mm ,sibling distance=12mm]
+%         %     child {node [rectangle,draw=blue] {1,2,3}
+%         %        }
+%         %     child {node [rectangle,draw=blue]{1,2,4}}}
+%         % child {node [rectangle,draw] {1,3}
+%         %     child {node [rectangle,draw=blue]{1,3,4}}}
+%         % child {node [rectangle,draw] {1,4}}
+%     }
+%     child {node [rectangle,draw] {2} 
+%     }
+%     child {node [rectangle,draw=red] [level distance=20mm ,sibling distance=50mm] {3}
+%         child {node [rectangle,draw] (1) {2,3}}
+%         child {node [rectangle,draw] (2) {2, 4}}
+%         child {node [rectangle,draw] (5) {2, 4}}
+%         child {node [rectangle,draw]{2, 4}}
+%     }
+%     child {node [rectangle,draw=red] {4} };
+
+%     \node at ($(1)!.5!(2)$) {\ldots};
+
+%     % \draw (1) -- (5);
+%     \end{tikzpicture}
+% \end{center}
+
+
+% \caption{Step in the algorithms when due to the sorted siblings node $j_k$ can be trimmed}
+% \label{figure:sorting:rule}
+% \end{figure}
 
 
 
@@ -1869,10 +1903,10 @@ In this section, we'll introduce another exact algorithm. It has a little differ
 
 \subsubsection{Domain of OF-LTS}
 We introduced two version of OF-LTS. First one is 
-$\of^{(LTS, h, n)}(\vec{w}), \vec{w} \in \mathbb{R}^p$ and the second is discrete version 
+$\of^{(LTS,h, n)}(\vec{w}), \vec{w} \in \mathbb{R}^p$ and the second is discrete version 
 $\oflts(\vec{m}), \vec{m} \in Q^{(n,h)}$. 
 We also know that 
-$\minim_{\vec{w} \in \mathbb{R}^p} \of^{(LTS, h, n)}(\vec{w})  =  \minim_{\vec{m} \in Q^{(n,h)}} \oflts(\vec{m})$.
+$\minim_{\vec{w} \in \mathbb{R}^p} \of^{(LTS,h, n)}(\vec{w})  =  \minim_{\vec{m} \in Q^{(n,h)}} \oflts(\vec{m})$.
 
 % Let us now extend this relationship.
  (see~\eqref{kloudaodvozeni}) Let us now talk about the non-discrete version and introduce some new feature.
@@ -1958,8 +1992,8 @@ Proof can be found in~\cite[Theorem~7]{klouda2015exact}.
 
 Based on the Theorem~\ref{minimas:in:relation} we can see that
 \begin{equation}
-    \minim_{\vec{m} \in Q^{(n,h)}} \of^{(OLS, \vec{M}\vec{X}, \vec{M}\vec{Y})} (\vec{w}) =
-    \minim_{m \in M^{(min)}} \of^{(OLS, \vec{m^i}\vec{X}, \vec{m^i}\vec{Y})} (\vec{w})
+    \minim_{\vec{m} \in Q^{(n,h)}} \of^{(OLS,\vec{M}\vec{X}, \vec{M}\vec{Y})} (\vec{w}) =
+    \minim_{m \in M^{(min)}} \of^{(OLS,\vec{m^i}\vec{X}, \vec{m^i}\vec{Y})} (\vec{w})
 \end{equation}
 
 where $\vec{M} = diag(\vec{m})$, $\vec{m^i} = diag(m)$. Set $M^{(min)}$ is very useful because we can iterate only through this set and not through whole $Q^{(n,h)}$.
