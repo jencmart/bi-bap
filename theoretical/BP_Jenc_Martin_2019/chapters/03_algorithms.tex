@@ -1985,32 +1985,46 @@ Then minimizing objective function $\oflts(\vec{m})$~\eqref{oflts_discrete} can 
 That means if we can find all $\vec{m} \in M^{(min)}$ then minimizing $\oflts$ would be easy.
 So how we can find the elements of $M^{(min)}$ set? 
 
-For now, let us assume that we know all elements of $\mathcal{H}$. Because for each $\vec{m} \in M^{(min)}$ there exists at least one $\vec{w} \in \mathcal{H}$ such that $(\vec{w}, \vec{m}) \in Z$, then for a given $\vec{w} \in \mathcal{H}$ we can find all $\vec{m}$ by the algorithm described by following pseudocode:
-
-\todo{write the pseudocode}
-\begin{algorithm}[H]
-    \label{find:all:m}
-            \KwIn{$\vec{Q} \in \mathbb{R}^{n \times n}, \vec{R} \in \mathbb{R}^{n \times p}, \vec{x_j} \in \mathbb{R}^p, k $}
-        \KwOut{ $\vec{Q^{(+)}} \in \mathbb{R}^{n+1 \times n+1}, \vec{R^{(+)}} \in \mathbb{R}^{n+1 \times p}$ }
-
-      \caption{Find all $\vec{m}$}
-    %   $\vec{R^{(+)}} \gets \vec{R}~with~appended~last~row~by~\vec{x_j}$\;
-    %   $\vec{Q^{(+)}} \gets \vec{Q}~with~appended~last~row~and~last~column~by~zeors$\;
-    %   $\vec{Q^{(+)}}_{n+1, n+1} \gets 1$ \tcp*{i.e.  ${Q^{(+)}}$ now has $1$ on the diagonal}
+For now, let us assume that we know all elements of $\mathcal{H}$. Because for each $\vec{m} \in M^{(min)}$ there exists at least one $\vec{w} \in \mathcal{H}$ such that $(\vec{w}, \vec{m}) \in Z$, then for a given $\vec{w} \in \mathcal{H}$ we can find all $\vec{m}$ by the following algorithm.
 
 
-    %   \For{$i \gets n$ \textbf{to} $p$}{
-    %     $\vec{Q}(i, n+1) \gets create~Givens~matrix \vec{Q}(i, n+1) \in \mathbb{R}^{n+1 \times n+1}$\;
-    %     $\vec{R^{(+)}} \gets   \vec{Q}(i, n+1) \vec{R^{(+)}} $\;
-    %     $\vec{Q^{(+)}} \gets \vec{Q^{(+)}} \vec{Q}^T(i, n+1) $\;        
-    %     }
+\begin{algo}[Find all $\vec{m}$ in relation $Z$ with a given $\vec{w}$] \label{find:all:m:in:relation}
+    \mbox{}\vspace{\dimexpr-\baselineskip-\topsep}
+\\
+    \begin{enumerate}
+        \item Calculate all squared residuals $r^{2}_i(\vec{w})$ for $i \in \{{1, \ldots,n\}}$.
+        \item Sort the residuals so that $r^{2}_{i_k}(\vec{w}) = r^{2}_{k:n}(\vec{w})$.
+        \item If $r^{2}_{i_h}(\vec{w}) < r^{2}_{i_{h+1}}(\vec{w})$ the relation Z between $\vec{w}$ and $\vec{m}$ where $m_i = 1  \Leftrightarrow r^{2}_i(\vec{w}) \leq  r^{2}_{i_h}(\vec{w})$ is unique. Return the $\vec{m}$.
+        \item Find the greatest index $l$ such that $r^{2}_{i_l}(\vec{w}) < r^{2}_{i_h}(\vec{w})$.
+        \item Find the greatest index $t$ such that $ r^{2}_{i_h}(\vec{w}) = r^{2}_{i_t}(\vec{w})$.
+        \item Create all vectors $\vec{m}$ in relation with $\vec{w}$ by combining first $l$ unique indices $i_1, \ldots ,i_l$ with all combinations of $h-l$-element subsets of indices $i_{l+1}, \ldots i_t$. Number of this vector is given by $\binom{t-l}{h-l}$.
+    \end{enumerate}
+\end{algo}
+
+% \todo{write the pseudocode}
+% \begin{algorithm}[H]
+%     \label{find:all:m}
+%             \KwIn{$\vec{Q} \in \mathbb{R}^{n \times n}, \vec{R} \in \mathbb{R}^{n \times p}, \vec{x_j} \in \mathbb{R}^p, k $}
+%         \KwOut{ $\vec{Q^{(+)}} \in \mathbb{R}^{n+1 \times n+1}, \vec{R^{(+)}} \in \mathbb{R}^{n+1 \times p}$ }
+
+%       \caption{Find all $\vec{m}$}
+%     %   $\vec{R^{(+)}} \gets \vec{R}~with~appended~last~row~by~\vec{x_j}$\;
+%     %   $\vec{Q^{(+)}} \gets \vec{Q}~with~appended~last~row~and~last~column~by~zeors$\;
+%     %   $\vec{Q^{(+)}}_{n+1, n+1} \gets 1$ \tcp*{i.e.  ${Q^{(+)}}$ now has $1$ on the diagonal}
+
+
+%     %   \For{$i \gets n$ \textbf{to} $p$}{
+%     %     $\vec{Q}(i, n+1) \gets create~Givens~matrix \vec{Q}(i, n+1) \in \mathbb{R}^{n+1 \times n+1}$\;
+%     %     $\vec{R^{(+)}} \gets   \vec{Q}(i, n+1) \vec{R^{(+)}} $\;
+%     %     $\vec{Q^{(+)}} \gets \vec{Q^{(+)}} \vec{Q}^T(i, n+1) $\;        
+%     %     }
       
-    % \For{$i \gets n+1$ \textbf{to} $k$}{
-    %     $\vec{Q^{(+)}} \gets  \vec{Q^{(+)}} where~we~swap~the~i~row~with~the~i-1~row$
-    % }
+%     % \For{$i \gets n+1$ \textbf{to} $k$}{
+%     %     $\vec{Q^{(+)}} \gets  \vec{Q^{(+)}} where~we~swap~the~i~row~with~the~i-1~row$
+%     % }
 
-    \Return{ $\vec{Q^{(+)}}$\,, $\vec{R^{(+)}}$ }\;
-\end{algorithm}
+%     \Return{ $\vec{Q^{(+)}}$\,, $\vec{R^{(+)}}$ }\;
+% \end{algorithm}
 
 Finally we need to find all the elements of $\mathcal{H}$. As we know, for all elements $\vec{w} \in \mathcal{H}$ it holds that $r^{2}_{h:n}(\vec{w}) = r^{2}_{h+1:n}(\vec{w})$. So if we find all $\vec{w}$ that are solutions of such an equation, then we are done. The problem is that the residuals are sorted. To overcome this issue we define the following set of suitable candidates for the desired $\vec{w}$.
 
@@ -2023,32 +2037,24 @@ If $\vec{w} \in \mathcal{H}$, then there exists $i,j, i \neq j$ so that
     
 Finding all elements of $H$ requires solving $\binom{n}{2}$ equations of type $r^{2}_i(\vec{w}) = r^{2}_j(\vec{w})$. Moreover, because these equations are quadratic, we can have up to two solutions for each equation.
 
-So idea of the whole algorithm is to find all elements of $H$ (by solving the quadratic equations), consequently finding which of them are part of $\mathcal{H}$ (by ordering squared residuals and checking if $r^{2}_{h:n}(\vec{w}) = r^{2}_{h+1:n}(\vec{w})$) and finally for each $\vec{w} \in \mathcal{H}$ find $\vec{m}$ that are in relation $Z$ with it. All of those $\vec{m}$ vectors form the $M^{(min)}$ set. Finally we can use $\vec{m} \in M^{(min)}$ for minimizing $\oflts(\vec{m})$ in terms of~\eqref{mminqnh}. The whole algorithm, the author calls the Border Scanning Algorithm (BSA) is described by the following pseudocode:
+So idea of the whole algorithm is to find all elements of $H$ (by solving the quadratic equations), consequently finding which of them are part of $\mathcal{H}$ (by ordering squared residuals and checking if $r^{2}_{h:n}(\vec{w}) = r^{2}_{h+1:n}(\vec{w})$) and finally for each $\vec{w} \in \mathcal{H}$ find $\vec{m}$ that are in relation $Z$ with it. All of those $\vec{m}$ vectors form the $M^{(min)}$ set. Finally we can use $\vec{m} \in M^{(min)}$ for minimizing $\oflts(\vec{m})$ in terms of~\eqref{mminqnh}. The whole algorithm, the author calls the Border Scanning Algorithm (BSA) and cab be described as follows.
 
-\todo{write the pseudocode}
-\begin{algorithm}[H]
-    \label{alg:border:scanning:bsa:onedim}
-            \KwIn{$\vec{Q} \in \mathbb{R}^{n \times n}, \vec{R} \in \mathbb{R}^{n \times p}, \vec{x_j} \in \mathbb{R}^p, k $}
-        \KwOut{ $\vec{Q^{(+)}} \in \mathbb{R}^{n+1 \times n+1}, \vec{R^{(+)}} \in \mathbb{R}^{n+1 \times p}$ }
-
-      \caption{BSA}
-    %   $\vec{R^{(+)}} \gets \vec{R}~with~appended~last~row~by~\vec{x_j}$\;
-    %   $\vec{Q^{(+)}} \gets \vec{Q}~with~appended~last~row~and~last~column~by~zeors$\;
-    %   $\vec{Q^{(+)}}_{n+1, n+1} \gets 1$ \tcp*{i.e.  ${Q^{(+)}}$ now has $1$ on the diagonal}
-
-
-    %   \For{$i \gets n$ \textbf{to} $p$}{
-    %     $\vec{Q}(i, n+1) \gets create~Givens~matrix \vec{Q}(i, n+1) \in \mathbb{R}^{n+1 \times n+1}$\;
-    %     $\vec{R^{(+)}} \gets   \vec{Q}(i, n+1) \vec{R^{(+)}} $\;
-    %     $\vec{Q^{(+)}} \gets \vec{Q^{(+)}} \vec{Q}^T(i, n+1) $\;        
-    %     }
-      
-    % \For{$i \gets n+1$ \textbf{to} $k$}{
-    %     $\vec{Q^{(+)}} \gets  \vec{Q^{(+)}} where~we~swap~the~i~row~with~the~i-1~row$
-    % }
-
-    \Return{ $\vec{Q^{(+)}}$\,, $\vec{R^{(+)}}$ }\;
-\end{algorithm}
+\begin{algo}[BSA for the $p=1$] \label{bsa:one:dimensional}
+    \mbox{}\vspace{\dimexpr-\baselineskip-\topsep}
+\\
+    \begin{enumerate}
+        \item Set $RSS_{min} = \infty, \vec{m}_{min} = \emptyset, \vec{w}_{min} = \emptyset$.
+        \item For each combination of two observations $(x_i, y_i)$ and $(x_j, y_j)$:
+        \item solve $r^2_i(\vec{w}) = r^2_j(\vec{w})$ for $\vec{w}$ (The solution $w_1$ and $w_2$ is given by the two linear equations).
+        \item For $\vec{w_1}$ and $\vec{w_2}$ (if $\vec{w_1}$ is equal to $\vec{w_2}$, then only for $w_1$):
+        \item calculate all squared residuals $r^{2}_i(\vec{w_j})$ for $i \in \{{1, \ldots,n\}}$.
+        \item Sort the residuals so that $r^{2}_{i_k}(\vec{w_j}) = r^{2}_{k:n}(\vec{w_j})$.
+        \item If $r^{2}_{i_h}(\vec{w_j}) = r^{2}_{i_{h+1}}(\vec{w_j})$ find all $\vec{m}$ in relation with $w_j$ using Algorithm~\ref{find:all:m:in:relation}.
+        \item For each subset $\vec{m}$:
+        \item if $ \oflts(\vec{m}) < RSS_{min}$, set $RSS_{min} = \oflts(\vec{m}), \vec{m}_{min} = \vec{m}$ and $ \vec{w}_{min} = \vec{w_j} $.
+        \item Return $\vec{m}_{min} $ and $ \vec{w}_{min}$
+    \end{enumerate}
+\end{algo}
 
 
 \subsection{Multidimensional BSA}
@@ -2060,7 +2066,9 @@ Therefore the author of BSA then proposes to find finite subset $\mathcal{H}_p$ 
     \forall \vec{m} \in M^{(min)} \exists \vec{w} \in \mathcal{H}_p : (\vec{w},\vec{m}) \in Z
 \end{equation}
 
-and also finite set $H_p$, so that $mathcal{H}_p \subset H_p \subset H$. We can see that for $p=1$ we need only one equation so the solution has dimension $0$. If we would like to have some solution with dimension equal to $0$ for $p > 1$ we need system of $p$ equations. Moreover this system of equations have to be independent. So we can consider system of $p$ equations of type $ r^{2}_i(\vec{w}) = r^{2}_j(\vec{w})$
+and also finite set $H_p$, so that $mathcal{H}_p \subset H_p \subset H$.
+To restrict the algorithm to the finite subset $\mathcal{H}_p$ we need to introduce $p$ independent equations of type
+$ r^{2}_i(\vec{w}) = r^{2}_j(\vec{w})$
 
 \begin{align} 
     r^{2}_{i_1}(\vec{w}) &= r^{2}_{i_2}(\vec{w}) \label{p:plus:one:equations}   \\
@@ -2070,13 +2078,11 @@ and also finite set $H_p$, so that $mathcal{H}_p \subset H_p \subset H$. We can 
 \end{align}
 where $i_1, i_2 \ldots i_{p+1}$  is $(p+1)$-element subset of $\{{1, 2, \ldots n \}}$.
 % System of those quadratic equations can be rewritten as 
-Because this is a system of quadratic equations, we can have up to $2^p$ solutions.
+% Because this is a system of quadratic equations, we can have up to $2^p$ solutions. Moreover, the total number of $(p+1)$-element subsets out of $n$ is $\binom{n}{p+1}$.
+% This means that the total number of solutions of the system above can be up to $\binom{n}{p+1} 2^p$. 
+% We denote the set of all these solutions $H_p$.
 
-Moreover, the total number of $(p+1)$-element subsets out of $n$ is $\binom{n}{p+1}$.
-This means that the total number of solutions can be up to $\binom{n}{p+1} 2^p$. 
-We denote the set of all these solutions $H_p$.
-
-If set $H_p$ satisfies~\eqref{hp:set:condition} then it can be used for finding $\mathcal{H}_p$ subset, thus we would be able to use this set for the multidimensional version of the algorithm.
+% If set $H_p$ satisfies~\eqref{hp:set:condition} then it can be used for finding $\mathcal{H}_p$ subset, thus we would be able to use this set for the multidimensional version of the algorithm.
 
 Let $\circ \in {+, -}$ be either operation $+$ or $-$. Then system of quadratic equations~\eqref{p:plus:one:equations} is equivalent to $2^p$ linear systems
 
@@ -2086,16 +2092,14 @@ Let $\circ \in {+, -}$ be either operation $+$ or $-$. Then system of quadratic 
     (\vec{x}_{i_p} \circ_p \vec {x}_{i_{p+1}} )^T \vec{w} &= y_{i_p} \circ_p y_{i_{p+1}}. \nonumber 
 \end{align}
 
-Moreover~\eqref{p:plus:one:equations:linear} is equivalent to the set of equations
-
+Moreover~\eqref{p:plus:one:equations:linear} it is equivalent to the set of equations
 
 \begin{align} 
     (\vec{x}_{i_1} \circ_1 \vec {x}_{i_2} )^T \vec{w} &= y_{i_1} \circ_1 y_{i_2} \label{p:plus:one:equations:linear:simple}   \\
     \vdots \ \ \  & \ \ \ \  \ \vdots  \nonumber \\ 
     (\vec{x}_{i_1} \circ_p \vec {x}_{i_{p+1}} )^T \vec{w} &= y_{i_1} \circ_p y_{i_{p+1}}. \nonumber 
 \end{align}
-Elements of set $\mathcal{H}_p$ then satisfies $r_{i_1^2}(\vec{w}) = r_{h:n}(\vec{w}) = r_{h+1:n}(\vec{w})$.
-
+Solution $\vec{w} \in H_p$ is also element of subset $\mathcal{H}_p$ if $r_{i_1^2}(\vec{w}) = r_{h:n}(\vec{w}) = r_{h+1:n}(\vec{w})$.
 
 Set $H_p$ was proven to be suitable for finding $\mathcal{H}_p$ in~\cite{klouda2015exact} thus that set $\mathcal{H}_p$ satisfies~\eqref{hp:set:condition} if following assumptions are satisfied (we already assume that Assumption~\ref{klouda:asump:1} holds). First is that for all $\vec{w}$ $r_{h:n}(\vec{w}) > 0$, second , for all 
 $(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -}$ the matrix system of $n-1$ equations
@@ -2103,14 +2107,21 @@ $(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -}$ the matrix sy
 \begin{align} 
     (\vec{x}_{i_1} \circ_1 \vec {x}_{i_2} )^T \vec{w} &= y_{i_1} \circ_1 y_{i_2} \label{p:plus:one:equations:linear:simple:to:n}   \\
     \vdots \ \ \  & \ \ \ \  \ \vdots  \nonumber \\ 
-    (\vec{x}_{i_1} \circ_{n-1} \vec {x}_{i_{n}} )^T \vec{w} &= y_{i_1} \circ_p y_{i_{n}}. \nonumber.
+    (\vec{x}_{i_1} \circ_{n-1} \vec {x}_{i_{n}} )^T \vec{w} &= y_{i_1} \circ_p y_{i_{n}}. \nonumber
 \end{align}
 The seconds assumption prevents the set $\mathcal{H}_p$ to be empty thus the case where all systems~\eqref{p:plus:one:equations:linear:simple} are dependent. 
 
-This assumption can cause problem because when we assume model with the intercept, thus for all rows $\vec{x_i}$ of matrix $\vec{X}$ is $x_{i1} = 1$ then in the case  $\circ_1,\circ_2 \ldots,  \circ_{n-1} = -$, first column of matrix $\vec{X}$ only contains zeroes. We can modify this assumption so that instead of using $(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -}$ we use only $(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -} \setminus {(-, \ldots, -)}$~\cite{klouda2015exact}. 
+This assumption can cause problem because when we assume model with the intercept, first column od $\vec{X}$ is column of $1$s. Then in the case  $\circ_1,\ldots,  \circ_{n-1} = -$, first column of matrix $\vec{X}$ only contains $0$s. We can modify this assumption so that instead of using $(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -}$ we use only $(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -} \setminus {(-, \ldots, -)}$~\cite{klouda2015exact}. 
 
-Given that we now know that set $H_p$ and $\mathcal{H}_p$ are suitable for our algorithm and we also know how to calculate them, so let us describe the multidimensional version of the algorithm.
+Given that we now know that set $H_p$ and $\mathcal{H}_p$ are suitable for our algorithm and we also know how to calculate them.
 
-\todo{write the pseudocode}
+The multidimensional version of the algorithm is indeed very similar to the one dimensional one. We basically just solve greater amount of bigger linear system. In terms of Algorithm~\ref{bsa:one:dimensional} the difference is in the step $2$ where we choose combinations of $p+1$ observations instead of two. Consequently in step $3$ we construct $2^p$ systems of $p$ linear equations instead of only two. This means that the total number of vectors $\vec{w}$ can be up to $\binom{n}{p+1} 2^p$. Algorithm~\ref{find:all:m:in:relation} works the same way for the multidimensional version of the algorithm. This algorithm can produce up to $\binom{p}{[p/2]}$ vectors $\vec{m}$ for each vector $\vec{w}$. That means in the worst case we have to calculate 
+$\vec{\hat{w}}^{(OLS,\vec{M}\vec{X}, \vec{M}\vec{y})}$ up to $\binom{n}{p+1} \binom{p}{[p/2]} 2^p$ times. We can already see that this algorithm is not suitable for higher dimensional observations.
 
-The time complexity of the algorithm is proportional to $\binom{n}{p+1} 2^p$
+
+\subsection{Speed ups and modifications}
+Author proposed modification of the algorithm called BSABAB. This modification tries to utilize the branch and bound paradigm described in the Section~\ref{sectionbab}. This can be done only at a smaller scale and that in the step $4$ of the Algorithm~\ref{find:all:m:in:relation}. If the sum of $l$ smallest unique squared residuals is larger than currently obtained $RSS_{min}$ then we can skip returning up  $\binom{p}{[p/2]}$ calculations of the OLS on those subsets.
+
+This idea can be pushed further in the similar way as was described in the Section~\ref{sectionbab}. We propose to use some approximative algorithm which solution can be used to set the $RSS_{min}$ in advance and let the algorithm cut as much as possible ``branches''.
+
+Another possibility  of modifying the algorithm is to instead of using all $p+1$-element subsets in the step $2$ of the multidimensional version of the Algorithm~\ref{bsa:one:dimensional} use only limited amount of randomly chosen $p+1$-element subsets. We refer to this modification as to the Random border scanning algorithm (RBSA).
