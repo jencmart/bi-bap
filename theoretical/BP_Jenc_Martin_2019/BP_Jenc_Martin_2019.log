@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2019.3.5)  16 MAY 2019 06:03
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2019.3.5)  16 MAY 2019 08:00
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1412,22 +1412,12 @@ Overfull \hbox (0.9091pt too wide) in paragraph at lines 12--12
  [][] [][]\OT1/lmr/m/n/10.95 Similarity of the so-lu-tions given by the al-go-rithms find-ing $\OML/lmm/m/it/10.95 h$\OT1/lmr/m/n/10.95 -element 
  []
 
-
-Overfull \hbox (0.9091pt too wide) in paragraph at lines 14--14
- [][] [][]\OT1/lmr/m/n/10.95 Similarity of the so-lu-tions given by the al-go-rithms find-ing $\OML/lmm/m/it/10.95 h$\OT1/lmr/m/n/10.95 -element 
- []
-
 )
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [11
 
 ] [12] (./BP_Jenc_Martin_2019.lot
-Overfull \hbox (12.91241pt too wide) in paragraph at lines 8--8
- \OT1/lmr/m/n/10.95 did not sat-is-fied strong nec-es-sary con-di-tion, so the al-go-rithms MMEA- 
- []
-
-
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [13
@@ -1478,7 +1468,7 @@ Underfull \vbox (badness 1137) has occurred while \output is active []
 
 
 
-] [4] [5] [6] [7] <img/outlier_regression.png, id=527, 936.49875pt x 307.1475pt>
+] [4] [5] [6] [7] <img/outlier_regression.png, id=525, 936.49875pt x 307.1475pt>
 File: img/outlier_regression.png Graphic file (type png)
  <use img/outlier_regression.png>
 Package pdftex.def Info: img/outlier_regression.png used on input line 248.
@@ -1516,7 +1506,7 @@ Package amsmath Warning: Foreign command \atopwithdelims;
 (amsmath)                \frac or \genfrac should be used instead
 (amsmath)                 on input line 706.
 
-<img/lts_convergence.png, id=754, 961.5925pt x 622.325pt>
+<img/lts_convergence.png, id=752, 961.5925pt x 622.325pt>
 File: img/lts_convergence.png Graphic file (type png)
  <use img/lts_convergence.png>
 Package pdftex.def Info: img/lts_convergence.png used on input line 746.
@@ -1840,52 +1830,46 @@ Underfull \hbox (badness 10000) in paragraph at lines 9--12
 
 
 
-] [54] [55]
-Overfull \hbox (19.27777pt too wide) in paragraph at lines 117--119
-[]\OT1/lmr/m/n/10.95 All three data sets are set to con-tain $20%$ lever-age points (thus $\OML/lmm/m/it/10.95 leverage ratio \OT1/lmr/m/n/10.95 =
- []
-
-[56] [57] <img/all_distances_feasible.png, id=1249, 995.72pt x 655.44875pt>
+] [54] [55] [56] [57] <img/all_distances_feasible.png, id=1250, 995.72pt x 655.44875pt>
 File: img/all_distances_feasible.png Graphic file (type png)
  <use img/all_distances_feasible.png>
-Package pdftex.def Info: img/all_distances_feasible.png used on input line 166.
+Package pdftex.def Info: img/all_distances_feasible.png used on input line 169.
 (pdftex.def)             Requested size: 398.33858pt x 262.21486pt.
 
-Overfull \hbox (29.33858pt too wide) in paragraph at lines 166--167
+Overfull \hbox (29.33858pt too wide) in paragraph at lines 169--170
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[58] <img/exact_improvement.png, id=1259, 703.62875pt x 434.62375pt>
+[58] <img/exact_improvement.png, id=1261, 703.62875pt x 434.62375pt>
 File: img/exact_improvement.png Graphic file (type png)
  <use img/exact_improvement.png>
-Package pdftex.def Info: img/exact_improvement.png used on input line 183.
+Package pdftex.def Info: img/exact_improvement.png used on input line 186.
 (pdftex.def)             Requested size: 341.43306pt x 210.89836pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [59 <./img/all_distances_feasible.png>] [60 <./img/exact_improvement.png>] <img/random_box.png, id=1280, 945.5325pt x 355.3275pt>
+[59 <./img/all_distances_feasible.png>] [60 <./img/exact_improvement.png>] <img/random_box.png, id=1286, 945.5325pt x 355.3275pt>
 File: img/random_box.png Graphic file (type png)
  <use img/random_box.png>
-Package pdftex.def Info: img/random_box.png used on input line 247.
+Package pdftex.def Info: img/random_box.png used on input line 251.
 (pdftex.def)             Requested size: 341.43306pt x 128.30817pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-) [61] [62 <./img/random_box.png>]
+[61]) [62 <./img/random_box.png>]
 \openout2 = `chapters/99_conclusion.aux'.
 
- (./chapters/99_conclusion.tex) [63
+ (./chapters/99_conclusion.tex
+Overfull \hbox (2.44458pt too wide) in paragraph at lines 7--8
+[]\OT1/lmr/m/n/10.95 Although the ex-act al-go-rithms have poly-no-mial time com-plex-ity, we showed
+ []
+
+) [63
 
 
 
@@ -1951,7 +1935,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 792.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 792.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 792.
 Package rerunfilecheck Info: File `BP_Jenc_Martin_2019.out' has not changed.
-(rerunfilecheck)             Checksum: AC3715A2ACF61D7617A9E51F7B6C40F8;9230.
+(rerunfilecheck)             Checksum: C09D04FC9660115E4907096730AB09AD;9187.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
@@ -1959,18 +1943,18 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 792.
  ) 
 Here is how much of TeX's memory you used:
- 46496 strings out of 494945
- 1010997 string characters out of 6181033
- 1515033 words of memory out of 5000000
+ 46497 strings out of 494945
+ 1011008 string characters out of 6181033
+ 1514194 words of memory out of 5000000
  48589 multiletter control sequences out of 15000+600000
  110603 words of font info for 96 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  75i,25n,102p,10424b,2138s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rmtt.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rmsc.enc}</usr/share/texmf/fonts/type1/public/lm/lmbsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx6.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx8.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx9.pfb></usr/share/texmf/fonts/type1/public/lm/lmbxi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmcsc10.pfb></usr/share/texmf/fonts/type1/public/lm/lmex10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi6.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi8.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi9.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmib7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr6.pfb></usr/share/texmf/fonts/type1/public/lm/lmr7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmr9.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy9.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on BP_Jenc_Martin_2019.pdf (99 pages, 919158 bytes).
+Output written on BP_Jenc_Martin_2019.pdf (99 pages, 921524 bytes).
 PDF statistics:
- 1595 PDF objects out of 1728 (max. 8388607)
- 1438 compressed objects within 15 object streams
- 532 named destinations out of 1000 (max. 500000)
+ 1601 PDF objects out of 1728 (max. 8388607)
+ 1444 compressed objects within 15 object streams
+ 533 named destinations out of 1000 (max. 500000)
  451 words of extra memory for PDF output out of 10000 (max. 10000000)
 

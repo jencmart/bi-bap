@@ -9,9 +9,9 @@
 \contentsline {figure}{\numberline {2.3}{\ignorespaces Tree consisting of all element subsets for $n=4$ and $h=3$. Leaves with blue border color represents $h$-element subsets.}}{46}{figure.2.3}
 \addvspace {10pt}
 \contentsline {figure}{\numberline {3.1}{\ignorespaces Different types of outliers. }}{54}{figure.3.1}
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Similarity of the solutions given by the algorithms finding $h$-element subsets satisfying strong necessary condition compared to the OLS solution on the subset of the data set that does not contain outliers. On the left are two box plots for all algorithms. Since visualization is influenced by the scale of MMEA-I and MOEA-I box plots, we provide two graphs without these two algorithms on the right.}}{59}{figure.3.2}
-\contentsline {figure}{\numberline {3.3}{\ignorespaces For various combinations of parameters $n$ and $p$ is calculated average multiplicative improvement of the CPU time for running FSA-QR-BAB and FSA-QR-BSA instead of BAB and BSA.}}{60}{figure.3.3}
-\contentsline {figure}{\numberline {3.4}{\ignorespaces Similarity of the solutions given by the algorithms finding $h$-element subsets satisfying strong necessary condition compared to the OLS solution on the subset of the data set that does not contain outliers. On the left are two box plots for all algorithms. Since visualization is influenced by the scale of MMEA-I and MOEA-I box plots, we provide two graphs without these two algorithms on the right.}}{62}{figure.3.4}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Similarity of the solutions given by the algorithms finding $h$-element subsets satisfying strong necessary condition compared to the OLS solution on the subset of the data set that does not contain outliers. On the left are two box plots for all algorithms. Since the visualization is influenced by the scale of MMEA-I and MOEA-I box plots, we provide also two graphs without these two algorithms on the right.}}{59}{figure.3.2}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces For various combinations of parameters $n$ and $p$ we calculated average multiplicative improvement of the CPU time for running FSA-QR-BAB and FSA-QR-BSA instead of BAB and BSA.}}{60}{figure.3.3}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Cosine similarity and $L^2$ norm for multiple algorithms. Random algorithms are outperformed by the algorithms finding the weak and strong necessary conditions.}}{62}{figure.3.4}
 \addvspace {10pt}
 \addvspace {10pt}
 \addvspace {10pt}
