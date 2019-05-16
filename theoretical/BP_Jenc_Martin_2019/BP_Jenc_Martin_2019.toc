@@ -36,8 +36,8 @@
 \contentsline {section}{\numberline {2.7}BSA algorithm}{47}{section.2.7}
 \contentsline {subsection}{\numberline {2.7.1}Domain of OF-LTS}{47}{subsection.2.7.1}
 \contentsline {subsection}{\numberline {2.7.2} One-dimensional version of the algorithm}{49}{subsection.2.7.2}
-\contentsline {subsection}{\numberline {2.7.3}Multidimensional BSA}{51}{subsection.2.7.3}
-\contentsline {subsection}{\numberline {2.7.4}Speed ups and modifications}{52}{subsection.2.7.4}
+\contentsline {subsection}{\numberline {2.7.3}Multidimensional BSA}{50}{subsection.2.7.3}
+\contentsline {subsection}{\numberline {2.7.4}Speed ups and modifications}{51}{subsection.2.7.4}
 \contentsline {chapter}{\chapternumberline {3}Experiments}{53}{chapter.3}
 \contentsline {section}{\numberline {3.1}Data set generator}{53}{section.3.1}
 \contentsline {subsection}{\numberline {3.1.1}Generating outliers}{54}{subsection.3.1.1}

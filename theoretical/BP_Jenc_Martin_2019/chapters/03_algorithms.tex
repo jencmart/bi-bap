@@ -1884,34 +1884,34 @@ In this section, we present another exact algorithm called BSA introduced in~\ci
 
 
 \subsection{Domain of OF-LTS}
-We introduced two version of OF-LTS. First one is 
+We have introduced two versions of OF-LTS. First one is 
 $\of^{(LTS,h, n)}(\vec{w})$ with the domain $\mathbb{R}^p$ and the second one is the discrete version 
 $\oflts(\vec{m})$ with the domain $Q^{(n,h)}$. 
 We also know that 
-$\minim_{\vec{w} \in \mathbb{R}^p} \of^{(LTS,h, n)}(\vec{w})  =  \minim_{\vec{m} \in Q^{(n,h)}} \oflts(\vec{m})$ (see~\eqref{kloudaodvozeni}). Let us now talk about the non-discrete version and introduce some new feature.
+$\minim_{\vec{w} \in \mathbb{R}^p} \of^{(LTS,h, n)}(\vec{w})  =  \minim_{\vec{m} \in Q^{(n,h)}} \oflts(\vec{m})$ (see~\eqref{kloudaodvozeni}). Let us now consider the non-discrete version and introduce some its features.
 
 \begin{definition}
     Let $Z \subset \mathbb{R}^p \times  Q^{(n,h)}$ be an relation defined as
     \begin{equation}
-        (\vec{w}, \vec{m}) \in Z \Leftrightarrow \sum\limits_{i=1}^h r_{i:n}^2(\vec{w}) = \sum\limits_{i=1}^n m_i r_{i}^2(\vec{w})
+        (\vec{w}, \vec{m}) \in Z \Leftrightarrow \sum\limits_{i=1}^h r_{i:n}^2(\vec{w}) = \sum\limits_{i=1}^n m_i r_{i}^2(\vec{w}).
     \end{equation}
 \end{definition}
 
 
-$Z$ is not a mapping. To show this, we can take a simple example: assume that $\vec{w}$ is a vector of regression coefficients such that so that $r^{2}_{h:n}(\vec{w}) = r^{2}_{h+1:n}(\vec{w})$. Then for the given $\vec{w}$ we have two different vectors $\vec{m}$ that are in relation with it.
+$Z$ is not a mapping. To show this, we can take a simple example: assume that $\vec{w}$ is a vector of regression coefficients such that $r^{2}_{h:n}(\vec{w}) = r^{2}_{h+1:n}(\vec{w})$. Then for this $\vec{w}$ we have two different vectors $\vec{m}$ that are in the relation with it.
 
 For that reason, let us define  $\mathcal{U} \subset \mathbb{R}^{p}$ the largest set where $Z$ is a mapping. Next we define 
 $\mathcal{H} = \mathbb{R}^{p}  \setminus   \mathcal{U}$
-as a complement of $\mathcal{U}$.
+as the complement of $\mathcal{U}$.
 
 Let us now describe some properties that can help us to decide whether $\vec{w}$ is in $\mathcal{U}$ or in $\mathcal{H}$.
 
 \begin{lemma} \label{klouda1} It holds that
-    $\vec{w} \in \mathcal{U}, \vec{w} \in \mathbb{R}^{p}$ if and only if 
+    $\vec{w} \in \mathcal{U}, \vec{w}$ if and only if 
     $r^{2}_{h:n}(\vec{w}) < r^{2}_{h+1:n}(\vec{w})$
 \end{lemma}
 \begin{proof}
-    As shown in the example above. If $r^{2}_{i}(\vec{w}) = r^{2}_{h:n}(\vec{w}) = r^{2}_{h+1:n}(\vec{w}) = r^{2}_{j}(\vec{w}), i,j \in   \{{1,2,\ldots , n\}}$ are distinct, then $(\vec{w}, \vec{m_1}) \in Z$ and $(\vec{w}, \vec{m_2}) \in Z$ where $\vec{m_1}$ has ones at indices of $h$ smallest residuals and $\vec{m_2}$ has ones at the same indices except for swapping $i$th one with $j$th zero.
+    As shown in the example above, if $r^{2}_{i}(\vec{w}) = r^{2}_{h:n}(\vec{w}) = r^{2}_{h+1:n}(\vec{w}) = r^{2}_{j}(\vec{w}), i,j \in   \{{1,2,\ldots , n\}}$ are distinct, then $(\vec{w}, \vec{m_1}) \in Z$ and $(\vec{w}, \vec{m_2}) \in Z$ where $\vec{m_1}$ has ones at indices of $h$ smallest residuals and $\vec{m_2}$ has ones at the same indices except for swapping $i$th one with $j$th zero.
 \end{proof}
 
 \begin{corollary}
@@ -1922,11 +1922,11 @@ Let us now describe some properties that can help us to decide whether $\vec{w}$
     % thus
     It holds that
     \begin{equation}
-        \mathcal{H} = \{{ \vec{w} \in \mathbb{R}^{p} | r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w}) \}}.
+        \mathcal{H} = \{{ \vec{w} \in \mathbb{R}^{p} | r^{2}_{h:n}(\vec{w}) = r^{2}_{h+1:n}(\vec{w}) \}}.
     \end{equation}
     That means that for each $\vec{w} \in \mathcal{H}$ there are two different $(\vec{x_i}, y_i)$ and  $(\vec{x_j}, y_j)$ so that
     \begin{equation}
-        (y_i - \vec{x_i} \vec{w})^2 = r^{2}_i(\vec{w}) =  r^{2}_{(h:n)}(\vec{w}) = r^{2}_{(h+1:n)}(\vec{w}) =  r^{2}_j(\vec{w}) = (y_j - \vec{x_j} \vec{w})^2.
+        (y_i - \vec{x_i} \vec{w})^2 = r^{2}_i(\vec{w}) =  r^{2}_{h:n}(\vec{w}) = r^{2}_{h+1:n}(\vec{w}) =  r^{2}_j(\vec{w}) = (y_j - \vec{x_j} \vec{w})^2.
     \end{equation}
 
     We can see that 
@@ -1940,29 +1940,104 @@ Let us now describe some properties that can help us to decide whether $\vec{w}$
     For $\vec{X} \in \mathbb{R}^{n \times p}$ let as assume that for all $i,j, \in \{{1,2 \ldots, n \}}$  if $ i \neq j$ then $\vec{x_i} \neq \pm \vec{x_j}$ and $\norm{\vec{x_i}} \neq 0$.
 \end{assumption}
 
-If Assumption~\ref{klouda:asump:1} is fulfilled then $ y_i \pm y_j + (\vec{x_i} \pm \vec{x_j})  \vec{w} = 0$ represents a hyperplane. 
+If Assumption~\ref{klouda:asump:1} is fulfilled, then $ y_i \pm y_j + (\vec{x_i} \pm \vec{x_j})  \vec{w} = 0$ represents a hyperplane. 
 
-It is easy to show that the set $\mathcal{U}$ is open and Lebesgue measure of $\mathcal{H}$  is $0$. Moreover $\mathcal{H}$ splits $\mathbb{R}^{p}$ into finite number of $k$ open disjoint subsets of $\mathcal{U}$. 
+It is easy to show that the set $\mathcal{U}$ is open and Lebesgue measure of $\mathcal{H}$  is $0$. Moreover, $\mathcal{H}$ splits $\mathbb{R}^{p}$ into finite number of $k$ open disjoint subsets of $\mathcal{U}$. 
+
+
+
 
 \begin{definition}
-    Let us define the set of $k \in \mathbb{N}$ sets $\mathcal{U}^{(set)} = \{{ U_i\}}_{i=1}^{k}$ so that
-    all $U_i$ are open and connected sets, $U_i$ and $U_j$ mutually are disjoined such that $U_i \cap  U_j = \emptyset$, $\cup_{i=1}^{k}    U_i = \mathcal{U}$ and $\cup_{i=1}^{k}    \partial U_i =  \mathcal{H}$.
+    Let us define the set of $k$ sets $\mathcal{U}^{(set)} = \{{ U_i\}}_{i=1}^{k}$ so that
+    all $U_i$ are open and connected sets, $U_i$ and $U_j$ are mutually disjoint such that $\cup_{i=1}^{k}    U_i = \mathcal{U}$ and $\cup_{i=1}^{k}    \partial U_i =  \mathcal{H}$.
 
     We define neighbor sets $U_i, U_j, i \neq j$ as the sets whose borders are not disjoint. 
     We also define $M^{(min)}$ as the set of $k$ vectors $\vec{m} \in Q^{(n,h)}$ by 
     \begin{equation*}
-        M^{(min)} = \{{ \vec{m_1}, \ldots, \vec{m_k} | \vec{m} = Z(\vec{w})~for~some~\vec{w} \in U_i  \}}.
+        M^{(min)} = \{{ \vec{m} | \vec{m} = Z(\vec{w})~for~some~\vec{w} \in U_i  \}}.
     \end{equation*}
-    That means $Z(\vec{w}) = Z(\vec{w^{\prime}})$ for all $w, w^{\prime} \in U_i$.
+    Note that we have $Z(\vec{w}) = Z(\vec{w^{\prime}})$ for all $w, w^{\prime} \in U_i$.
 \end{definition}
 
-For a better understanding of the definitions above see 
-\missingfigure{p=1 n=5 h=3. visualise all $U_i$ and elements of $\mathcal{H}$}
+% For a better understanding of the definitions above see At the Figure~\ref{figure:bsa:domain} we can see illustration of vectors from $\mathcal{H}$, sets from $\mathcal{U}^{(set)}$ and representation. 
+% % \missingfigure{p=1 n=5 h=3. visualise all $U_i$ and elements of $\mathcal{H}$}
 
-We say that the matrix $\vec{X} \in \mathbb{R}^{n \times p}$ has \defterm{$h$-full} if for all $\vec{m} \in \qnh$ the matrix $\vec{M}\vec{X}$ has rank $p$.
+% \begin{figure}[h]
+%     \centering
+    
+% % even more fun
+% \begin{tikzpicture}
+%     \begin{axis}[
+%         xlabel={$\vec{w}$},
+%         ylabel={$L$},
+%         xmin=0,
+%         xmax=5,
+%         ymin=0,
+%         ymax=6,
+%         xtick = {0},
+%         %xticklabels = {$\vec{\hat{w}_1}$}, 
+%         ytick = {0}, 
+%         domain = 0:10,
+%         axis lines = middle,
+%         clip=false,
+%         every extra x tick/.style={grid=none, xticklabel
+%       style={anchor=north, color=red}},
+%     extra x ticks ={1.416, 2},
+%     extra x tick labels={$\vec{\hat{w}_2}$,$\vec{\hat{w}_1}$},
+%       ]
+      
+%       % M1 
+%     %   \addplot [thick, domain = -0.5:4.5] {0.5*x^2 - 2*x  + 5.5} node [right] 
+%     %   {$\of^{(OLS,\vec{M_1}\vec{X},  \vec{M_1}\vec{y} )} (\vec{w})$};
+
+%     \addplot [thick, domain = 3.0:4.0] {0.51*x^2 - 2*x  + 5.5} node [right] {};
+
+%       % OFD(M1)
+%       \addplot[soldot,black]coordinates {(2, 3.5)} node [anchor=north east,text=black] {$(1)$};
+%       % {$\oflts(\vec{m_1})$};
+
+
+%       % M2
+%       \addplot [thick, domain = -0.5:4.5] {0.6*x^2 - 1.7*x  + 3.5} node [left] 
+%       {$\of^{(OLS,\vec{M_2}\vec{X},  \vec{M_2}\vec{y} )} (\vec{w})$};
+      
+%       % OFD(M2)
+%       \addplot[soldot, black]coordinates {(1.416,2.295)} node [anchor=north east,text=black]  {$(3)$};
+%       %{$\oflts(\vec{m_2})$};
+      
+%         % sorted on W1
+%       \addplot[soldot, red]coordinates {(2, 2.5)} node [anchor=north west,text=black]  {$(2)$};
+
+%       % red dashed line for W1
+%       \draw [red, dashed](axis cs: 2, 0) -- (axis cs: 2, 3.5) node [pos=0.5,anchor=north east]{};
+
+%       % red dashed line for W1
+%       \draw [red, dashed](axis cs: 1.416, 0) -- (axis cs: 1.416, 2.295) node [pos=0.5,anchor=north east]{};
+%       %\addplot [dashed, domain = -0.5:2] {2.5 - 2*x} node [left] {$f(x) + t \nabla f(x)^T\Delta x $};
+%       %\addplot [dashed, domain = -0.5:4.5] {2.5 - 0.65*x} node [below right] {$f(x) + \alpha t \nabla f(x)^T\Delta x $};
+%       % \draw [dotted, gray] (-4,-6) grid (5,5);
+
+%       % \node [blue] at (3,-2.5) {$\circ$};
+      
+%     \end{axis}
+
+
+ 
+% \end{tikzpicture}
+
+
+
+
+
+%     \caption{Illustration of the C-step algorithm. $(1)$ represents the value of $\of^{(OLS,\vec{M_1}\vec{X},  \vec{M_1}\vec{y} )} (\vec{\hat{w}_1})$ (which is equal to the value $\oflts(\vec{m_1})$ ). $(2)$~represents  the value of $\of^{(OLS,\vec{M_2}\vec{X},  \vec{M_2}\vec{y} )} (\vec{\hat{w}_1})$ and $(3)$ represents the value of $\of^{(OLS,\vec{M_2}\vec{X},  \vec{M_2}\vec{y} )} (\vec{\hat{w}_2})$ (which is equal to the value $\oflts(\vec{m_2})$). }
+%     \label{figure:bsa:domain}
+% \end{figure}
+
+
+We say that the matrix $\vec{X} \in \mathbb{R}^{n \times p}$ has \defterm{$h$-full} rank if for all $\vec{m} \in \qnh$ the matrix $\vec{M}\vec{X}$ has rank $p$ where $\vec{M} = diag(\vec{m})$.
 
 \begin{theorem} \label{minimas:in:relation}
-    If the matrix $\vec{X}$ has $h$-full rank, then for every local minima of the OF-LTS at point $\vec{w_{0}}$ satisfying weak-necessary condition, there exists a vector $\vec{m} \in Q^{(n,h)}$ such that $(\vec{w_{0}}, \vec{m}) \in Z$.
+    If the matrix $\vec{X}$ has $h$-full rank, then for every local minima of the OF-LTS at point $\vec{w_{0}}$ satisfying the weak necessary condition, there exists a vector $\vec{m} \in Q^{(n,h)}$ such that $(\vec{w_{0}}, \vec{m}) \in Z$.
 \end{theorem}
 Proof can be found in~\cite[Theorem~7]{klouda2015exact}. 
 
@@ -1970,22 +2045,17 @@ Proof can be found in~\cite[Theorem~7]{klouda2015exact}.
 
 Based on the Theorem~\ref{minimas:in:relation} we can see that
 \begin{equation}
-    \minim_{\vec{m} \in Q^{(n,h)}} \of^{(OLS,\vec{M}\vec{X}, \vec{M}\vec{Y})} (\vec{w}) =
-    \minim_{ \vec{m} \in M^{(min)}} \of^{(OLS,\vec{m^i}\vec{X}, \vec{m^i}\vec{Y})} (\vec{w})
+    \minim_{\vec{m} \in Q^{(n,h)}} \of^{(OLS,\vec{M}\vec{X}, \vec{M}\vec{y})} (\vec{w}) =
+    \minim_{ \vec{m} \in M^{(min)}} \of^{(OLS,\vec{M}\vec{X}, \vec{M}\vec{y})} (\vec{w}),
 \end{equation}
-
-where $\vec{M} = diag(\vec{m})$, $\vec{m^i} = diag(m)$. Set $M^{(min)}$ is very useful because we can iterate only through this set and not through whole $Q^{(n,h)}$.
-
-Then minimizing objective function $\oflts(\vec{m})$~\eqref{oflts_discrete} can be reformulated as 
+where $\vec{M} = diag(\vec{m})$, $\vec{m^i} = diag(m)$. Set $M^{(min)}$ is very useful because we can iterate only through this set and not through whole $Q^{(n,h)}$. Hence minimizing objective function $\oflts(\vec{m})$~\eqref{oflts_discrete} can be reformulated as 
 \begin{equation} \label{mminqnh}
-    \minim_{\vec{m} \in Q^{(n,h)}}  \oflts(\vec{m}) = \minim_{m \in M^{(min)}} \oflts(\vec{m})
+    \minim_{\vec{m} \in Q^{(n,h)}}  \oflts(\vec{m}) = \minim_{m \in M^{(min)}} \oflts(\vec{m}).
 \end{equation}
-
-
 That means if we can find all $\vec{m} \in M^{(min)}$ then minimizing $\oflts$ would be easy.
-So how we can find the elements of $M^{(min)}$ set? 
+How can we find all the elements of $M^{(min)}$ set? 
 
-For now, let us assume that we know all elements of $\mathcal{H}$. Because for each $\vec{m} \in M^{(min)}$ there exists at least one $\vec{w} \in \mathcal{H}$ such that $(\vec{w}, \vec{m}) \in Z$, then for a given $\vec{w} \in \mathcal{H}$ we can find all $\vec{m}$ by the following algorithm.
+For now, let us assume that we know all the elements of $\mathcal{H}$. Because for each $\vec{m} \in M^{(min)}$ there exists at least one $\vec{w} \in \mathcal{H}$ such that $(\vec{w}, \vec{m}) \in Z$, then for a given $\vec{w} \in \mathcal{H}$ we can find all $\vec{m}$ by the following algorithm.
 
 
 \begin{algo}[Find all $\vec{m}$ in relation $Z$ with a given $\vec{w}$] \label{find:all:m:in:relation}
@@ -1994,10 +2064,10 @@ For now, let us assume that we know all elements of $\mathcal{H}$. Because for e
     \begin{enumerate}
         \item Calculate all squared residuals $r^{2}_i(\vec{w})$ for $i \in \{{1, \ldots,n\}}$.
         \item Sort the residuals so that $r^{2}_{i_k}(\vec{w}) = r^{2}_{k:n}(\vec{w})$.
-        \item If $r^{2}_{i_h}(\vec{w}) < r^{2}_{i_{h+1}}(\vec{w})$ the relation Z between $\vec{w}$ and $\vec{m}$ where $m_i = 1  \Leftrightarrow r^{2}_i(\vec{w}) \leq  r^{2}_{i_h}(\vec{w})$ is unique. Return the $\vec{m}$.
+        \item If $r^{2}_{i_h}(\vec{w}) < r^{2}_{i_{h+1}}(\vec{w})$ there is a unique $\vec{m}$ in relation with $\vec{w}$, namely $\vec{m}$ where $m_i = 1  \Leftrightarrow r^{2}_i(\vec{w}) \leq  r^{2}_{i_h}(\vec{w})$. Return this $\vec{m}$.
         \item Find the greatest index $l$ such that $r^{2}_{i_l}(\vec{w}) < r^{2}_{i_h}(\vec{w})$.
         \item Find the greatest index $t$ such that $ r^{2}_{i_h}(\vec{w}) = r^{2}_{i_t}(\vec{w})$.
-        \item Create all vectors $\vec{m}$ in relation with $\vec{w}$ by combining first $l$ unique indices $i_1, \ldots ,i_l$ with all combinations of $h-l$-element subsets of indices $i_{l+1}, \ldots i_t$. Number of this vector is given by $\binom{t-l}{h-l}$.
+        \item Create all vectors $\vec{m}$ by combining first $l$ unique indices $i_1, \ldots ,i_l$ with all combinations of $(h-l)$-element subsets of indices $i_{l+1}, \ldots i_t$. Number of this vector is given by $\binom{t-l}{h-l}$.
     \end{enumerate}
 \end{algo}
 
@@ -2026,18 +2096,17 @@ For now, let us assume that we know all elements of $\mathcal{H}$. Because for e
 %     \Return{ $\vec{Q^{(+)}}$\,, $\vec{R^{(+)}}$ }\;
 % \end{algorithm}
 
-Finally we need to find all the elements of $\mathcal{H}$. As we know, for all elements $\vec{w} \in \mathcal{H}$ it holds that $r^{2}_{h:n}(\vec{w}) = r^{2}_{h+1:n}(\vec{w})$. So if we find all $\vec{w}$ that are solutions of such an equation, then we are done. The problem is that the residuals are sorted. To overcome this issue we define the following set of suitable candidates for the desired $\vec{w}$.
+Finally we need to find all the elements of $\mathcal{H}$. As we know, for all the elements $\vec{w} \in \mathcal{H}$ it holds that $r^{2}_{h:n}(\vec{w}) = r^{2}_{h+1:n}(\vec{w})$. So, if we find all $\vec{w}$ that are solutions of such an equation, then we are done. The problem is that the residuals are sorted. To overcome this issue we define the following set of suitable candidates for the desired $\vec{w}$.
 
 
-If $\vec{w} \in \mathcal{H}$, then there exists $i,j, i \neq j$ so that
-    $r^{2}_i(\vec{w}) = r^{2}_j(\vec{w})$. We define the set $H$ containing $\vec{w}$ satisfying this necessary condition, thus
+If $\vec{w} \in \mathcal{H}$, then there exists $i,j, i \neq j$, so that
+    $r^{2}_i(\vec{w}) = r^{2}_j(\vec{w})$. We define the set $H$ containing $\vec{w}$ satisfying this necessary condition, as
 \begin{equation}
     H = \{{ \vec{w} \in \mathbb{R}^p | r^{2}_i(\vec{w}) = r^{2}_j(\vec{w}), i \neq j  \}}.   
 \end{equation}
-    
 Finding all elements of $H$ requires solving $\binom{n}{2}$ equations of type $r^{2}_i(\vec{w}) = r^{2}_j(\vec{w})$. Moreover, because these equations are quadratic, we can have up to two solutions for each equation.
 
-So idea of the whole algorithm is to find all elements of $H$ (by solving the quadratic equations), consequently finding which of them are part of $\mathcal{H}$ (by ordering squared residuals and checking if $r^{2}_{h:n}(\vec{w}) = r^{2}_{h+1:n}(\vec{w})$) and finally for each $\vec{w} \in \mathcal{H}$ find $\vec{m}$ that are in relation $Z$ with it. All of those $\vec{m}$ vectors form the $M^{(min)}$ set. Finally we can use $\vec{m} \in M^{(min)}$ for minimizing $\oflts(\vec{m})$ in terms of~\eqref{mminqnh}. The whole algorithm, the author calls the Border Scanning Algorithm (BSA) and cab be described as follows.
+So the idea of the whole algorithm is to find all elements of $H$ (by solving the quadratic equations), consequently finding which of them are elements of $\mathcal{H}$ (by ordering squared residuals and checking if $r^{2}_{h:n}(\vec{w}) = r^{2}_{h+1:n}(\vec{w})$) and finally for each $\vec{w} \in \mathcal{H}$ find subsets $\vec{m}$ that are in relation $Z$ with it. All of those $\vec{m}$ vectors form the $M^{(min)}$ set. Finally we can use $\vec{m} \in M^{(min)}$ for minimizing $\oflts(\vec{m})$ in terms of~\eqref{mminqnh}. The author calls this algorithm Border Scanning Algorithm (BSA).
 
 \begin{algo}[BSA for the $p=1$] \label{bsa:one:dimensional}
     \mbox{}\vspace{\dimexpr-\baselineskip-\topsep}
@@ -2045,11 +2114,11 @@ So idea of the whole algorithm is to find all elements of $H$ (by solving the qu
     \begin{enumerate}
         \item Set $RSS_{min} = \infty, \vec{m}_{min} = \emptyset, \vec{w}_{min} = \emptyset$.
         \item For each combination of two observations $(x_i, y_i)$ and $(x_j, y_j)$:
-        \item solve $r^2_i(\vec{w}) = r^2_j(\vec{w})$ for $\vec{w}$ (The solution $w_1$ and $w_2$ is given by the two linear equations).
+        \item solve $r^2_i(\vec{w}) = r^2_j(\vec{w})$ for $\vec{w}$ and denote the two solutions as $\vec{w}_1$ and $\vec{w}_2$.
         \item For $\vec{w_1}$ and $\vec{w_2}$ (if $\vec{w_1}$ is equal to $\vec{w_2}$, then only for $w_1$):
         \item calculate all squared residuals $r^{2}_i(\vec{w_j})$ for $i \in \{{1, \ldots,n\}}$.
-        \item Sort the residuals so that $r^{2}_{i_k}(\vec{w_j}) = r^{2}_{k:n}(\vec{w_j})$.
-        \item If $r^{2}_{i_h}(\vec{w_j}) = r^{2}_{i_{h+1}}(\vec{w_j})$ find all $\vec{m}$ in relation with $w_j$ using Algorithm~\ref{find:all:m:in:relation}.
+        \item Sort the residuals.
+        \item If $r^{2}_{i_h}(\vec{w_j}) = r^{2}_{i_{h+1}}(\vec{w_j})$ find all $\vec{m}$ in relation with $\vec{w_j}$ using Algorithm~\ref{find:all:m:in:relation}.
         \item For each subset $\vec{m}$:
         \item if $ \oflts(\vec{m}) < RSS_{min}$, set $RSS_{min} = \oflts(\vec{m}), \vec{m}_{min} = \vec{m}$ and $ \vec{w}_{min} = \vec{w_j} $.
         \item Return $\vec{m}_{min} $ and $ \vec{w}_{min}$
@@ -2059,15 +2128,14 @@ So idea of the whole algorithm is to find all elements of $H$ (by solving the qu
 
 \subsection{Multidimensional BSA}
 
-If we would like to scale the algorithm into the higher dimension $p > 2$, we have to face one major complication. The algorithm finds all elements of $H$ and $\mathcal{H}$ but if $p > 1$, then  $\mathcal{H}$ forms a hyperplane and so contain an infinite number of points.
+If we would like to scale the algorithm into the higher dimension $p > 1$, we have to face one major complication. The algorithm finds all elements of $H$ and $\mathcal{H}$ but if $p > 1$, then  $\mathcal{H}$ is union of hyperplanes and so contain an infinite number of points.
 
-Therefore the author of BSA then proposes to find finite subset $\mathcal{H}_p$ of $\mathcal{H}$ that satisfies following condition
+Therefore the author of BSA proposes to find a finite subset $\mathcal{H}_p$ of $\mathcal{H}$ that satisfies following condition
 \begin{equation} \label{hp:set:condition}
     \forall \vec{m} \in M^{(min)} \exists \vec{w} \in \mathcal{H}_p : (\vec{w},\vec{m}) \in Z
 \end{equation}
-
-and also finite set $H_p$, so that $mathcal{H}_p \subset H_p \subset H$.
-To restrict the algorithm to the finite subset $\mathcal{H}_p$ we need to introduce $p$ independent equations of type
+and also finite set $H_p$, so that $\mathcal{H}_p \subset H_p \subset H$.
+It is proven in~\cite{klouda2015exact} the set $\mathcal{H}_p$ can be defined as the set of solutions of $p$ quadratic equations
 $ r^{2}_i(\vec{w}) = r^{2}_j(\vec{w})$
 
 \begin{align} 
@@ -2084,44 +2152,44 @@ where $i_1, i_2 \ldots i_{p+1}$  is $(p+1)$-element subset of $\{{1, 2, \ldots n
 
 % If set $H_p$ satisfies~\eqref{hp:set:condition} then it can be used for finding $\mathcal{H}_p$ subset, thus we would be able to use this set for the multidimensional version of the algorithm.
 
-Let $\circ \in {+, -}$ be either operation $+$ or $-$. Then system of quadratic equations~\eqref{p:plus:one:equations} is equivalent to $2^p$ linear systems
+Let $\circ \in \{{+, -\}}$ be either the operation $+$ or $-$. The system of quadratic equations~\eqref{p:plus:one:equations} is equivalent to $2^p$ linear systems
 
 \begin{align} 
     (\vec{x}_{i_1} \circ_1 \vec {x}_{i_2} )^T \vec{w} &= y_{i_1} \circ_1 y_{i_2} \label{p:plus:one:equations:linear}   \\
     \vdots \ \ \  & \ \ \ \  \ \vdots  \nonumber \\ 
-    (\vec{x}_{i_p} \circ_p \vec {x}_{i_{p+1}} )^T \vec{w} &= y_{i_p} \circ_p y_{i_{p+1}}. \nonumber 
+    (\vec{x}_{i_p} \circ_p \vec {x}_{i_{p+1}} )^T \vec{w} &= y_{i_p} \circ_p y_{i_{p+1}}, \nonumber 
 \end{align}
+where $\circ_i$ represents ether the addition or subtraction.
+% Moreover~\eqref{p:plus:one:equations:linear} it is equivalent to the set of equations
+% \begin{align} 
+%     (\vec{x}_{i_1} \circ_1 \vec {x}_{i_2} )^T \vec{w} &= y_{i_1} \circ_1 y_{i_2} \label{p:plus:one:equations:linear:simple}   \\
+%     \vdots \ \ \  & \ \ \ \  \ \vdots  \nonumber \\ 
+%     (\vec{x}_{i_1} \circ_p \vec {x}_{i_{p+1}} )^T \vec{w} &= y_{i_1} \circ_p y_{i_{p+1}}. \nonumber 
+% \end{align}
+The set $\mathcal{H}_p$ with the property~\eqref{hp:set:condition} can be define as the set of elements of $H_p$ such that $r_{i_1}^2(\vec{w}) = r_{h:n}^2(\vec{w}) = r_{h+1:n}^2(\vec{w})$.
 
-Moreover~\eqref{p:plus:one:equations:linear} it is equivalent to the set of equations
+%Set $H_p$ was proven to be suitable for finding $\mathcal{H}_p$ in~\cite{klouda2015exact}.
+%  thus that set $\mathcal{H}_p$ satisfies~\eqref{hp:set:condition} if following assumptions are satisfied (we already assume that Assumption~\ref{klouda:asump:1} holds). First is that for all $\vec{w}$ $r_{h:n}(\vec{w}) > 0$, second , for all 
+% $(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -}$ the matrix system of $n-1$ equations
 
-\begin{align} 
-    (\vec{x}_{i_1} \circ_1 \vec {x}_{i_2} )^T \vec{w} &= y_{i_1} \circ_1 y_{i_2} \label{p:plus:one:equations:linear:simple}   \\
-    \vdots \ \ \  & \ \ \ \  \ \vdots  \nonumber \\ 
-    (\vec{x}_{i_1} \circ_p \vec {x}_{i_{p+1}} )^T \vec{w} &= y_{i_1} \circ_p y_{i_{p+1}}. \nonumber 
-\end{align}
-Solution $\vec{w} \in H_p$ is also element of subset $\mathcal{H}_p$ if $r_{i_1^2}(\vec{w}) = r_{h:n}(\vec{w}) = r_{h+1:n}(\vec{w})$.
+% \begin{align} 
+%     (\vec{x}_{i_1} \circ_1 \vec {x}_{i_2} )^T \vec{w} &= y_{i_1} \circ_1 y_{i_2} \label{p:plus:one:equations:linear:simple:to:n}   \\
+%     \vdots \ \ \  & \ \ \ \  \ \vdots  \nonumber \\ 
+%     (\vec{x}_{i_1} \circ_{n-1} \vec {x}_{i_{n}} )^T \vec{w} &= y_{i_1} \circ_p y_{i_{n}}. \nonumber
+% \end{align}
+% The seconds assumption prevents the set $\mathcal{H}_p$ to be empty thus the case where all systems~\eqref{p:plus:one:equations:linear:simple} are dependent. 
 
-Set $H_p$ was proven to be suitable for finding $\mathcal{H}_p$ in~\cite{klouda2015exact} thus that set $\mathcal{H}_p$ satisfies~\eqref{hp:set:condition} if following assumptions are satisfied (we already assume that Assumption~\ref{klouda:asump:1} holds). First is that for all $\vec{w}$ $r_{h:n}(\vec{w}) > 0$, second , for all 
-$(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -}$ the matrix system of $n-1$ equations
+% This assumption can cause problem because when we assume model with the intercept, first column od $\vec{X}$ is column of $1$s. Then in the case  $\circ_1,\ldots,  \circ_{n-1} = -$, first column of matrix $\vec{X}$ only contains $0$s. We can modify this assumption so that instead of using $(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -}$ we use only $(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -} \setminus {(-, \ldots, -)}$~\cite{klouda2015exact}. 
 
-\begin{align} 
-    (\vec{x}_{i_1} \circ_1 \vec {x}_{i_2} )^T \vec{w} &= y_{i_1} \circ_1 y_{i_2} \label{p:plus:one:equations:linear:simple:to:n}   \\
-    \vdots \ \ \  & \ \ \ \  \ \vdots  \nonumber \\ 
-    (\vec{x}_{i_1} \circ_{n-1} \vec {x}_{i_{n}} )^T \vec{w} &= y_{i_1} \circ_p y_{i_{n}}. \nonumber
-\end{align}
-The seconds assumption prevents the set $\mathcal{H}_p$ to be empty thus the case where all systems~\eqref{p:plus:one:equations:linear:simple} are dependent. 
+% Given that we now know that set $H_p$ and $\mathcal{H}_p$ are suitable for our algorithm and we also know how to calculate them.
 
-This assumption can cause problem because when we assume model with the intercept, first column od $\vec{X}$ is column of $1$s. Then in the case  $\circ_1,\ldots,  \circ_{n-1} = -$, first column of matrix $\vec{X}$ only contains $0$s. We can modify this assumption so that instead of using $(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -}$ we use only $(\circ_1,\circ_2 \ldots,  \circ_{n-1}) \in \times^n_{i=1} {+, -} \setminus {(-, \ldots, -)}$~\cite{klouda2015exact}. 
-
-Given that we now know that set $H_p$ and $\mathcal{H}_p$ are suitable for our algorithm and we also know how to calculate them.
-
-The multidimensional version of the algorithm is indeed very similar to the one dimensional one. We basically just solve greater amount of bigger linear system. In terms of Algorithm~\ref{bsa:one:dimensional} the difference is in the step $2$ where we choose combinations of $p+1$ observations instead of two. Consequently in step $3$ we construct $2^p$ systems of $p$ linear equations instead of only two. This means that the total number of vectors $\vec{w}$ can be up to $\binom{n}{p+1} 2^p$. Algorithm~\ref{find:all:m:in:relation} works the same way for the multidimensional version of the algorithm. This algorithm can produce up to $\binom{p}{[p/2]}$ vectors $\vec{m}$ for each vector $\vec{w}$. That means in the worst case we have to calculate 
+The multidimensional version of the algorithm is indeed very similar to the one dimensional one. We basically just solve greater amount of bigger linear system to find all the elements of $\mathcal{H}_p$. In terms of Algorithm~\ref{bsa:one:dimensional} the difference is in the step $2$ where we choose combinations of $p+1$ observations instead of two. Consequently in step $3$ we construct $2^p$ systems of $p$ linear equations instead of only two. This means that the total number of vectors elements of $\mathcal{H}_p$ can be up to $\binom{n}{p+1} 2^p$. Algorithm~\ref{find:all:m:in:relation} works the same way for the multidimensional version of the algorithm. This algorithm can produce up to $\binom{p}{[p/2]}$ vectors $\vec{m}$ for each vector $\vec{w}$. That means in the worst case we have to calculate 
 $\vec{\hat{w}}^{(OLS,\vec{M}\vec{X}, \vec{M}\vec{y})}$ up to $\binom{n}{p+1} \binom{p}{[p/2]} 2^p$ times. We can already see that this algorithm is not suitable for higher dimensional observations.
 
 
 \subsection{Speed ups and modifications}
-Author proposed modification of the algorithm called BSABAB. This modification tries to utilize the branch and bound paradigm described in the Section~\ref{sectionbab}. This can be done only at a smaller scale and that in the step $4$ of the Algorithm~\ref{find:all:m:in:relation}. If the sum of $l$ smallest unique squared residuals is larger than currently obtained $RSS_{min}$ then we can skip returning up  $\binom{p}{[p/2]}$ calculations of the OLS on those subsets.
+Author proposed modification of the algorithm called BSABAB. This modification tries to utilize the branch and bound paradigm described in the Section~\ref{sectionbab}. This can be done only at a smaller scale in step $4$ of Algorithm~\ref{find:all:m:in:relation}. If the sum of $l$ smallest unique squared residuals is larger than currently obtained $RSS_{min}$ then we can skip up to  $\binom{p}{[p/2]}$ calculations of the OLS.
 
 This idea can be pushed further in the similar way as was described in the Section~\ref{sectionbab}. We propose to use some approximative algorithm which solution can be used to set the $RSS_{min}$ in advance and let the algorithm cut as much as possible ``branches''.
 
-Another possibility  of modifying the algorithm is to instead of using all $p+1$-element subsets in the step $2$ of the multidimensional version of the Algorithm~\ref{bsa:one:dimensional} use only limited amount of randomly chosen $p+1$-element subsets. We refer to this modification as to the Random border scanning algorithm (RBSA).
+Another possibility  of modifying the algorithm is to instead of using all $(p+1)$-element subsets in the step $2$ of the multidimensional version of the Algorithm~\ref{bsa:one:dimensional} use only limited amount of randomly chosen $(p+1)$-element subsets. We refer to this modification as to the Random border scanning algorithm (RBSA).
