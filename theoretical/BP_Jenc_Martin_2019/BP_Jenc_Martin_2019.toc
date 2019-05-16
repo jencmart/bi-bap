@@ -29,12 +29,12 @@
 \contentsline {subsection}{\numberline {2.4.1}Multiplicative formula}{33}{subsection.2.4.1}
 \contentsline {subsection}{\numberline {2.4.2}The OEA and its properties}{37}{subsection.2.4.2}
 \contentsline {subsection}{\numberline {2.4.3}Minimum-maximum exchange algorithm}{39}{subsection.2.4.3}
-\contentsline {subsection}{\numberline {2.4.4}Different method of computation}{40}{subsection.2.4.4}
-\contentsline {section}{\numberline {2.5}Combined algorithm}{45}{section.2.5}
+\contentsline {subsection}{\numberline {2.4.4}Different method of computation of the inversion}{40}{subsection.2.4.4}
+\contentsline {section}{\numberline {2.5}Combined algorithm}{44}{section.2.5}
 \contentsline {section}{\numberline {2.6}BAB algorithm}{45}{section.2.6}
 \contentsline {subsection}{\numberline {2.6.1}Improvements}{47}{subsection.2.6.1}
-\contentsline {section}{\numberline {2.7}BSA algorithm}{48}{section.2.7}
-\contentsline {subsubsection}{\numberline {2.7.0.1}Domain of OF-LTS}{48}{subsubsection.2.7.0.1}
+\contentsline {section}{\numberline {2.7}BSA algorithm}{47}{section.2.7}
+\contentsline {subsubsection}{\numberline {2.7.0.1}Domain of OF-LTS}{47}{subsubsection.2.7.0.1}
 \contentsline {subsection}{\numberline {2.7.1} One-dimensional version of the algorithm}{49}{subsection.2.7.1}
 \contentsline {subsection}{\numberline {2.7.2}Multidimensional BSA}{50}{subsection.2.7.2}
 \contentsline {chapter}{\chapternumberline {3}Experiments}{53}{chapter.3}
@@ -47,7 +47,7 @@
 \contentsline {subsection}{\numberline {3.4.2}Algorithms for finding exact solution}{58}{subsection.3.4.2}
 \contentsline {subsection}{\numberline {3.4.3}FAST-LTS and combinations of the algorithms}{60}{subsection.3.4.3}
 \contentsline {subsection}{\numberline {3.4.4}Random algorithm and RBSA}{61}{subsection.3.4.4}
-\contentsline {chapter}{Conclusion}{63}{chapter*.25}
-\contentsline {chapter}{Bibliography}{65}{section*.27}
+\contentsline {chapter}{Conclusion}{63}{chapter*.23}
+\contentsline {chapter}{Bibliography}{65}{section*.25}
 \contentsline {appendix}{\chapternumberline {A}Results of the experiments}{69}{appendix.A}
 \contentsline {appendix}{\chapternumberline {B}Contents of enclosed CD}{83}{appendix.B}

@@ -301,7 +301,7 @@ The QR decomposition is considered as a standard way of computing OLS estimate b
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsubsection*{Givens Rotation} \label{givensrotation}
-In this section, we describe Givens rotations in detail. Moreover, we also show how to update QR decomposition when adding or deleting a from the matrix $\vec{X}$. We use this in the algorithm described in Section~\ref{differentcomputation}.
+In this section, we describe Givens rotations in detail. Let us note that this theory is extensively used in Section~\ref{differentcomputation} where we also show how to update QR decomposition when adding or deleting a from the matrix $\vec{X}$. 
 
 As described in~\cite{hammarling2008updatingqr}, we compute the QR factorization of $\vec{A} \in \mathbb{R}^{m \times n}$ so that we apply an orthogonal transformation using a matrix $\vec{Q}^T$ as 
 
@@ -536,7 +536,7 @@ L_1 = \sum\limits_{i=1}^n m^{(1)}_i r_{i}^2(\vec{w_1})
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%    C-STEP algorithm    %%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Based on the previous theorem, using some $\vec{m_{old}}$ with corresponding
+Based on the previous theorem, using some $h$-element subset $\vec{m_{old}}$ with corresponding
  $\vec{\hat{w}}^{(OLS,\vec{M}_{old}\vec{X}, \vec{M}_{old}\vec{y})}$ 
  we can construct
   $\vec{m_{new}}$ with corresponding $\vec{\hat{w}}^{(OLS,\vec{M}_{new}\vec{X}, \vec{M}_{new}\vec{y})}$ 
@@ -634,9 +634,6 @@ C-step algorithm is visualized on Figure~\ref{figure:one:c:step} where we start 
       
     \end{axis}
 
-    % \draw[latex-latex, thin, draw=gray] (-4,0)--(4,0) node [right] {$x$}; % l'axe des abscisses
-    %   \draw[latex-latex, thin, draw=gray] (0,-5)--(0,5) node [above] {$y$}; % l'axe des ordonnées
-    %   \draw[thick] (-3,-2)--(3,4); % l'axe des abscisses
 
  
 \end{tikzpicture}
@@ -710,7 +707,7 @@ Answer to this question is presented by the following theorem.
 \end{theorem}
 
 \begin{proof}
-    $\what{{i}}$  is uniquely given by  the $h$-element subset $\vec{m_i} \in Q^{(n, h)}$ and since $Q^{(n, h)}$ is finite,  namely its size is ${n \choose h}$, the sequence becomes constant at the latest after this number of steps.
+    $\what{{i}}$  is uniquely given by  an $h$-element subset $\vec{m_i} \in Q^{(n, h)}$ and since $Q^{(n, h)}$ is finite,  namely its size is ${n \choose h}$, the sequence becomes constant at the latest after this number of steps.
 \end{proof}
 
 
@@ -926,28 +923,28 @@ $\oflts(\what{{i}}) = \oflts(\what{{i+1}})$ .
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Feasible solution} \label{section_feasible_solution}
-In this section we introduce feasible solution algorithm from~\cite{hawkins:1994}.
+In this section we introduce the Feasible solution algorithm (FSA) from~\cite{hawkins:1994}.
 It is based on the strong necessary condition described at Definition~\ref{strong_condition}. 
 The basic idea can be described as follows.
 
-Let us consider that we have some $\vec{m} \in Q^{(n,h)}$, then we can denote $O_m = \{{i \in  \set{ 1,2,\ldots , n } ;w_i = 1\}}$ and $Z_m = \{{j \in  \set{ 1,2,\ldots , n } ;w_j = 0\}}$ thus sets of indexes of positions where is $0$ respectively $1$ in vector $\vec{m}$. We can think about it as indexes of observations in $h$ set and $g$ set respectively. Then we can mark $\vec{m}^{(i,j)}$ as a vector which is constructed by swap of its ith and jth element where $i \in O$ and $j \in Z$. Such vector corresponds to vector $\vec{m_{swap}}$ which we marked at Definition~\ref{strong_condition}.
+Let us consider that we have some $\vec{m} \in Q^{(n,h)}$, let us denote $O_m = \{{i \in  \set{ 1,2,\ldots , n } ;w_i = 1\}}$ and $Z_m = \{{j \in  \set{ 1,2,\ldots , n } ;w_j = 0\}}$ the sets of indices of $0$s and $1$s in vector $\vec{m}$. We can think about it as indices of non-trimmed observations in the $h$-element subset and trimmed $n-h$ observations respectively. Let $\vec{m}^{(i,j)}$ be a vector which is constructed by swapping $i$th and $j$th element $\vec{m}$ where $i \in O_m$ and $j \in Z_m$. Such vector corresponds to the vector $\vec{m_{swap}}$ from Definition~\ref{strong_condition}.
 
-With this in mind, let us mark 
+With this in mind, put 
 \begin{equation}
-    \Delta S^{(\vec{m})}_{i,j} = \oflts(\vec{m}^{(i,j)}) - \oflts(\vec{m})
+    \Delta S^{(\vec{m})}_{i,j} = \oflts(\vec{m}^{(i,j)}) - \oflts(\vec{m}),
 \end{equation}
-thus a change of the LTS objective function by swapping one observation from not trimmed subset with another from trimmed subset. To calculate this we can obviously first calculate the  $\oflts(\vec{m})$ and  the $ \oflts(\vec{m}^{(i,j)})$ and finally subtract both results. Although it is a option, it it computationally exhaustive. So the question is if there is easier way of calculating $\Delta S^{(\vec{m})}_{i,j}$. The answer is positive and we describe it now.
+to express a change of the LTS objective function by swapping one observation from the non-trimmed subset with another from the trimmed subset. To calculate this we can obviously first calculate the  $\oflts(\vec{m})$, then the $ \oflts(\vec{m}^{(i,j)})$ and finally subtract both results. Although it is an option, it it computationally exhaustive. So the question is whether there is an easier way of calculating $\Delta S^{(\vec{m})}_{i,j}$. The answer is positive and we describe it now.
 
-Let us mark  
-$M = diag(\vec{m})$ and 
-$M^{(i,j)} = diag(\vec{m}^{(i,j)})$ and also
-$\vec{Z_M} = (\vec{X}^T\vec{M}^T\vec{X})$
-For now let us assume that we also have
+Let  
+$M = diag(\vec{m})$, 
+$M^{(i,j)} = diag(\vec{m}^{(i,j)})$ and 
+$\vec{Z_M} = (\vec{X}^T\vec{M}\vec{X})$.
+For now let us assume that we also have computed
 $\vec{Z_M}^{-1}$ and $\vec{\hat{w}} = \vec{Z_M}^{-1}\vec{X}^T\vec{M}\vec{y}$.
 We now want to calculate $\Delta S^{(\vec{m})}_{i,j}$.
-Let us mark vector of residuals 
-$\vec{r}^{(\vec{m})} = \vec{Y} - \vec{X} \vec{\hat{w}} $
-and also $d_{r,s} = \vec{x_r} \vec{Z_M}^{-1}  \vec{x_s} $
+Let 
+$\vec{r}^{(\vec{m})} = \vec{Y} - \vec{X} \vec{\hat{w}} $ be the vector of residuals
+and $d_{r,s} = \vec{x_r} \vec{Z_M}^{-1}  \vec{x_s} $,
 then by equation introduced in~\cite{atkinson1991simulated} we get
 
 \begin{equation} \label{hawkins:rovnice}
@@ -956,35 +953,35 @@ then by equation introduced in~\cite{atkinson1991simulated} we get
     {(1-d_{i,i})(1+d_{j,j}) + d_{i,j}^2}.
 \end{equation}
 
-Let us now describe the core of the algorithm. It is similar to the FAST-LTS algorithm in the sense of iterative refinement of a $h$-element subset. So let us assume that we have some vector  $\vec{m} \in Q^{(n,h)}$. No we compute  $\Delta S^{(\vec{m})}_{i,j}$ for all $i \in O$ and $j \in Z$. This may lead to several different outcomes:
+Let us now describe the core of the FSA. It is similar to the FAST-LTS algorithm in terms of iterative refinement of a $h$-element subset. Let us assume that we have some vector  $\vec{m} \in Q^{(n,h)}$. No we compute  $\Delta S^{(\vec{m})}_{i,j}$ for all $i \in O_m$ and $j \in Z_m$. This may lead to several different outcomes:
 \begin{enumerate}
-    \item all $S^{(\vec{m})}_{i,j}$ are non-negative
-    \item one $S^{(\vec{m})}_{i,j}$ is negative
-    \item multiple $S^{(\vec{m})}_{i,j}$ are negative
+    \item all $S^{(\vec{m})}_{i,j}$ are non-negative,
+    \item one $S^{(\vec{m})}_{i,j}$ is negative,
+    \item multiple $S^{(\vec{m})}_{i,j}$ are negative.
 \end{enumerate}
 
-In the first case, all $\oflts(\vec{m}^{(i,j)})$ are higher or the same as the $\oflts(\vec{m})$ so none swap will lead to an improvement. That also means that strong necessary condition is satisfied and the algorithm ends.
+In the first case, all the $\oflts(\vec{m}^{(i,j)})$ are greater or the same as the $\oflts(\vec{m})$, so none swap will lead to an improvement. That also means that strong necessary condition is satisfied and the algorithm ends.
 
-In the second and third case, the strong necessary condition is not satisfied, and we can make the swap. In the second case, it is easy which one to choose because we have only one. In the third case, we have a couple of options again:
+In the second and the third case, the strong necessary condition is not satisfied, and we can make the swap decreasing the objective function. In the second case, it is easy which one to choose because we have only one. In the third case, we have a couple of options again:
 \begin{enumerate}
-    \item use the first swap that leads to the improvement
-    \item from all possible swaps choose one that has highest improvement value  $\oflts(\vec{m}^{(i,j)})$
-    \item use the first swap that has improvement higher than some given threshold
+    \item use the first swap that leads to the improvement,
+    \item from all possible swaps choose one that has highest improvement value  $\oflts(\vec{m}^{(i,j)})$,
+    \item use the first swap that has improvement higher than some given threshold.
 \end{enumerate}
 
-In terms of complexity, all three options give the same results, because to find a feasible solution you need to evaluate all pair swaps. In practice, the third option is the winner because it leads to the least amount of iterations. On the other hand, as we said this does not improve the complexity of the algorithm, so from now on let us assume that we use the case number two.
-So if there negative  $S^{(\vec{m})}_{i,j}$, we choose the one with the lowest value, make the swap and repeat the process.  
+In practice, the third option is the winner, because it gives parameter which can be used to affect number if iterations of the algorithm. On the other hand, none of the options improve the time complexity of the algorithm, so from now on let us assume that we use the case number two.
+So if there are some negative  $S^{(\vec{m})}_{i,j}$, we choose the one with the least value, make the swap and repeat the process.  
 
 The algorithm ends when there is no possible improvement, i.e., when all $S^{(\vec{m})}_{i,j}$ are non-negative.
-The number of iterations needed till algorithm stops is usually quite low, but for practical usage, it is still convenient to use some parameter $i_{max}$ after which algorithm stops without finding $h$-element subset satisfying the strong necessary condition. 
-One step of this algorithm we call optimal swap additive algorithm (OSAA) is described by the following pseudocode.
+The number of iterations needed till algorithm stops is usually quite low, but for practical usage, it is still convenient to use some parameter $i_{max}$ to bound the number of swaps without finding an $h$-element subset satisfying the strong necessary condition. 
+One step of this algorithm, called optimal swap additive algorithm (OSAA), is described by the following pseudocode.
 
 \begin{algorithm}[H]
     \label{alg:optimal:improvement}
     \KwIn{$\vec{Z_M}^{-1} \in \mathbb{R}^{p \times p}$, 
     $\vec{r}^{(\vec{m})} \in \mathbb{R}^{n \times 1}$, 
     $O_m$, $Z_m$, $\vec{X} \in \mathbb{R}^{n \times p} $}
-    \KwOut{ $\what{{new}}$, $m_{new}$ }
+    \KwOut{ $i_{swap}, j_{swap}, S$ }
     \caption{OSAA}
     
     $S \gets 0$\;
@@ -998,7 +995,7 @@ One step of this algorithm we call optimal swap additive algorithm (OSAA) is des
             $d_{i,i} = \vec{x_{m_i}} \vec{Z_M}^{-1} \vec{x^T_{m_i}}$ \;
             $d_{i,j} = \vec{x_{m_i}} \vec{Z_M}^{-1} \vec{x^T_{m_j}}$ \;
             $d_{j,j} = \vec{x_{m_j}} \vec{Z_M}^{-1} \vec{x^T_{m_j}}$ \;
-            $S_{tmp} = calculate~\Delta S^{(\vec{m})}_{i,j}~by$ \eqref{hawkins:rovnice} \;
+            $S_{tmp} = calculate~\Delta S^{(\vec{m})}_{i,j}~by$ \eqref{hawkins:rovnice}\;
             \If{$S_{tmp} < S$}{
                 $S \gets S_{tmp}$\;
                 $i_{swap} \gets m_i$\;
@@ -1016,21 +1013,18 @@ One step of this algorithm we call optimal swap additive algorithm (OSAA) is des
 
 
 \begin{proof}
-All $d_{i,i}$ and $d_{j,j}$ can be calculated before the for loops. 
-To calculate $d_{i,i}$ resp. $d_{j,j}$ we need co multiply vector $\in \mathbb{R}^p$ with matrix  $\in \mathbb{R}^{p \times p}$ and vector $\in \mathbb{R}^p$ that is $\mathcal{O}(p^2)$. For all $d_{i,i}$ this have to be done $h$ times and for $d_{j,j}$ $n-h$ times. So all together it is $\mathcal{O}(np^2)$. 
-
-The two loops go through all pairs; thus it is $\mathcal{O}(n^2)$. $d_{i,j}$ can be calculated in the loop, and it can be done in $\mathcal{O}(p^2)$.
+All $d_{i,i}$ and $d_{j,j}$ can be calculated before the for loops; we need co multiply vector $\in \mathbb{R}^p$ with matrix from  $\mathbb{R}^{p \times p}$ and vector from $\mathbb{R}^p$ that is $\mathcal{O}(p^2)$. For all $d_{i,i}$ this have to be done $h$ times and for $d_{j,j}$ $n-h$ times. So all together it is $\mathcal{O}(np^2)$. The two main loops go through all pairs; thus it is $\mathcal{O}(n^2)$ and $d_{i,j}$, which can be calculated in $\mathcal{O}(p^2)$, must be calculated inside the loops each time.
 
 If we put everything together we get 
 $\mathcal{O}(np^2 + n^2p^2) \sim \mathcal{O}(n^2p^2)$.
 \end{proof}
 
 
-One run of this iteration process leads to some local optimum, i.e., set satisfying the strong necessary condition. In~\cite{hawkins:1994} they refer to to this set as to \defterm{feasible set}.
-This because it is not global optima the algorithm needs to be run multiple times say $t$ times. A $h$  subset with the smallest value of the objective function is chosen as the final solution.
+One run of this iteration process leads to sort of a local optimum, i.e., to a $h$-element subset satisfying the strong necessary condition. In~\cite{hawkins:1994} they refer to this set as to the \defterm{feasible set}.
+As a process is not guaranteed to find the global minimum, the algorithm needs to be run multiple times say, $t$ times. The $h$-element subset corresponding to the solution with the smallest value of the objective function is chosen as the final solution.
 
-Discussion about how to find the initial $h$-element subset resp. initial $\vec{m}$ was already discussed when describing FAST-LTS algorithm.
-More importantly, as we already suggested $h$-element subset satisfying weak necessary condition do not need to satisfy strong necessary condition so passing such a $h$-element subset as input to this algorithm is another option and we discuss it in detail later. We now describe a feasible solution algorithm (FSA) with pseudocode, and we assume that we already have some function that generates for us $h$-element subsets, e.g., random one. 
+The problem of finding the initial $h$-element subset $\vec{m}$ was already discussed when describing the FAST-LTS algorithm.
+More importantly, an $h$-element subset satisfying the weak necessary condition do not need to satisfy the strong necessary condition, so passing such a $h$-element subset as input to this algorithm is another option which we discuss in Section~\ref{sectioncombined}. We now describe the FSA using a pseudocode; we assume that we have function $\texttt{generate\_intial\_subset}$ that generates $h$-element subsets. 
 
 \newcommand\mycommfont[1]{\footnotesize\ttfamily\textcolor{blue}{#1}}
 \SetCommentSty{mycommfont}
@@ -1044,20 +1038,19 @@ More importantly, as we already suggested $h$-element subset satisfying weak nec
     \SetKw{Break}{break}
     $\vec{\hat{w}_{final}} \gets \emptyset$\;
     $\vec{m_{final}} \gets \emptyset$\;
-    $R \gets \emptyset$\;
+    $RSS_{min} \gets \infty$\;
 
     \For{$k \gets 0$ \textbf{to} $t$}{
         $\vec{m} \gets generate\_intial\_subset()$  \tcp*{e.g. random $\vec{m} \in Q^{(n,h)}$}
-
     $l \gets 0$\;
         \While{$True$}{           
            $\vec{M} \gets diag(\vec{m})$\;
-       $\vec{Z_M} = (\vec{X}^T\vec{M}^T\vec{X})$\;
-       $\vec{Z_M}^{-1} = calculate~inversion~of~\vec{Z_M}$\;
-       $\vec{\hat{w}} \gets \of^{(OLS,\vec{M}\vec{X},  \vec{M}\vec{y} )}$\;
-       $\vec{r}^{(\vec{m})} = \vec{Y} - \vec{X} \vec{\hat{w}}$\;
+       $\vec{Z_M} = (\vec{X}^T\vec{M}\vec{X})$\;
+       $\vec{Z_M}^{-1} \gets inversion~of~\vec{Z_M}$\;
+       $\vec{\hat{w}} \gets \oflts(m)$\;
+       $\vec{r}^{(\vec{m})} \gets \vec{Y} - \vec{X} \vec{\hat{w}}$\;
       
-    $S_{i,j}, i, j$ = 
+    $i, j, S_{i,j}$ = 
        $OSAA$(
             $\vec{Z_M}^{-1}$, 
                 $\vec{r}^{(\vec{m})}$, 
@@ -1066,28 +1059,31 @@ More importantly, as we already suggested $h$-element subset satisfying weak nec
                         $\vec{X}$)\;
 
             \If{$ S_{i,j} \geq 0$ \textbf{or}  $l \geq i_{max}$ }{
-                $\vec{m_{final}} \gets \vec{m}$\;
-                $\vec{\hat{w}} \gets \of^{(OLS,\vec{M}\vec{X},  \vec{M}\vec{y} )}$\;
-                $R \gets R \cup \{\vec{m_{final}} , \vec{\hat{w}} \}$\;
+                $RSS_{new} \gets \of^{(OLS,\vec{M}\vec{X}, \vec{M}\vec{y})}$\;
+                \If{$RSS_{new} < RSS_{min}$ }{
+                    $RSS_{min} \gets RSS_{new}$\;
+                    $\vec{m_{final}} \gets \vec{m}$\;
+                    $\vec{\hat{w}_{final}} \gets \vec{\hat{w}}$\;
+                }
                 \Break\;
             }
             \Else {
                 $\vec{m} \gets \vec{m}^{(i,j)}$\;
+                $l \gets l + 1$\;
             }
         }        
     }
-    $\vec{m_{final}}, \vec{\hat{w}_{final}}  \gets $ select best from $R$ based on smallest value of $\oflts$\;
     \Return{ $\what{{final}}$\,, $\vec{m_{final}}$ }\;
 \end{algorithm}
 
 
 
 \begin{observation}  \label{time:complexity:fsa}
-In the main loop beside running OSAA which time complexity is $\mathcal{O}(n^2p^2)$ we need to recalculate $\vec{\hat{w}}$ using the matrix inversion which time complexity is $\mathcal{O}(p^2n)$ (see Observation~\ref{time:complexity:ols:inversion}).
-Main loop of the FSA runs up to $l$ iterations for each start $t$. So the time complexity of whole algorithm is  $\mathcal{O}( lt(n^2p^2 + p^2n)  )$. Because $l$ and $t$ are usually quite low, we can see that the FSA time complexity is dominated by the OSAA. 
+In the main loop, beside running OSAA whose time complexity is $\mathcal{O}(n^2p^2)$, we need to recalculate $\vec{\hat{w}}$ using the matrix inversion with time complexity $\mathcal{O}(p^2n)$ (see Observation~\ref{time:complexity:ols:inversion}).
+The main loop of the FSA runs up to $i_{max}$ iterations for each start $t$. So the time complexity of whole algorithm is  $\mathcal{O}( i_{max}t(n^2p^2 + p^2n)  )$. Because $i_{max}$ is usually quite low, we can see that the FSA time complexity is dominated by the OSAA. 
 \end{observation} 
 
-In this section, we've described the FSA algorithm. In the next section, we introduce a very similar algorithm, but which have higher numerical stability and also contains various optimizations for higher performance.
+In this section, we have described the FSA algorithm. In the next section, we introduce a very similar algorithm having better numerical stability and performance.
 
 
 
@@ -1102,9 +1098,10 @@ In this section, we've described the FSA algorithm. In the next section, we intr
 \section{OEA, MOEA, MMEA} \label{oeamoeammea}
 %three exchanging algorithms from Agulló, 2000
 
-In the FSA algorithm, we assumed that after each cycle of OSAA~\ref{alg:optimal:improvement} we need to recalculate inversion $(\vec{X}^T\vec{X})$ together with $\vec{\hat{w}}$. In this section, we introduce a different approach described in~\cite{agullo2001new} so that we can update it instead of recalculating. Moreover, these ideas lead to bounding condition of FSA which not only improves the speed but also gives options to construct different algorithms. 
+In the FSA, we assumed that after each cycle of OSAA we need to recalculate the inversion of $\vec{X}^T\vec{M}\vec{X}$ together with $\vec{\hat{w}}$. In this section, we introduce a different approach described in~\cite{agullo2001new}.
+Moreover, these ideas lead not only to speeding up the FSA but also to construction of other algorithms. 
 
-In Section~\ref{section_feasible_solution} we introduce additive formula~\eqref{hawkins:rovnice} which corresponds to $\oflts(\vec{m}^{(i,j)}) - \oflts(\vec{m})$. Let us now try to obtain similar formula but with the focus on how the individual elements in our current algorithm change namely the inversion $\vec{Z^{-1}}$ and $\vec{\hat{w}}$. We also split the idea of swap the $i, j$ into the insertion of $j$ and remove of $i$. Thus we describe how individual elements are affected after adding one row and also removing one row. Moreover, during this derivation, we obtain two different approaches to calculate it. Both are important, and we recapitulate them after.
+In Section~\ref{section_feasible_solution} we have introduced additive formula~\eqref{hawkins:rovnice} which value is $\oflts(\vec{m}^{(i,j)}) - \oflts(\vec{m})$. Let us now try to obtain a similar formula but with focus on how the individual elements in our current algorithm changes, namely the inversion iof $\vec{X}^T\vec{M}\vec{X}$ and $\vec{\hat{w}}$. We also split the process of swapping $i$th and $j$th elements into the insertion of $j$th and removal of $i$th element.
 
 
 
@@ -1115,8 +1112,7 @@ In Section~\ref{section_feasible_solution} we introduce additive formula~\eqref{
 
 
 
-$\vec{Z} = \vec{X}^T\vec{X}$
-Let us denote $\vec{A} = (\vec{X}, \vec{y})$, a matrix $\vec{X}$ expanded by one column of corresponding dependent variables and and $\vec{\tilde{Z}} = \vec{A}^T\vec{A}$. Then
+Let us denote $\vec{Z} = \vec{X}^T\vec{X}$ and let $\vec{A} = (\vec{X} \vec{y})$ stand for the matrix $\vec{X}$ containing target variables and $\vec{\tilde{Z}} = \vec{A}^T\vec{A}$, then
 
 \[  \numberthis \label{matrixZ}
     \vec{\tilde{Z}} = \begin{bmatrix}
@@ -1124,22 +1120,21 @@ Let us denote $\vec{A} = (\vec{X}, \vec{y})$, a matrix $\vec{X}$ expanded by one
     \vec{y}^T\vec{X} & \vec{y}^T\vec{y}
   \end{bmatrix} .
 \]
-Notice that $\vec{Z}$ is symmetric square matrix $\in \mathbb{R}^ {p \times p}$, moreover we suppose that $Z$ is regular. $\vec{X}^T\vec{y}$ is $p$ dimensional column vector, $\vec{y}^T\vec{X}$ is $p$ dimensional row vector and $\vec{y}^T\vec{y}$ is a scalar.
+Notice that $\vec{Z}$ is a symmetric square matrix from $\mathbb{R}^ {p \times p}$, we also assume that $Z$ is regular. $\vec{X}^T\vec{y}$ is $p$ dimensional column vector, $\vec{y}^T\vec{X}$ is $p$ dimensional row vector and $\vec{y}^T\vec{y}$ is a scalar. The
 OLS estimate $\vec{\hat{w}}$ is then given by
 \begin{equation}
     \vec{\hat{w}}^{(OLS,\vec{X}, \vec{y})} = \vec{Z}^{-1} \vec{X}^T\vec{y}
 \end{equation}
-and the RSS by 
+and the $RSS(\vec{\hat{w}})$ by 
 
 \begin{equation}
-    RSS = \vec{y}^T\vec{y} - \vec{y}^T\vec{X}\vec{\hat{w}}.
+    RSS(\vec{\hat{w}}) = \vec{y}^T\vec{y} - \vec{y}^T\vec{X}\vec{\hat{w}}.
 \end{equation}
-Also, note that all necessary matrix multiplications are already in the matrix $\vec{\tilde{Z}}$.
 
-Let us show that $RSS$ can  be expressed as ratio of determinants $\det(\vec{\tilde{Z}})$ and $\det(\vec{Z})$ (using determinant rule for block matrices) so that 
+Let us show that the $RSS(\vec{\hat{w}})$ can  be expressed as the fraction of determinants $\det(\vec{\tilde{Z}})$ and $\det(\vec{Z})$ (using determinant rule for block matrices) so that 
 
 \begin{align*} \numberthis \label{rssdeterminant} 
-    RSS &= \frac{\det(\vec{\tilde{Z}})}{\det(\vec{Z})} \\ &= \frac{
+    RSS(\vec{\hat{w}}) &= \frac{\det(\vec{\tilde{Z}})}{\det(\vec{Z})} \\ &= \frac{
     \det\begin{pmatrix}
             \vec{Z} & \vec{X}^T\vec{y} \\
             \vec{y}^T\vec{X} & \vec{y}^T\vec{y}
@@ -1150,23 +1145,23 @@ Let us show that $RSS$ can  be expressed as ratio of determinants $\det(\vec{\ti
         &= \vec{y}^T\vec{y} - \vec{y}^T\vec{X}\vec{\hat{w}}.
 \end{align*}
 
-If we assume that $RSS > 0$ then $\vec{\tilde{Z}}^{-1}$ can be expressed as 
+If we assume that $RSS(\vec{\hat{w}}) > 0$, then $\vec{\tilde{Z}}^{-1}$ can be expressed as 
 
 \[ \numberthis
     \vec{\tilde{Z}}^{-1} = 
     \begin{bmatrix}
-        \vec{Z}^{-1}+\dfrac{\vec{\hat{w}} \vec{\hat{w}}}{RSS} & - \dfrac{\vec{\hat{w}}^T}{RSS} \\[6pt]
-        - \dfrac{\vec{\hat{w}^{T}}}{RSS} & \dfrac{1}{RSS}
+        \vec{Z}^{-1}+\dfrac{\vec{\hat{w}} \vec{\hat{w}}}{RSS(\vec{\hat{w}})} & - \dfrac{\vec{\hat{w}}^T}{RSS(\vec{\hat{w}})} \\[6pt]
+        - \dfrac{\vec{\hat{w}^{T}}}{RSS(\vec{\hat{w}})} & \dfrac{1}{RSS(\vec{\hat{w}})}
     \end{bmatrix}.
 \]
-For following equations it is important to notice that for any two row vectors $\vec{c_i} = (\vec{x_i}, y_i)$  and $\vec{c_j} = (\vec{x_j}, y_j)$, $\vec{c_i}, \vec{c_j} \in \mathbb{R}^{1 \times p+1}$ is 
+For the following equations it is important to notice that for any two row vectors $\vec{c_i} = (\vec{x_i}, y_i)$  and $\vec{c_j} = (\vec{x_j}, y_j)$ from $\mathbb{R}^{p+1}$ it holds that 
 
 \begin{equation}
-    \vec{c_i} \vec{\tilde{Z}}^{-1} \vec{c_i^T} = \dfrac{ ( y_i - \vec{x_i}\vec{\hat{w}} )^2 }{RSS}  + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}
+    \vec{c_i} \vec{\tilde{Z}}^{-1} \vec{c_i^T} = \dfrac{ ( y_i - \vec{x_i}\vec{\hat{w}} )^2 }{RSS(\vec{\hat{w}})}  + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}
 \end{equation}
 and
 \begin{equation}
-    \vec{c_j} \vec{\tilde{Z}}^{-1} \vec{c_j^T} = \dfrac{ ( y_j - \vec{x_j}\vec{\hat{w}} ) ( y_i - \vec{x_i}\vec{\hat{w}} ) }{RSS}  + \vec{x_j}\vec{Z}^{-1}\vec{x_j^T}
+    \vec{c_j} \vec{\tilde{Z}}^{-1} \vec{c_j^T} = \dfrac{ ( y_j - \vec{x_j}\vec{\hat{w}} ) ( y_i - \vec{x_i}\vec{\hat{w}} ) }{RSS(\vec{\hat{w}})}  + \vec{x_j}\vec{Z}^{-1}\vec{x_j^T}.
 \end{equation}
 
 
@@ -1175,40 +1170,40 @@ and
 
 \subsubsection*{Including the observation} 
 
-Using above let us express how the determinant $\det(\vec{Z})$ and the inverse of the $vec{Z}^{-1}$ changes when observation $\vec{c_i} = (\vec{x_i}, y_i)$ is added to the matrix $\vec{A}$. First let us notice that if we add this row to $\vec{A}$, then  $\vec{Z}$ changes as
+Using the formulas above, let us express how the determinant $\det(\vec{Z})$ and the inverse of the $\vec{Z}^{-1}$ changes when an observation $\vec{c_i} = (\vec{x_i}, y_i)$ is added to the matrix $\vec{A}$. First let us notice that if we add this row to $\vec{A}$, then  $\vec{Z}$ changes as
 
 \[ \numberthis \label{addedrow}
 \begin{bmatrix}
-    x_{11} & x_{12} & \dots  & x_{1n} & x_{i_1}  \\
-    x_{21} & x_{22} & \dots  & x_{2n} & x_{i_2} \\
+    x_{11} & x_{12} & \dots  & x_{1n} & x_{i1}  \\
+    x_{21} & x_{22} & \dots  & x_{2n} & x_{i2} \\
     \vdots & \vdots & \vdots & \ddots & \vdots \\
-    x_{p1} & x_{p2} & \dots  & x_{pn} & x_{i_p}     
+    x_{p1} & x_{p2} & \dots  & x_{pn} & x_{ip}     
 \end{bmatrix}
 \begin{bmatrix}
     x_{11} & x_{12}  & \dots  & x_{1p} \\
     x_{21} & x_{22}  & \dots  & x_{2p} \\
     \vdots  & \vdots & \ddots & \vdots \\
     x_{n1} & x_{n2}  & \dots  & x_{np} \\
-    x_{i_1} & x_{i_2}  & \dots  & x_{i_p}
+    x_{i1} & x_{i2}  & \dots  & x_{ip}
 \end{bmatrix}
  = \vec{X}^T\vec{X} + \vec{x_i^T}\vec{x_i} = \vec{Z} + \vec{x_i^T}\vec{x_i},
 \]
-so determinant with appended row changes as
+so the determinant with appended row changes as
 \begin{equation} \label{udpateddeterminant}
     \det(\vec{Z} + \vec{x_i^T}\vec{x_i}) = det(\vec{Z})(1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}).
 \end{equation}
 Finally the inversion $\vec{Z}^{-1}$ can be obtained using Sherman-Morrison formula~\cite{bartlett1951inverse} so that 
 \begin{equation} \label{shermanmorris}
-    (\vec{Z} + \vec{x_i^T}\vec{x_i})^{-1} = \vec{Z}^{-1} - \dfrac{\vec{Z}^{-1}\vec{x_i^T}\vec{x_i}\vec{Z}^{-1}}{1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}}
+    (\vec{Z} + \vec{x_i^T}\vec{x_i})^{-1} = \vec{Z}^{-1} - \dfrac{\vec{Z}^{-1}\vec{x_i^T}\vec{x_i}\vec{Z}^{-1}}{1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}}.
 \end{equation}
 
 It is now convenient to denote 
 \begin{equation}
-    b = \dfrac{-1}{(1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T})},  b \in \mathbb{R},
+    b = \dfrac{-1}{(1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T})}
 \end{equation}
 and 
 \begin{equation} \label{agullo_u}
-    \vec{u} = \vec{Z}^{-1}\vec{x_i^T},      \vec{u} \in \mathbb{R}^{p \times 1}.
+    \vec{u} = \vec{Z}^{-1}\vec{x_i^T}.
 \end{equation}
 
 Then~\eqref{shermanmorris} can be written as
@@ -1216,19 +1211,18 @@ Then~\eqref{shermanmorris} can be written as
     (\vec{Z} + \vec{x_i^T}\vec{x_i})^{-1} = \vec{Z}^{-1} + b\vec{u}\vec{u^T}.
 \end{equation}
 
-Given that last missing piece to express updated $\vec{\hat{w}}$ is appended $\vec{X}^T\vec{y}$ by one row, which can be simply expressed by same idea as~\eqref{addedrow} so that updated $\vec{\hat{w}}$ which we denote as $\vec{\overline{\hat{w}}}$ is 
+Now, using the same idea as in~\eqref{addedrow} the updated $\vec{\hat{w}}$, which we denote as $\vec{\overline{\hat{w}}}$, is 
 \begin{equation}
     \vec{\overline{\hat{w}}} = (\vec{Z}^{-1} + b\vec{u}\vec{u^T})(\vec{X^T}\vec{y} + y_i\vec{x_i^T}).
 \end{equation}
-This can be simplified so that we get
-\todo{mention the mistake in original paper? w + (y - xw)bu ??}
+This can be simplified so that we get \footnote{In~\cite{agullo2001new} is a typing error in this formula so that $ \vec{\overline{\hat{w}}} = \vec{\hat{w}} + (y_i - \vec{x_i}\vec{\hat{w}})b\vec{u}$ is used instead of $ \vec{\overline{\hat{w}}} = \vec{\hat{w}} - (y_i - \vec{x_i}\vec{\hat{w}})b\vec{u}$}
 \begin{equation} \label{thetaplus}
     \vec{\overline{\hat{w}}} = \vec{\hat{w}} - (y_i - \vec{x_i}\vec{\hat{w}})b\vec{u}.
 \end{equation}
-Least but not last we want to express updated $RSS$ which we denote as $\overline{RSS}$. This can be done easily from~\eqref{rssdeterminant} and~\eqref{udpateddeterminant} as 
+Last but not least, we want to express the updated $RSS(\vec{\hat{w}})$. This can be done easily from~\eqref{rssdeterminant} and~\eqref{udpateddeterminant} as 
 
 \begin{equation}
-    \overline{RSS} =  RSS + \dfrac{(y_i - \vec{x_i}\vec{\hat{w})^2}}{(1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T})}.
+    RSS(\vec{\overline{\hat{w}}}) =  RSS(\vec{\hat{w}}) + \dfrac{(y_i - \vec{x_i}\vec{\hat{w})^2}}{(1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T})}.
 \end{equation}
 It is convenient to mark 
 \begin{equation} \label{gamma:plus}
@@ -1236,9 +1230,9 @@ It is convenient to mark
 \end{equation}
 so that 
 \begin{equation} \label{rssplus}
-    \overline{RSS} =  RSS + \gamma^{+}(\vec{c_i})
+    RSS(\vec{\overline{\hat{w}}}) =  RSS(\vec{\hat{w}}) + \gamma^{+}(\vec{c_i})
 \end{equation}
-We can see that $\gamma^{+}(\vec{c_i})$ measures how $RSS$ increase after we append our dataset with observation $\vec{c_i}$, thus $\gamma^{+}(\vec{c_i}) \geq 0$
+We can see that $\gamma^{+}(\vec{c_i})$ measures how $RSS(\vec{\hat{w}})$ increases after we extend the data set with observation $\vec{c_i}$, thus $\gamma^{+}(\vec{c_i}) \geq 0$.
 
 
 
@@ -1246,9 +1240,9 @@ We can see that $\gamma^{+}(\vec{c_i})$ measures how $RSS$ increase after we app
 
 \subsubsection*{Excluding the observation}
 
-Because we want to express both increment and decrement change in our dataset, let us now focus how $RSS$, $\vec{Z^{-1}}$ and $\vec{\hat{w}}$  changes after we exclude one observation. 
+Because we want to express both increment and decrement change in our dataset, let us now focus on how $RSS(\vec{\hat{w}})$, $\vec{Z^{-1}}$ and $\vec{\hat{w}}$  changes after we exclude one observation. 
 
-Consider that we already included one observation $\vec{c_i}$ in our dataset and mark $\vec{\overline{Z}} = \vec{Z} + \vec{x_i} \vec{x_i^T} $. If we exclude one observation $\vec{c_j} = (\vec{x_j}, y_j) \in \mathbb{R}^{p+1 \times 1} $ from already updated matrix $\vec{A}$ then the determinant $\det(\vec{\overline{Z}})$  changes as
+Let us assume that we have already included one observation $\vec{c_i}$ in our dataset and mark $\vec{\overline{Z}} = \vec{Z} + \vec{x_i} \vec{x_i^T} $. If we exclude one observation $\vec{c_j} = (\vec{x_j}, y_j)$ from already updated matrix $\vec{A}$, then the determinant $\det(\vec{\overline{Z}})$  changes as
 
 \begin{equation} 
     \det(\vec{\overline{Z}} - \vec{x_j^T}\vec{x_j}) = det(\vec{\overline{Z}})(1 - \vec{x_j}\vec{\overline{Z}}^{-1}\vec{x_j^T})
@@ -1271,26 +1265,26 @@ so that we can write
     (\vec{\overline{Z}} + \vec{x_j^T}\vec{x_j})^{-1} = \vec{Z}^{-1} - \overline{b}\vec{\overline{u}}\vec{\overline{u}^T}.
 \end{equation}
 
-Using the same approach as before we can denote express down-dated estimate which we denote as $\vec{\overline{\overline{\hat{w}}}}$
+Using the same approach as before we can express the up-dated estimate denoted as $\vec{\overline{\overline{\hat{w}}}}$:
 
 \begin{equation} \label{thetaminus}
     \vec{\overline{\overline{\hat{w}}}} =  +\vec{\overline{\hat{w}}} (y_j - \vec{x_j}\vec{\overline{\hat{w}}}) \overline{b} \vec{\overline{u}}.
 \end{equation}
 
-Finally lets also express updated $\overline{RSS}$ which we denote as $\overline{\overline{RSS}}$. This can be done easily from~\eqref{rssdeterminant} and~\eqref{udpateddeterminant} and~\eqref{updatedinversion2} as 
+The updated $RSS(\vec{\overline{\hat{w}}})$ can be expressed using~\eqref{rssdeterminant} and~\eqref{udpateddeterminant} and~\eqref{updatedinversion2} as 
 
 \begin{equation}
-    \overline{\overline{RSS}} =  \overline{RSS} - \dfrac{(y_j - \vec{x_j}\vec{\overline{\hat{w}})^2}}{(1 - \vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T})}.
+    RSS(\vec{\overline{\hat{w}}}) =  RSS(\vec{\overline{\hat{w}}}) - \dfrac{(y_j - \vec{x_j}\vec{\overline{\hat{w}})^2}}{(1 - \vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T})}.
 \end{equation}
 
-Let us mark
+Putting
 
 \begin{equation} \label{gamma:minus}
     \gamma^{-}(\vec{c_j}) = \dfrac{(y_j - \vec{x_j}\vec{\overline{\hat{w}})^2}}{(1 - \vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T})},
 \end{equation}
-so that 
+we get
 \begin{equation} \label{rssminus}
-    \overline{\overline{RSS}} =  \overline{RSS} - \gamma^{-}(\vec{c_j}).
+    RSS(\vec{\overline{\hat{w}}}) =  RSS(\vec{\overline{\hat{w}}}) - \gamma^{-}(\vec{c_j}).
 \end{equation}
 
 
@@ -1302,37 +1296,37 @@ so that
 Let us now express the equation for including and excluding observation at once. First, notice that from~\eqref{updatedinversion2} we can express 
 
 \begin{equation} \label{xjoverlinez}
-    \vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T}) =  \vec{x_j}\vec{Z}^{-1}\vec{x_j^T}) - 
+    \vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T} =  \vec{x_j}\vec{Z}^{-1}\vec{x_j^T} - 
     \dfrac{( \vec{x_i}\vec{Z}^{-1}\vec{x_j^T})^2}{1 +  \vec{x_i}\vec{Z}^{-1}\vec{x_i^T})},
 \end{equation}
- so that 
+and get 
 
  \begin{gather}
  \begin{align*} \numberthis
     &\det(\vec{Z} + \vec{x_i^T}\vec{x_i} - \vec{x_j^T}\vec{x_j}) = \\
-    \det(\vec{Z})(1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T} -& \vec{x_j}\vec{Z}^{-1}\vec{x_j^T} +  ( \vec{x_i}\vec{Z}^{-1}\vec{x_j^T})^2 - \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}\vec{x_j}\vec{Z}^{-1}\vec{x_j^T} )
+    \det(\vec{Z})(1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T} -& \vec{x_j}\vec{Z}^{-1}\vec{x_j^T} +  ( \vec{x_i}\vec{Z}^{-1}\vec{x_j^T})^2 - \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}\vec{x_j}\vec{Z}^{-1}\vec{x_j^T} ).
 \end{align*}
 \end{gather}
 
-Finally we can express the $\overline{\overline{RSS}} $ as
+Finally, we can express the $RSS(\vec{\overline{\hat{w}}})$ as
 
 \begin{equation} \label{updaterss}
-    \overline{\overline{RSS}}  = RSS\rho(\vec{c_i}, \vec{c_j}),
+    RSS(\vec{\overline{\hat{w}}})  = RSS(\vec{\hat{w}})\rho(\vec{c_i}, \vec{c_j}),
 \end{equation}
 where
 \begin{equation} \label{agullo:rovnice}
     \rho(\vec{c_i}, \vec{c_j}) =
      \dfrac
-     {(1+\vec{x_i}\vec{Z}^{-1}\vec{x_i^T} + \dfrac{e_j^2}{RSS})
-        (1 - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T} - \dfrac{e_i^2}{RSS} )+
-        (\vec{x_i}\vec{Z}^{-1}\vec{x_j^T} + \dfrac{e_i e_j}{RSS} )^2}
+     {(1+\vec{x_i}\vec{Z}^{-1}\vec{x_i^T} + \dfrac{e_j^2}{RSS(\vec{\hat{w}})})
+        (1 - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T} - \dfrac{e_i^2}{RSS(\vec{\hat{w}})} )+
+        (\vec{x_i}\vec{Z}^{-1}\vec{x_j^T} + \dfrac{e_i e_j}{RSS(\vec{\hat{w}})} )^2}
     {1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}  - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T}  + ( \vec{x_i}\vec{Z}^{-1}\vec{x_j^T})^2 -   \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}\vec{x_j}\vec{Z}^{-1}\vec{x_j^T} },
 \end{equation}
 where $e_i = y_i - x_i\vec{\hat{w}}$ and $e_j = y_j - x_j\vec{\hat{w}}$.
 
-We can see that this formula is similar to the~\eqref{hawkins:rovnice} but here the $\rho(\vec{c_i}, \vec{c_j})$ represents multiplicative increment. Moreover $0 < \rho(\vec{c_i}, \vec{c_j}) $ and if $0 < \rho(\vec{c_i}, \vec{c_j})< 1$ then the swap leads to improvement in terms of feasible solution.
+We can see that this formula is similar to~\eqref{hawkins:rovnice} but here $\rho(\vec{c_i}, \vec{c_j})$ represents multiplicative increment. Moreover if $0 < \rho(\vec{c_i}, \vec{c_j})< 1$ then the swap leads to improvement in terms of the value of the objective function.
 
-We are now able to modify the FSA so that we do not need to recompute $\vec{\hat{w}}$ and inversion $(\vec{X}^T \vec{X})^{-1}$ but we can update it. Authors call this algorithm optimal exchange algorithm (OEA)
+We are now able to modify the FSA so that we do not need to recompute $\vec{\hat{w}}$ and inversion $(\vec{X}^T \vec{X})^{-1}$ but only to update it. The authors of~\cite{agullo2001new} call this algorithm optimal exchange algorithm (OEA).
 
 
 
@@ -1342,26 +1336,22 @@ We are now able to modify the FSA so that we do not need to recompute $\vec{\hat
 %%%%%%%%%%     O E A    A L G O R I TH M        %%%%%%%%%%%%%
 
 \subsection{The OEA and its properties}
-We can apply theory from the previous section to the FSA. Sets $O_m$ and $Z_m$ (see Section~\ref{section_feasible_solution}) contains indexes of observations to exclude and include respectively.
-The matrix $\vec{Z_M}$ can be used instead of the matrix $\vec{Z}$ and
- $\vec{X_M}$ with $\vec{y_M}$ to calculate $\vec{\hat{w}}$. 
+We can apply the previous section to the FSA. The sets $O_m$ and $Z_m$ (see Section~\ref{section_feasible_solution}) contain indices of observations to be excluded and included within the swap.
 
-In terms of the FSA~\ref{alg:feasible_solution} we first need to change the OSAA.  There are only minor tweaks. First, we need to pass one more argument, and that is $RSS$. Second, We want to find minimal $\rho(\vec{c_i}, \vec{c_j})$ calculated by~\eqref{agullo:rovnice} so that $0 < \rho(\vec{c_i}, \vec{c_j}) < 1 $. Other parts of the algorithm remains the same. Time complexity thus remains the same.
+In terms of the FSA, as described in Algorithm~\ref{alg:feasible_solution}, we first need to change the OSAA.  There are only minor tweaks. First, we need to pass one more argument $RSS(\vec{\hat{w}})$. Second, we want to find the minimal $\rho(\vec{c_i}, \vec{c_j})$ calculated by~\eqref{agullo:rovnice} so that $0 < \rho(\vec{c_i}, \vec{c_j}) < 1 $. Other parts of the algorithm remain unchanged as well as the time complexity.
 
-This algorithm produces $\rho(\vec{c_i}$, and indexes  $i_{swap} \in O_m$ and $j_{swap} \in Z_m$ of observations we want to swap. Given that, we can update the $RSS$ by~\eqref{updaterss}, $\vec{Z_M^{-1}}$ by~\eqref{inversionplus} and~\eqref{updatedinversion2} and finally update $\vec{\hat{w}}$ by~\eqref{thetaplus} and~\eqref{thetaminus}.
+This algorithm returns $\rho(\vec{c_i}, \vec{c_j})$, and indices  $i_{swap} \in O_m$ and $j_{swap} \in Z_m$ of observations we want to swap. With those in hand, we can update the $RSS(\vec{\hat{w}})$ by~\eqref{updaterss}, $\vec{Z_M^{-1}}$ by~\eqref{inversionplus} and~\eqref{updatedinversion2} and finally update $\vec{\hat{w}}$ by~\eqref{thetaplus} and~\eqref{thetaminus}.
 
-Let us now talk about the time complexity of such a solution. As we said, the time complexity of modifies OSAA is $\mathcal{O}( n^2 p^2)$. Thus there is no asymptotic improvement. On the other hand, there are some significant constants outside the OSAA so let us look at how they improve.
+As we said, the time complexity of modified OSAA is $\mathcal{O}( n^2 p^2)$. Thus there is no asymptotic improvement.
 
-When an improvement is found, thus when $0 < \rho(\vec{c_i}, \vec{c_j}) < 1 $, then we update $RSS$, which is constant. Next we update inversion by~\eqref{inversionplus} which is $\mathcal{O}(4p^2)$ and~\eqref{updatedinversion2} which is also $\mathcal{O}(4p^2)$.  Finally we need to update $\vec{\hat{w}}$ by~\eqref{thetaplus} and~\eqref{thetaminus} which are both $\mathcal{O}(p^2 +p)$. 
+When an $RSS(\vec{\hat{w}})$ improvement is found i.e., when $0 < \rho(\vec{c_i}, \vec{c_j}) < 1 $, then we update $RSS(\vec{\hat{w}})$. Next we update inversion by~\eqref{inversionplus} which is $\mathcal{O}(4p^2)$ and by~\eqref{updatedinversion2} which is also $\mathcal{O}(4p^2)$.  Finally we need to update $\vec{\hat{w}}$ by~\eqref{thetaplus} and~\eqref{thetaminus} which are both $\mathcal{O}(p^2 +p)$. 
 
-\begin{observation} \label{updatinginversionobservation}
 Time complexity of updating all the quantities is 
 $\mathcal{O}(8p^2 + 2p^2 + p) \sim \mathcal{O}(p^2)$.
 That is quite an improvement if we compare it to time complexity $\mathcal{O}(p^2n)$ of updating those quantities in the FSA (see Observation~\ref{time:complexity:fsa}).
-\end{observation}
 
 
-Note that right now it actually does not matter if we use additive formula~\eqref{hawkins:rovnice} with the stopping criterion $\Delta S^{(\vec{m})}_{i,j} \geq 0$ --- thus unmodified OSAA --- or multiplicative formula~\eqref{agullo:rovnice} with the stopping criterion $\rho(\vec{c_i}, \vec{c_j}) \geq 1 $. Both results we can update $RSS$ and other quantities can be used to calculate both formulas. 
+Now it seems it actually does not matter if we use additive formula~\eqref{hawkins:rovnice} with the stopping criterion $\Delta S^{(\vec{m})}_{i,j} \geq 0$ -- thus unmodified OSAA or multiplicative formula~\eqref{agullo:rovnice} with the stopping criterion $\rho(\vec{c_i}, \vec{c_j}) \geq 1 $. 
 
 However, the advantage of the multiplicative formula~\eqref{agullo:rovnice} is that we can use the following bounding condition to improve the performance of the modified OSAA.
 
@@ -1370,17 +1360,17 @@ However, the advantage of the multiplicative formula~\eqref{agullo:rovnice} is t
 
 \subsubsection*{Bounding condition improvement}
 
-The $\rho(\vec{c_i}, \vec{c_j})$ is expressed as a ratio. We can see that in the numerator we have
+The $\rho(\vec{c_i}, \vec{c_j})$ is expressed as a fraction with the numerator
 
 \begin{equation}
-    (1+\vec{x_i}\vec{Z}^{-1}\vec{x_i^T} + \dfrac{e_j^2}{RSS})
-        (1 - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T} - \dfrac{e_i^2}{RSS} )+
-        (\vec{x_i}\vec{Z}^{-1}\vec{x_j^T} + \dfrac{e_i e_j}{RSS} )^2,
+    (1+\vec{x_i}\vec{Z}^{-1}\vec{x_i^T} + \dfrac{e_j^2}{RSS(\vec{\hat{w}})})
+        (1 - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T} - \dfrac{e_i^2}{RSS(\vec{\hat{w}})} )+
+        (\vec{x_i}\vec{Z}^{-1}\vec{x_j^T} + \dfrac{e_i e_j}{RSS(\vec{\hat{w}})} )^2.
 \end{equation}
-and because $ \dfrac{e_i e_j}{RSS} )^2 \geq 0$ then whole numerator is greater or equal to
+Since $ (\dfrac{e_i e_j}{RSS(\vec{\hat{w}})} )^2 \geq 0$, then whole numerator is greater or equal to
 \begin{equation}
-    (1+\vec{x_i}\vec{Z}^{-1}\vec{x_i^T} + \dfrac{e_j^2}{RSS})
-(1 - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T} - \dfrac{e_i^2}{RSS} ).
+    (1+\vec{x_i}\vec{Z}^{-1}\vec{x_i^T} + \dfrac{e_j^2}{RSS(\vec{\hat{w}})})
+(1 - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T} - \dfrac{e_i^2}{RSS(\vec{\hat{w}})} ).
 \end{equation}
 On the other hand, we can see that denominator is
 
@@ -1391,27 +1381,27 @@ and because $(\vec{x_i}\vec{Z}^{-1}\vec{x_j^T})^2$ and $\vec{x_i}\vec{Z}^{-1}\ve
 \begin{equation}
     (\vec{x_i}\vec{Z}^{-1}\vec{x_j^T})^2 \leq \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}\vec{x_j}
 \end{equation}
-using the Cauchy-Schwarz inequality. This means that denominator is less or equal to
+using the Cauchy-Schwarz inequality. This means that the denominator is less or equal to
 \begin{equation}
     1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}  - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T}.
 \end{equation}
 Given that we can denote $\rho_b(\vec{c_i}, \vec{c_j})$  as
 
 \begin{equation} \label{boundingcondition}
-\rho_b(\vec{c_i}, \vec{c_j}) = \dfrac{(1+\vec{x_i}\vec{Z}^{-1}\vec{x_i^T} + \dfrac{e_j^2}{RSS})
-    (1 - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T} - \dfrac{e_i^2}{RSS} )}{1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}  - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T}} \quad \leq \rho(\vec{c_i}, \vec{c_j}).
+\rho_b(\vec{c_i}, \vec{c_j}) = \dfrac{(1+\vec{x_i}\vec{Z}^{-1}\vec{x_i^T} + \dfrac{e_j^2}{RSS(\vec{\hat{w}})})
+    (1 - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T} - \dfrac{e_i^2}{RSS(\vec{\hat{w}})} )}{1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}  - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T}} \quad \leq \rho(\vec{c_i}, \vec{c_j}).
 \end{equation}
 
-The actual speed improvement is then given by that we do not need to compute $\vec{x_i}\vec{Z}^{-1}\vec{x_j^T}$ in each of $h(n-h)$ pairs swap comparison. As we know this quantity cannot be computed outside the loop; thus it is the reason for such a high time complexity. The modified OSAA can be further modified as follows.
+The actual speed improvement is then given by that we do not need to compute $\vec{x_i}\vec{Z}^{-1}\vec{x_j^T}$ in each of $h(n-h)$ pairs swap comparison. This quantity cannot be computed outside the for loop; thus it is the reason for such a high time complexity. The modified OSAA can be further modified as follows.
 
-First we set $\rho_{min} :=1$. Then for each pair we only compute $\rho_b(\vec{c_i}, \vec{c_j})$ and if it is greater of equal to $\rho_{min}$ we can continue to next pair without computing $\rho(\vec{c_i}, \vec{c_j})$. 
+First we set $\rho_{min} :=1$, then for each pair we only compute $\rho_b(\vec{c_i}, \vec{c_j})$ and if it is greater than or equal to $\rho_{min}$, we can continue to the next pair without computing $\rho(\vec{c_i}, \vec{c_j})$. 
 It is very useful because all quantities necessary for calculating $\rho_b(\vec{c_i}, \vec{c_j})$ can be precalculated outside of the loop.
 
-If $\rho_b(\vec{c_i}, \vec{c_j})$ is less that  $\rho_{min}$ we actually compute $\rho(\vec{c_i}, \vec{c_j})$ and set $\rho_{min} := \rho(\vec{c_i}, \vec{c_j})$.
+If $\rho_b(\vec{c_i}, \vec{c_j})$ is less that  $\rho_{min}$, we actually compute $\rho(\vec{c_i}, \vec{c_j})$ and set $\rho_{min} := \rho(\vec{c_i}, \vec{c_j})$.
 
-That means in the double loop which time complexity is $\mathcal{O}(n^2)$  we do not always need to calculate $\rho(\vec{c_i}, \vec{c_j})$ which time complexity is $\mathcal{O}(n^2)$. This does not improve the asymptotic time complexity, but (as can be seen in the table \todo{create experiment}) it can improve the speed of the algorithm. 
+This means that in the double loop whose time complexity is $\mathcal{O}(n^2)$  we do not always need to calculate $\rho(\vec{c_i}, \vec{c_j})$ with time complexity $\mathcal{O}(n^2)$. This does not improve the asymptotic time complexity, but as we will see later, can improve the speed of the algorithm. 
 
-Finally, let us note that in~\cite{agullo2001new} authors call this algorithm with bounding condition as \defterm{modified optimal exchange algorithm} (MOEA).
+Finally, let us note that in~\cite{agullo2001new} the authors call this algorithm with bounding condition as \defterm{modified optimal exchange algorithm} (MOEA).
 
 
 
@@ -1420,28 +1410,28 @@ Finally, let us note that in~\cite{agullo2001new} authors call this algorithm wi
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Minimum-maximum exchange algorithm} \label{mmeasection}
-The minimum-maximum exchange algorithm (MMEA) is very similar to the FSA respectively to its modified version the OEA. The main difference is the greediness of this algorithm. What we mean by that is that this algorithm does not find the optimal swap, but rather first find the $\vec{c_j}$  which increase the $RSS$ by the minimum value and include this observation.
-Next, it finds $\vec{c_j}$ such that in decrease $RSS$ by maximum and exclude this observation.
+The minimum-maximum exchange algorithm (MMEA) is very similar to the OEA. The main difference is the greediness of this algorithm: algorithm does not find the optimal swap, but rather first find the $\vec{c_j}$  whose inclusion increases the $RSS(\vec{\hat{w}})$ as less as possible.
+Next, it finds $\vec{c_j}$ such that excluding this observation lead to the maximum decrease of the $RSS(\vec{\hat{w}})$.
 
-The minimum increase can be found by calculating $\gamma^{+}(\vec{c_i}) $ by~\eqref{gamma:plus} for each trimmed observation in  $Z_m$.
+The minimum increase can be found by calculating $\gamma^{+}(\vec{c_i}) $ using~\eqref{gamma:plus} for each trimmed observation in  $Z_m$.
 
 Next, this observation is included, so we get $h+1$ untrimmed observations. We update 
-$\vec{Z_M^{-1}}$ to  $\vec{\overline{Z_M}}^{-1}$ by~\eqref{inversionplus} and  and $\vec{\hat{w}}$ to $\vec{\overline{\hat{w}}}$ by~\eqref{thetaplus}.
+$\vec{Z_M^{-1}}$ to  $\vec{\overline{Z_M}}^{-1}$ by~\eqref{inversionplus} and $\vec{\hat{w}}$ to $\vec{\overline{\hat{w}}}$ using~\eqref{thetaplus}.
 
-Then we can find maximum  $\gamma^{-}(\vec{c_j})$ by~\eqref{gamma:minus} among $O_m^{(i)}$ where $m^{(i)}$ denotes included observation $c_i$.
+Then we can find maximum  $\gamma^{-}(\vec{c_j})$ by~\eqref{gamma:minus} among $O_m \cap \{ i \}$.
 
 Next, we can update $\vec{\overline{Z_M}}^{-1}$ to the   $\vec{\overline{\overline{Z_M}}}^{-1}$ by~\eqref{updatedinversion2} and 
 $\vec{\overline{\hat{w}}}$ to $\vec{\overline{\overline{\hat{w}}}}$ by~\eqref{thetaminus}.
 
-Finally, we can update $RSS$ to $\overline{\overline{RSS}}$ by~\eqref{rssplus} and~\eqref{rssminus}. We can repeat this process until $\gamma^{-}(\vec{c_j}) > \gamma^{+}(\vec{c_i})$.
+Finally, we can update $RSS(\vec{\hat{w}})$ to $RSS(\vec{\overline{\hat{w}}})$ by~\eqref{rssplus} and~\eqref{rssminus}. We can repeat this process until $\gamma^{-}(\vec{c_j}) > \gamma^{+}(\vec{c_i})$.
 
 \begin{observation} \label{timecomplexitymmea}
-    One step of the algorithm MMEA has time complexity $O(p^2n)$. So the whole algorithm has time complexity $\mathcal{O}(tlp^2n)$ where $t$ is number of the starts and $l$ is maximum number of iterations of each start.
+    One step of the algorithm MMEA has time complexity $O(p^2n)$. So the whole algorithm has time complexity $\mathcal{O}(tlp^2n)$ where $t$ and $l$ are given parameters bounding the number of iterations.
 \end{observation}
 
 \begin{proof}
-    Because we do not iterate through all pairs but only over $n-h$ followed by $h+1$ subsets the loops takes only $\mathcal{O}(n)$ time. In the loops, we are computing $\gamma^{-}(\vec{c_j}) $ and $\gamma^{+}(\vec{c_i})$ both takes $\mathcal{O}(p^2)$ time. Outside the loops, all the each of the quantities we are updating take $\mathcal{O}(p^2)$ time.
-That means the one loop of the whole algorithm last $\mathcal{O}(p^2n)$.
+    Because we do not iterate through all pairs but only over $n-h$ trimmed and $h+1$  non-trimmed observations, the loops takes only $\mathcal{O}(n)$ time. Within the loops we are computing $\gamma^{-}(\vec{c_j}) $ and $\gamma^{+}(\vec{c_i})$ which both takes $\mathcal{O}(p^2)$ time. Outside the loops, all the quantities we are updating take $\mathcal{O}(p^2)$ time.
+That means the one loop of the whole algorithm takes $\mathcal{O}(p^2n)$ steps.
 As in the case of the FSA, if we introduce parameters $t$ and $l$, then the time complexity of the algorithm is $\mathcal{O}(tlp^2n)$
 \end{proof}
 
@@ -1455,10 +1445,10 @@ As in the case of the FSA, if we introduce parameters $t$ and $l$, then the time
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\subsection{Different method of computation} \label{differentcomputation}
-In the last section we introduced a way of calculating the OEA so that we update $\vec{\hat{w}}$ and inversion $(\vec{X}^T \vec{X})^{-1}$. This, however, requires to compute inversion at the start of the algorithm (this is also the case for the FSA, MOEA and MMEA) As we know, calculating inversion is not practical due to low numerical stability. In practice, we usually use QR decomposition. In this section, we describe how we can modify OEA to use the QR decomposition (the same idea can also be applied to the FSA, MOEA and the MMEA). 
+\subsection{Different method of computation of the inversion} \label{differentcomputation}
+In the last section we introduced a way of calculating the OEA so that we update $\vec{\hat{w}}$ and inversion $(\vec{X}^T \vec{X})^{-1}$. This, however, requires to compute inversion at the start of the algorithm (this is also the case for the FSA, MOEA and MMEA. As we know, calculating inversion directly is not practical due to low numerical stability. In practice, we usually use QR decomposition. In this section, we describe how we can modify the OEA to use the QR decomposition (the same idea can also be applied to the FSA, MOEA and the MMEA). 
 
-Let us start by describing how we can update the QR factorization, which is a critical part of this modified computation. Assume that we have QR decomposition of $\vec{X}$, and we need to exchange $i$th observation from $O_m$ with $j$th observation from $Z_m$. We can simulate this by inserting $j$th row and consequently extracting $i$th row from the QR decomposition. 
+Let us start by describing how we can update the QR factorization, which is a critical part of this modified computation. Assume that we have QR decomposition of $\vec{X}$, and we need to exchange $i$th observation from $O_m$ with $j$th observation from $Z_m$. We can simulate this by inserting $j$th row and consequently deleting $i$th row from the QR decomposition. 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1479,14 +1469,14 @@ If we add a row to $\vec{A}$ as the last row, our decomposition looks like
         \vdots& \vdots& \vdots& \vdots& 0  \\
         \vdots& \vdots& \vdots& \vdots& \vdots \\
         \times & \cdots & \cdots & \cdots & \times \\
-    \end{bmatrix}
+    \end{bmatrix},
 \end{equation}
-Where $\vec{\overline{R}}$ denotes matrix $\vec{R}$ which is now not upper triangular and needs to be updated and $\vec{\overline{Q}} \in \mathbb{R}^{p+1 \times p+1}$ denotes matrix created from $\vec{Q}$ by adding one row and one column with zeros. To preserve zeroes on the diagonal we in addition put $\vec{\overline{Q}}_{n+1,n+1} = 1$ . 
-To update $\vec{\overline{R}}$ to upper triangular matrix $\vec{R^{(+)}}$, we need to create additional orthogonal Givens matrices $\vec{Q_{e+1}}\ldots\vec{Q_{e+p}}$. Then updated upper triangular matrix is
-$\vec{R^{(+)}}  =  \vec{Q_{e+p}} \ldots \vec{Q_{e+2}} \vec{Q_{e+1}} \vec{R}$. 
+where $\vec{\overline{R}}$ denotes the matrix $\vec{R}$ with the added row and $\vec{\overline{Q}} \in \mathbb{R}^{p+1, p+1}$ denotes the matrix created from $\vec{Q}$ by adding one row and one column with zeros and putting $\vec{\overline{Q}}_{n+1,n+1} = 1$ . 
 
-Updated matrix $\vec{\overline{Q}}$ which we denote as $\vec{Q^{(+)}}$
-is updated in the same manner, thus $\vec{Q^{(+)}} = \vec{Q}\vec{Q_e^T}\vec{Q_{e+1}^T}\ldots\vec{Q_{e+p}^T}$.
+To update $\vec{\overline{R}}$ to upper triangular matrix $\vec{R^{(+)}}$, we need to create additional orthogonal Givens matrices $\vec{Q_{e+1}}\ldots\vec{Q_{e+p}}$ zeroing the last row of  $\vec{\overline{R}}$. Then the upper triangular matrix $\vec{R^{(+)}}$ equals $ \vec{Q_{e+p}} \ldots \vec{Q_{e+2}} \vec{Q_{e+1}} \vec{R}$. 
+
+Updated matrix $\vec{\overline{Q}}$ denoted as $\vec{Q^{(+)}}$
+is updated in the same manner: $\vec{Q^{(+)}} = \vec{Q}\vec{Q_e^T}\vec{Q_{e+1}^T}\ldots\vec{Q_{e+p}^T}$.
 Note that if we do not want to have inserted row $\vec{x_j}$ as the last but as (say $k$th) row, then in terms of QR decomposition, we only need to move (last) $\vec{x_j}$ row to the $k$th position. In other words, we create a permutation  matrix $\vec{P}$ so that 
 \begin{equation}
     \vec{P}\vec{Q^{(+)}} = \begin{bmatrix}
@@ -1502,8 +1492,8 @@ We can describe the whole process by the following pseudocode.
 
 \begin{algorithm}[H]
     \label{addingrowqr}
-            \KwIn{$\vec{Q} \in \mathbb{R}^{n \times n}, \vec{R} \in \mathbb{R}^{n \times p}, \vec{x_j} \in \mathbb{R}^p, k $}
-        \KwOut{ $\vec{Q^{(+)}} \in \mathbb{R}^{n+1 \times n+1}, \vec{R^{(+)}} \in \mathbb{R}^{n+1 \times p}$ }
+            \KwIn{$\vec{Q} \in \mathbb{R}^{n, n}, \vec{R} \in \mathbb{R}^{n, p}, \vec{x_j} \in \mathbb{R}^p, k $}
+        \KwOut{ $\vec{Q^{(+)}} \in \mathbb{R}^{n+1, n+1}, \vec{R^{(+)}} \in \mathbb{R}^{n+1, p}$ }
 
       \caption{QR insert}
       $\vec{R^{(+)}} \gets \vec{R}~with~appended~last~row~by~\vec{x_j}$\;
@@ -1512,7 +1502,7 @@ We can describe the whole process by the following pseudocode.
 
 
       \For{$i \gets n$ \textbf{to} $p$}{
-        $\vec{Q}(i, n+1) \gets create~Givens~matrix \vec{Q}(i, n+1) \in \mathbb{R}^{n+1 \times n+1}$\;
+        $\vec{Q}(i, n+1) \gets create~Givens~matrix \vec{Q}(i, n+1) \in \mathbb{R}^{n+1, n+1}$\;
         $\vec{R^{(+)}} \gets   \vec{Q}(i, n+1) \vec{R^{(+)}} $\;
         $\vec{Q^{(+)}} \gets \vec{Q^{(+)}} \vec{Q}^T(i, n+1) $\;        
         }
@@ -1530,12 +1520,12 @@ Computing $\vec{R^{(+)}}$ is $\mathcal{O}(p^2)$ and computing $\vec{Q^{(+)}}$ is
 \end{observation}
 
 \begin{proof} \label{qrinsertproof}
-We have loop over $p$ $\vec{Q}(i,j)$ Givens matrices. We do not need to create those matrices, because by multiplying $\vec{R}^{(+)}$ or $\vec{Q}^{(+)}$ with the matrix $\vec{Q}(i,j)$ only one row of is affected. That means we can simulate this matrix-matrix multiplication only by iterating over those matrices and multiplying elements with $\cos(\varphi)$ and $\sin(\varphi)$ adequately. This means in case of $\vec{R}^{(+)}$ we are iterating $p$ times over nonzero rows of $\vec{R}^{(+)}$ thus $p$ rows. That gives us time complexity of $\mathcal{O}(p^2)$. In the case of $\vec{Q}^{(+)}$  we are iterating $p$ times over columns of $\vec{Q}^{(+)}$ and that gives us time complexity of $\mathcal{O}(np)$.
+We have to loop over $p$ Givens matrices. We do not need to create those matrices, because by multiplying $\vec{R}^{(+)}$ or $\vec{Q}^{(+)}$ with the matrix $\vec{Q}(i,j)$ only two rows are affected. That means we can simulate this matrix multiplication only by iterating over those matrices and multiplying the corresponding elements by $\cos(\varphi)$ and $\sin(\varphi)$ adequately. In case of $\vec{R}^{(+)}$ we are iterating $p$ times over $p$ nonzero rows of $\vec{R}^{(+)}$ thus $p$ rows. That gives us time complexity of $\mathcal{O}(p^2)$. In the case of $\vec{Q}^{(+)}$  we are iterating $p$ times over columns of $\vec{Q}^{(+)}$ and that gives us time complexity of $\mathcal{O}(np)$.
 \end{proof}
 
 \begin{note}
-This process can also be done in case we are using an economic version of matrices $\vec{R}$ and $\vec{Q}$  thus matrices $\vec{R_1}$ and $\vec{Q_1}$ (see~\eqref{matrixq1r1}). In such a case
-$\vec{Q_1} \in \mathbb{R}^{p \times p}$ thus then updating $\vec{Q_1}$ to $\vec{Q_1}^{(+)}$ is only $\mathcal{O}(p^2)$.
+This process can also be done in the case when we are using an economic version of matrices $\vec{R}$ and $\vec{Q}$  thus matrices $\vec{R_1}$ and $\vec{Q_1}$ (see~\eqref{matrixq1r1}). In such a case
+$\vec{Q_1} \in \mathbb{R}^{p, p}$ thus then updating $\vec{Q_1}$ to $\vec{Q_1}^{(+)}$ is only $\mathcal{O}(p^2)$.
 \end{note}
 
 \begin{note} \label{qnotrequired}
@@ -1549,7 +1539,7 @@ The matrix $\vec{\overline{R}}$  can be updated to $\vec{R}^{(+)}$  without the 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsubsection*{QR delete}
-When we extract the row $\vec{x_i}$ from matrix $\vec{A}$ we can use following trick~\cite{hammarling2008updatingqr}. First, we move such row as the first row of the matrix $\vec{A}$ so ve create permutation matrix $\vec{P}$ so that 
+When we extract the row $\vec{x_i}$ from matrix $\vec{A}$ we can use the following trick~\cite{hammarling2008updatingqr}. First, we move such row as the first row of the matrix $\vec{A}$ by creating create permutation matrix $\vec{P}$ so that 
 \begin{equation}
     \vec{P}\vec{A} = \begin{bmatrix}
         \vec{x_i} \\
@@ -1561,10 +1551,10 @@ When we extract the row $\vec{x_i}$ from matrix $\vec{A}$ we can use following t
         \vec{x_i} \\
         \vec{A^{(-)}}
     \end{bmatrix}
-    = \vec{P}\vec{Q}\vec{R}
+    = \vec{P}\vec{Q}\vec{R},
 \end{equation} 
 where $\vec{A}(a:b , 1:p) $ means rows of matrix $\vec{A}$ from $a$ to $b$.
-We can see that we only need to introduce zeros in the first row $\vec{q_1}$ (except $q_{11}$) of the matrix $\vec{Q}$. We can do this by $n-1$ matrices $\vec{Q}(i,j) \in \mathbb{R}^{n \times n}$ so that
+Hence we only need to introduce zeros in the first row $\vec{q_1}$ (except for $q_{11}$) of the matrix $\vec{Q}$. We can do this by $n-1$ matrices $\vec{Q}(i,j) \in \mathbb{R}^{n, n}$ so that
 
 \begin{equation}
     \vec{Q}(1,2) \ldots \vec{Q}(n-1,n)\vec{q_1^T} =     \begin{bmatrix}
@@ -1574,7 +1564,7 @@ We can see that we only need to introduce zeros in the first row $\vec{q_1}$ (ex
     \end{bmatrix}
 \end{equation}
 
-To propagate the change into $\vec{R}$ we then consequently need to update $\vec{R}$ so that
+To propagate the change into $\vec{R}$ we update $\vec{R}$ so that
 \begin{equation}
     \vec{Q}(1,2) \ldots \vec{Q}(n-1,n) \vec{R} =   \begin{bmatrix}
         \vec{v} \\
@@ -1582,7 +1572,7 @@ To propagate the change into $\vec{R}$ we then consequently need to update $\vec
     \end{bmatrix}.
 \end{equation}
 The result is then
-\begin{equation}
+\begin{multline}
     \vec{P}\vec{A} = (\vec{P}\vec{Q}  \vec{Q^T}(n-1,n) \ldots   \vec{Q^T}(1,2)) (\vec{Q}(1,2) \ldots \vec{Q}(n-1,n) \vec{R} ) \\
     = 
     \begin{bmatrix}
@@ -1593,25 +1583,23 @@ The result is then
         \times \\
         \vec{R^{-}}
     \end{bmatrix},
-\end{equation}
-so that 
+\end{multline}
+and 
 \begin{equation}
-    \vec{A^{(-)}} = \vec{Q^{(-)}}\vec{R^{(-)}}
+    \vec{A^{(-)}} = \vec{Q^{(-)}}\vec{R^{(-)}}.
 \end{equation}
-
-Pseudocode is very similar to the algorithm QR Insert~\ref{addingrowqr} so it is not necessary to provide it here.
 
 \begin{observation} \label{qrdeletetime}
-Time complexity of QR delete is   $\mathcal{O}(n^2)$.
+The time complexity of QR delete is   $\mathcal{O}(n^2)$.
 \end{observation}
 
 \begin{proof}
-We need to create $n-1$ Givens matrices, and with each of this we need to multiply $\vec{Q^{(-)}}$ and $\vec{R^{(-)}}$. As we stated in Observation~\ref{qrinserttime} this can be node in $\mathcal{O}(n)$ for each matrix.
+We need to create $n-1$ Givens matrices and with each multiply $\vec{Q^{(-)}}$ and $\vec{R^{(-)}}$. As we stated in Observation~\ref{qrinserttime}, this can be done in $\mathcal{O}(n)$ for each matrix.
 So together we get $\mathcal{O}(n^2)$.
 \end{proof}
 
 \begin{note}
-In case of QR delete, it is not possible to use the economic version of matrices.
+In case of the QR delete, it is not possible to use the economic version of matrices.
 \end{note}
 
 
@@ -1625,56 +1613,51 @@ In case of QR delete, it is not possible to use the economic version of matrices
 
 \subsubsection*{Calculation of OEA using QR decomposition}
 Given all the required theory above, let us describe the computation. Let us start with~\eqref{agullo:rovnice}. Here we need inversion to calculate 
-$\vec{x_i}\vec{Z}^{-1}\vec{x_i^T}$, $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$ and $\vec{x_i}\vec{Z}^{-1}\vec{x_j^T}$. But this can also be done without inversion, only using the decomposition. We can write this equation
+$\vec{x_i}\vec{Z}^{-1}\vec{x_i^T}$, $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$ and $\vec{x_i}\vec{Z}^{-1}\vec{x_j^T}$. But this can also be done without inversion, only using the:
 \begin{equation} \label{solveimi}
     \vec{x_i}\vec{Z}^{-1}\vec{x_i^T} = \vec{v}^T\vec{v}     \iff \vec{x_i}(\vec{R}^T\vec{R})^{-1}\vec{x_i^T} = \vec{v}^T\vec{v}
 \end{equation} 
-where $\vec{v}$ can be obtained by solving lower triangular system
+where $\vec{v}$ can be obtained by solving the lower triangular linear system
 \begin{equation} \label{vsolution}
     \vec{R}^T\vec{v} = \vec{x_i}^T.
 \end{equation} 
-The same can be done with  $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$. Least but not last we need to solve 
-$\vec{x_i}\vec{Z}^{-1}\vec{x_j^T}$. We can write this 
+The same can be done with  $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$. Last but not least we need to solve 
+$\vec{x_i}\vec{Z}^{-1}\vec{x_j^T}$. We have
 \begin{equation}
     \vec{x_i}\vec{Z}^{-1}\vec{x_j^T} = \vec{x_j}\vec{u}     \iff \vec{x_i}(\vec{R}^T\vec{R})^{-1}\vec{x_j^T} = \vec{x_j}^T\vec{u},
 \end{equation} 
-where column vector $\vec{u}$ is defined by~\eqref{agullo_u}. We can see that 
+where the column vector $\vec{u}$ is defined by~\eqref{agullo_u}. We can see that 
 
 \begin{equation}
     \vec{u} = \vec{Z}^{-1}\vec{x_i^T}     \iff (\vec{R}^T\vec{R})^{-1}\vec{x_i^T} = \vec{u}
 \end{equation}
-so that $\vec{u}$ can be obtained by solving the upper triangular system 
+where $\vec{u}$ can be obtained by solving the upper triangular linear system 
 \begin{equation} \label{solve_u_qr}
     \vec{R}\vec{u} = \vec{v},
 \end{equation}
-where $\vec{v}$ is solution of~\eqref{vsolution}. Other quantities of~\eqref{agullo:rovnice} does not require $\vec{Z}^{-1}$.
+where $\vec{v}$ is solution of~\eqref{vsolution}. 
 
-\begin{observation}
-We can see that time complexity of all these calculations is the same as in case of calculating with inversion thus $\mathcal{O}(p^2)$.
-\end{observation}
 
-\begin{proof}
+We can see that time complexity of all these calculations is the same as in the case of calculating with inversion thus $\mathcal{O}(p^2)$.
+
 Indeed, in the case of the inversion, we are multiplying quantities such as $\vec{x_i}\vec{Z}^{-1}\vec{x_i^T}$ which can be done in $\mathcal{O}(p^2)$.
-In the case of decomposition, we solve this problem by solving the triangular system of $p$ equations. This can also be done in $\mathcal{O}(p^2)$.
-\end{proof}
+In the case of decomposition, we solve this problem by solving the triangular linear system of $p$ equations. This can also be done in $\mathcal{O}(p^2)$.
 
-When optimal exchange $\vec{c_i}, \vec{c_j}$ is found then we need to update $RSS$ which can be done same way by~\eqref{updaterss}. Updating $\vec{\hat{w}}$ to  $\vec{\overline{\hat{w}}}$ by~\eqref{thetaplus} requires
-$\vec{u}$  which in this case we calculate by~\eqref{solve_u_qr} and $b$ which requires  $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$. This can be done in the same manner as~\eqref{solveimi}. Analogous operations can be used to update $\vec{\overline{\hat{w}}}$ to $\vec{\overline{\overline{\hat{w}}}}$  by means of~\eqref{thetaminus}. Only thing wee need to realize that we can express~\eqref{xjoverlinez} as $\vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T} = \vec{x_i}\vec{{{Z}}}^{-1}\vec{x_i^T} + b(\vec{u}\vec{x_j}^2)$.
 
-On the other hand, we cannot use equation~\eqref{inversionplus} and~\eqref{updatedinversion2} for updating the inversion, because we do not have one. So we need to update our QR decomposition somehow. 
-We describe algorithms for updating the QR decomposition in Section~\ref{differentcomputation}. 
-First, we can use the QR Insert algorithm to add row $\vec{x_j}$ to the decomposition and consequently QR delete to extract $\vec{x_j}$  from the decomposition. 
+When optimal exchange of $\vec{c_i}$ and $ \vec{c_j}$ is found, then we need to update the $RSS(\vec{\hat{w}})$ which can be done in the same way as in~\eqref{updaterss}. Updating $\vec{\hat{w}}$ to  $\vec{\overline{\hat{w}}}$ by~\eqref{thetaplus} requires
+$\vec{u}$  which in this case we calculate using~\eqref{solve_u_qr} and $b$ which requires  $\vec{x_j}\vec{Z}^{-1}\vec{x_j^T}$. This can be done in the same manner as in~\eqref{solveimi}. Analogous operations can be used to update $\vec{\overline{\hat{w}}}$ to $\vec{\overline{\overline{\hat{w}}}}$  by means of~\eqref{thetaminus}. Only thing we need to realize is that we can express~\eqref{xjoverlinez} as $\vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T} = \vec{x_i}\vec{{{Z}}}^{-1}\vec{x_i^T} + b(\vec{u}\vec{x_j}^2)$.
 
-\begin{observation}
-This approach is slower than updating inversion directly. On the other hand, this solution is numerically stable. Updating inversion can be done in $\mathcal{O}(p^2)$ (see Observation~\ref{updatinginversionobservation})  while QR insert has $\mathcal{O}(np)$ (see Observation~\ref{qrinserttime}) and time complexity and QR delete even $\mathcal{O}(n^2)$ (see Observation~\ref{qrdeletetime}).
-\end{observation}
+On the other hand, we cannot use equation~\eqref{inversionplus} and~\eqref{updatedinversion2} for updating the inversion because we do not have one. So we need to update our QR decomposition somehow. We have describe algorithms for updating the QR decomposition in Section~\ref{differentcomputation}. 
+
+This approach is slower than updating inversion directly. On the other hand, this solution is numerically stable. Updating inversion can be done in $\mathcal{O}(p^2)$  while QR insert is $\mathcal{O}(np)$ and time complexity and QR delete even $\mathcal{O}(n^2)$.
+
 
 \begin{note}
-Because time complexity of the QR delete is $\mathcal{O}(n^2)$, it is up to consideration if instead of recycling QR decomposition is not worth it to recalculate it from scratch which takes $\mathcal{O}(p^2n)$ (see~\eqref{qrtimewhat}).
+Because the time complexity of the QR delete is $\mathcal{O}(n^2)$, it is to be considered if instead of recycling QR decomposition is not worth it to recalculate it from scratch which takes $\mathcal{O}(p^2n)$ (see~\eqref{qrtimewhat}).
 \end{note}
 
 
-Finally let us talk about matrix $\vec{\tilde{Z}}$~\eqref{matrixZ} which we used for derivation of our equations. If we use Observation~\ref{qrcholesky} then we realize that if we make QR factorization of $\vec{A} = (\vec{X}, \vec{y})$ then
+Finally let us consider the matrix $\vec{\tilde{Z}}$ from~\eqref{matrixZ} which we used for derivation of our equations. Employing the Observation~\ref{qrcholesky}  we get for $\vec{A} = (\vec{X}, \vec{y})$ 
 
 \begin{equation}
     \vec{\tilde{Z}} = 
@@ -1705,13 +1688,13 @@ where
 \end{equation}
 
 is matrix from QR factorization of $\vec{A}$. 
-Next, we can realize that $\vec{R} \in \mathbb{R}^{p \times p}$ is matrix $\vec{R}$ which we can obtain by QR factorization of $\vec{X}$. 
+Next, we can realize that $\vec{R}$ is the matrix $\vec{R}$ which we can obtain by QR factorization of $\vec{X}$. 
 Moreover $\vec{\phi} \in \mathbb{R}^{p \times 1}$ is column vector which is actually equal to
 \begin{equation}
     \vec{\phi} =  \vec{Q^T}\vec{y}
 \end{equation}
-where $\vec{Q}$ is matrix $\vec{Q}$ from QR factorization of $\vec{R}$.
-Due to this fact $\vec{\hat{w}}$ is solution of upper triangular system 
+where $\vec{Q}$ is matrix $\vec{Q}$ from the QR factorization of $\vec{X}$.
+Due to this fact $\vec{\hat{w}}$ is the solution of upper triangular linear system 
 \begin{equation}
     \vec{R}\vec{\hat{w}} = \vec{\phi}
 \end{equation}
@@ -1719,14 +1702,14 @@ Due to this fact $\vec{\hat{w}}$ is solution of upper triangular system
 Finally $r \in \mathbb{R}$ is scalar such that 
 
 \begin{equation}
-    r^2 = \vec{y}^T\vec{y} - \vec{y}^T\vec{X}\vec{\hat{w}} = RSS
+    r^2 = \vec{y}^T\vec{y} - \vec{y}^T\vec{X}\vec{\hat{w}} = RSS(\vec{\hat{w}})
 \end{equation}
 
 \begin{remark} \label{qnotrequiredspeedupremark}
     We can see that all the quantities we use in the algorithm can be obtained from matrix $\vec{\tilde{R}}$.
 \end{remark}
 
-Now we have described both versions of calculation the algorithm OEA. As we already stated, it easy to use this approach on algorithms FSA, MOEA, and MMEA. Using inversion $\vec{Z}^{-1}$ is slightly faster, but numerically less stable, second, using QR decomposition is more numerically stable. Asymptotically both approaches provide the same performance. Finally, we have also shown that using matrix $\vec{\tilde{R}}$ is useful because it contains all necessary quantities for the algorithms.
+We have described both versions of calculation the algorithm OEA. As we already stated, it is easy to apply this approach also on the FSA, MOEA, and MMEA. Using the inversion $\vec{Z}^{-1}$ is slightly faster, but numerically less stable. Asymptotically both approaches provide the same performance. Finally, we have also shown that using the matrix $\vec{\tilde{R}}$ is useful because it contains all the necessary quantities for the algorithms.
 
 
 
@@ -1740,22 +1723,22 @@ Now we have described both versions of calculation the algorithm OEA. As we alre
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Combined algorithm} \label{sectioncombined}
-In this section, we shortly describe how we can utilize Lemma~\ref{lemma_conditions}; thus that strong necessary condition is not satisfied unless the weak necessary condition is satisfied.
+In this section, we shortly describe how we can utilize Lemma~\ref{lemma_conditions} saying that the strong necessary condition is not satisfied unless the weak necessary condition is satisfied.
 
-Algorithm FAST-LTS outputs $h$ element subset satisfying the weak necessary condition. One step of this algorithm has time complexity $\mathcal{O}(p^2n)$ (see Observation~\ref{csteptimecomplexity}). The iteration of this step is quite low and moreover usually limited by parameter. 
+THe algorithm FAST-LTS outputs $h$-element subset satisfying the weak necessary condition. One step of this algorithm has time complexity $\mathcal{O}(p^2n)$ (see Observation~\ref{csteptimecomplexity}). The number of iterations of this step is quite low and moreover usually limited by parameter. 
 
-On the other hand, algorithms for finding strong necessary condition FSA, OEA and MOEA have time complexity of one step $\mathcal{O}(p^2n^2)$ (we now don't take into account eager version MMEA, because we have no proof that it finds $h$ element subset satisfying strong necessary condition). 
+On the other hand, algorithms for finding strong necessary condition FSA, OEA and MOEA have time complexity of one step $\mathcal{O}(p^2n^2)$ (we now do not take into account greedy version MMEA, because we have no proof that it finds $h$-element subset satisfying the strong necessary condition). 
 
-We can use this in our favor so that we can find $h$ element subset satisfying weak necessary condition by the FAST-LTS algorithm and consequently use this $h$ element subset as an input to some of the algorithms which find $h$ element subset satisfying the strong necessary condition.
+We can use this in our favor so that we can find an $h$-element subset satisfying weak necessary condition by the FAST-LTS algorithm and consequently use this $h$ element subset as an input to some of the algorithms which find $h$-element subset satisfying the strong necessary condition.
 
-Let us consider the combination of the FAST-LTS and the MOEA. We have two options on how to perform this:
+Let us consider the combination of the FAST-LTS and the MOEA. We have two options of how to proceed:
 z
 \begin{enumerate}
-    \item Let the FAST-LTS converge and use this $h$ element subset as input to the MOEA which we let converge.
-    \item Let the FAST-LTS converge to some $h$ element subset. Perform one step of the MOEA and use the result as the input to the FAST-LTS. We can then iterate between steps of these two algorithms till convergence.
+    \item Run the FAST-LTS algorithm and use its output as the $h$-element subset input to the MOEA.
+    \item Get the output $h$-element subset of the FAST-LTS algorithm an then perform one step of the MOEA and use the result as the input to the FAST-LTS. Then repeat these steps of these two algorithms till convergence.
 \end{enumerate}
 
-On the large data sets, where even one step of the MOEA is too exhausting, we can use the eager MMEA which time complexity of one step is lower than in the case of MOEA.
+On the large data sets, where even one step of the MOEA is too exhausting, we can use the greedy MMEA which time complexity is lower than in the case of MOEA.
 
 In Chapter~\ref{chapterexperiments} we show the experimental results of various combinations of these algorithms.
 
@@ -1818,7 +1801,7 @@ Let us now consider tree such that at level $k$ is $\binom{n}{k}$ nodes represen
 \end{figure}
 
 
-In the case of the exhaustive approach, we can then traverse the tree starting in the root using the left to right (LTR) preorder traversal, and in each node, we can calculate the OLS fit on $\vec{ X_{J_k} }$ and $\vec{ Y_{J_k} }$. If we are in the level $k = h$, we calculate the fit on the $h$ element subset. This approach is exhaustive, so let us now describe how we can improve efficiency. 
+In the case of the exhaustive approach, we can then traverse the tree starting in the root using the left to right (LTR) preorder traversal, and in each node, we can calculate the OLS fit on $\vec{ X_{J_k} }$ and $\vec{ Y_{J_k} }$. If we are in the level $k = h$, we calculate the fit on an $h$ element subset. This approach is exhaustive, so let us now describe how we can improve efficiency. 
 
 First, it is not necessary to calculate fit on $k$th level of the tree in a case $k < p$ because this would mean that matrix $\vec{ X_{J_k} }$ is not regular. The main improvement can because we can skip parts of the tree (perform pruning) based on the following criteria. Moreover at some point of the traversal we encounter nodes from which we cannot get into the depth $h$ these nodes can also be skipped. On the Figure~\ref{figure:full:tree} these nodes are highlighted with red border color. 
 
