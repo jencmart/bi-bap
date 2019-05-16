@@ -122,8 +122,7 @@ Klouda, K. An exact polynomial time algorithm for computing the least trimmed
   volume~84, 2015: pp. 27--40.
 
 \bibitem{numpy}
-Oliphant, T. {NumPy}: A guide to {NumPy}. USA: Trelgol Publishing, 2006--,
-  [Online; accessed <today>].
+Oliphant, T. {NumPy}: A guide to {NumPy}. USA: Trelgol Publishing, 2006.
 \urlprefix\biburl{http://www.numpy.org/}
 
 \bibitem{eigenweb}

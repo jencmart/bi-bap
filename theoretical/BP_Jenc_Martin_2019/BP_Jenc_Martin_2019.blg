@@ -12,37 +12,37 @@ Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 Warning--empty journal in hammarling2008updatingqr
 You've used 28 entries,
             3146 wiz_defined-function locations,
-            827 strings with 10244 characters,
-and the built_in function-call counts, 14021 in all, are:
-= -- 1125
+            825 strings with 10212 characters,
+and the built_in function-call counts, 13999 in all, are:
+= -- 1122
 > -- 383
 < -- 43
 + -- 196
 - -- 110
-* -- 750
-:= -- 1583
+* -- 748
+:= -- 1582
 add.period$ -- 84
 call.type$ -- 28
-change.case$ -- 117
+change.case$ -- 116
 chr.to.int$ -- 3
 cite$ -- 29
-duplicate$ -- 1320
-empty$ -- 1228
+duplicate$ -- 1317
+empty$ -- 1227
 format.name$ -- 127
-if$ -- 3080
+if$ -- 3075
 int.to.chr$ -- 0
 int.to.str$ -- 28
-missing$ -- 313
+missing$ -- 312
 newline$ -- 94
 num.names$ -- 57
-pop$ -- 633
+pop$ -- 632
 preamble$ -- 1
 purify$ -- 107
 quote$ -- 0
-skip$ -- 583
+skip$ -- 584
 stack$ -- 0
-substring$ -- 659
-swap$ -- 799
+substring$ -- 657
+swap$ -- 797
 text.length$ -- 42
 text.prefix$ -- 0
 top$ -- 0
@@ -50,5 +50,5 @@ type$ -- 104
 warning$ -- 1
 while$ -- 107
 width$ -- 30
-write$ -- 257
+write$ -- 256
 (There was 1 warning)

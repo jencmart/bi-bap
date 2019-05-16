@@ -1752,17 +1752,16 @@ In Chapter~\ref{chapterexperiments} we show the experimental results of various 
 \section{BAB algorithm} \label{sectionbab}
 In this section, we describe the algorithm from~\cite{agullo2001new}. Let us note that very similar algorithm can also be found in~\cite{hofmann2010matrix}.
 
-Unlike previous algorithms, this one is exact. As we discussed in Section~\ref{sectionofltsdiscrete}, exact algorithm calculate OLS fit on all of the $\binom{n}{h}$ $h$ element subsets. For larger data sets this approach is computationally prohibitive.
+Unlike previous algorithms, this one is exact, meaning that it is guaranteed to fit the exact LTS estimate. As we discussed in Section~\ref{sectionofltsdiscrete}, there is a exhaustive exact algorithm calculating the OLS fit on all of the $\binom{n}{h}$ $h$-element subsets. For larger data sets this approach is computationally prohibitive. This version of the exact algorithm is based on the branch and bound design paradigm; thus it tries to avoid exhaustive computation on all $h$-element subsets. 
 
-This version of the exact algorithm is based on the branch and bound design paradigm; thus it tries to avoid exhaustive computation on all $h$ element subsets. First, let us describe how the combination tree is built. 
-
+First, let us describe how the combination tree is built. 
 Let us denote subset of indexes 
-$J_k = (j_1, j_2, \ldots , j_k) \subset {1,2,\ldots , n}$. We can then mark
-$\vec{ X_{J_k} }$ and $\vec{ Y_{J_k} }$ matrices created from $\vec{X}$
-and $\vec{Y}$ so that all rows that are not indexed by $J_k$ are removed.
-We can see that the number of subsets is given by $\binom{n}{k}$.
+$J_k = (j_1, j_2, \ldots , j_k) \subset \{{1,2,\ldots , n\}}$. Then we can mark
+$\vec{ X_{J_k} }$ and $\vec{ Y_{J_k} }$ the matrices created from $\vec{X}$
+and $\vec{Y}$ by removing all rows that are not indexed by $J_k$.
+We can see that the number of such subsets is given by $\binom{n}{k}$.
 
-Let us now consider tree such that at level $k$ is $\binom{n}{k}$ nodes representing all $J_k$ subsets. The depth of the tree is $h$, so this tree has $\binom{n}{h}$ leaves representing all $h$ index subsets. Example of such a tree we can see at Figure~\ref{figure:full:tree}.
+Let us now consider the tree such that at level $k$ is $\binom{n}{k}$ nodes representing all $J_k$ subsets. The depth of the tree is $h$, so this tree has $\binom{n}{h}$ leaves representing all $h$-element subset indices. An example of such a tree we can be seen in Figure~\ref{figure:full:tree}.
 
 \begin{figure}[h]
 \centering
@@ -1796,41 +1795,41 @@ Let us now consider tree such that at level $k$ is $\binom{n}{k}$ nodes represen
 \end{center}
 
 
-\caption{Tree consisting of all element subsets for $n=4$ and $h=3$. Leaves with blue border color represents $h$-element subsets.}
+\caption{The tree consisting of all $3$-element subsets for $n=4$. The leaves with blue border color represents $3$-element subsets of $\{{1,2,3,4\}}$.}
 \label{figure:full:tree}
 \end{figure}
 
 
-In the case of the exhaustive approach, we can then traverse the tree starting in the root using the left to right (LTR) preorder traversal, and in each node, we can calculate the OLS fit on $\vec{ X_{J_k} }$ and $\vec{ Y_{J_k} }$. If we are in the level $k = h$, we calculate the fit on an $h$ element subset. This approach is exhaustive, so let us now describe how we can improve efficiency. 
+In the case of the exhaustive approach, we can then traverse the tree starting in the root using the left to right (LTR) preorder traversal, and in each node, we can calculate the OLS fit on $\vec{ X_{J_k} }$ and $\vec{ Y_{J_k} }$. This approach is exhaustive, so let us now describe how we can get better efficiency. 
 
-First, it is not necessary to calculate fit on $k$th level of the tree in a case $k < p$ because this would mean that matrix $\vec{ X_{J_k} }$ is not regular. The main improvement can because we can skip parts of the tree (perform pruning) based on the following criteria. Moreover at some point of the traversal we encounter nodes from which we cannot get into the depth $h$ these nodes can also be skipped. On the Figure~\ref{figure:full:tree} these nodes are highlighted with red border color. 
+The main improvement is done by skipping parts of the tree (subtree pruning) according to the following. Moreover, at some point of the traversal we encounter nodes from which we cannot get into the depth $h$ and hence these nodes can also be skipped. In Figure~\ref{figure:full:tree} these nodes are highlighted with red border color. 
 
 If at any step (at any node) of the tree traversal we calculate the
-$\oflts(m_k)$ where $m_{k_i} = 1$ when $k_i \in J_k$ and $m_{k_i} = 0$ and we find out that this value is higher than minimal value found for some $\oflts(m_h)$ thus value of OLS fit on some $h$-element subset, then we can discard all subsets which contain $J_k$. That means we can trim all descendants of the node which represent $J_k$ subset.
+$\oflts(\vec{m_k})$ (where $m_{k_i} = 1$ when $k_i \in J_k$ and $m_{k_i} = 0$ otherwise) and we find out that this value is higher than the minimal value $\oflts(\vec{m_h})$ found so far for some $h$-element subset $\vec{m_h}$, then we can discard all subsets which contain $J_k$. That means we can trim all descendants of the node which represents $J_k$ subset in the tree.
 
 We can describe the algorithm as follows:
 
 \begin{enumerate}
-    \item Set $RSS^* = \inf$, $m^* = \emptyset$, $\vec{{w}^*} = \emptyset$ 
-    \item For each node in LTR preorder traversal calculate $\oflts(m_k)$
-    \item If $\oflts(m_k) > RSS^*$, skip all siblings of this node in the traversal.
-    \item If $\oflts(m_k) < RSS^* $ and $k = h$, then set $RSS^* = \oflts(m_k)$, $m^*$ so that $m_{k_i} = 1$ when $k_i \in J_k$ and $m_{k_i} = 0$ and $\vec{{w}^*} = \vec{\hat{w}}^{(OLS,\vec{M}_{k}\vec{X}, \vec{M}_{k}\vec{y})}$.
- \item After the traversal return $m^*$ and $\vec{\hat{w}^*}$
+    \item Set $RSS^* = \inf$, $\vec{m^*} = \emptyset$, $\vec{{w}^*} = \emptyset$,
+    \item for each node in LTR preorder traversal calculate $\oflts(\vec{m_k})$.
+    \item If $\oflts(\vec{m_k}) > RSS^*$, skip all siblings of this node in the traversal.
+    \item If $\oflts(\vec{m_k}) < RSS^* $ and $k = h$, then set $RSS^* = \oflts(\vec{m_k})$, $\vec{m^*}$ so that $m_{k_i} = 1$ when $k_i \in J_k$ and $m_{k_i} = 0$ otherwise, and also set $\vec{{w}^*} = \vec{\hat{w}}^{(OLS,\vec{M}_{k}\vec{X}, \vec{M}_{k}\vec{y})}$.
+ \item When the traversal is finished, return $\vec{m^*}$ and $\vec{\hat{w}^*}$
 \end{enumerate}
 
 Note that during the traversal of the tree, we only need to know the path back to the root. Thus the whole tree does not have to be held in the memory. 
 
 \begin{remark}
-If we calculated $\oflts(m_{k})$ than we do not need to calculate $\oflts(m_{k+1})$ from scratch. In Section~\ref{oeamoeammea} we described the way how to update it when a row is added using the matrix inversion any we can apply it here. In Section~\ref{differentcomputation} we described the way of doing this using the matrix decomposition which is another option. 
+If we calculated $\oflts(\vec{m_{k}})$, than we do not need to calculate $\oflts(\vec{m_{k+1}})$ from the scratch. In Section~\ref{oeamoeammea} we have described the way of how to update it when a row is added using the matrix inversion any we can apply it here. In Section~\ref{differentcomputation} we described the way of doing this using the QR decomposition which is another option. 
 
-Moreover, we described that if rows are not extracted and only inserted, then matrix $\vec{Q}$ do not have to be present and only matrix $\vec{R}$ can be updated. We can use this in our favor because we can keep all the decompositions on the path from the root in the memory so we updated the decomposition only when inserting the rows to the matrix $\vec{X}$.  If we use matrix $\vec{\tilde{Z}}$ and $\vec{\tilde{R}}$ we can  (see Remark~\ref{qnotrequiredspeedupremark} ) calculate all the quantities required for the update only using the matrix $\vec{\tilde{R}}$. This means that both versions of updating are possible and both can be done in $\mathcal{O}(p^2)$.
+Moreover, we have described that if rows are not removed but only inserted, then the matrix $\vec{Q}$ do not have to be present and only the matrix $\vec{R}$ can be updated. We can use this in our favor because we can keep all the decompositions on the path from the root in the memory so we update the decomposition only when inserting the rows to the matrix $\vec{X}$.  If we use matrix $\vec{\tilde{Z}}$ and $\vec{\tilde{R}}$ we can  (see Remark~\ref{qnotrequiredspeedupremark} ) calculate all the quantities required for the update only using the matrix $\vec{\tilde{R}}$. This means that both versions of updating are possible and both can be done in $\mathcal{O}(p^2)$.
 \end{remark}
 
 \subsection{Improvements}
-Because the tree is pruned based on the smallest value $RSS^*$, it would be convenient if we were able to obtain small value $RSS^*$ early in the traversal. We can obtain this value by calculating an approximative LTS estimate. This can be done using any probabilistic algorithm described in the previous sections of this chapter. An ideal candidate may be some combined algorithm described in Section~\ref{sectioncombined}. When we find such small value, it is then also convenient to permutate the observations based on its absolute residuals based on this LTS estimate in the decreasing order. That means that during the traversal first $h$-element subset we encounter represents the best known sub-optimal solution given by the approximative algorithm.
+Because the tree is pruned based on the smallest value $RSS^*$, it would be convenient if we were able to obtain small value $RSS^*$ early in the traversal. We can obtain this value by calculating an approximative LTS estimate. This can be done using any probabilistic algorithm described in the previous sections of this chapter. An ideal candidate may be some combined algorithm described in Section~\ref{sectioncombined}. When we find such small value, it is then also convenient to permutate the observations based on its absolute residuals for this LTS estimate in the decreasing order. That means that during the traversal first $h$-element subset we encounter represents the best known solution given by the approximative algorithm.
 
-Another improvement can be made using the following sorting rule \defterm{sorting rule}: If we are at the level $k$ ( we assume that $k > p$ )
-in the node $J_k$ and this node has $s$ siblings indexed as $s_1 \ldots s_s$ then we can change the order of those siblings first by calculating partial increment~\eqref{gamma:plus} for each sibling and consequently ordered them in the descending order from left to right. This means we visit siblings with a lowest partial increment first. Trimming can then be done in the same manner. Moreover, if we calculate $RSS$ in one of those siblings we and realize that $RSS > RSS^*$, then we can on the top of trimming all siblings of this sibling trim also all brothers left to this sibling. That means we can trim parent node $J_k$ because all of his siblings have already been explored or can be trimmed.
+Another improvement can be made using the following \defterm{sorting rule}: If we are at the level $k$ ( we assume that $k > p$ )
+in the node $J_k$ and this node has $s$ siblings indexed as $s_1 \ldots s_s$, then we can change the order of those siblings first by calculating partial increment~\eqref{gamma:plus} for each sibling and consequently ordered them in the descending order from left to right. This means we visit siblings with a lowest partial increment first. Trimming can then be done in the same manner. Moreover, if we calculate $RSS$ for one of those siblings,and if $RSS > RSS^*$, then we can on the top of trimming all siblings of this sibling trim also all brothers left to this sibling. That means we can trim the parent node $J_k$ because all of his siblings have already been explored or can be trimmed.
 
 % We can see such a procedure at Figure~\ref{figure:sorting:rule}.
 
