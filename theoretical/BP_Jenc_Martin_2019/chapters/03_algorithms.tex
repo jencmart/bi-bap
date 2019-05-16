@@ -1271,10 +1271,10 @@ Using the same approach as before we can express the up-dated estimate denoted a
     \vec{\overline{\overline{\hat{w}}}} =  +\vec{\overline{\hat{w}}} (y_j - \vec{x_j}\vec{\overline{\hat{w}}}) \overline{b} \vec{\overline{u}}.
 \end{equation}
 
-The updated $RSS(\vec{\overline{\hat{w}}})$ can be expressed using~\eqref{rssdeterminant} and~\eqref{udpateddeterminant} and~\eqref{updatedinversion2} as 
+The updated $RSS(\vec{\overline{\overline{\hat{w}}}})$ can be expressed using~\eqref{rssdeterminant} and~\eqref{udpateddeterminant} and~\eqref{updatedinversion2} as 
 
 \begin{equation}
-    RSS(\vec{\overline{\hat{w}}}) =  RSS(\vec{\overline{\hat{w}}}) - \dfrac{(y_j - \vec{x_j}\vec{\overline{\hat{w}})^2}}{(1 - \vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T})}.
+    RSS(\vec{\overline{\overline{\hat{w}}}}) =  RSS(\vec{\overline{\hat{w}}}) - \dfrac{(y_j - \vec{x_j}\vec{\overline{\hat{w}})^2}}{(1 - \vec{x_j}\vec{\overline{{Z}}}^{-1}\vec{x_j^T})}.
 \end{equation}
 
 Putting
@@ -1284,7 +1284,7 @@ Putting
 \end{equation}
 we get
 \begin{equation} \label{rssminus}
-    RSS(\vec{\overline{\hat{w}}}) =  RSS(\vec{\overline{\hat{w}}}) - \gamma^{-}(\vec{c_j}).
+    RSS(\vec{\overline{\overline{\hat{w}}}}) =  RSS(\vec{\overline{\hat{w}}}) - \gamma^{-}(\vec{c_j}).
 \end{equation}
 
 
@@ -1308,17 +1308,17 @@ and get
 \end{align*}
 \end{gather}
 
-Finally, we can express the $RSS(\vec{\overline{\hat{w}}})$ as
+Finally, we can express the $RSS(\vec{\overline{\overline{\hat{w}}}})$ as
 
 \begin{equation} \label{updaterss}
-    RSS(\vec{\overline{\hat{w}}})  = RSS(\vec{\hat{w}})\rho(\vec{c_i}, \vec{c_j}),
+    RSS(\vec{\overline{\overline{\hat{w}}}})  = RSS(\vec{\hat{w}})\rho(\vec{c_i}, \vec{c_j}),
 \end{equation}
 where
 \begin{equation} \label{agullo:rovnice}
-    \rho(\vec{c_i}, \vec{c_j}) =
+    \rho(\vec{c_i}, \vec{c_j}) = \\
      \dfrac
      {(1+\vec{x_i}\vec{Z}^{-1}\vec{x_i^T} + \dfrac{e_j^2}{RSS(\vec{\hat{w}})})
-        (1 - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T} - \dfrac{e_i^2}{RSS(\vec{\hat{w}})} )+
+        (1 - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T} -  \dfrac{e_i^2}{RSS(\vec{\hat{w}})} )+
         (\vec{x_i}\vec{Z}^{-1}\vec{x_j^T} + \dfrac{e_i e_j}{RSS(\vec{\hat{w}})} )^2}
     {1 + \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}  - \vec{x_j}\vec{Z}^{-1}\vec{x_j^T}  + ( \vec{x_i}\vec{Z}^{-1}\vec{x_j^T})^2 -   \vec{x_i}\vec{Z}^{-1}\vec{x_i^T}\vec{x_j}\vec{Z}^{-1}\vec{x_j^T} },
 \end{equation}
@@ -1423,7 +1423,7 @@ Then we can find maximum  $\gamma^{-}(\vec{c_j})$ by~\eqref{gamma:minus} among $
 Next, we can update $\vec{\overline{Z_M}}^{-1}$ to the   $\vec{\overline{\overline{Z_M}}}^{-1}$ by~\eqref{updatedinversion2} and 
 $\vec{\overline{\hat{w}}}$ to $\vec{\overline{\overline{\hat{w}}}}$ by~\eqref{thetaminus}.
 
-Finally, we can update $RSS(\vec{\hat{w}})$ to $RSS(\vec{\overline{\hat{w}}})$ by~\eqref{rssplus} and~\eqref{rssminus}. We can repeat this process until $\gamma^{-}(\vec{c_j}) > \gamma^{+}(\vec{c_i})$.
+Finally, we can update $RSS(\vec{\hat{w}})$ to $RSS(\vec{\overline{\overline{\hat{w}}}})$ by~\eqref{rssplus} and~\eqref{rssminus}. We can repeat this process until $\gamma^{-}(\vec{c_j}) > \gamma^{+}(\vec{c_i})$.
 
 \begin{observation} \label{timecomplexitymmea}
     One step of the algorithm MMEA has time complexity $O(p^2n)$. So the whole algorithm has time complexity $\mathcal{O}(tlp^2n)$ where $t$ and $l$ are given parameters bounding the number of iterations.
