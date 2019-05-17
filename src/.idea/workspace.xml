@@ -165,8 +165,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-2" />
-    <option name="y" value="-18" />
+    <option name="x" value="-1" />
+    <option name="y" value="3" />
     <option name="width" value="1922" />
     <option name="height" value="1078" />
   </component>
@@ -176,7 +176,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -184,90 +183,11 @@
               <item name="src" type="b2602c69:ProjectViewProjectNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="src" type="b2602c69:ProjectViewProjectNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="package-lts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="src" type="b2602c69:ProjectViewProjectNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="package-lts" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="src" type="b2602c69:ProjectViewProjectNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="package-lts" type="462c0819:PsiDirectoryNode" />
-              <item name="experiments" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="src" type="b2602c69:ProjectViewProjectNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="package-lts" type="462c0819:PsiDirectoryNode" />
-              <item name="lts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="src" type="b2602c69:ProjectViewProjectNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="package-lts" type="462c0819:PsiDirectoryNode" />
-              <item name="lts" type="462c0819:PsiDirectoryNode" />
-              <item name="exact" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="src" type="b2602c69:ProjectViewProjectNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="package-lts" type="462c0819:PsiDirectoryNode" />
-              <item name="lts" type="462c0819:PsiDirectoryNode" />
-              <item name="exact" type="462c0819:PsiDirectoryNode" />
-              <item name="cpp" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="src" type="b2602c69:ProjectViewProjectNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="package-lts" type="462c0819:PsiDirectoryNode" />
-              <item name="lts" type="462c0819:PsiDirectoryNode" />
-              <item name="fastlts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="src" type="b2602c69:ProjectViewProjectNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="package-lts" type="462c0819:PsiDirectoryNode" />
-              <item name="lts" type="462c0819:PsiDirectoryNode" />
-              <item name="fastlts" type="462c0819:PsiDirectoryNode" />
-              <item name="cpp" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="src" type="b2602c69:ProjectViewProjectNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="package-lts" type="462c0819:PsiDirectoryNode" />
-              <item name="lts" type="462c0819:PsiDirectoryNode" />
-              <item name="feasible" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="src" type="b2602c69:ProjectViewProjectNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="package-lts" type="462c0819:PsiDirectoryNode" />
-              <item name="lts" type="462c0819:PsiDirectoryNode" />
-              <item name="feasible" type="462c0819:PsiDirectoryNode" />
-              <item name="cpp" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="src" type="b2602c69:ProjectViewProjectNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="package-lts" type="462c0819:PsiDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="src" type="b2602c69:ProjectViewProjectNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="package-lts" type="462c0819:PsiDirectoryNode" />
-              <item name="tests" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -392,17 +312,17 @@
       <workItem from="1557692667634" duration="8558000" />
       <workItem from="1557827210090" duration="17316000" />
       <workItem from="1557944540662" duration="955000" />
+      <workItem from="1558031704980" duration="835000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="553325000" />
+    <option name="totallyTimeSpent" value="554160000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-2" y="-18" width="1924" height="1100" extended-state="0" />
-    <editor active="true" />
+    <frame x="-1" y="3" width="1922" height="1078" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22008547" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2224599" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -503,21 +423,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/out/fast_lts_cpp_big_results.csv">
-      <provider editor-type-id="csv-table-editor">
-        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="csv-text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/package-lts/out/fast_lts_cpp_big_results.csv" />
     <entry file="file://$PROJECT_DIR$/package-lts/lts/exact/cpp/clean.sh">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -600,73 +506,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/out/experiment_1/experiment_probabilistic_p1.csv">
-      <provider editor-type-id="csv-table-editor">
-        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
-      </provider>
-      <provider selected="true" editor-type-id="csv-text-editor">
-        <state>
-          <caret selection-end-line="3501" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/out/experiment_1/experiment_probabilistic_p2.csv">
-      <provider editor-type-id="csv-table-editor">
-        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
-      </provider>
-      <provider selected="true" editor-type-id="csv-text-editor">
-        <state relative-caret-position="63018">
-          <caret line="3501" selection-start-line="1" selection-end-line="3501" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/out/experiment_1/experiment_probabilistic_p3.csv">
-      <provider selected="true" editor-type-id="csv-text-editor">
-        <state relative-caret-position="802">
-          <caret line="24501" selection-start-line="1" selection-end-line="24501" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/out/fast_lts_cpp_results.csv">
-      <provider editor-type-id="csv-table-editor">
-        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="24" column="2" selection-start-line="24" selection-start-column="2" selection-end-line="24" selection-end-column="2" />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="csv-text-editor">
-        <state relative-caret-position="468">
-          <caret line="26" column="12" selection-start-line="26" selection-start-column="12" selection-end-line="26" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/out/lts_cpp_vs_numpy_results.csv">
-      <provider editor-type-id="csv-table-editor">
-        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="508">
-          <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="csv-text-editor">
-        <state relative-caret-position="522">
-          <caret line="29" selection-start-line="29" selection-end-line="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/out/experiment_1/experiment_probabilistic_all.csv">
-      <provider editor-type-id="csv-table-editor">
-        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
-      </provider>
-      <provider selected="true" editor-type-id="csv-text-editor">
-        <state>
-          <caret column="3" selection-start-column="3" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/package-lts/out/experiment_1/experiment_probabilistic_p1.csv" />
+    <entry file="file://$PROJECT_DIR$/package-lts/out/experiment_1/experiment_probabilistic_p2.csv" />
+    <entry file="file://$PROJECT_DIR$/package-lts/out/experiment_1/experiment_probabilistic_p3.csv" />
+    <entry file="file://$PROJECT_DIR$/package-lts/out/fast_lts_cpp_results.csv" />
+    <entry file="file://$PROJECT_DIR$/package-lts/out/lts_cpp_vs_numpy_results.csv" />
+    <entry file="file://$PROJECT_DIR$/package-lts/out/experiment_1/experiment_probabilistic_all.csv" />
     <entry file="file://$PROJECT_DIR$/package-lts/tests/test_fast.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -735,42 +580,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/out/experiment_1/experiment_probabilistic_big.csv">
-      <provider editor-type-id="csv-table-editor">
-        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
-      </provider>
-      <provider selected="true" editor-type-id="csv-text-editor">
-        <state relative-caret-position="634">
-          <caret line="18001" selection-start-line="18001" selection-end-line="18001" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/out/experiment_1/experiment_probabilistic_big_p2.csv">
-      <provider editor-type-id="csv-table-editor">
-        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
-      </provider>
-      <provider selected="true" editor-type-id="csv-text-editor">
-        <state relative-caret-position="562">
-          <caret line="2001" lean-forward="true" selection-start-line="1" selection-end-line="2001" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/out/experiment_exact.csv">
-      <provider editor-type-id="csv-table-editor">
-        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
-      </provider>
-      <provider selected="true" editor-type-id="csv-text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package-lts/out/my_csv.csv">
-      <provider editor-type-id="csv-table-editor">
-        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
-      </provider>
-      <provider selected="true" editor-type-id="csv-text-editor">
-        <state relative-caret-position="-2106">
-          <caret column="16" selection-start-column="16" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/package-lts/out/experiment_1/experiment_probabilistic_big.csv" />
+    <entry file="file://$PROJECT_DIR$/package-lts/out/experiment_1/experiment_probabilistic_big_p2.csv" />
+    <entry file="file://$PROJECT_DIR$/package-lts/out/experiment_exact.csv" />
+    <entry file="file://$PROJECT_DIR$/package-lts/out/my_csv.csv" />
     <entry file="file://$PROJECT_DIR$/package-lts/lts/fastlts/fast_lts.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="18">
