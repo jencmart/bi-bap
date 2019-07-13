@@ -6,6 +6,7 @@
     <mapping directory="$PROJECT_DIR$/algorithms-cpp/example/src/lib/eigen" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/algorithms-cpp/fast-lts/lib/eigen" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/algorithms-cpp/feasible-solution/lib/eigen" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lts/lib/eigen" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ltsregression/example" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ltsregression/example/src/lib/eigen" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ltsregression/fast-lts/lib/eigen" vcs="Git" />
